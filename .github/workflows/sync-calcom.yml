@@ -1,0 +1,29 @@
+name: Sync to Cal.com
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'content.md'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      
+      - name: Install dependencies
+        run: |
+          pip install requests
+      
+      - name: Sync description to Cal.com
+        env:
+          CAL_API_KEY: ${{ secrets.CAL_API_KEY }}
+        run: |
+          python3 sync_description.py

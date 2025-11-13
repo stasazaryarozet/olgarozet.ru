@@ -6,69 +6,51 @@
 <meta name="description" content="Ольга Розет — художник, искусствовед">
 <title>Ольга Розет</title>
 <style>
-:root{
-  --text:#1a1a1a;
-  --bg:#fff;
-  --link:#000;
-  --border:#e0e0e0;
-  --focus:#0066cc
-}
+:root{--text:#1a1a1a;--bg:#fff;--link:#000;--border:#e0e0e0;--focus:#0066cc}
 *{margin:0;padding:0;box-sizing:border-box}
-html{
-  font:400 18px/1.7 -apple-system,BlinkMacSystemFont,system-ui,sans-serif;
-  -webkit-text-size-adjust:100%;
-  -webkit-font-smoothing:antialiased
-}
-body{
-  color:var(--text);
-  background:var(--bg);
-  max-width:38em;
-  margin:0 auto;
-  padding:4em 1.5em 8em
-}
+html{font:400 18px/1.7 -apple-system,BlinkMacSystemFont,system-ui,sans-serif;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}
+body{color:var(--text);background:var(--bg);max-width:38em;margin:0 auto;padding:4em 1.5em 8em}
 h1{font-size:1.8em;font-weight:400;margin-bottom:0.2em;letter-spacing:-0.01em}
 h2{font-size:1.1em;font-weight:500;margin:3em 0 1em;padding-top:2em;border-top:1px solid var(--border)}
 p{margin:0.8em 0}
-a{
-  color:var(--link);
-  text-decoration:none;
-  border-bottom:1px solid currentColor;
-  transition:opacity .15s
-}
+a{color:var(--link);text-decoration:none;border-bottom:1px solid currentColor;transition:opacity .15s}
 a:hover{opacity:0.6}
 a:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 strong{font-weight:500}
 hr{border:0;height:1px;background:var(--border);margin:2.5em 0}
-main{min-height:50vh;opacity:0;animation:show .3s ease forwards}
-@keyframes show{to{opacity:1}}
-#v{
-  position:fixed;
-  bottom:12px;
-  right:12px;
-  font-size:11px;
-  color:#999;
-  font-variant-numeric:tabular-nums
-}
+#v{position:fixed;bottom:12px;right:12px;font-size:11px;color:#999;font-variant-numeric:tabular-nums}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
-@media(max-width:600px){
-  html{font-size:17px}
-  body{padding:3em 1.2em 6em}
-}
+@media(max-width:600px){html{font-size:17px}body{padding:3em 1.2em 6em}}
 </style>
 </head>
 <body>
-<main id="c"></main>
-<div id="v"></div>
-<script src="https://cdn.jsdelivr.net/npm/marked@11/marked.min.js"></script>
-<script>
-fetch('content.md')
-  .then(r=>r.text())
-  .then(t=>{
-    var match=t.match(/version:\s*([\d.]+)/);
-    if(match)v.textContent='v'+match[1];
-    c.innerHTML=marked.parse(t.replace(/---[\s\S]*?---\n/,''));
-  })
-  .catch(()=>c.innerHTML='<p><a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a>');
-</script>
+<h1>Ольга Розет</h1>
+<p>
+Художник. Искусствовед (МГХПА).
+</p>
+<p>
+34 года практики. 30 лет преподавания (ВБШД).
+</p>
+<hr>
+<h2>Консультации</h2>
+<p>
+40 минут. Прямой разбор вашего дела.
+</p>
+<p>
+<a href="https://cal.com/olga-rozet-u6bgb0/delo-40min">Запись</a>
+</p>
+<hr>
+<h2>Ближайшее</h2>
+<p>
+<strong>Лекция ЦДЛ</strong> — 2 декабря
+</p>
+<p>
+<strong>Paris 2026</strong> — <a href="https://parisinjanuary.ru">запись</a>
+</p>
+<hr>
+<p>
+o.g.rozet@gmail.com • <a href="https://instagram.com/olga.rozet">@olga.rozet</a>
+</p>
+<div id="v">v1.0</div>
 </body>
 </html>
