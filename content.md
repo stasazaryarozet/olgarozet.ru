@@ -1,16 +1,16 @@
 ---
-version: 1.0
+version: k
 ---
 
 # Ольга Розет
 
-Художник. Искусствовед (МГХПА).
+Художник. Искусствовед.
 
 34 года практики. 30 лет преподавания (ВБШД).       
 
 ## Консультации
 
-40 минут. Прямой разбор вашего дела.
+Подключить Ольгу к вашему делу.
 
 [Запись](https://cal.com/olgarozet/delo-40min)      
 
@@ -20,4 +20,4 @@ version: 1.0
 
 **Paris 2026** — [запись](https://parisinjanuary.ru)
 
-o.g.rozet@gmail.com • [@olga.rozet](https://instagram.com/olga.rozet)
+o.g.rozet@gmail.com • [@olga.rozet](https://instagram.com/olga_rozet)
