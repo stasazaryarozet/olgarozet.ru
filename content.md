@@ -20,4 +20,4 @@ version: k
 
 **Paris 2026** — [запись](https://parisinjanuary.ru)
 
-o.g.rozet@gmail.com • [@olga.rozet](https://instagram.com/olga_rozet)
+o.g.rozet@gmail.com • [@olga_rozet](https://instagram.com/olga_rozet)
