@@ -211,6 +211,20 @@
       height: 56px;
     }
 
+    .scroll-top {
+      display: block;
+      text-align: center;
+      padding: 1em;
+      color: #ccc;
+      border: none;
+      transition: color 0.3s;
+    }
+
+    .scroll-top:hover {
+      color: #ff0000;
+      border: none;
+    }
+
     @media (max-width: 600px) {
       .social-icon:first-of-type {
         left: 10%;
@@ -290,7 +304,13 @@
         </svg>
       </a>
     </div>
-    <div style="text-align:center;padding:0.5em;font-size:10px;color:#ccc;">v6</div>
+    <a href="#" class="scroll-top" aria-label="Наверх"
+      onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </a>
+    <div style="text-align:center;padding:0.5em;font-size:10px;color:#ccc;">v7</div>
   </footer>
 
   <script>
