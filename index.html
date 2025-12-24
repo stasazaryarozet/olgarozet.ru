@@ -135,23 +135,18 @@
     }
 
     footer {
-      margin-top: 6em;
+      margin-top: 4em;
       padding: 0;
       border-top: none;
-      position: relative;
-      overflow: visible;
       width: 100vw;
       margin-left: calc(-50vw + 50%);
     }
 
     .footer-content {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 3em;
-      padding: 4em 2em;
+      position: relative;
+      display: block;
       opacity: 0;
-      transform: translateY(40px);
+      transform: translateY(30px);
       transition: opacity 1s ease, transform 1s ease;
     }
 
@@ -162,65 +157,57 @@
 
     .footer-portrait {
       width: 100%;
-      max-width: 800px;
       height: auto;
       display: block;
-    }
-
-    .footer-content {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      padding: 4em 2em;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 1s ease, transform 1s ease;
-    }
-
-    .footer-content.visible {
-      opacity: 1;
-      transform: translateY(0);
+      object-fit: cover;
     }
 
     .social-icon {
       position: absolute;
-      top: 30%;
-      width: 44px;
-      height: 44px;
+      top: 25%;
+      width: 48px;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: rgba(255, 255, 255, 0.9);
+      color: rgba(255, 255, 255, 0.95);
       border: none;
       transition: color 0.3s ease, transform 0.3s ease;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+      z-index: 10;
     }
 
     .social-icon:first-of-type {
-      left: calc(50% - 180px);
+      left: 20%;
     }
 
     .social-icon:last-of-type {
-      right: calc(50% - 180px);
+      right: 20%;
     }
 
     .social-icon:hover {
       color: #fff;
-      transform: scale(1.1);
+      transform: scale(1.15);
       border: none;
     }
 
     .social-icon svg {
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
     }
 
-    .footer-tagline {
-      text-align: center;
-      padding: 1.5em;
-      font-size: 0.9em;
-      color: #999;
-      background: #fafafa;
+    @media (max-width: 600px) {
+      .social-icon:first-of-type {
+        left: 10%;
+      }
+
+      .social-icon:last-of-type {
+        right: 10%;
+      }
+
+      .social-icon {
+        top: 20%;
+      }
     }
 
     @media (max-width: 600px) {
