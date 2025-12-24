@@ -19,8 +19,6 @@
       margin: 0;
       padding: 0;
       overflow-x: hidden;
-      overscroll-behavior-y: contain;
-      -webkit-overflow-scrolling: touch;
     }
 
     html {
@@ -29,19 +27,11 @@
       -webkit-font-smoothing: antialiased;
       scroll-behavior: smooth;
       overflow-x: hidden;
-      background: #fff;
-      touch-action: pan-y;
     }
 
     body {
       color: #1a1a1a;
       background: #fff;
-      margin: 0;
-      padding: 0;
-      width: 100%;
-    }
-
-    main {
       max-width: 36em;
       margin: 0 auto;
       padding: 4em 1.5em 0;
@@ -145,25 +135,18 @@
       margin-top: 1em;
     }
 
-    /* Remove bottom space before footer */
-    section:last-of-type {
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
-
     .help p {
       font-size: 0.95em;
       color: #666;
     }
 
     footer {
-      display: block;
       margin: 0;
       padding: 0;
       border: none;
-      width: 100%;
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
       background: #fff;
-      overflow: hidden;
     }
 
     .footer-content {
@@ -171,8 +154,6 @@
       display: block;
       margin: 0;
       padding: 0;
-      line-height: 0;
-      font-size: 0;
     }
 
     .footer-content.visible {
@@ -187,11 +168,13 @@
       -webkit-mask-image: linear-gradient(to bottom,
           transparent 0%,
           black 10%,
-          black 100%);
+          black 90%,
+          transparent 100%);
       mask-image: linear-gradient(to bottom,
           transparent 0%,
           black 10%,
-          black 100%);
+          black 90%,
+          transparent 100%);
     }
 
     .social-icon {
@@ -231,20 +214,14 @@
     .scroll-top {
       display: block;
       text-align: center;
-      padding: 0.5em 0 0;
-      color: #999;
+      padding: 1em;
+      color: #ccc;
       border: none;
-      transition: color 0.3s, transform 0.3s;
-    }
-
-    .scroll-top svg {
-      width: 56px;
-      height: 56px;
+      transition: color 0.3s;
     }
 
     .scroll-top:hover {
       color: #ff0000;
-      transform: translateY(-3px);
       border: none;
     }
 
@@ -267,7 +244,7 @@
         font-size: 17px;
       }
 
-      main {
+      body {
         padding: 3em 1.2em 0;
       }
     }
@@ -281,37 +258,35 @@
 </head>
 
 <body>
-  <main>
-    <h1>Ольга Розет</h1>
+  <h1>Ольга Розет</h1>
 
-    <section>
-      <p>в том числе</p>
-      <p class="artist-highlight"><a href="art/">Художник</a>.</p>
-      <p>Проектировщик. Дизайнер.</p>
-      <p>Ученик. Учитель.</p>
-      <p>Вдохновляю —<br>за деньги<br>и без:<br><a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p>
-    </section>
+  <section>
+    <p>в том числе</p>
+    <p class="artist-highlight"><a href="art/">Художник</a>.</p>
+    <p>Проектировщик. Дизайнер.</p>
+    <p>Ученик. Учитель.</p>
+    <p>Вдохновляю —<br>за деньги<br>и без:<br><a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p>
+  </section>
 
-    <section>
-      <h2>Консультации</h2>
-      <p>40 минут. Подключить меня к вашему делу.</p>
-      <p class="price">15 000 ₽ · онлайн</p>
-      <a href="https://cal.com/olgarozet/delo-40min" class="cta">Записаться</a>
-    </section>
+  <section>
+    <h2>Консультации</h2>
+    <p>40 минут. Подключить меня к вашему делу.</p>
+    <p class="price">15 000 ₽ · онлайн</p>
+    <a href="https://cal.com/olgarozet/delo-40min" class="cta">Записаться</a>
+  </section>
 
-    <section>
-      <h2>Ближайшее</h2>
-      <div class="event">
-        <p class="event-date">четверг 15 — воскресенье 18+ января 2026</p>
-        <p>Париж · <em>набор закончен</em></p>
-        <p class="event-details"><a href="https://parisinjanuary.ru">Лист ожидания →</a></p>
-      </div>
-      <div class="event">
-        <p class="event-date">четверг 19 — понедельник 23 марта 2026</p>
-        <p>Узбекистан · Бухара → Самарканд</p>
-      </div>
-    </section>
-  </main>
+  <section>
+    <h2>Ближайшее</h2>
+    <div class="event">
+      <p class="event-date">четверг 15 — воскресенье 18+ января 2026</p>
+      <p>Париж · <em>набор закончен</em></p>
+      <p class="event-details"><a href="https://parisinjanuary.ru">Лист ожидания →</a></p>
+    </div>
+    <div class="event">
+      <p class="event-date">четверг 19 — понедельник 23 марта 2026</p>
+      <p>Узбекистан · Бухара → Самарканд</p>
+    </div>
+  </section>
 
   <footer>
     <div class="footer-content">
@@ -329,7 +304,13 @@
         </svg>
       </a>
     </div>
-    <!-- v21: removed scroll-top and version -->
+    <a href="#" class="scroll-top" aria-label="Наверх"
+      onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </a>
+    <div style="text-align:center;padding:0.5em;font-size:10px;color:#ccc;">v22-revert</div>
   </footer>
 
   <script>
