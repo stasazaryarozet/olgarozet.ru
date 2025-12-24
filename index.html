@@ -37,6 +37,12 @@
     body {
       color: #1a1a1a;
       background: #fff;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
+
+    main {
       max-width: 36em;
       margin: 0 auto;
       padding: 4em 1.5em 0;
@@ -140,6 +146,12 @@
       margin-top: 1em;
     }
 
+    /* Remove bottom space before footer */
+    section:last-of-type {
+      margin-bottom: 0;
+      padding-bottom: 4em;
+    }
+
     .help p {
       font-size: 0.95em;
       color: #666;
@@ -149,10 +161,7 @@
       margin: 0;
       padding: 0;
       border: none;
-      width: 100vw;
-      max-width: 100%;
-      margin-left: 50%;
-      transform: translateX(-50%);
+      width: 100%;
       background: #fff;
     }
 
@@ -257,7 +266,7 @@
         font-size: 17px;
       }
 
-      body {
+      main {
         padding: 3em 1.2em 0;
       }
     }
@@ -271,35 +280,37 @@
 </head>
 
 <body>
-  <h1>Ольга Розет</h1>
+  <main>
+    <h1>Ольга Розет</h1>
 
-  <section>
-    <p>в том числе</p>
-    <p class="artist-highlight"><a href="art/">Художник</a>.</p>
-    <p>Проектировщик. Дизайнер.</p>
-    <p>Ученик. Учитель.</p>
-    <p>Вдохновляю —<br>за деньги<br>и без:<br><a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p>
-  </section>
+    <section>
+      <p>в том числе</p>
+      <p class="artist-highlight"><a href="art/">Художник</a>.</p>
+      <p>Проектировщик. Дизайнер.</p>
+      <p>Ученик. Учитель.</p>
+      <p>Вдохновляю —<br>за деньги<br>и без:<br><a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p>
+    </section>
 
-  <section>
-    <h2>Консультации</h2>
-    <p>40 минут. Подключить меня к вашему делу.</p>
-    <p class="price">15 000 ₽ · онлайн</p>
-    <a href="https://cal.com/olgarozet/delo-40min" class="cta">Записаться</a>
-  </section>
+    <section>
+      <h2>Консультации</h2>
+      <p>40 минут. Подключить меня к вашему делу.</p>
+      <p class="price">15 000 ₽ · онлайн</p>
+      <a href="https://cal.com/olgarozet/delo-40min" class="cta">Записаться</a>
+    </section>
 
-  <section>
-    <h2>Ближайшее</h2>
-    <div class="event">
-      <p class="event-date">четверг 15 — воскресенье 18+ января 2026</p>
-      <p>Париж · <em>набор закончен</em></p>
-      <p class="event-details"><a href="https://parisinjanuary.ru">Лист ожидания →</a></p>
-    </div>
-    <div class="event">
-      <p class="event-date">четверг 19 — понедельник 23 марта 2026</p>
-      <p>Узбекистан · Бухара → Самарканд</p>
-    </div>
-  </section>
+    <section>
+      <h2>Ближайшее</h2>
+      <div class="event">
+        <p class="event-date">четверг 15 — воскресенье 18+ января 2026</p>
+        <p>Париж · <em>набор закончен</em></p>
+        <p class="event-details"><a href="https://parisinjanuary.ru">Лист ожидания →</a></p>
+      </div>
+      <div class="event">
+        <p class="event-date">четверг 19 — понедельник 23 марта 2026</p>
+        <p>Узбекистан · Бухара → Самарканд</p>
+      </div>
+    </section>
+  </main>
 
   <footer>
     <div class="footer-content">
@@ -323,7 +334,7 @@
         <path d="M12 19V5M5 12l7-7 7 7" />
       </svg>
     </a>
-    <div style="text-align:center;padding:0.5em;font-size:10px;color:#ccc;">v11</div>
+    <div style="text-align:center;padding:0.5em;font-size:10px;color:#ccc;">v12</div>
   </footer>
 
   <script>
