@@ -19,6 +19,8 @@
       margin: 0;
       padding: 0;
       overflow-x: hidden;
+      overscroll-behavior: none;
+      -webkit-overflow-scrolling: touch;
     }
 
     html {
@@ -28,6 +30,8 @@
       scroll-behavior: smooth;
       overflow-x: hidden;
       background: #fff;
+      min-height: 100%;
+      min-height: 100dvh;
     }
 
     body {
@@ -222,8 +226,8 @@
     }
 
     .scroll-top svg {
-      width: 40px;
-      height: 40px;
+      width: 56px;
+      height: 56px;
     }
 
     .scroll-top:hover {
@@ -317,7 +321,7 @@
         <path d="M12 19V5M5 12l7-7 7 7" />
       </svg>
     </a>
-    <div style="text-align:center;padding:0.5em;font-size:10px;color:#ccc;">v9</div>
+    <div style="text-align:center;padding:0.5em;font-size:10px;color:#ccc;">v10</div>
   </footer>
 
   <script>
