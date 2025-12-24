@@ -308,7 +308,7 @@
         <path d="M12 19V5M5 12l7-7 7 7" />
       </svg>
     </a>
-    <div style="text-align:center;padding:0.5em;font-size:10px;color:#ccc;">v23</div>
+    <div style="text-align:center;padding:0.5em;font-size:10px;color:#ccc;">v24</div>
   </footer>
 
   <script>
@@ -321,6 +321,16 @@
       });
     }, { threshold: 0.2 });
     observer.observe(footer);
+
+    // Prevent overscroll at bottom
+    document.body.addEventListener('touchmove', function (e) {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = document.documentElement.clientHeight;
+      if (scrollTop + clientHeight >= scrollHeight) {
+        e.preventDefault();
+      }
+    }, { passive: false });
   </script>
 </body>
 
