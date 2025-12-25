@@ -59,202 +59,221 @@
     .artist-highlight a {
       color: inherit;
       text-decoration: none;
-    }
 
-    section {
-      margin: 4em 0;
-      padding-top: 3em;
-      border-top: 1px solid #ddd;
-    }
-
-    section:first-of-type {
-      border-top: none;
-      padding-top: 0;
-      margin-top: 0;
-    }
-
-    h2 {
-      font-size: 1em;
-      font-weight: 500;
-      margin-bottom: 0.8em;
-      color: #666;
-    }
-
-    p {
-      margin: 0.8em 0;
-      font-size: 1.1em;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-      border-bottom: 1px solid #ccc;
-      transition: border-color 0.2s;
-    }
-
-    a:hover {
-      border-color: #000;
-    }
-
-    .price {
-      font-size: 0.9em;
-      color: #666;
-    }
-
-    .cta {
-      display: inline-block;
-      margin-top: 0.5em;
-      padding: 0.6em 1.2em;
-      background: #1a1a1a;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      transition: opacity 0.2s;
-    }
-
-    .cta:hover {
-      opacity: 0.8;
-      border: none;
-    }
-
-    .event {
-      margin: 1.5em 0;
-    }
-
-    .event-date {
-      font-weight: 500;
-    }
-
-    .event-details {
-      font-size: 0.95em;
-      color: #666;
-      margin-top: 0.3em;
-    }
-
-    .help {
-      background: #fafafa;
-      padding: 1.5em;
-      border-radius: 8px;
-      margin-top: 1em;
-    }
-
-    .help p {
-      font-size: 0.95em;
-      color: #666;
-    }
-
-    footer {
-      margin: 0 -1.5em;
-      padding: 0;
-      border: none;
-      background: #fff;
-    }
-
-    .footer-content {
-      position: relative;
-      display: block;
-      margin: 0;
-      padding: 0;
-    }
-
-    .footer-content.visible {
-      /* animation handled by JS */
-    }
-
-    .footer-portrait {
-      width: 100%;
-      height: auto;
-      display: block;
-      object-fit: cover;
-      -webkit-mask-image: linear-gradient(to bottom,
-          transparent 0%,
-          black 10%,
-          black 90%,
-          transparent 100%);
-      mask-image: linear-gradient(to bottom,
-          transparent 0%,
-          black 10%,
-          black 90%,
-          transparent 100%);
-    }
-
-    .social-icon {
-      position: absolute;
-      top: 25%;
-      width: 80px;
-      height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(255, 255, 255, 0.95);
-      border: none;
-      transition: color 0.3s ease, transform 0.3s ease;
-      filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.7));
-      z-index: 10;
-    }
-
-    .social-icon:first-of-type {
-      left: 20%;
-    }
-
-    .social-icon:last-of-type {
-      right: 20%;
-    }
-
-    .social-icon:hover {
-      color: #fff;
-      transform: scale(1.15);
-      border: none;
-    }
-
-    .social-icon svg {
-      width: 56px;
-      height: 56px;
-    }
-
-    .scroll-top {
-      display: block;
-      text-align: center;
-      padding: 1em;
-      color: #ccc;
-      border: none;
-      transition: color 0.3s;
-    }
-
-    .scroll-top:hover {
-      color: #ff0000;
-      border: none;
-    }
-
-    @media (max-width: 600px) {
-      .social-icon:first-of-type {
-        left: 10%;
+      .expressive-art {
+        margin: 8rem calc(50% - 50vw);
+        width: 100vw;
+        text-align: center;
+        background: #fafafa;
+        /* Subtle contrast */
+        padding: 0;
       }
 
-      .social-icon:last-of-type {
-        right: 10%;
+      .expressive-art img {
+        width: auto;
+        height: auto;
+        max-width: 90%;
+        max-height: 90vh;
+        display: block;
+        margin: 0 auto;
+        mix-blend-mode: multiply;
+        /* Better integration */
+      }
+
+      section {
+        margin: 4em 0;
+        padding-top: 3em;
+        border-top: 1px solid #ddd;
+      }
+
+      section:first-of-type {
+        border-top: none;
+        padding-top: 0;
+        margin-top: 0;
+      }
+
+      h2 {
+        font-size: 1em;
+        font-weight: 500;
+        margin-bottom: 0.8em;
+        color: #666;
+      }
+
+      p {
+        margin: 0.8em 0;
+        font-size: 1.1em;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+        border-bottom: 1px solid #ccc;
+        transition: border-color 0.2s;
+      }
+
+      a:hover {
+        border-color: #000;
+      }
+
+      .price {
+        font-size: 0.9em;
+        color: #666;
+      }
+
+      .cta {
+        display: inline-block;
+        margin-top: 0.5em;
+        padding: 0.6em 1.2em;
+        background: #1a1a1a;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        transition: opacity 0.2s;
+      }
+
+      .cta:hover {
+        opacity: 0.8;
+        border: none;
+      }
+
+      .event {
+        margin: 1.5em 0;
+      }
+
+      .event-date {
+        font-weight: 500;
+      }
+
+      .event-details {
+        font-size: 0.95em;
+        color: #666;
+        margin-top: 0.3em;
+      }
+
+      .help {
+        background: #fafafa;
+        padding: 1.5em;
+        border-radius: 8px;
+        margin-top: 1em;
+      }
+
+      .help p {
+        font-size: 0.95em;
+        color: #666;
+      }
+
+      footer {
+        margin: 0 -1.5em;
+        padding: 0;
+        border: none;
+        background: #fff;
+      }
+
+      .footer-content {
+        position: relative;
+        display: block;
+        margin: 0;
+        padding: 0;
+      }
+
+      .footer-content.visible {
+        /* animation handled by JS */
+      }
+
+      .footer-portrait {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+        -webkit-mask-image: linear-gradient(to bottom,
+            transparent 0%,
+            black 10%,
+            black 90%,
+            transparent 100%);
+        mask-image: linear-gradient(to bottom,
+            transparent 0%,
+            black 10%,
+            black 90%,
+            transparent 100%);
       }
 
       .social-icon {
-        top: 20%;
+        position: absolute;
+        top: 25%;
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255, 255, 255, 0.95);
+        border: none;
+        transition: color 0.3s ease, transform 0.3s ease;
+        filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.7));
+        z-index: 10;
       }
-    }
 
-    @media (max-width: 600px) {
-      html {
-        font-size: 17px;
+      .social-icon:first-of-type {
+        left: 20%;
       }
 
-      body {
-        padding: 3em 1.2em 0;
+      .social-icon:last-of-type {
+        right: 20%;
       }
-    }
 
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
+      .social-icon:hover {
+        color: #fff;
+        transform: scale(1.15);
+        border: none;
       }
-    }
+
+      .social-icon svg {
+        width: 56px;
+        height: 56px;
+      }
+
+      .scroll-top {
+        display: block;
+        text-align: center;
+        padding: 1em;
+        color: #ccc;
+        border: none;
+        transition: color 0.3s;
+      }
+
+      .scroll-top:hover {
+        color: #ff0000;
+        border: none;
+      }
+
+      @media (max-width: 600px) {
+        .social-icon:first-of-type {
+          left: 10%;
+        }
+
+        .social-icon:last-of-type {
+          right: 10%;
+        }
+
+        .social-icon {
+          top: 20%;
+        }
+      }
+
+      @media (max-width: 600px) {
+        html {
+          font-size: 17px;
+        }
+
+        body {
+          padding: 3em 1.2em 0;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
   </style>
 </head>
 
@@ -269,6 +288,10 @@
     <p>Вдохновляю —<br>за деньги<br>и без.</p>
     <p><a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p>
   </section>
+
+  <div class="expressive-art">
+    <img src="art/img/rozety.jpg" alt="Ольга Розет" loading="lazy">
+  </div>
 
   <section>
     <h2>Консультации</h2>
