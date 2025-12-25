@@ -256,19 +256,74 @@
       }
     }
 
-    /* Desktop: larger typography */
+    /* Desktop: премиум */
     @media (min-width: 1024px) {
-      html {
-        font-size: 32px;
+      body {
+        max-width: 900px;
+        padding: 15vh 0 0;
+        margin: 0 auto;
       }
 
       h1 {
-        font-size: 8em;
+        font-size: 6rem;
+        font-weight: 200;
+        letter-spacing: -0.04em;
+        margin-bottom: 0.3em;
       }
 
-      body {
-        padding: 10em 6em 0;
-        max-width: 70em;
+      section:first-of-type p {
+        font-size: 1.8rem;
+        line-height: 1.6;
+      }
+
+      section {
+        margin: 6rem 0;
+        padding-top: 4rem;
+      }
+
+      h2 {
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #999;
+        margin-bottom: 1.5rem;
+      }
+
+      p {
+        font-size: 1.4rem;
+        line-height: 1.7;
+      }
+
+      .price {
+        font-size: 1.2rem;
+      }
+
+      .cta {
+        font-size: 1rem;
+        padding: 1.2rem 2.5rem;
+        margin-top: 1.5rem;
+      }
+
+      .event {
+        padding: 1.5rem 0;
+      }
+
+      .event-date {
+        font-size: 1.1rem;
+      }
+
+      .event-details {
+        font-size: 1.1rem;
+      }
+
+      footer {
+        margin-top: 8rem;
+      }
+
+      .social-icon svg {
+        width: 64px;
+        height: 64px;
       }
     }
   </style>
