@@ -1,104 +1,163 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Забронировать консультацию — Ольга Розет</title>
-<meta name="description" content="Забронировать 40-минутную консультацию с Ольгой Розет. 15 000 ₽.">
-<style>
-:root{--text:#1a1a1a;--bg:#fff;--link:#000;--border:#e0e0e0;--accent:#E31B1B}
-*{margin:0;padding:0;box-sizing:border-box}
-html{font:400 18px/1.7 -apple-system,BlinkMacSystemFont,system-ui,sans-serif;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}
-body{color:var(--text);background:var(--bg);max-width:38em;margin:0 auto;padding:4em 1.5em 2em;min-height:100vh;display:flex;flex-direction:column}
-main{flex:1}
-h1{font-size:1.8em;font-weight:400;margin-bottom:0.2em;letter-spacing:-0.01em}
-p{margin:0.8em 0}
-.breadcrumbs{font-size:0.9em;margin-bottom:2em;color:#999}
-.breadcrumbs a{color:#999;border-bottom:1px solid #ddd;text-decoration:none}
-.info{background:#fafafa;padding:1.5em;margin:2em 0;border-left:3px solid var(--accent)}
-.info p{margin:0.5em 0}
-.price{font-size:2.5em;font-weight:400;margin:1em 0 0.2em;text-align:center}
-.cal-embed{margin:2em 0;min-height:600px}
-iframe{border:none;width:100%;min-height:600px}
-footer{margin-top:4em;padding-top:2em;border-top:1px solid var(--border);font-size:1em;color:var(--text)}
-footer a{color:var(--text);border-bottom:1px solid var(--border);text-decoration:none}
-footer p{line-height:2}
-@media(max-width:600px){html{font-size:17px}body{padding:3em 1.2em 2em}.price{font-size:2em}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Забронировать консультацию — Ольга Розет</title>
+  <meta name="description" content="Забронировать 40-минутную консультацию с Ольгой Розет. 15 000 ₽.">
+  <style>
+    :root {
+      --text: #1a1a1a;
+      --bg: #fff;
+      --link: #000;
+      --border: #e0e0e0;
+      --accent: #E31B1B
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    html {
+      font: 400 18px/1.7 -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      -webkit-text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased
+    }
+
+    body {
+      color: var(--text);
+      background: var(--bg);
+      max-width: 38em;
+      margin: 0 auto;
+      padding: 4em 1.5em 2em;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column
+    }
+
+    main {
+      flex: 1
+    }
+
+    h1 {
+      font-size: 1.8em;
+      font-weight: 400;
+      margin-bottom: 0.2em;
+      letter-spacing: -0.01em
+    }
+
+    p {
+      margin: 0.8em 0
+    }
+
+    .breadcrumbs {
+      font-size: 0.9em;
+      margin-bottom: 2em;
+      color: #999
+    }
+
+    .breadcrumbs a {
+      color: #999;
+      border-bottom: 1px solid #ddd;
+      text-decoration: none
+    }
+
+    .info {
+      background: #fafafa;
+      padding: 1.5em;
+      margin: 2em 0;
+      border-left: 3px solid var(--accent)
+    }
+
+    .info p {
+      margin: 0.5em 0
+    }
+
+    .price {
+      font-size: 2.5em;
+      font-weight: 400;
+      margin: 1em 0 0.2em;
+      text-align: center
+    }
+
+    .cal-embed {
+      margin: 2em 0;
+      min-height: 600px
+    }
+
+    iframe {
+      border: none;
+      width: 100%;
+      min-height: 600px
+    }
+
+    footer {
+      margin-top: 4em;
+      padding-top: 2em;
+      border-top: 1px solid var(--border);
+      font-size: 0.9em;
+      color: #666;
+      text-align: center
+    }
+
+    footer a {
+      color: var(--text);
+      text-decoration: none
+    }
+
+    @media(max-width:600px) {
+      html {
+        font-size: 17px
+      }
+
+      body {
+        padding: 3em 1.2em 2em
+      }
+
+      .price {
+        font-size: 2em
+      }
+    }
+  </style>
 </head>
+
 <body>
-<main>
-<nav class="breadcrumbs">
-<a href="/">← olgarozet.ru</a>
-</nav>
+  <main>
+    <nav class="breadcrumbs">
+      <a href="/">← olgarozet.ru</a>
+    </nav>
 
-<h1>Включить в дело</h1>
+    <h1>Включить в дело</h1>
 
-<div class="info">
-  <p><strong>Длительность:</strong> 40 минут</p>
-  <p><strong>Формат:</strong> Онлайн или лично (по договорённости)</p>
-</div>
+    <div class="info">
+      <p><strong>Длительность:</strong> 40 минут</p>
+      <p><strong>Формат:</strong> Онлайн или лично (по договорённости)</p>
+    </div>
 
-<div class="price">15 000 ₽</div>
+    <div class="price">15 000 ₽</div>
 
-<p style="text-align:center;font-size:0.9em;color:#666;margin:1.5em 0;line-height:1.6">
-Нет 15 000 ₽? Возможно, что-нибудь придумаем. Пожалуйста, пишите: <a href="https://t.me/olgarozet" style="color:var(--accent)">@olgarozet</a>
-</p>
+    <p style="text-align:center;font-size:0.9em;color:#666;margin:1.5em 0;line-height:1.6">
+      Нет 15 000 ₽? Возможно, что-нибудь придумаем. Пожалуйста, пишите: <a href="https://t.me/olgaroset"
+        style="color:var(--accent)">@olgaroset</a>
+    </p>
 
-<div class="cal-embed">
-  <iframe src="https://cal.com/olgarozet/delo-40min?embed=true&ui=ru" loading="lazy"></iframe>
-</div>
+    <div class="cal-embed">
+      <iframe src="https://cal.com/olgarozet/delo-40min?embed=true&ui=ru" loading="lazy"></iframe>
+    </div>
 
-<p style="text-align:center;font-size:0.9em;color:#999;margin-top:2em">
-После выбора времени вы получите подтверждение и реквизиты для оплаты.
-</p>
-</main>
+    <p style="text-align:center;font-size:0.9em;color:#999;margin-top:2em">
+      После выбора времени вы получите подтверждение и реквизиты для оплаты.
+    </p>
+  </main>
 
-<div id="footer"></div>
-<script src="/footer.js"></script>
-
-<script>
-// Cal.com embed script
-(function (C, A, L) {
-  let p = function (a, ar) {
-    a.q.push(ar);
-  };
-  let d = C.document;
-  C.Cal = C.Cal || function () {
-    let cal = C.Cal;
-    let ar = arguments;
-    if (!cal.loaded) {
-      cal.ns = {};
-      cal.q = cal.q || [];
-      d.head.appendChild(d.createElement("script")).src = A;
-      cal.loaded = true;
-    }
-    if (ar[0] === L) {
-      const api = function () {
-        p(api, arguments);
-      };
-      const namespace = ar[1];
-      api.q = api.q || [];
-      typeof namespace === "string" ? (cal.ns[namespace] = api) && p(api, ar) : p(cal, ar);
-      return;
-    }
-    p(cal, ar);
-  };
-})(window, "https://app.cal.com/embed/embed.js", "init");
-
-Cal("init", {origin:"https://cal.com"});
-
-// Русификация интерфейса (custom CSS)
-Cal("ui", {
-  cssVarsPerTheme: {
-    light: {
-      "cal-brand": "#E31B1B"
-    }
-  },
-  hideEventTypeDetails: false,
-  layout: "month_view"
-});
-</script>
+  <footer>
+    <a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a> ·
+    <a href="https://t.me/olga_rozet">Telegram</a> ·
+    <a href="https://instagram.com/olga_rozet">Instagram</a>
+  </footer>
 </body>
-</html>
 
+</html>

@@ -1,0 +1,25 @@
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+*.error.log
+
+# Temp
+*.pid
+/tmp/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Backup
+backup/

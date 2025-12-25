@@ -1,64 +1,74 @@
-# olgaroset.ru
+# olgarozet.ru
 
-Сайт Ольги Розет — консультации, ближайшие мероприятия.
+Официальный сайт Ольги Розет.
 
 ## Архитектура
 
-**Single Source of Truth:** `content.md` (Markdown)
-
-**Rendering:** Pre-render (build.py → index.html)
-
-**Deployment:** GitHub Pages
-
-## Workflow
-
-### Локально (MacBook)
-
-1. Открываешь `content.md` в TextEdit
-2. Вносишь изменения → сохраняешь
-3. **fswatch автоматически:**
-   - Запускает `build.py`
-   - Коммитит изменения
-   - Пушит в GitHub
-4. Через ~30 сек обновляется https://olgaroset.ru
-
-### На сервере (GitHub Actions)
-
-При пуше `content.md` в `main`:
-- GitHub Actions запускает `build.py`
-- Генерирует `index.html`
-- Автоматически коммитит и деплоит
-
-## Структура
-
 ```
-content.md          # Источник правды
-build.py            # Генератор HTML
-index.html          # Результат (автогенерируемый)
-.github/workflows/
-  build-and-deploy.yml    # GitHub Action для авто-сборки
-  sync-calcom.yml         # Синхронизация с Cal.com
+olgarozet.ru/
+├── index.html          # Главная (v2.5+)
+├── content.md          # Source of truth для контента
+├── art/                # Галерея работ
+│   ├── index.html      # 94 произведения, shuffle
+│   └── img/            # Изображения (195MB)
+├── booking/            # Страница консультаций (каноническая)
+├── book/               # Редирект → /booking/
+└── .integrations.json  # Манифест интеграции с Dela
 ```
 
-## Версионирование
+## Sources of Truth
 
-Версия задаётся в frontmatter `content.md`:
+| Данные | Файл | Синхронизируется с |
+|--------|------|-------------------|
+| Bio | `../bio.txt` | Telegram канал, intro сайта |
+| Контент | `content.md` | index.html (build.py) |
+| Работы | `../olga_artworks/` | art/img/ |
 
-```markdown
----
-version: 1.0
----
+## Интеграции
+
+### Cal.com
+- Event Type: `delo-40min`
+- Embed: `/booking/`
+- API sync: `sync-calcom.yml`
+
+### Telegram
+- Канал: @olga_rozet
+- Bio sync: `ru.olgarozet.sync` daemon
+- Session: `.gates/telegram_olga_azarya_device.session`
+
+### Instagram
+- Аккаунт: @olga_rozet
+- Link in bio → olgarozet.ru
+
+## Deployment
+
+```bash
+# Push → GitHub Actions → GitHub Pages
+git push origin main
 ```
 
-Отображается в правом нижнем углу сайта.
+**Workflows:**
+- `static.yml` — Deploy на каждый push
+- `build-and-deploy.yml` — Auto-build content.md → index.html
+- `sync-calcom.yml` — Sync с Cal.com API
 
-## Cal.com интеграция
+## Зависимости
 
-Описание консультации "40 минут. Прямой разбор вашего дела." берётся из `content.md` и автоматически синхронизируется с Cal.com при изменении.
+**Tools:**
+- `tools/credentials_master.py`
+- `tools/sync_channel_bio.py`
 
-## Миграция на сервер
+**Daemons:**
+- `ru.olgarozet.sync` — Bio sync (каждые 5 мин + на изменение bio.txt)
+- `com.dela.art.sync` — Artwork sync
 
-Текущий fswatch работает на MacBook. Для переноса на сервер:
-- Запустить fswatch на сервере с доступом к iCloud Drive
-- Или использовать только GitHub Actions (пушить content.md вручную или через API)
+**Gates:**
+- Telegram session (Olga)
+- Google credentials (для будущих интеграций)
 
+## Связанные проекты
+
+- **parisinjanuary.ru** — Париж 2026
+- **Telegram канал** — @olga_rozet
+- **Instagram** — @olga_rozet
+- **olga_artworks/** — База произведений

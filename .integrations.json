@@ -1,6 +1,95 @@
 {
   "project": "olgarozet.ru",
-  "providers": {},
-  "auto_actions": [],
-  "watchers": []
+  "type": "website",
+  "owner": "olga",
+  "repository": "github.com/stasazaryarozet/olgarozet.ru",
+  "domain": "olgarozet.ru",
+  "hosting": "github-pages",
+  "sources_of_truth": {
+    "bio": {
+      "file": "../bio.txt",
+      "targets": [
+        "telegram_channel_about",
+        "site_intro"
+      ],
+      "daemon": "ru.olgarozet.sync"
+    },
+    "content": {
+      "file": "content.md",
+      "targets": [
+        "index.html"
+      ],
+      "workflow": "build-and-deploy.yml"
+    },
+    "artworks": {
+      "source": "../olga_artworks/",
+      "target": "art/img/",
+      "daemon": "com.dela.art.sync"
+    }
+  },
+  "integrations": {
+    "calcom": {
+      "status": "active",
+      "api_key_location": "github_secrets",
+      "event_type": "delo-40min",
+      "schedule_id": 1035314,
+      "sync_workflow": "sync-calcom.yml"
+    },
+    "telegram": {
+      "channel": "@olga_rozet",
+      "session": "../.gates/telegram_olga_azarya_device.session",
+      "sync_daemon": "ru.olgarozet.sync"
+    },
+    "instagram": {
+      "account": "@olga_rozet",
+      "link_in_bio": "https://olgarozet.ru"
+    },
+    "parisinjanuary": {
+      "domain": "parisinjanuary.ru",
+      "redirect_from": "/paris-2026"
+    }
+  },
+  "pages": {
+    "/": {
+      "title": "Ольга Розет",
+      "source": "index.html",
+      "auto_build": false
+    },
+    "/art/": {
+      "title": "Искусство",
+      "source": "art/index.html",
+      "artwork_count": 94
+    },
+    "/booking/": {
+      "title": "Консультация",
+      "source": "booking/index.html",
+      "calcom_embed": true
+    },
+    "/book/": {
+      "redirect": "/booking/"
+    }
+  },
+  "dependencies": {
+    "tools": [
+      "credentials_master.py",
+      "sync_channel_bio.py"
+    ],
+    "gates": [
+      "telegram_olga_azarya_device.session",
+      "google/credentials.json"
+    ],
+    "daemons": [
+      "ru.olgarozet.sync",
+      "com.dela.art.sync"
+    ]
+  },
+  "workflows": {
+    "static.yml": "Deploy to GitHub Pages on push",
+    "build-and-deploy.yml": "Build index.html from content.md",
+    "sync-calcom.yml": "Sync consultation description to Cal.com"
+  },
+  "assets": {
+    "footer_image": "olga_footer.png",
+    "art_gallery": "art/img/"
+  }
 }
