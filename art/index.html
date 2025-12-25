@@ -243,20 +243,27 @@
         }
         artworks.forEach(art => gallery.appendChild(art));
 
-        // Lazy load with Intersection Observer
+        // Load first 8 images immediately
         const images = document.querySelectorAll('.artwork img');
+        images.forEach((img, i) => {
+            if (i < 8 && img.dataset.src) {
+                img.src = img.dataset.src;
+            }
+        });
+
+        // Lazy load rest with Intersection Observer
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const img = entry.target;
-                    if (img.dataset.src) {
+                    if (img.dataset.src && !img.src) {
                         img.src = img.dataset.src;
-                        observer.unobserve(img);
                     }
+                    observer.unobserve(img);
                 }
             });
-        }, { rootMargin: '200px' });
-        images.forEach(img => observer.observe(img));
+        }, { rootMargin: '500px' });
+        images.forEach((img, i) => { if (i >= 8) observer.observe(img); });
 
         // Scroll progress
         const progress = document.getElementById('progress');
