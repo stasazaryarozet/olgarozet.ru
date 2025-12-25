@@ -28,7 +28,29 @@ OUTPUT = ROOT / 'index.html'
 # ============================================================================
 
 # CSS вынесен в отдельную константу для читаемости
+# Fluid typography: clamp(min, preferred, max)
 CSS = '''
+    :root {
+      /* Fluid type scale */
+      --font-size-base: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
+      --font-size-h1: clamp(2.5rem, 1.5rem + 5vw, 7rem);
+      --font-size-p: clamp(1rem, 0.95rem + 0.25vw, 1.35rem);
+      
+      /* Fluid spacing */
+      --space-section: clamp(3rem, 2rem + 4vw, 6rem);
+      --space-padding: clamp(1.2rem, 1rem + 2vw, 3rem);
+      --space-top: clamp(3rem, 2rem + 8vh, 12vh);
+      
+      /* Layout */
+      --max-width: min(50em, 90vw);
+      
+      /* Colors */
+      --color-text: #1a1a1a;
+      --color-accent: #ff0000;
+      --color-muted: #666;
+      --color-border: #ddd;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -43,33 +65,32 @@ CSS = '''
     }
 
     html {
-      font: 400 20px/1.8 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font: 400 var(--font-size-base)/1.8 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
       -webkit-text-size-adjust: 100%;
       -webkit-font-smoothing: antialiased;
       scroll-behavior: smooth;
-      overflow-x: hidden;
       overscroll-behavior: none;
     }
 
     body {
-      color: #1a1a1a;
+      color: var(--color-text);
       background: #fff;
-      max-width: 50em;
+      max-width: var(--max-width);
       margin: 0 auto;
-      padding: 6em 3em 0;
+      padding: var(--space-top) var(--space-padding) 0;
     }
 
     h1 {
-      font-size: 4.5em;
-      font-weight: 300;
+      font-size: var(--font-size-h1);
+      font-weight: clamp(200, 300 - 5vw, 300);
       margin-bottom: 0.5em;
       letter-spacing: -0.03em;
-      color: #ff0000;
+      color: var(--color-accent);
       line-height: 1;
     }
 
     .artist-highlight {
-      color: #ff0000;
+      color: var(--color-accent);
     }
 
     .artist-highlight a {
@@ -78,9 +99,9 @@ CSS = '''
     }
 
     section {
-      margin: 4em 0;
-      padding-top: 3em;
-      border-top: 1px solid #ddd;
+      margin: var(--space-section) 0;
+      padding-top: calc(var(--space-section) * 0.7);
+      border-top: 1px solid var(--color-border);
     }
 
     section:first-of-type {
@@ -90,15 +111,17 @@ CSS = '''
     }
 
     h2 {
-      font-size: 1em;
+      font-size: clamp(0.9rem, 0.85rem + 0.2vw, 1rem);
       font-weight: 500;
       margin-bottom: 0.8em;
-      color: #666;
+      color: var(--color-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
     }
 
     p {
       margin: 0.8em 0;
-      font-size: 1.1em;
+      font-size: var(--font-size-p);
     }
 
     a {
@@ -109,22 +132,24 @@ CSS = '''
     }
 
     a:hover {
-      border-color: #000;
+      border-color: var(--color-text);
     }
 
     .price {
-      font-size: 0.9em;
-      color: #666;
+      font-size: clamp(0.85rem, 0.8rem + 0.2vw, 1.15rem);
+      color: var(--color-muted);
     }
 
     .cta {
       display: inline-block;
       margin-top: 0.5em;
-      padding: 0.6em 1.2em;
-      background: #1a1a1a;
+      padding: clamp(0.5em, 0.4em + 0.3vw, 1.2rem) clamp(1em, 0.8em + 0.5vw, 2.5rem);
+      background: var(--color-text);
       color: #fff;
       border: none;
       border-radius: 4px;
+      font-size: clamp(0.9rem, 0.85rem + 0.2vw, 1.1rem);
+      font-weight: 500;
       transition: opacity 0.2s;
     }
 
@@ -134,21 +159,24 @@ CSS = '''
     }
 
     .event {
-      margin: 1.5em 0;
+      margin: clamp(1em, 0.8em + 0.5vw, 1.5rem) 0;
+      padding: clamp(0.5em, 0.3em + 0.3vw, 1.5rem) 0;
     }
 
     .event-date {
       font-weight: 500;
+      font-size: clamp(1rem, 0.95rem + 0.2vw, 1.2rem);
     }
 
     .event-details {
-      font-size: 0.95em;
-      color: #666;
+      font-size: clamp(0.9rem, 0.85rem + 0.15vw, 1.15rem);
+      color: var(--color-muted);
       margin-top: 0.3em;
     }
 
+    /* Footer */
     footer {
-      margin: 0 -1.5em;
+      margin: var(--space-section) calc(-1 * var(--space-padding)) 0;
       padding: 0;
       border: none;
       background: #fff;
@@ -181,8 +209,8 @@ CSS = '''
     .social-icon {
       position: absolute;
       top: 25%;
-      width: 80px;
-      height: 80px;
+      width: clamp(60px, 50px + 3vw, 80px);
+      height: clamp(60px, 50px + 3vw, 80px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -194,11 +222,11 @@ CSS = '''
     }
 
     .social-icon:first-of-type {
-      left: 20%;
+      left: clamp(10%, 8% + 5vw, 20%);
     }
 
     .social-icon:last-of-type {
-      right: 20%;
+      right: clamp(10%, 8% + 5vw, 20%);
     }
 
     .social-icon:hover {
@@ -208,8 +236,8 @@ CSS = '''
     }
 
     .social-icon svg {
-      width: 56px;
-      height: 56px;
+      width: clamp(40px, 35px + 2vw, 72px);
+      height: clamp(40px, 35px + 2vw, 72px);
     }
 
     .scroll-top {
@@ -222,105 +250,12 @@ CSS = '''
     }
 
     .scroll-top:hover {
-      color: #ff0000;
+      color: var(--color-accent);
       border: none;
     }
 
-    @media (max-width: 600px) {
-      html {
-        font-size: 17px;
-      }
-
-      body {
-        padding: 3em 1.2em 0;
-      }
-
-      .social-icon:first-of-type {
-        left: 10%;
-      }
-
-      .social-icon:last-of-type {
-        right: 10%;
-      }
-
-      .social-icon {
-        top: 20%;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-    }
-
-    /* Desktop: МОЩНО */
-    @media (min-width: 1024px) {
-      html {
-        font-size: 24px;
-      }
-
-      body {
-        max-width: 900px;
-        padding: 12vh 3rem 0;
-        margin: 0 auto;
-      }
-
-      h1 {
-        font-size: 7rem;
-        font-weight: 200;
-        letter-spacing: -0.04em;
-        margin-bottom: 0.4em;
-      }
-
-      section:first-of-type p {
-        font-size: 1.6rem;
-        line-height: 1.6;
-      }
-
-      section {
-        margin: 5rem 0;
-        padding-top: 3.5rem;
-      }
-
-      h2 {
-        font-size: 1rem;
-        font-weight: 700;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-        color: #666;
-        margin-bottom: 1.5rem;
-      }
-
-      p {
-        font-size: 1.35rem;
-        line-height: 1.75;
-      }
-
-      .price {
-        font-size: 1.15rem;
-      }
-
-      .cta {
-        font-size: 1.1rem;
-        padding: 1.2rem 2.5rem;
-        margin-top: 1.5rem;
-        font-weight: 500;
-      }
-
-      .event {
-        padding: 1.5rem 0;
-      }
-
-      .event-date {
-        font-size: 1.2rem;
-        font-weight: 600;
-      }
-
-      .event-details {
-        font-size: 1.15rem;
-      }
-
+    /* Desktop: full-width footer */
+    @media (min-width: 768px) {
       footer {
         position: relative;
         left: 50%;
@@ -328,8 +263,6 @@ CSS = '''
         margin-left: -50vw;
         margin-right: -50vw;
         width: 100vw;
-        margin-top: 8rem;
-        padding: 0;
       }
 
       .footer-content {
@@ -339,17 +272,37 @@ CSS = '''
 
       .footer-portrait {
         width: 100vw;
-        height: 100vh;
+        height: min(100vh, 80vw);
         object-fit: cover;
         object-position: center 20%;
         -webkit-mask-image: none;
         mask-image: none;
-        display: block;
       }
+    }
 
-      .social-icon svg {
-        width: 72px;
-        height: 72px;
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Dark mode ready */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-text: #f0f0f0;
+        --color-muted: #aaa;
+        --color-border: #333;
+      }
+      body {
+        background: #111;
+      }
+      .cta {
+        background: #f0f0f0;
+        color: #111;
       }
     }
 '''
@@ -543,27 +496,27 @@ def generate_intro_html(intro: list) -> str:
 
 
 def generate_events_html(events: list) -> str:
-    """Generate events section HTML."""
+    """Generate events section HTML with proper semantics."""
     html_parts = []
     
     for event in events:
-        html_parts.append('    <div class="event">')
+        html_parts.append('      <article class="event">')
         
         if event.get('date'):
-            html_parts.append(f'      <p class="event-date">{event["date"]}</p>')
+            html_parts.append(f'        <p class="event-date"><time>{event["date"]}</time></p>')
         
         if event.get('title') and event.get('status'):
-            html_parts.append(f'      <p>{event["title"]} · <em>{event["status"]}</em></p>')
+            html_parts.append(f'        <p>{event["title"]} · <em>{event["status"]}</em></p>')
         elif event.get('title') and event.get('location'):
-            html_parts.append(f'      <p>{event["title"]} · {event["location"]}</p>')
+            html_parts.append(f'        <p>{event["title"]} · {event["location"]}</p>')
         elif event.get('title'):
-            html_parts.append(f'      <p>{event["title"]}</p>')
+            html_parts.append(f'        <p>{event["title"]}</p>')
         
         if event.get('link'):
             link_text = event.get('link_text', 'Подробнее →')
-            html_parts.append(f'      <p class="event-details"><a href="{event["link"]}">{link_text}</a></p>')
+            html_parts.append(f'        <p class="event-details"><a href="{event["link"]}">{link_text}</a></p>')
         
-        html_parts.append('    </div>')
+        html_parts.append('      </article>')
     
     return '\n'.join(html_parts)
 
@@ -574,18 +527,33 @@ def generate_html(data: dict) -> str:
     
     # Intro section
     intro_html = generate_intro_html(data.get('intro', []))
-    
     # Consultations section
     cons = data.get('consultations', {})
-    cons_html = f'''  <section>
-    <h2>Консультации</h2>
-    <p>{cons.get('description', '40 минут. Подключить меня к вашему делу.')}</p>
-    <p class="price">{cons.get('price', '15 000 ₽ · онлайн')}</p>
-    <a href="{cons.get('link', 'https://cal.com/olgarozet/delo-40min')}" class="cta">Записаться</a>
-  </section>'''
+    cons_html = f'''    <section id="consultations" aria-labelledby="consultations-heading">
+      <h2 id="consultations-heading">Консультации</h2>
+      <p>{cons.get('description', '40 минут. Подключить меня к вашему делу.')}</p>
+      <p class="price">{cons.get('price', '15 000 ₽ · онлайн')}</p>
+      <a href="{cons.get('link', 'https://cal.com/olgarozet/delo-40min')}" class="cta">Записаться</a>
+    </section>'''
     
     # Events section
     events_html = generate_events_html(data.get('events', []))
+    
+    # JSON-LD structured data
+    schema = '''{
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Ольга Розет",
+    "alternateName": "Olga Rozet",
+    "url": "https://olgarozet.ru",
+    "image": "https://olgarozet.ru/olga_footer.png",
+    "jobTitle": ["Художник", "Дизайнер", "Искусствовед"],
+    "email": "o.g.rozet@gmail.com",
+    "sameAs": [
+      "https://instagram.com/olga_rozet",
+      "https://t.me/olga_rozet"
+    ]
+  }'''
     
     # Assemble
     html = f'''<!DOCTYPE html>
@@ -594,29 +562,61 @@ def generate_html(data: dict) -> str:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="Ольга Розет — художник, искусствовед">
-  <meta name="theme-color" content="#ffffff">
-  <title>Ольга Розет</title>
+  
+  <!-- SEO -->
+  <title>Ольга Розет — художник, дизайнер</title>
+  <meta name="description" content="Ольга Розет — художник, искусствовед, дизайнер интерьеров. Консультации, путешествия, искусство.">
+  <link rel="canonical" href="https://olgarozet.ru">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Ольга Розет">
+  <meta property="og:description" content="Художник, искусствовед, дизайнер интерьеров">
+  <meta property="og:url" content="https://olgarozet.ru">
+  <meta property="og:image" content="https://olgarozet.ru/olga_footer.png">
+  <meta property="og:locale" content="ru_RU">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ольга Розет">
+  <meta name="twitter:description" content="Художник, искусствовед, дизайнер интерьеров">
+  <meta name="twitter:image" content="https://olgarozet.ru/olga_footer.png">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  <!-- Theme -->
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
+  
+  <!-- Structured Data -->
+  <script type="application/ld+json">{schema}</script>
+  
   <style>{CSS}
   </style>
 </head>
 
 <body>
-  <div
-    style="position:fixed;bottom:1rem;right:1rem;background:#000;color:#fff;padding:0.3rem 0.6rem;font-size:12px;border-radius:4px;opacity:0.7;z-index:9999;">
-    v{version}</div>
-  <h1>Ольга Розет</h1>
+  <!-- Version badge (dev only) -->
+  <div aria-hidden="true" style="position:fixed;bottom:1rem;right:1rem;background:#000;color:#fff;padding:0.3rem 0.6rem;font-size:12px;border-radius:4px;opacity:0.7;z-index:9999;">v{version}</div>
+  
+  <header>
+    <h1>Ольга Розет</h1>
+  </header>
 
-  <section>
+  <main>
+    <section id="about" aria-label="О себе">
 {intro_html}
-  </section>
+    </section>
 
 {cons_html}
 
-  <section>
-    <h2>Ближайшее</h2>
+    <section id="events" aria-labelledby="events-heading">
+      <h2 id="events-heading">Ближайшее</h2>
 {events_html}
-  </section>
+    </section>
+  </main>
 {FOOTER}
 </body>
 
