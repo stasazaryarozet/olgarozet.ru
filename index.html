@@ -201,10 +201,10 @@
     /* Footer - Full Width (outside content-wrapper) */
     footer {
       width: 100%;
-      margin-top: var(--space-section);
+      margin-top: calc(var(--space-section) * 2);
       padding: 0;
       border: none;
-      background: #000;
+      background: #fff;
     }
 
     .footer-content {
@@ -228,6 +228,21 @@
       display: block;
       width: 100%;
       height: auto;
+      /* Soft edges - fade top and bottom */
+      -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        black 8%,
+        black 92%,
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        black 8%,
+        black 92%,
+        transparent 100%
+      );
     }
 
     .social-icon {
@@ -268,10 +283,10 @@
     .scroll-top {
       display: block;
       text-align: center;
-      padding: 1.5em;
-      color: #666;
+      padding: 2em;
+      color: #ccc;
       border: none;
-      background: #000;
+      background: #fff;
       transition: color 0.3s;
     }
 
@@ -324,7 +339,7 @@
 
 <body>
   <!-- Version badge (dev only) -->
-  <div aria-hidden="true" style="position:fixed;bottom:1rem;right:1rem;background:#000;color:#fff;padding:0.3rem 0.6rem;font-size:12px;border-radius:4px;opacity:0.7;z-index:9999;">v4.0</div>
+  <div aria-hidden="true" style="position:fixed;bottom:1rem;right:1rem;background:#000;color:#fff;padding:0.3rem 0.6rem;font-size:12px;border-radius:4px;opacity:0.7;z-index:9999;">v4.1</div>
   
   <div class="content-wrapper">
     <header>
