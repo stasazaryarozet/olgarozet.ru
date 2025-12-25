@@ -193,10 +193,14 @@
       margin-top: 0.3em;
     }
 
-    /* Footer - Full Bleed */
+    /* Footer - Full Bleed (aggressive) */
     footer {
+      position: relative;
+      left: 50%;
+      right: 50%;
       width: 100vw;
-      margin-left: calc(50% - 50vw);
+      margin-left: -50vw;
+      margin-right: -50vw;
       margin-top: var(--space-section);
       padding: 0;
       border: none;
@@ -321,7 +325,7 @@
 
 <body>
   <!-- Version badge (dev only) -->
-  <div aria-hidden="true" style="position:fixed;bottom:1rem;right:1rem;background:#000;color:#fff;padding:0.3rem 0.6rem;font-size:12px;border-radius:4px;opacity:0.7;z-index:9999;">v3.2</div>
+  <div aria-hidden="true" style="position:fixed;bottom:1rem;right:1rem;background:#000;color:#fff;padding:0.3rem 0.6rem;font-size:12px;border-radius:4px;opacity:0.7;z-index:9999;">v3.3</div>
   
   <header>
     <h1>Ольга Розет</h1>
