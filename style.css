@@ -1,216 +1,284 @@
-/* olgaroset.ru — Главная страница (Бренд/Хаб) */
-/* Базируется на стиле parisinjanuary.ru */
+/* 
+ * olgarozet.ru Style System
+ * Design tokens + component styles
+ * Single Source of Truth for all pages
+ */
 
+/* ========================================
+   Design Tokens
+   ======================================== */
 :root {
-  --text-primary: #111111;
-  --bg-primary: #FAFAFA;
-  --font-display: 'Cormorant Garamond', 'Crimson Text', 'Baskerville', Georgia, serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  /* Colors */
+  --color-text: #1a1a1a;
+  --color-text-secondary: #666;
+  --color-text-muted: #999;
+  --color-bg: #fff;
+  --color-accent: #e31b1b;
+  --color-border: #e0e0e0;
+  --color-focus: #0066cc;
+
+  /* Typography */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-size-base: 18px;
+  --font-size-small: 0.9em;
+  --font-size-h1: 4.5em;
+  --font-size-h2: 1.1em;
+  --font-size-h3: 1em;
+  --line-height: 1.7;
+
+  /* Spacing */
+  --spacing-xs: 0.5em;
+  --spacing-sm: 1em;
+  --spacing-md: 2em;
+  --spacing-lg: 4em;
+  --spacing-xl: 6em;
+
+  /* Layout */
+  --max-width: 38em;
+  --border-radius: 4px;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
 }
 
-* {
+/* ========================================
+   Reset
+   ======================================== */
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* ========================================
+   Base
+   ======================================== */
 html {
-  font-size: 16px;
+  font: 400 var(--font-size-base)/var(--line-height) var(--font-family);
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: var(--font-body);
-  color: var(--text-primary);
-  background-color: var(--bg-primary);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.container {
-  max-width: 700px;
+  color: var(--color-text);
+  background: var(--color-bg);
+  max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: var(--spacing-lg) 1.5em var(--spacing-xl);
+  min-height: 100vh;
 }
 
-/* Header (Навигация) */
-.site-header {
-  padding: 2rem 0;
-  border-bottom: 1px solid rgba(17, 17, 17, 0.1);
+/* ========================================
+   Typography
+   ======================================== */
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--color-accent);
+  margin-bottom: var(--spacing-xs);
 }
 
-.header-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin: var(--spacing-lg) 0 var(--spacing-sm);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+}
+
+h3 {
+  font-size: var(--font-size-h3);
+  font-weight: 500;
+  margin: var(--spacing-md) 0 var(--spacing-xs);
+}
+
+p {
+  margin: var(--spacing-xs) 0;
+}
+
+strong {
+  font-weight: 500;
+}
+
+em {
+  font-style: italic;
+  color: var(--color-text-secondary);
+}
+
+/* ========================================
+   Links
+   ======================================== */
+a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-border);
+  transition: border-color var(--transition-fast), opacity var(--transition-fast);
+}
+
+a:hover {
+  border-color: var(--color-text);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+/* Accent links */
+a.accent {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+/* ========================================
+   Components: CTA Button
+   ======================================== */
+.cta {
+  display: inline-block;
+  margin-top: var(--spacing-sm);
+  padding: 0.6em 1.2em;
+  background: var(--color-text);
+  color: var(--color-bg);
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  transition: opacity var(--transition-fast);
+}
+
+.cta:hover {
+  opacity: 0.8;
+  border: none;
+}
+
+/* ========================================
+   Components: Price
+   ======================================== */
+.price {
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+}
+
+/* ========================================
+   Components: Event
+   ======================================== */
+.event {
+  margin: 1.5em 0;
+}
+
+.event-date {
+  font-weight: 500;
+}
+
+.event-details {
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+  margin-top: 0.3em;
+}
+
+/* ========================================
+   Layout: Main
+   ======================================== */
+main {
+  flex: 1;
+}
+
+/* ========================================
+   Layout: Footer
+   ======================================== */
+footer {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
 }
 
-.header-logo a {
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 400;
-  color: var(--text-primary);
-  text-decoration: none;
+footer a {
+  color: var(--color-text-secondary);
+  border-bottom-color: transparent;
 }
 
-.header-nav a {
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  font-weight: 300;
-  color: var(--text-primary);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: border-bottom 0.2s ease;
+footer a:hover {
+  color: var(--color-text);
+  border-bottom-color: var(--color-border);
 }
 
-.header-nav a:hover {
-  border-bottom: 1px solid var(--text-primary);
+/* ========================================
+   Utility: Version Badge
+   ======================================== */
+#version {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
 }
 
-/* Секции */
-section {
-  padding: 4rem 0;
-}
-
-/* Hero */
-.hero {
-  padding-top: 6rem;
-  padding-bottom: 3rem;
-}
-
-.hero h1 {
-  font-family: var(--font-display);
-  font-size: 3rem;
-  font-weight: 300;
-  line-height: 1.2;
-  margin-bottom: 1rem;
-}
-
-.hero h2 {
-  font-family: var(--font-body);
-  font-size: 1.25rem;
-  font-weight: 300;
-  line-height: 1.5;
-  color: rgba(17, 17, 17, 0.7);
-}
-
-/* Био */
-.bio ul {
-  list-style: none;
-  font-size: 1.05rem;
-  font-weight: 300;
-  line-height: 1.8;
-}
-
-.bio ul li {
-  margin-bottom: 0.5rem;
-}
-
-/* Философия */
-.philosophy h2 {
-  font-family: var(--font-display);
-  font-size: 1.75rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: var(--text-primary);
-}
-
-/* Проекты */
-.projects h2 {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 300;
-  margin-bottom: 2.5rem;
-}
-
-.project {
-  margin-bottom: 2.5rem;
-}
-
-.project h3 {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 400;
-  margin-bottom: 0.5rem;
-}
-
-.project h3 a {
-  color: var(--text-primary);
-  text-decoration: none;
-  border-bottom: 1px solid var(--text-primary);
-  transition: opacity 0.2s ease;
-}
-
-.project h3 a:hover {
-  opacity: 0.6;
-}
-
-.project p {
-  font-size: 1.05rem;
-  font-weight: 300;
-  line-height: 1.6;
-  color: rgba(17, 17, 17, 0.7);
-}
-
-/* Footer */
-.footer {
-  margin-top: 6rem;
-  padding: 3rem 0 4rem 0;
-  border-top: 1px solid rgba(17, 17, 17, 0.1);
-}
-
-.footer p {
-  font-size: 0.95rem;
-  font-weight: 300;
-  margin-bottom: 0.5rem;
-}
-
-.footer a {
-  color: var(--text-primary);
-  text-decoration: underline;
-  transition: opacity 0.2s ease;
-}
-
-.footer a:hover {
-  opacity: 0.6;
-}
-
-/* Адаптив */
-@media (max-width: 768px) {
-  .hero h1 {
-    font-size: 2.25rem;
+/* ========================================
+   Responsive: Mobile
+   ======================================== */
+@media (max-width: 600px) {
+  :root {
+    --font-size-base: 17px;
+    --font-size-h1: 2.5em;
   }
 
-  .hero h2 {
-    font-size: 1.1rem;
+  body {
+    padding: 3em 1.2em 4em;
+  }
+}
+
+/* ========================================
+   Responsive: Desktop Large
+   ======================================== */
+@media (min-width: 1024px) {
+  :root {
+    --font-size-base: 20px;
+    --font-size-h1: 5em;
+    --max-width: 50em;
   }
 
-  .philosophy h2 {
-    font-size: 1.4rem;
+  body {
+    padding: 8vh 3em 0;
+  }
+}
+
+/* ========================================
+   Accessibility
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 
-  .projects h2 {
-    font-size: 1.75rem;
+  html {
+    scroll-behavior: auto;
   }
+}
 
-  .project h3 {
-    font-size: 1.25rem;
-  }
-
-  section {
-    padding: 3rem 0;
-  }
-
-  .hero {
-    padding-top: 4rem;
-  }
-
-  .header-content {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: flex-start;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text: #f0f0f0;
+    --color-text-secondary: #aaa;
+    --color-text-muted: #666;
+    --color-bg: #111;
+    --color-border: #333;
   }
 }

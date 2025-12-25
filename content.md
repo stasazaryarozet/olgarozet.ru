@@ -1,6 +1,7 @@
 ---
-version: 2.6
+version: 3.0
 updated: 2025-12-26
+build: true
 ---
 
 # Ольга Розет
@@ -13,8 +14,8 @@ updated: 2025-12-26
 
 Ученик. Учитель.
 
-Вдохновляю —
-за деньги
+Вдохновляю —  
+за деньги  
 и без.
 
 [o.g.rozet@gmail.com](mailto:o.g.rozet@gmail.com)
@@ -25,19 +26,20 @@ updated: 2025-12-26
 
 **15 000 ₽** · онлайн
 
-[Записаться](https://cal.com/olgarozet/delo-40min)
+[Записаться](https://cal.com/olgarozet/delo-40min){.cta}
 
 ## Ближайшее
 
 ### Париж
+
 **четверг 15 — воскресенье 18+ января 2026**
+
 *набор закончен*
+
 [Лист ожидания →](https://parisinjanuary.ru)
 
 ### Узбекистан
+
 **четверг 19 — понедельник 23 марта 2026**
+
 Бухара → Самарканд
-
----
-
-[Instagram](https://instagram.com/olga_rozet) · [Telegram](https://t.me/olga_rozet)

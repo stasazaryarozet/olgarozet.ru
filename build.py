@@ -1,107 +1,146 @@
 #!/usr/bin/env python3
 """
-Генерирует index.html из content.md
+olgarozet.ru Site Generator
+
+Generates index.html from content.md using proper Markdown parsing.
+Follows Single Source of Truth principle.
+
+Usage:
+    python3 build.py           # Generate index.html
+    python3 build.py --watch   # Watch mode (future)
 """
+import sys
 import re
+import json
+from pathlib import Path
+from datetime import datetime
 
-# Читаем content.md
-with open('content.md', 'r', encoding='utf-8') as f:
-    content = f.read()
+try:
+    import markdown2
+except ImportError:
+    print("Installing markdown2...")
+    import subprocess
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "markdown2", "-q"])
+    import markdown2
 
-# Извлекаем версию
-version_match = re.search(r'version:\s*(.+)', content)
-version = version_match.group(1).strip() if version_match else '1.0'
 
-# Удаляем frontmatter
-content = re.sub(r'^---.*?---\n', '', content, flags=re.DOTALL)
+# Configuration
+CONFIG = {
+    "source": "content.md",
+    "output": "index.html", 
+    "template": "templates/base.html",
+    "css": "style.css",
+    "lang": "ru",
+    "charset": "utf-8"
+}
 
-# Парсим Markdown вручную (простой парсер)
-def parse_markdown(text):
-    # Заголовки
-    text = re.sub(r'^# (.+)$', r'<h1>\1</h1>', text, flags=re.MULTILINE)
-    text = re.sub(r'^## (.+)$', r'<h2>\1</h2>', text, flags=re.MULTILINE)
-    
-    # Жирный текст
-    text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
-    
-    # Ссылки
-    text = re.sub(r'\[([^\]]+)\]\(([^\)]+)\)', r'<a href="\2">\1</a>', text)
-    
-    # Параграфы и переносы
-    lines = text.split('\n')
-    result = []
-    in_paragraph = False
-    
-    for line in lines:
-        line = line.strip()
-        
-        if not line:
-            if in_paragraph:
-                result.append('</p>')
-                in_paragraph = False
-            continue
-            
-        if line == '---':
-            if in_paragraph:
-                result.append('</p>')
-                in_paragraph = False
-            result.append('<hr>')
-            continue
-            
-        if line.startswith('<h'):
-            if in_paragraph:
-                result.append('</p>')
-                in_paragraph = False
-            result.append(line)
-            continue
-            
-        if not in_paragraph:
-            result.append('<p>')
-            in_paragraph = True
-            
-        result.append(line)
-    
-    if in_paragraph:
-        result.append('</p>')
-    
-    return '\n'.join(result)
 
-html_content = parse_markdown(content)
+def parse_frontmatter(content: str) -> tuple[dict, str]:
+    """Extract YAML frontmatter and return (metadata, body)."""
+    if not content.startswith('---'):
+        return {}, content
+    
+    parts = content.split('---', 2)
+    if len(parts) < 3:
+        return {}, content
+    
+    frontmatter = {}
+    for line in parts[1].strip().split('\n'):
+        if ':' in line:
+            key, value = line.split(':', 1)
+            frontmatter[key.strip()] = value.strip()
+    
+    return frontmatter, parts[2].strip()
 
-# Генерируем HTML
-html = f'''<!DOCTYPE html>
-<html lang="ru">
+
+def render_markdown(text: str) -> str:
+    """Convert Markdown to HTML using markdown2."""
+    # Handle {.class} syntax for links before markdown processing
+    # [text](url){.cta} -> <a href="url" class="cta">text</a>
+    text = re.sub(
+        r'\[([^\]]+)\]\(([^)]+)\)\{\.([^}]+)\}',
+        r'<a href="\2" class="\3">\1</a>',
+        text
+    )
+    
+    return markdown2.markdown(
+        text,
+        extras=[
+            'fenced-code-blocks',
+            'tables',
+            'header-ids',
+            'strike',
+            'task_list',
+            'breaks'  # Convert line breaks to <br>
+        ]
+    )
+
+
+def load_css() -> str:
+    """Load and inline CSS."""
+    css_path = Path(CONFIG["css"])
+    if css_path.exists():
+        return css_path.read_text(encoding='utf-8')
+    return ""
+
+
+def generate_html(metadata: dict, body_html: str) -> str:
+    """Generate complete HTML document."""
+    version = metadata.get('version', '1.0')
+    updated = metadata.get('updated', datetime.now().strftime('%Y-%m-%d'))
+    css = load_css()
+    
+    # Template - clean, semantic HTML5
+    return f'''<!DOCTYPE html>
+<html lang="{CONFIG['lang']}">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="{CONFIG['charset']}">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Ольга Розет — художник, искусствовед">
+<meta name="theme-color" content="#ffffff">
+<meta name="generator" content="olgarozet.ru build.py">
+<meta name="version" content="{version}">
+<meta name="updated" content="{updated}">
 <title>Ольга Розет</title>
 <style>
-:root{{--text:#1a1a1a;--bg:#fff;--link:#000;--border:#e0e0e0;--focus:#0066cc}}
-*{{margin:0;padding:0;box-sizing:border-box}}
-html{{font:400 18px/1.7 -apple-system,BlinkMacSystemFont,system-ui,sans-serif;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}}
-body{{color:var(--text);background:var(--bg);max-width:38em;margin:0 auto;padding:4em 1.5em 8em}}
-h1{{font-size:1.8em;font-weight:400;margin-bottom:0.2em;letter-spacing:-0.01em}}
-h2{{font-size:1.1em;font-weight:500;margin:3em 0 1em;padding-top:2em;border-top:1px solid var(--border)}}
-p{{margin:0.8em 0}}
-a{{color:var(--link);text-decoration:none;border-bottom:1px solid currentColor;transition:opacity .15s}}
-a:hover{{opacity:0.6}}
-a:focus-visible{{outline:2px solid var(--focus);outline-offset:2px}}
-strong{{font-weight:500}}
-hr{{border:0;height:1px;background:var(--border);margin:2.5em 0}}
-#v{{position:fixed;bottom:12px;right:12px;font-size:11px;color:#999;font-variant-numeric:tabular-nums}}
-@media(prefers-reduced-motion:reduce){{*{{animation:none!important}}}}
-@media(max-width:600px){{html{{font-size:17px}}body{{padding:3em 1.2em 6em}}}}
+{css}
 </style>
 </head>
 <body>
-{html_content}
-<div id="v">v{version}</div>
+<main>
+{body_html}
+</main>
+<footer>
+<a href="https://instagram.com/olga_rozet" aria-label="Instagram">Instagram</a>
+<a href="https://t.me/olga_rozet" aria-label="Telegram">Telegram</a>
+</footer>
+<div id="version" aria-hidden="true">v{version}</div>
 </body>
-</html>'''
+</html>
+'''
 
-# Записываем index.html
-with open('index.html', 'w', encoding='utf-8') as f:
-    f.write(html)
 
-print(f"✅ Сгенерирован index.html (версия {version})")
+def build():
+    """Main build function."""
+    source = Path(CONFIG["source"])
+    output = Path(CONFIG["output"])
+    
+    if not source.exists():
+        print(f"❌ Source file not found: {source}")
+        sys.exit(1)
+    
+    content = source.read_text(encoding='utf-8')
+    metadata, body = parse_frontmatter(content)
+    body_html = render_markdown(body)
+    html = generate_html(metadata, body_html)
+    
+    output.write_text(html, encoding='utf-8')
+    
+    version = metadata.get('version', '1.0')
+    print(f"✅ Generated {output} (v{version})")
+    
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(build())
