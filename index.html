@@ -1,348 +1,435 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Ольга Розет — художник, искусствовед">
-<meta name="theme-color" content="#ffffff">
-<meta name="generator" content="olgarozet.ru build.py">
-<meta name="version" content="3.0">
-<meta name="updated" content="2025-12-26">
-<title>Ольга Розет</title>
-<style>
-/* 
- * olgarozet.ru Style System
- * Design tokens + component styles
- * Single Source of Truth for all pages
- */
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Ольга Розет — художник, искусствовед">
+  <meta name="theme-color" content="#ffffff">
+  <title>Ольга Розет</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-/* ========================================
-   Design Tokens
-   ======================================== */
-:root {
-  /* Colors */
-  --color-text: #1a1a1a;
-  --color-text-secondary: #666;
-  --color-text-muted: #999;
-  --color-bg: #fff;
-  --color-accent: #e31b1b;
-  --color-border: #e0e0e0;
-  --color-focus: #0066cc;
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
 
-  /* Typography */
-  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --font-size-base: 18px;
-  --font-size-small: 0.9em;
-  --font-size-h1: 4.5em;
-  --font-size-h2: 1.1em;
-  --font-size-h3: 1em;
-  --line-height: 1.7;
+    html {
+      font: 400 20px/1.8 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      -webkit-text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      overscroll-behavior: none;
+    }
 
-  /* Spacing */
-  --spacing-xs: 0.5em;
-  --spacing-sm: 1em;
-  --spacing-md: 2em;
-  --spacing-lg: 4em;
-  --spacing-xl: 6em;
+    body {
+      color: #1a1a1a;
+      background: #fff;
+      max-width: 50em;
+      margin: 0 auto;
+      padding: 6em 3em 0;
+    }
 
-  /* Layout */
-  --max-width: 38em;
-  --border-radius: 4px;
+    h1 {
+      font-size: 4.5em;
+      font-weight: 300;
+      margin-bottom: 0.5em;
+      letter-spacing: -0.03em;
+      color: #ff0000;
+      line-height: 1;
+    }
 
-  /* Transitions */
-  --transition-fast: 0.15s ease;
-  --transition-normal: 0.3s ease;
-}
+    .red,
+    .red a {
+      color: #ff0000;
+    }
 
-/* ========================================
-   Reset
-   ======================================== */
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+    .artist-highlight {
+      color: #ff0000;
+    }
 
-/* ========================================
-   Base
-   ======================================== */
-html {
-  font: 400 var(--font-size-base)/var(--line-height) var(--font-family);
-  -webkit-text-size-adjust: 100%;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  scroll-behavior: smooth;
-}
+    .artist-highlight a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-body {
-  color: var(--color-text);
-  background: var(--color-bg);
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: var(--spacing-lg) 1.5em var(--spacing-xl);
-  min-height: 100vh;
-}
+    section {
+      margin: 4em 0;
+      padding-top: 3em;
+      border-top: 1px solid #ddd;
+    }
 
-/* ========================================
-   Typography
-   ======================================== */
-h1 {
-  font-size: var(--font-size-h1);
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: var(--color-accent);
-  margin-bottom: var(--spacing-xs);
-}
+    section:first-of-type {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
 
-h2 {
-  font-size: var(--font-size-h2);
-  font-weight: 500;
-  color: var(--color-text-secondary);
-  margin: var(--spacing-lg) 0 var(--spacing-sm);
-  padding-top: var(--spacing-md);
-  border-top: 1px solid var(--color-border);
-}
+    h2 {
+      font-size: 1em;
+      font-weight: 500;
+      margin-bottom: 0.8em;
+      color: #666;
+    }
 
-h3 {
-  font-size: var(--font-size-h3);
-  font-weight: 500;
-  margin: var(--spacing-md) 0 var(--spacing-xs);
-}
+    p {
+      margin: 0.8em 0;
+      font-size: 1.1em;
+    }
 
-p {
-  margin: var(--spacing-xs) 0;
-}
+    a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid #ccc;
+      transition: border-color 0.2s;
+    }
 
-strong {
-  font-weight: 500;
-}
+    a:hover {
+      border-color: #000;
+    }
 
-em {
-  font-style: italic;
-  color: var(--color-text-secondary);
-}
+    .price {
+      font-size: 0.9em;
+      color: #666;
+    }
 
-/* ========================================
-   Links
-   ======================================== */
-a {
-  color: inherit;
-  text-decoration: none;
-  border-bottom: 1px solid var(--color-border);
-  transition: border-color var(--transition-fast), opacity var(--transition-fast);
-}
+    .cta {
+      display: inline-block;
+      margin-top: 0.5em;
+      padding: 0.6em 1.2em;
+      background: #1a1a1a;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      transition: opacity 0.2s;
+    }
 
-a:hover {
-  border-color: var(--color-text);
-}
+    .cta:hover {
+      opacity: 0.8;
+      border: none;
+    }
 
-a:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
-  border-color: transparent;
-}
+    .event {
+      margin: 1.5em 0;
+    }
 
-/* Accent links */
-a.accent {
-  color: var(--color-accent);
-  border-color: var(--color-accent);
-}
+    .event-date {
+      font-weight: 500;
+    }
 
-/* ========================================
-   Components: CTA Button
-   ======================================== */
-.cta {
-  display: inline-block;
-  margin-top: var(--spacing-sm);
-  padding: 0.6em 1.2em;
-  background: var(--color-text);
-  color: var(--color-bg);
-  border: none;
-  border-radius: var(--border-radius);
-  font-weight: 500;
-  transition: opacity var(--transition-fast);
-}
+    .event-details {
+      font-size: 0.95em;
+      color: #666;
+      margin-top: 0.3em;
+    }
 
-.cta:hover {
-  opacity: 0.8;
-  border: none;
-}
+    .help {
+      background: #fafafa;
+      padding: 1.5em;
+      border-radius: 8px;
+      margin-top: 1em;
+    }
 
-/* ========================================
-   Components: Price
-   ======================================== */
-.price {
-  font-size: var(--font-size-small);
-  color: var(--color-text-secondary);
-}
+    .help p {
+      font-size: 0.95em;
+      color: #666;
+    }
 
-/* ========================================
-   Components: Event
-   ======================================== */
-.event {
-  margin: 1.5em 0;
-}
+    footer {
+      margin: 0 -1.5em;
+      padding: 0;
+      border: none;
+      background: #fff;
+    }
 
-.event-date {
-  font-weight: 500;
-}
+    @media (min-width: 1024px) {
+      footer {
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        width: 100vw;
+        padding: 0;
+      }
 
-.event-details {
-  font-size: var(--font-size-small);
-  color: var(--color-text-secondary);
-  margin-top: 0.3em;
-}
+      .footer-content {
+        width: 100%;
+      }
 
-/* ========================================
-   Layout: Main
-   ======================================== */
-main {
-  flex: 1;
-}
+      .footer-portrait {
+        width: 100%;
+        height: 100vh;
+        object-fit: cover;
+        object-position: center top;
+        -webkit-mask-image: none;
+        mask-image: none;
+      }
+    }
 
-/* ========================================
-   Layout: Footer
-   ======================================== */
-footer {
-  margin-top: var(--spacing-lg);
-  padding-top: var(--spacing-md);
-  border-top: 1px solid var(--color-border);
-  display: flex;
-  gap: var(--spacing-sm);
-  font-size: var(--font-size-small);
-  color: var(--color-text-secondary);
-}
+    .footer-content {
+      position: relative;
+      display: block;
+      margin: 0;
+      padding: 0;
+    }
 
-footer a {
-  color: var(--color-text-secondary);
-  border-bottom-color: transparent;
-}
+    .footer-content.visible {
+      /* animation handled by JS */
+    }
 
-footer a:hover {
-  color: var(--color-text);
-  border-bottom-color: var(--color-border);
-}
+    .footer-portrait {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      -webkit-mask-image: linear-gradient(to bottom,
+          transparent 0%,
+          black 10%,
+          black 90%,
+          transparent 100%);
+      mask-image: linear-gradient(to bottom,
+          transparent 0%,
+          black 10%,
+          black 90%,
+          transparent 100%);
+    }
 
-/* ========================================
-   Utility: Version Badge
-   ======================================== */
-#version {
-  position: fixed;
-  bottom: 12px;
-  right: 12px;
-  font-size: 11px;
-  color: var(--color-text-muted);
-  font-variant-numeric: tabular-nums;
-}
+    .social-icon {
+      position: absolute;
+      top: 25%;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.95);
+      border: none;
+      transition: color 0.3s ease, transform 0.3s ease;
+      filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.7));
+      z-index: 10;
+    }
 
-/* ========================================
-   Responsive: Mobile
-   ======================================== */
-@media (max-width: 600px) {
-  :root {
-    --font-size-base: 17px;
-    --font-size-h1: 2.5em;
-  }
+    .social-icon:first-of-type {
+      left: 20%;
+    }
 
-  body {
-    padding: 3em 1.2em 4em;
-  }
-}
+    .social-icon:last-of-type {
+      right: 20%;
+    }
 
-/* ========================================
-   Responsive: Desktop Large
-   ======================================== */
-@media (min-width: 1024px) {
-  :root {
-    --font-size-base: 20px;
-    --font-size-h1: 5em;
-    --max-width: 50em;
-  }
+    .social-icon:hover {
+      color: #fff;
+      transform: scale(1.15);
+      border: none;
+    }
 
-  body {
-    padding: 8vh 3em 0;
-  }
-}
+    .social-icon svg {
+      width: 56px;
+      height: 56px;
+    }
 
-/* ========================================
-   Accessibility
-   ======================================== */
-@media (prefers-reduced-motion: reduce) {
+    .scroll-top {
+      display: block;
+      text-align: center;
+      padding: 1em;
+      color: #ccc;
+      border: none;
+      transition: color 0.3s;
+    }
 
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+    .scroll-top:hover {
+      color: #ff0000;
+      border: none;
+    }
 
-  html {
-    scroll-behavior: auto;
-  }
-}
+    @media (max-width: 600px) {
+      .social-icon:first-of-type {
+        left: 10%;
+      }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-text: #f0f0f0;
-    --color-text-secondary: #aaa;
-    --color-text-muted: #666;
-    --color-bg: #111;
-    --color-border: #333;
-  }
-}
-</style>
+      .social-icon:last-of-type {
+        right: 10%;
+      }
+
+      .social-icon {
+        top: 20%;
+      }
+    }
+
+    @media (max-width: 600px) {
+      html {
+        font-size: 17px;
+      }
+
+      body {
+        padding: 3em 1.2em 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+    }
+
+    /* Desktop: МОЩНО */
+    @media (min-width: 1024px) {
+      html {
+        font-size: 24px;
+      }
+
+      body {
+        max-width: 900px;
+        padding: 12vh 3rem 0;
+        margin: 0 auto;
+      }
+
+      h1 {
+        font-size: 7rem;
+        font-weight: 200;
+        letter-spacing: -0.04em;
+        margin-bottom: 0.4em;
+      }
+
+      section:first-of-type p {
+        font-size: 1.6rem;
+        line-height: 1.6;
+      }
+
+      section {
+        margin: 5rem 0;
+        padding-top: 3.5rem;
+      }
+
+      h2 {
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #666;
+        margin-bottom: 1.5rem;
+      }
+
+      p {
+        font-size: 1.35rem;
+        line-height: 1.75;
+      }
+
+      .price {
+        font-size: 1.15rem;
+      }
+
+      .cta {
+        font-size: 1.1rem;
+        padding: 1.2rem 2.5rem;
+        margin-top: 1.5rem;
+        font-weight: 500;
+      }
+
+      .event {
+        padding: 1.5rem 0;
+      }
+
+      .event-date {
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      .event-details {
+        font-size: 1.15rem;
+      }
+
+      footer {
+        margin-top: 8rem;
+      }
+
+      .social-icon svg {
+        width: 64px;
+        height: 64px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<main>
-<h1 id="ольга-розет">Ольга Розет</h1>
+  <div
+    style="position:fixed;bottom:1rem;right:1rem;background:#000;color:#fff;padding:0.3rem 0.6rem;font-size:12px;border-radius:4px;opacity:0.7;z-index:9999;">
+    v2.4</div>
+  <h1>Ольга Розет</h1>
 
-<p>в том числе</p>
+  <section>
+    <p>в том числе</p>
+    <p><span class="artist-highlight"><a href="art/">Художник</a></span>.</p>
+    <p>Проектировщик. Дизайнер.</p>
+    <p>Ученик. Учитель.</p>
+    <p>Вдохновляю —<br>за деньги<br>и без.</p>
+    <p><a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p>
+  </section>
 
-<p><strong><a href="/art/">Художник</a></strong>.</p>
+  <section>
+    <h2>Консультации</h2>
+    <p>40 минут. Подключить меня к вашему делу.</p>
+    <p class="price">15 000 ₽ · онлайн</p>
+    <a href="https://cal.com/olgarozet/delo-40min" class="cta">Записаться</a>
+  </section>
 
-<p>Проектировщик. Дизайнер.</p>
+  <section>
+    <h2>Ближайшее</h2>
+    <div class="event">
+      <p class="event-date">четверг 15 — воскресенье 18+ января 2026</p>
+      <p>Париж · <em>набор закончен</em></p>
+      <p class="event-details"><a href="https://parisinjanuary.ru">Лист ожидания →</a></p>
+    </div>
+    <div class="event">
+      <p class="event-date">четверг 19 — понедельник 23 марта 2026</p>
+      <p>Узбекистан · Бухара → Самарканд</p>
+    </div>
+  </section>
 
-<p>Ученик. Учитель.</p>
+  <footer>
+    <div class="footer-content">
+      <a href="https://instagram.com/olga_rozet" class="social-icon" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+        </svg>
+      </a>
+      <img src="olga_footer.png" alt="Ольга Розет" class="footer-portrait">
+      <a href="https://t.me/olga_rozet" class="social-icon" aria-label="Telegram">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+        </svg>
+      </a>
+    </div>
+    <a href="#" class="scroll-top" aria-label="Наверх"
+      onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </a>
+  </footer>
 
-<p>Вдохновляю —<br />
-за деньги<br />
-и без.</p>
-
-<p><a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p>
-
-<h2 id="консультации">Консультации</h2>
-
-<p>40 минут. Подключить меня к вашему делу.</p>
-
-<p><strong>15 000 ₽</strong> · онлайн</p>
-
-<p><a href="https://cal.com/olgarozet/delo-40min" class="cta">Записаться</a></p>
-
-<h2 id="ближаишее">Ближайшее</h2>
-
-<h3 id="париж">Париж</h3>
-
-<p><strong>четверг 15 — воскресенье 18+ января 2026</strong></p>
-
-<p><em>набор закончен</em></p>
-
-<p><a href="https://parisinjanuary.ru">Лист ожидания →</a></p>
-
-<h3 id="узбекистан">Узбекистан</h3>
-
-<p><strong>четверг 19 — понедельник 23 марта 2026</strong></p>
-
-<p>Бухара → Самарканд</p>
-
-</main>
-<footer>
-<a href="https://instagram.com/olga_rozet" aria-label="Instagram">Instagram</a>
-<a href="https://t.me/olga_rozet" aria-label="Telegram">Telegram</a>
-</footer>
-<div id="version" aria-hidden="true">v3.0</div>
+  <script>
+    const footer = document.querySelector('.footer-content');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+    observer.observe(footer);
+  </script>
 </body>
+
 </html>
