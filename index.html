@@ -94,6 +94,11 @@
     body {
       color: var(--color-text);
       background: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .content-wrapper {
       max-width: var(--max-width);
       margin: 0 auto;
       padding: var(--space-top) var(--space-padding) 0;
@@ -193,16 +198,13 @@
       margin-top: 0.3em;
     }
 
-    /* Footer */
+    /* Footer - Full Width (outside content-wrapper) */
     footer {
+      width: 100%;
       margin-top: var(--space-section);
-      margin-left: calc(-1 * var(--space-padding));
-      margin-right: calc(-1 * var(--space-padding));
       padding: 0;
       border: none;
       background: #000;
-      /* Compensate for body padding */
-      width: calc(100% + 2 * var(--space-padding));
     }
 
     .footer-content {
@@ -322,14 +324,15 @@
 
 <body>
   <!-- Version badge (dev only) -->
-  <div aria-hidden="true" style="position:fixed;bottom:1rem;right:1rem;background:#000;color:#fff;padding:0.3rem 0.6rem;font-size:12px;border-radius:4px;opacity:0.7;z-index:9999;">v3.5</div>
+  <div aria-hidden="true" style="position:fixed;bottom:1rem;right:1rem;background:#000;color:#fff;padding:0.3rem 0.6rem;font-size:12px;border-radius:4px;opacity:0.7;z-index:9999;">v4.0</div>
   
-  <header>
-    <h1>Ольга Розет</h1>
-  </header>
+  <div class="content-wrapper">
+    <header>
+      <h1>Ольга Розет</h1>
+    </header>
 
-  <main>
-    <section id="about" aria-label="О себе">
+    <main>
+      <section id="about" aria-label="О себе">
     <p>в том числе</p>
     <p><span class="artist-highlight"><a href="art/">Художник</a></span>.</p>
     <p>Проектировщик. Дизайнер.</p>
@@ -338,7 +341,7 @@
     <p>за деньги</p>
     <p>и без.</p>
     <p><a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p>
-    </section>
+      </section>
 
     <section id="consultations" aria-labelledby="consultations-heading">
       <h2 id="consultations-heading">Консультации</h2>
@@ -347,8 +350,8 @@
       <a href="https://cal.com/olgarozet/delo-40min" class="cta">Записаться</a>
     </section>
 
-    <section id="events" aria-labelledby="events-heading">
-      <h2 id="events-heading">Ближайшее</h2>
+      <section id="events" aria-labelledby="events-heading">
+        <h2 id="events-heading">Ближайшее</h2>
       <article class="event">
         <p class="event-date"><time>четверг 15 — воскресенье 18+ января 2026</time></p>
         <p>Париж · <em>набор закончен</em></p>
@@ -358,8 +361,9 @@
         <p class="event-date"><time>четверг 19 — понедельник 23 марта 2026</time></p>
         <p>Узбекистан · Бухара → Самарканд</p>
       </article>
-    </section>
-  </main>
+      </section>
+    </main>
+  </div>
 
   <footer>
     <div class="footer-content">

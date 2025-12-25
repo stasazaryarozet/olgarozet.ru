@@ -1,5 +1,5 @@
 ---
-version: 3.5
+version: 4.0
 updated: 2025-12-26
 build: true
 ---
