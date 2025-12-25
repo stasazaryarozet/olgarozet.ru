@@ -25,21 +25,33 @@
         }
 
         .gallery {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2px;
         }
 
         .artwork {
             width: 100%;
-            padding: 0;
-            margin: 0 0 3px 0;
             line-height: 0;
+            overflow: hidden;
         }
 
         .artwork img {
             width: 100%;
             height: auto;
             display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .artwork:hover img {
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 600px) {
+            .gallery {
+                grid-template-columns: 1fr;
+                gap: 1px;
+            }
         }
 
         /* Navigation - minimal, appears on hover */
@@ -122,115 +134,109 @@
     </nav>
 
     <main class="gallery">
-        <div class="artwork"><img src="img/04.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/05.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/06.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/07.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/08.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/09.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/43.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/5777.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/5779.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/Antib1.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/Antib3.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/Dozhd_na_ozere_Garda.jpg" alt="Произведение Ольги Розет">
+        <div class="artwork"><img loading="lazy" src="img/04.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/05.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/06.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/07.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/08.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/09.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/43.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/5777.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/5779.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/Antib1.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/Antib3.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/Dozhd_na_ozere_Garda.jpg" alt="Произведение Ольги Розет">
         </div>
-        <div class="artwork"><img src="img/Eshchë_maki_provansa.jpg" alt="Произведение Ольги Розет">
+        <div class="artwork"><img loading="lazy" src="img/Eshchë_maki_provansa.jpg" alt="Произведение Ольги Розет">
         </div>
-        <div class="artwork"><img src="img/Ivan_Stenin.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/KARTINA1.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/KONI.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/Letyashchaya_v_tishine_(Olga_Marusina).jpg"
-                alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/MOË.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/Medlennye_sumerki_proshedshego.jpg"
-                alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/NIMFEI.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/Nakhodka.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/ONI.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/Sher_v_Bilbao.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/Sole.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/Syna,_let_10_bolshoĭ.jpg" alt="Произведение Ольги Розет">
+        <div class="artwork"><img loading="lazy" src="img/Ivan_Stenin.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/KARTINA1.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/KONI.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/Letyashchaya_v_tishine_(Olga_Marusina).jpg" alt="Произведение Ольги Розет">
         </div>
-        <div class="artwork"><img src="img/T8LPnmJYCcgbD9Y3LEYGwA-article.jpg"
-                alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/Ya_prishla_syuda.....jpg" alt="Произведение Ольги Розет">
+        <div class="artwork"><img loading="lazy" src="img/MOË.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/Medlennye_sumerki_proshedshego.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/NIMFEI.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/Nakhodka.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/ONI.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/Sher_v_Bilbao.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/Sole.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/Syna,_let_10_bolshoĭ.jpg" alt="Произведение Ольги Розет">
         </div>
-        <div class="artwork"><img src="img/Zhizn._kotoraya_khochet._chtoby_eë_razdelili_vdvoem.jpg"
-                alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/angl.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/antib.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/ausser.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/belgrad.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/byloe_i_dumy.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/chereshnya_i_krasnye_kryshi.jpeg"
-                alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/dunaĭ.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/esfir.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/eskizy_2003.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/etrog_braĭt.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/fff.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/gerbera.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/id-5-Cvet-na-vode-i-svet-na-pikah-gor.jpg"
-                alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/img014.JPG" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/iris.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/ital.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/kamin_tsv.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/katya_bilbao.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/liliya_menora.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/lost.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/maki_provans.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/maki_provans_2.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/menora.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/metafora.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/monokhrom_3.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/more.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/motherhorse.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/nartsissy.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/natyurmort.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/nefertitti_1.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/obratnaya_storona_solntsa33.jpg"
-                alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/obratnaya_storona_solntsa_1.jpg"
-                alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/obratnaya_storona_solntsa_2.jpg"
-                alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/otkrytka_iris.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/parizha_dereva_1.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/pavliny.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/prosto_belgrad.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/rozety.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/rut.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/shishki_i_khvoya.jpeg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/skettchers_(1).jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/skettchers_(2).jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/sredizemnoe_more.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/syn__2016.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/terblansh.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/trikotazhnye_nayady_1.jpg" alt="Произведение Ольги Розет">
+        <div class="artwork"><img loading="lazy" src="img/T8LPnmJYCcgbD9Y3LEYGwA-article.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/Ya_prishla_syuda.....jpg" alt="Произведение Ольги Розет">
         </div>
-        <div class="artwork"><img src="img/trikotazhnye_nayady_3.jpg" alt="Произведение Ольги Розет">
+        <div class="artwork"><img loading="lazy" src="img/Zhizn._kotoraya_khochet._chtoby_eë_razdelili_vdvoem.jpg"
+                alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/angl.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/antib.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/ausser.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/belgrad.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/byloe_i_dumy.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/chereshnya_i_krasnye_kryshi.jpeg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/dunaĭ.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/esfir.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/eskizy_2003.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/etrog_braĭt.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/fff.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/gerbera.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/id-5-Cvet-na-vode-i-svet-na-pikah-gor.jpg" alt="Произведение Ольги Розет">
         </div>
-        <div class="artwork"><img src="img/tsv.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/tsvety_na_vode.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/u1.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/u2.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/u3.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/ulita_na_kholste.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/ulity1.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/ulity2.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/ulity3.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/ulity5.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/verdon_chb.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/work-002-full.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/work-005-full.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/work-007-full.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/work-011-full.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/work-012-full.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/work-013-full.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/z_4f61effe.jpg" alt="Произведение Ольги Розет"></div>
-        <div class="artwork"><img src="img/zoloto_lyubvi.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/img014.JPG" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/iris.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/ital.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/kamin_tsv.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/katya_bilbao.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/liliya_menora.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/lost.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/maki_provans.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/maki_provans_2.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/menora.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/metafora.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/monokhrom_3.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/more.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/motherhorse.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/nartsissy.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/natyurmort.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/nefertitti_1.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/obratnaya_storona_solntsa33.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/obratnaya_storona_solntsa_1.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/obratnaya_storona_solntsa_2.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/otkrytka_iris.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/parizha_dereva_1.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/pavliny.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/prosto_belgrad.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/rozety.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/rut.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/shishki_i_khvoya.jpeg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/skettchers_(1).jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/skettchers_(2).jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/sredizemnoe_more.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/syn__2016.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/terblansh.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/trikotazhnye_nayady_1.jpg" alt="Произведение Ольги Розет">
+        </div>
+        <div class="artwork"><img loading="lazy" src="img/trikotazhnye_nayady_3.jpg" alt="Произведение Ольги Розет">
+        </div>
+        <div class="artwork"><img loading="lazy" src="img/tsv.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/tsvety_na_vode.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/u1.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/u2.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/u3.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/ulita_na_kholste.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/ulity1.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/ulity2.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/ulity3.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/ulity5.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/verdon_chb.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/work-002-full.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/work-005-full.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/work-007-full.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/work-011-full.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/work-012-full.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/work-013-full.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/z_4f61effe.jpg" alt="Произведение Ольги Розет"></div>
+        <div class="artwork"><img loading="lazy" src="img/zoloto_lyubvi.jpg" alt="Произведение Ольги Розет"></div>
     </main>
 
     <script>
