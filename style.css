@@ -157,6 +157,7 @@ section {
 
 /* Footer */
 .footer {
+  margin-top: 6rem;
   padding: 3rem 0 4rem 0;
   border-top: 1px solid rgba(17, 17, 17, 0.1);
 }
