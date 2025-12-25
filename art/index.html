@@ -236,12 +236,12 @@
     <script>
         // Shuffle gallery on load
         const gallery = document.querySelector('.gallery');
-        const artworks = [...gallery.children];
+        const artworks = Array.from(gallery.children);
         for (let i = artworks.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            gallery.appendChild(artworks[j]);
-            artworks.splice(j, 1, artworks[i]);
+            [artworks[i], artworks[j]] = [artworks[j], artworks[i]];
         }
+        artworks.forEach(art => gallery.appendChild(art));
 
         // Scroll progress
         const progress = document.getElementById('progress');
