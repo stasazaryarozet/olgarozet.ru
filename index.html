@@ -211,30 +211,28 @@
 
     .scroll-top {
       position: absolute;
-      bottom: 8%;
+      bottom: 2%;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 48px;
-      height: 48px;
-      color: rgba(255, 255, 255, 0.85);
+      width: 40px;
+      height: 24px;
+      color: rgba(255, 255, 255, 0.4);
       border: none;
-      transition: color 0.3s, transform 0.3s;
-      filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.4));
+      transition: color 0.3s;
       z-index: 10;
     }
 
     .scroll-top:hover {
-      color: #fff;
-      transform: translateX(-50%) scale(1.1);
+      color: rgba(255, 255, 255, 0.8);
       border: none;
     }
 
     .scroll-top svg {
-      width: 32px;
-      height: 32px;
+      width: 24px;
+      height: 24px;
     }
 
     /* Tablet */
@@ -381,8 +379,8 @@
       </a>
       <a href="#" class="scroll-top" aria-label="Наверх"
         onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 4l-8 8h5v8h6v-8h5z" />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M5 15l7-7 7 7" />
         </svg>
       </a>
     </div>
