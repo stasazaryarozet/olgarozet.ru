@@ -47,11 +47,6 @@
       line-height: 1;
     }
 
-    .red,
-    .red a {
-      color: #ff0000;
-    }
-
     .artist-highlight {
       color: #ff0000;
     }
@@ -131,18 +126,6 @@
       margin-top: 0.3em;
     }
 
-    .help {
-      background: #fafafa;
-      padding: 1.5em;
-      border-radius: 8px;
-      margin-top: 1em;
-    }
-
-    .help p {
-      font-size: 0.95em;
-      color: #666;
-    }
-
     footer {
       margin: 0 -1.5em;
       padding: 0;
@@ -150,40 +133,11 @@
       background: #fff;
     }
 
-    @media (min-width: 1024px) {
-      footer {
-        position: relative;
-        left: 50%;
-        right: 50%;
-        margin-left: -50vw;
-        margin-right: -50vw;
-        width: 100vw;
-        padding: 0;
-      }
-
-      .footer-content {
-        width: 100%;
-      }
-
-      .footer-portrait {
-        width: 100%;
-        height: 100vh;
-        object-fit: cover;
-        object-position: center top;
-        -webkit-mask-image: none;
-        mask-image: none;
-      }
-    }
-
     .footer-content {
       position: relative;
       display: block;
       margin: 0;
       padding: 0;
-    }
-
-    .footer-content.visible {
-      /* animation handled by JS */
     }
 
     .footer-portrait {
@@ -252,6 +206,14 @@
     }
 
     @media (max-width: 600px) {
+      html {
+        font-size: 17px;
+      }
+
+      body {
+        padding: 3em 1.2em 0;
+      }
+
       .social-icon:first-of-type {
         left: 10%;
       }
@@ -262,16 +224,6 @@
 
       .social-icon {
         top: 20%;
-      }
-    }
-
-    @media (max-width: 600px) {
-      html {
-        font-size: 17px;
-      }
-
-      body {
-        padding: 3em 1.2em 0;
       }
     }
 
@@ -349,21 +301,44 @@
       }
 
       footer {
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        width: 100vw;
         margin-top: 8rem;
+        padding: 0;
+      }
+
+      .footer-content {
+        width: 100vw;
+        max-width: none;
+      }
+
+      .footer-portrait {
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        object-position: center 20%;
+        -webkit-mask-image: none;
+        mask-image: none;
+        display: block;
       }
 
       .social-icon svg {
-        width: 64px;
-        height: 64px;
+        width: 72px;
+        height: 72px;
       }
     }
+
   </style>
 </head>
 
 <body>
   <div
     style="position:fixed;bottom:1rem;right:1rem;background:#000;color:#fff;padding:0.3rem 0.6rem;font-size:12px;border-radius:4px;opacity:0.7;z-index:9999;">
-    v2.5</div>
+    v3.0</div>
   <h1>Ольга Розет</h1>
 
   <section>
@@ -371,7 +346,9 @@
     <p><span class="artist-highlight"><a href="art/">Художник</a></span>.</p>
     <p>Проектировщик. Дизайнер.</p>
     <p>Ученик. Учитель.</p>
-    <p>Вдохновляю —<br>за деньги<br>и без.</p>
+    <p>Вдохновляю —</p>
+    <p>за деньги</p>
+    <p>и без.</p>
     <p><a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p>
   </section>
 
@@ -386,7 +363,7 @@
     <h2>Ближайшее</h2>
     <div class="event">
       <p class="event-date">четверг 15 — воскресенье 18+ января 2026</p>
-      <p>Париж · <em>набор закончен</em></p>
+      <p>### Париж · <em>набор закончен</em></p>
       <p class="event-details"><a href="https://parisinjanuary.ru">Лист ожидания →</a></p>
     </div>
     <div class="event">
@@ -430,6 +407,7 @@
     }, { threshold: 0.2 });
     observer.observe(footer);
   </script>
+
 </body>
 
 </html>
