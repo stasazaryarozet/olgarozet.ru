@@ -112,8 +112,19 @@ h1 {
     line-height: 1;
 }
 
+h1::after {
+    content: '——— ✿ ———';
+    display: block;
+    font-size: 0.25em;
+    letter-spacing: 0.1em;
+    color: var(--color-text);
+    margin-top: 1em;
+    font-weight: 300;
+}
+
 .artist-highlight {
     color: var(--color-accent);
+    letter-spacing: 0.08em;
 }
 
 .artist-highlight a {
@@ -304,6 +315,10 @@ footer {
 
 /* Icons positioning on mobile */
 @media (max-width: 767px) {
+    .content-wrapper {
+        padding-left: calc(var(--space-padding) + 1.5em);
+    }
+
     .social-icon {
         width: clamp(60px, 15vw, 85px);
         height: clamp(60px, 15vw, 85px);
@@ -315,8 +330,7 @@ footer {
     }
 
     .inspire::before {
-        left: -1.3em;
-        font-size: 0.9em;
+        left: -1.8em;
     }
 }
 
@@ -346,18 +360,16 @@ footer {
 
     <main>
       <section id="about" aria-label="О себе">
-    <p>**[ХУДОЖНИК](/art/)**.</p>
+    <p><span class="artist-highlight"><a href="/art/">ХУДОЖНИК</a>.</span></p>
     <p>Ученик; Учитель;</p>
     <p>Проектировщик; Дизайнер</p>
-    <p class="inspire">Вдохновляю —<br>за деньги<br>и без.</p>
-    <p>за деньги</p>
-    <p>и без.</p>
+    <p class="inspire">Вдохновляю —<br>за деньги<br>и без<br>•</p>
     <p><a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p>
       </section>
 
     <section id="consultations" aria-labelledby="consultations-heading">
       <h2 id="consultations-heading">Консультации</h2>
-      <p>40 минут.<br>Подключить меня к вашему делу.</p>
+      <p>Подключить меня к вашему делу<br>на 40 минут</p>
       <p class="price">15 000 ₽ · онлайн</p>
       <a href="https://cal.com/olgarozet/delo-40min" class="cta">Записаться</a>
     </section>
