@@ -154,7 +154,7 @@ p {
 .inspire::before {
     content: '🔥';
     position: absolute;
-    left: calc(-1 * var(--space-padding) - 0.5em);
+    left: -2.2em;
     font-size: 1em;
 }
 
@@ -313,6 +313,11 @@ footer {
         width: clamp(44px, 11vw, 65px);
         height: clamp(44px, 11vw, 65px);
     }
+
+    .inspire::before {
+        left: -1.3em;
+        font-size: 0.9em;
+    }
 }
 
 /* Accessibility */
@@ -341,7 +346,7 @@ footer {
 
     <main>
       <section id="about" aria-label="О себе">
-    <p><span class="artist-highlight"><a href="art/">Художник</a></span>.</p>
+    <p>**[ХУДОЖНИК](/art/)**.</p>
     <p>Ученик; Учитель;</p>
     <p>Проектировщик; Дизайнер</p>
     <p class="inspire">Вдохновляю —<br>за деньги<br>и без.</p>
@@ -352,7 +357,7 @@ footer {
 
     <section id="consultations" aria-labelledby="consultations-heading">
       <h2 id="consultations-heading">Консультации</h2>
-      <p>40 минут.</p>
+      <p>40 минут.<br>Подключить меня к вашему делу.</p>
       <p class="price">15 000 ₽ · онлайн</p>
       <a href="https://cal.com/olgarozet/delo-40min" class="cta">Записаться</a>
     </section>
