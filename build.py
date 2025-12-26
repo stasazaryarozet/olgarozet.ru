@@ -489,7 +489,7 @@ def build_from_config():
     # Skills
     skills = bio.get('skills', [])
     if skills:
-        intro.append('; '.join(skills))
+        intro.append('; '.join(skills) + '.')
     
     # Inspire
     inspire = bio.get('inspire', '')
