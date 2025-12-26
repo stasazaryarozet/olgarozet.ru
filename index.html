@@ -57,7 +57,7 @@
     /* Fluid spacing */
     --space-section: clamp(3rem, 2rem + 4vw, 6rem);
     --space-padding: clamp(1.2rem, 1rem + 2vw, 3rem);
-    --space-top: clamp(3rem, 2rem + 8vh, 12vh);
+    --space-top: clamp(4rem, 3rem + 10vh, 16vh);
 
     /* Layout */
     --max-width: min(50em, 90vw);
@@ -318,17 +318,31 @@ footer {
     }
 
     .social-icon {
-        width: clamp(60px, 15vw, 85px);
-        height: clamp(60px, 15vw, 85px);
+        width: clamp(70px, 18vw, 95px);
+        height: clamp(70px, 18vw, 95px);
     }
 
     .social-icon svg {
-        width: clamp(44px, 11vw, 65px);
-        height: clamp(44px, 11vw, 65px);
+        width: clamp(52px, 14vw, 75px);
+        height: clamp(52px, 14vw, 75px);
     }
 
     .inspire::before {
         left: -1.8em;
+    }
+
+    .footer-portrait {
+        width: 140%;
+        margin-left: -20%;
+        object-fit: cover;
+    }
+
+    .social-icon:first-of-type {
+        left: 12%;
+    }
+
+    .social-icon:last-of-type {
+        right: 5%;
     }
 }
 
@@ -358,7 +372,7 @@ footer {
 
     <main>
       <section id="about" aria-label="О себе">
-    <p><span class="artist-highlight"><a href="/art/">ХУДОЖНИК</a>.</span></p>
+    <p><span class="artist-highlight"><a href="art/">ХУДОЖНИК</a></span>.</p>
     <p>Ученик; Учитель;</p>
     <p>Проектировщик; Дизайнер</p>
     <p class="inspire">Вдохновляю —<br>за деньги<br>и без<br>•</p>
