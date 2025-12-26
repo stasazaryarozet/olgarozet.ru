@@ -51,6 +51,7 @@ body {
     max-width: var(--max-width);
     margin: 0 auto;
     padding: var(--space-top) var(--space-padding) 0;
+    padding-left: calc(var(--space-padding) + 2.5em);
 }
 
 h1 {
