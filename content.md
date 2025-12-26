@@ -1,5 +1,5 @@
 ---
-version: 5.3
+version: 5.2
 updated: 2025-12-26
 build: true
 ---
@@ -7,6 +7,7 @@ build: true
 # Ольга Розет
 
 **[Художник](/art/)**.
+Оль
 
 Ученик; Учитель;
 
@@ -18,14 +19,14 @@ build: true
 
 [o.g.rozet@gmail.com](mailto:o.g.rozet@gmail.com)
 
-## Включить в дело
+## Консультация
 
 40 минут.
 Подключить меня к вашему делу.
 
 **15 000 ₽** · онлайн
 
-[Записаться](https://cal.com/olgarozet/delo-40min){.cta}
+[ЗАПИСАТЬСЯ](https://cal.com/olgarozet/delo-40min){.cta}
 
 ## Ближайшее
 
