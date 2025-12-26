@@ -399,8 +399,8 @@ def generate_html(data: dict) -> str:
   <!-- Structured Data -->
   <script type="application/ld+json">{schema}</script>
   
-  <style>{get_css()}
-  </style>
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
