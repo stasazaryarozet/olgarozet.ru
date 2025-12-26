@@ -1,323 +1,88 @@
 #!/usr/bin/env python3
 """
-olgarozet.ru Site Generator — Архитектурная версия
+olgarozet.ru Site Generator — Архитектурная версия v2
 
 Single Source of Truth:
-    - content.md → контент (intro, консультации, события)
-    - templates/base.css → стили (inline в HTML)
-    - templates/footer.html → footer с изображением и соцсетями
-
-Генерирует index.html идентичный v2.5 с graffiti footer.
+    - ../config.yaml → ВСЕ данные (bio, контакты, события)
+    
+Генерирует:
+    - index.html
+    - ../channel_bio.txt (для Telegram)
 
 Usage:
-    python3 build.py           # Generate index.html
-    python3 build.py --check   # Validate without writing
+    python3 build.py           # Generate from config.yaml
+    python3 build.py --legacy  # Use old content.md (deprecated)
 """
 import sys
 import re
+import yaml
 from pathlib import Path
 from datetime import datetime
 
 # Paths
 ROOT = Path(__file__).parent
+OLGA_ROOT = ROOT.parent
 CONTENT = ROOT / 'content.md'
 OUTPUT = ROOT / 'index.html'
+CONFIG_PATH = OLGA_ROOT / 'config.yaml'
+
+# Context Engine import
+sys.path.insert(0, str(ROOT.parent.parent / 'engine'))
+try:
+    from context import Context
+    CTX = Context(OLGA_ROOT)
+    HAS_CONTEXT = True
+except ImportError:
+    CTX = None
+    HAS_CONTEXT = False
+
+# Load project config
+def load_config():
+    """Load project parameters from config.yaml."""
+    if CONFIG_PATH.exists():
+        with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
+            return yaml.safe_load(f)
+    return {}
+
+CONFIG = load_config()
 
 # ============================================================================
 # TEMPLATES
 # ============================================================================
 
-# CSS вынесен в отдельную константу для читаемости
-# Fluid typography: clamp(min, preferred, max)
-CSS = '''
-    :root {
-      /* Fluid type scale */
-      --font-size-base: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
-      --font-size-h1: clamp(2.5rem, 1.5rem + 5vw, 7rem);
-      --font-size-p: clamp(1rem, 0.95rem + 0.25vw, 1.35rem);
-      
-      /* Fluid spacing */
-      --space-section: clamp(3rem, 2rem + 4vw, 6rem);
-      --space-padding: clamp(1.2rem, 1rem + 2vw, 3rem);
-      --space-top: clamp(3rem, 2rem + 8vh, 12vh);
-      
-      /* Layout */
-      --max-width: min(50em, 90vw);
-      
-      /* Colors */
-      --color-text: #1a1a1a;
-      --color-accent: #ff0000;
-      --color-muted: #666;
-      --color-border: #ddd;
-    }
+# CSS загружается из внешнего файла
+STYLES_PATH = ROOT / 'styles.css'
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+def get_css():
+    """Load CSS from external file."""
+    if STYLES_PATH.exists():
+        return STYLES_PATH.read_text(encoding='utf-8')
+    return ''
 
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-    }
 
-    html {
-      font: 400 var(--font-size-base)/1.8 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      -webkit-text-size-adjust: 100%;
-      -webkit-font-smoothing: antialiased;
-      scroll-behavior: smooth;
-      overscroll-behavior: none;
-    }
-
-    body {
-      color: var(--color-text);
-      background: #fff;
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: var(--space-top) var(--space-padding) 0;
-    }
-
-    h1 {
-      font-size: var(--font-size-h1);
-      font-weight: clamp(200, 300 - 5vw, 300);
-      margin-bottom: 0.5em;
-      letter-spacing: -0.03em;
-      color: var(--color-accent);
-      line-height: 1;
-    }
-
-    .artist-highlight {
-      color: var(--color-accent);
-    }
-
-    .artist-highlight a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    section {
-      margin: var(--space-section) 0;
-      padding-top: calc(var(--space-section) * 0.7);
-      border-top: 1px solid var(--color-border);
-    }
-
-    section:first-of-type {
-      border-top: none;
-      padding-top: 0;
-      margin-top: 0;
-    }
-
-    h2 {
-      font-size: clamp(0.9rem, 0.85rem + 0.2vw, 1rem);
-      font-weight: 500;
-      margin-bottom: 0.8em;
-      color: var(--color-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    p {
-      margin: 0.8em 0;
-      font-size: var(--font-size-p);
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-      border-bottom: 1px solid #ccc;
-      transition: border-color 0.2s;
-    }
-
-    a:hover {
-      border-color: var(--color-text);
-    }
-
-    .price {
-      font-size: clamp(0.85rem, 0.8rem + 0.2vw, 1.15rem);
-      color: var(--color-muted);
-    }
-
-    .cta {
-      display: inline-block;
-      margin-top: 0.5em;
-      padding: clamp(0.5em, 0.4em + 0.3vw, 1.2rem) clamp(1em, 0.8em + 0.5vw, 2.5rem);
-      background: var(--color-text);
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: clamp(0.9rem, 0.85rem + 0.2vw, 1.1rem);
-      font-weight: 500;
-      transition: opacity 0.2s;
-    }
-
-    .cta:hover {
-      opacity: 0.8;
-      border: none;
-    }
-
-    .event {
-      margin: clamp(1em, 0.8em + 0.5vw, 1.5rem) 0;
-      padding: clamp(0.5em, 0.3em + 0.3vw, 1.5rem) 0;
-    }
-
-    .event-date {
-      font-weight: 500;
-      font-size: clamp(1rem, 0.95rem + 0.2vw, 1.2rem);
-    }
-
-    .event-details {
-      font-size: clamp(0.9rem, 0.85rem + 0.15vw, 1.15rem);
-      color: var(--color-muted);
-      margin-top: 0.3em;
-    }
-
-    /* Footer */
-    footer {
-      margin: var(--space-section) calc(-1 * var(--space-padding)) 0;
-      padding: 0;
-      border: none;
-      background: #fff;
-    }
-
-    .footer-content {
-      position: relative;
-      display: block;
-      margin: 0;
-      padding: 0;
-    }
-
-    .footer-portrait {
-      width: 100%;
-      height: auto;
-      display: block;
-      object-fit: cover;
-      -webkit-mask-image: linear-gradient(to bottom,
-          transparent 0%,
-          black 10%,
-          black 90%,
-          transparent 100%);
-      mask-image: linear-gradient(to bottom,
-          transparent 0%,
-          black 10%,
-          black 90%,
-          transparent 100%);
-    }
-
-    .social-icon {
-      position: absolute;
-      top: 25%;
-      width: clamp(60px, 50px + 3vw, 80px);
-      height: clamp(60px, 50px + 3vw, 80px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(255, 255, 255, 0.95);
-      border: none;
-      transition: color 0.3s ease, transform 0.3s ease;
-      filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.7));
-      z-index: 10;
-    }
-
-    .social-icon:first-of-type {
-      left: clamp(10%, 8% + 5vw, 20%);
-    }
-
-    .social-icon:last-of-type {
-      right: clamp(10%, 8% + 5vw, 20%);
-    }
-
-    .social-icon:hover {
-      color: #fff;
-      transform: scale(1.15);
-      border: none;
-    }
-
-    .social-icon svg {
-      width: clamp(40px, 35px + 2vw, 72px);
-      height: clamp(40px, 35px + 2vw, 72px);
-    }
-
-    .scroll-top {
-      display: block;
-      text-align: center;
-      padding: 1em;
-      color: #ccc;
-      border: none;
-      transition: color 0.3s;
-    }
-
-    .scroll-top:hover {
-      color: var(--color-accent);
-      border: none;
-    }
-
-    /* Desktop: full-width footer */
-    @media (min-width: 768px) {
-      footer {
-        position: relative;
-        left: 50%;
-        right: 50%;
-        margin-left: -50vw;
-        margin-right: -50vw;
-        width: 100vw;
-      }
-
-      .footer-content {
-        width: 100vw;
-        max-width: none;
-      }
-
-      .footer-portrait {
-        width: 100vw;
-        height: min(100vh, 80vw);
-        object-fit: cover;
-        object-position: center 20%;
-        -webkit-mask-image: none;
-        mask-image: none;
-      }
-    }
-
-    /* Accessibility */
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-      *, *::before, *::after {
-        transition-duration: 0.01ms !important;
-      }
-    }
-
-    /* Dark mode ready */
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --color-text: #f0f0f0;
-        --color-muted: #aaa;
-        --color-border: #333;
-      }
-      body {
-        background: #111;
-      }
-      .cta {
-        background: #f0f0f0;
-        color: #111;
-      }
-    }
-'''
-
-FOOTER = '''
+def get_footer():
+    """Generate footer with social links from config."""
+    urls = CONFIG.get('urls', {})
+    instagram_url = urls.get('instagram', 'instagram.com/olga_rozet')
+    telegram_url = urls.get('telegram_channel', 't.me/olga_rozet')
+    
+    # Ensure https://
+    if not instagram_url.startswith('http'):
+        instagram_url = 'https://' + instagram_url
+    if not telegram_url.startswith('http'):
+        telegram_url = 'https://' + telegram_url
+    
+    return f'''
   <footer>
     <div class="footer-content">
-      <a href="https://instagram.com/olga_rozet" class="social-icon" aria-label="Instagram">
+      <a href="{instagram_url}" class="social-icon" aria-label="Instagram">
         <svg viewBox="0 0 24 24" fill="currentColor">
           <path
             d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
         </svg>
       </a>
       <img src="olga_footer.png" alt="Ольга Розет" class="footer-portrait">
-      <a href="https://t.me/olga_rozet" class="social-icon" aria-label="Telegram">
+      <a href="{telegram_url}" class="social-icon" aria-label="Telegram">
         <svg viewBox="0 0 24 24" fill="currentColor">
           <path
             d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
@@ -325,7 +90,7 @@ FOOTER = '''
       </a>
     </div>
     <a href="#" class="scroll-top" aria-label="Наверх"
-      onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+      onclick="window.scrollTo({{top:0,behavior:'smooth'}});return false;">
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M12 19V5M5 12l7-7 7 7" />
       </svg>
@@ -334,16 +99,17 @@ FOOTER = '''
 
   <script>
     const footer = document.querySelector('.footer-content');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
+    const observer = new IntersectionObserver((entries) => {{
+      entries.forEach(entry => {{
+        if (entry.isIntersecting) {{
           entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.2 });
+        }}
+      }});
+    }}, {{ threshold: 0.1 }});
     observer.observe(footer);
   </script>
 '''
+
 
 
 # ============================================================================
@@ -405,7 +171,7 @@ def parse_content(content_md: str) -> dict:
 
 def parse_consultations(content: str) -> dict:
     """Parse consultations section."""
-    result = {'description': '', 'price': '', 'link': ''}
+    result = {'description': [], 'price': '', 'link': ''}
     
     lines = content.strip().split('\n')
     for line in lines:
@@ -415,14 +181,16 @@ def parse_consultations(content: str) -> dict:
         if '₽' in line:
             # Extract price
             result['price'] = re.sub(r'[*]', '', line)
-        elif 'cal.com' in line or 'Записаться' in line:
+        elif 'cal.com' in line or 'Записаться' in line or 'ЗАПИСАТЬСЯ' in line:
             # Extract link
             match = re.search(r'\((https?://[^)]+)\)', line)
             if match:
                 result['link'] = match.group(1)
-        elif not result['description']:
-            result['description'] = line
+        else:
+            result['description'].append(line)
     
+    # Join description lines with <br>
+    result['description'] = '<br>'.join(result['description'])
     return result
 
 
@@ -430,67 +198,102 @@ def parse_events(content: str) -> list:
     """Parse events section."""
     events = []
     
-    # Split by ### headers
-    event_blocks = re.split(r'\n### ', content)
+    # Find all ### headers and their content
+    pattern = r'###\s+([^\n]+)\n(.*?)(?=###|\Z)'
+    matches = re.findall(pattern, content, re.DOTALL)
     
-    for block in event_blocks:
-        if not block.strip():
-            continue
+    for title, body in matches:
+        event = {
+            'title': title.strip(),
+            'date': '',
+            'status': '',
+            'link': '',
+            'link_text': '',
+            'location': ''
+        }
         
-        lines = block.strip().split('\n')
-        event = {'title': '', 'date': '', 'status': '', 'link': ''}
-        
-        if lines:
-            event['title'] = lines[0].strip()
-        
-        for line in lines[1:]:
+        for line in body.strip().split('\n'):
             line = line.strip()
             if not line:
                 continue
             
-            # Date (bold)
-            if line.startswith('**') and ('января' in line or 'февраля' in line or 'марта' in line):
-                event['date'] = re.sub(r'[*]', '', line)
-            # Status (italic)
-            elif line.startswith('*') and line.endswith('*'):
+            # Date (bold) **text**
+            if line.startswith('**') and line.endswith('**'):
+                event['date'] = line.strip('*')
+            # Status (italic) *text*
+            elif line.startswith('*') and line.endswith('*') and not line.startswith('**'):
                 event['status'] = line.strip('*')
-            # Link
-            elif 'http' in line:
+            # Link [text](url)
+            elif '[' in line and '](' in line:
                 match = re.search(r'\[([^\]]+)\]\(([^)]+)\)', line)
                 if match:
                     event['link_text'] = match.group(1)
                     event['link'] = match.group(2)
-            # Location
-            elif '→' in line or 'Бухара' in line:
+            # Location (plain text with arrow or specific words)
+            elif '→' in line or 'Бухара' in line or 'Самарканд' in line:
                 event['location'] = line
         
         if event['title']:
             events.append(event)
     
     return events
+    
 
 
 # ============================================================================
 # HTML GENERATION
 # ============================================================================
 
+def md_to_html(text: str) -> str:
+    """Convert markdown inline formatting to HTML."""
+    # Bold links: **[text](url)** -> <strong><a href="url">text</a></strong>
+    text = re.sub(r'\*\*\[([^\]]+)\]\(([^)]+)\)\*\*', r'<strong><a href="\2">\1</a></strong>', text)
+    # Regular links: [text](url) -> <a href="url">text</a>
+    text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', text)
+    # Bold: **text** -> <strong>text</strong>
+    text = re.sub(r'\*\*([^*]+)\*\*', r'<strong>\1</strong>', text)
+    # Italic: *text* -> <em>text</em>
+    text = re.sub(r'\*([^*]+)\*', r'<em>\1</em>', text)
+    return text
+
+
 def generate_intro_html(intro: list) -> str:
-    """Generate intro section HTML."""
+    """Generate intro section HTML from markdown lines."""
     html_parts = []
-    for line in intro:
-        # Handle special formatting
-        if line.startswith('**') and 'Художник' in line:
-            html_parts.append(f'    <p><span class="artist-highlight"><a href="art/">Художник</a></span>.</p>')
-        elif line.startswith('['):
-            # Email link
-            match = re.search(r'\[([^\]]+)\]\(([^)]+)\)', line)
-            if match:
-                html_parts.append(f'    <p><a href="{match.group(2)}">{match.group(1)}</a></p>')
-        elif '—' in line and 'деньги' in line:
-            # Multi-line with breaks
-            html_parts.append(f'    <p>Вдохновляю —<br>за деньги<br>и без.</p>')
-        else:
-            html_parts.append(f'    <p>{line}</p>')
+    skip_next = 0
+    
+    for i, line in enumerate(intro):
+        if skip_next > 0:
+            skip_next -= 1
+            continue
+            
+        # Check if this is the "Вдохновляю" block (spans multiple lines)
+        if 'Вдохновляю' in line:
+            # Collect all lines until email
+            inspire_lines = [line.rstrip(' ')]
+            j = i + 1
+            while j < len(intro) and not intro[j].startswith('['):
+                inspire_lines.append(intro[j].rstrip(' '))
+                skip_next += 1
+                j += 1
+            html_parts.append(f'    <p class="inspire">{("<br>".join(inspire_lines)).replace("  ", "")}</p>')
+            continue
+        
+        # Artist highlight (bold link) - dot outside the span
+        if line.startswith('**') and '[' in line:
+            html = md_to_html(line)
+            # Remove strong tags and extract dot if present
+            inner = html.replace("<strong>", "").replace("</strong>", "")
+            if inner.endswith('.'):
+                inner = inner[:-1]
+                html_parts.append(f'    <p><span class="artist-highlight">{inner}</span>.</p>')
+            else:
+                html_parts.append(f'    <p><span class="artist-highlight">{inner}</span></p>')
+            continue
+        
+        # Regular line - convert markdown
+        html = md_to_html(line)
+        html_parts.append(f'    <p>{html}</p>')
     
     return '\n'.join(html_parts)
 
@@ -506,7 +309,7 @@ def generate_events_html(events: list) -> str:
             html_parts.append(f'        <p class="event-date"><time>{event["date"]}</time></p>')
         
         if event.get('title') and event.get('status'):
-            html_parts.append(f'        <p>{event["title"]} · <em>{event["status"]}</em></p>')
+            html_parts.append(f'        <p>{event["title"]} · {event["status"]}</p>')
         elif event.get('title') and event.get('location'):
             html_parts.append(f'        <p>{event["title"]} · {event["location"]}</p>')
         elif event.get('title'):
@@ -529,14 +332,17 @@ def generate_html(data: dict) -> str:
     intro_html = generate_intro_html(data.get('intro', []))
     # Consultations section
     cons = data.get('consultations', {})
+    availability_html = f'<p class="availability">{cons.get("current_availability", "")}</p>' if cons.get('current_availability') else ''
     cons_html = f'''    <section id="consultations" aria-labelledby="consultations-heading">
-      <h2 id="consultations-heading">Консультации</h2>
+      <h2 id="consultations-heading">Консультации:</h2>
       <p>{cons.get('description', '40 минут. Подключить меня к вашему делу.')}</p>
-      <p class="price">{cons.get('price', '15 000 ₽ · онлайн')}</p>
+      <p class="price">{cons.get('price', '15 000 ₽')}</p>
       <a href="{cons.get('link', 'https://cal.com/olgarozet/delo-40min')}" class="cta">Записаться</a>
+      {availability_html}
     </section>'''
     
     # Events section
+    events_title = data.get('events_section_title', 'Ближайшее').upper() + ':'
     events_html = generate_events_html(data.get('events', []))
     
     # JSON-LD structured data
@@ -593,31 +399,31 @@ def generate_html(data: dict) -> str:
   <!-- Structured Data -->
   <script type="application/ld+json">{schema}</script>
   
-  <style>{CSS}
+  <style>{get_css()}
   </style>
 </head>
 
 <body>
-  <!-- Version badge (dev only) -->
-  <div aria-hidden="true" style="position:fixed;bottom:1rem;right:1rem;background:#000;color:#fff;padding:0.3rem 0.6rem;font-size:12px;border-radius:4px;opacity:0.7;z-index:9999;">v{version}</div>
   
-  <header>
-    <h1>Ольга Розет</h1>
-  </header>
+  <div class="content-wrapper">
+    <header>
+      <h1>Ольга Розет</h1>
+    </header>
 
-  <main>
-    <section id="about" aria-label="О себе">
+    <main>
+      <section id="about" aria-label="О себе">
 {intro_html}
-    </section>
+      </section>
 
 {cons_html}
 
-    <section id="events" aria-labelledby="events-heading">
-      <h2 id="events-heading">Ближайшее</h2>
+      <section id="events" aria-labelledby="events-heading">
+        <h2 id="events-heading">{events_title}</h2>
 {events_html}
-    </section>
-  </main>
-{FOOTER}
+      </section>
+    </main>
+  </div>
+{get_footer()}
 </body>
 
 </html>
@@ -648,8 +454,166 @@ def build():
     OUTPUT.write_text(html, encoding='utf-8')
     print(f"✅ Generated index.html (v{data.get('version')})")
     
+    # Generate channel_bio.txt from same source
+    generate_channel_bio(data.get('intro', []))
+    
     return 0
 
 
+def build_from_config():
+    """Build from unified config.yaml using Context Engine."""
+    if not HAS_CONTEXT:
+        print("❌ Context Engine not available")
+        return build()  # Fallback to legacy
+    
+    # Get data from Context (inherits from parent configs)
+    identity = CTX.get('identity', {})
+    bio = CTX.get('bio', {})
+    contacts = CTX.get('contacts', {})
+    consultations = CTX.get('consultations', {})
+    events = CTX.get('events', [])
+    
+    # Build intro lines for compatibility with existing generator
+    intro = []
+    
+    # Artist line
+    artist = bio.get('artist', 'ХУДОЖНИК')
+    artist_link = bio.get('artist_link', 'art/')
+    intro.append(f"**[{artist}]({artist_link})**.")
+    
+    # Roles
+    roles = bio.get('roles', [])
+    if roles:
+        intro.append('; '.join(roles) + ';')
+    
+    # Skills
+    skills = bio.get('skills', [])
+    if skills:
+        intro.append('; '.join(skills))
+    
+    # Inspire
+    inspire = bio.get('inspire', '')
+    if inspire:
+        for line in inspire.strip().split('\n'):
+            intro.append(line + '  ')  # Two spaces for line break
+    
+    # Dot separator
+    intro.append('•')
+    
+    # Email
+    email = contacts.get('email', '')
+    if email:
+        intro.append(f"[{email}](mailto:{email})")
+    
+    # Build data dict
+    price_raw = consultations.get('price', 15000)
+    if isinstance(price_raw, int):
+        price_formatted = f"{price_raw:,}".replace(',', ' ')
+    else:
+        price_formatted = str(price_raw)
+    
+    data = {
+        'version': '6.0',
+        'intro': intro,
+        'consultations': {
+            'description': consultations.get('description', '').replace('\n', '<br>'),
+            'price': f"{price_formatted} {consultations.get('currency', '₽')}",
+            'current_availability': consultations.get('current_availability', '').strip().replace('\n', '<br>'),
+            'link': consultations.get('link', ''),
+            'cta': consultations.get('cta', 'ЗАПИСАТЬСЯ')
+        },
+        'events_section_title': CTX.get('events_section_title', 'Ближайшее'),
+        'events': [
+            {
+                'title': e.get('title', ''),
+                'date': e.get('date_range', ''),
+                'status': e.get('status_text', ''),
+                'location': e.get('subtitle', ''),
+                'link': e.get('link', ''),
+                'link_text': e.get('link_text', 'Подробнее →')
+            }
+            for e in events
+        ]
+    }
+    
+    html = generate_html(data)
+    OUTPUT.write_text(html, encoding='utf-8')
+    print(f"✅ Generated index.html (v{data.get('version')}) from config.yaml")
+    
+    # Generate channel_bio.txt
+    generate_channel_bio_from_config()
+    
+    return 0
+
+
+def generate_channel_bio(intro: list):
+    """Generate channel_bio.txt for Telegram from intro."""
+    bio_path = OLGA_ROOT / 'channel_bio.txt'
+    
+    # Get channel from config (for bio footer)
+    telegram_channel = CONFIG.get('contacts', {}).get('telegram_channel', 'olga_rozet')
+    telegram_handle = f'@{telegram_channel}'
+    
+    lines = []
+    for line in intro:
+        # Skip email lines
+        if '@' in line and 'gmail' in line.lower():
+            continue
+        if 'mailto:' in line:
+            continue
+            
+        # Remove markdown formatting
+        clean = re.sub(r'\*\*\[([^\]]+)\]\([^)]+\)\*\*', r'\1', line)  # **[text](url)**
+        clean = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', clean)  # [text](url)
+        clean = clean.replace('**', '').replace('*', '')
+        clean = clean.strip()
+        if clean:
+            lines.append(clean)
+    
+    # Format for Telegram bio - add handle from config
+    bio = '\n\n'.join(lines) + f'\n\n{telegram_handle}\n'
+    
+    bio_path.write_text(bio, encoding='utf-8')
+    print(f"✅ Generated channel_bio.txt")
+
+
+def generate_channel_bio_from_config():
+    """Generate channel_bio.txt from unified config.yaml."""
+    bio_path = OLGA_ROOT / 'channel_bio.txt'
+    
+    bio_data = CTX.get('bio', {})
+    contacts = CTX.get('contacts', {})
+    
+    lines = []
+    
+    # Artist
+    lines.append(bio_data.get('artist', 'ХУДОЖНИК'))
+    
+    # Roles + Skills
+    roles = bio_data.get('roles', [])
+    skills = bio_data.get('skills', [])
+    if roles or skills:
+        lines.append('; '.join(roles + skills))
+    
+    # Inspire (shortened for Telegram bio limit)
+    inspire = bio_data.get('inspire', '')
+    if inspire:
+        # Take first line only for bio
+        first_line = inspire.strip().split('\n')[0]
+        lines.append(first_line)
+    
+    # Handle
+    telegram_account = contacts.get('telegram_account', 'olgaroset')
+    lines.append(f'@{telegram_account}')
+    
+    bio_text = '\n'.join(lines)
+    bio_path.write_text(bio_text, encoding='utf-8')
+    print(f"✅ Generated channel_bio.txt from config.yaml")
+
+
 if __name__ == '__main__':
-    sys.exit(build())
+    if '--legacy' in sys.argv:
+        sys.exit(build())
+    else:
+        sys.exit(build_from_config())
+

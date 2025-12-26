@@ -57,7 +57,7 @@
     /* Fluid spacing */
     --space-section: clamp(3rem, 2rem + 4vw, 6rem);
     --space-padding: clamp(1.2rem, 1rem + 2vw, 3rem);
-    --space-top: clamp(4rem, 3rem + 10vh, 16vh);
+    --space-top: clamp(6rem, 4rem + 12vh, 20vh);
 
     /* Layout */
     --max-width: min(50em, 90vw);
@@ -126,8 +126,9 @@ h1::after {
 
 .artist-highlight a {
     color: inherit;
-    text-decoration: none;
-    border-bottom: none;
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 0.15em;
 }
 
 section {
@@ -362,8 +363,6 @@ footer {
 </head>
 
 <body>
-  <!-- Version badge (dev only) -->
-  <div aria-hidden="true" style="position:fixed;bottom:1rem;right:1rem;background:#000;color:#fff;padding:0.3rem 0.6rem;font-size:12px;border-radius:4px;opacity:0.7;z-index:9999;">v5.2</div>
   
   <div class="content-wrapper">
     <header>
@@ -380,22 +379,23 @@ footer {
       </section>
 
     <section id="consultations" aria-labelledby="consultations-heading">
-      <h2 id="consultations-heading">Консультации</h2>
-      <p>Подключить<br>к вашему делу<br>на 40 минут</p>
-      <p class="price">15 000 ₽ · онлайн</p>
+      <h2 id="consultations-heading">Консультации:</h2>
+      <p>Подключить<br>к вашему делу<br>на 40 минут<br></p>
+      <p class="price">15 000 ₽</p>
       <a href="https://cal.com/olgarozet/delo-40min" class="cta">Записаться</a>
+      <p class="availability">сейчас — онлайн:<br>я в Сербии.</p>
     </section>
 
       <section id="events" aria-labelledby="events-heading">
-        <h2 id="events-heading">Ближайшее</h2>
+        <h2 id="events-heading">СКОРО:</h2>
       <article class="event">
         <p class="event-date"><time>четверг 15 — воскресенье 18+ января 2026</time></p>
-        <p>Париж · <em>набор закончен</em></p>
+        <p>Париж · набор закончен</p>
         <p class="event-details"><a href="https://parisinjanuary.ru">Лист ожидания →</a></p>
       </article>
       <article class="event">
         <p class="event-date"><time>четверг 19 — понедельник 23 марта 2026</time></p>
-        <p>Узбекистан · Бухара → Самарканд</p>
+        <p>Узбекистан · даты уточняем</p>
       </article>
       </section>
     </main>
