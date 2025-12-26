@@ -407,7 +407,7 @@ def generate_html(data: dict) -> str:
   
   <div class="content-wrapper">
     <header>
-      <h1>Ольга <span style="color: var(--color-text);">Розет</span></h1>
+      <h1 style="color: rgba(26, 26, 26, 0.75);">Ольга Розет</h1>
     </header>
 
     <main>
