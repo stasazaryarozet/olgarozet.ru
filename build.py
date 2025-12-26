@@ -279,14 +279,14 @@ def generate_intro_html(intro: list) -> str:
             html_parts.append(f'    <p class="inspire">{("<br>".join(inspire_lines)).replace("  ", "")}</p>')
             continue
         
-        # Artist highlight (bold link) - dot outside the span
+        # Artist highlight (bold link) - bullet on next line like "без"
         if line.startswith('**') and '[' in line:
             html = md_to_html(line)
             # Remove strong tags and extract dot if present
             inner = html.replace("<strong>", "").replace("</strong>", "")
             if inner.endswith('.'):
                 inner = inner[:-1]
-                html_parts.append(f'    <p><span class="artist-highlight">{inner}</span>.</p>')
+                html_parts.append(f'    <p><span class="artist-highlight">{inner}</span><br>•</p>')
             else:
                 html_parts.append(f'    <p><span class="artist-highlight">{inner}</span></p>')
             continue
