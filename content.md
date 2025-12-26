@@ -18,7 +18,7 @@ build: true
 
 [o.g.rozet@gmail.com](mailto:o.g.rozet@gmail.com)
 
-## Включить в 
+## Включить в дело
 
 40 минут.
 Подключить меня к вашему делу.
