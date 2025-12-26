@@ -270,7 +270,7 @@ footer {
 /* Icons positioning on mobile */
 @media (max-width: 767px) {
     .content-wrapper {
-        padding-left: calc(var(--space-padding) + 1.5em);
+        padding-left: calc(var(--space-padding) + 3em);
     }
 
     .social-icon {
