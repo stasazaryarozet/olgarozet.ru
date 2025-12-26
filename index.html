@@ -147,6 +147,17 @@ p {
     font-size: var(--font-size-p);
 }
 
+.inspire {
+    position: relative;
+}
+
+.inspire::before {
+    content: '🔥';
+    position: absolute;
+    left: calc(-1 * var(--space-padding) - 0.5em);
+    font-size: 1em;
+}
+
 a {
     color: inherit;
     text-decoration: none;
@@ -340,7 +351,7 @@ footer {
     <section id="consultations" aria-labelledby="consultations-heading">
       <h2 id="consultations-heading">Консультации</h2>
       <p>40 минут.</p>
-      <p class="price">15 000 ₽ · онлайн</p>
+      <p class="price">13 000 ₽ · онлайн</p>
       <a href="https://cal.com/olgarozet/delo-40min" class="cta">Записаться</a>
     </section>
 
