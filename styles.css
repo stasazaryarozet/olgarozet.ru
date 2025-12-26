@@ -178,7 +178,7 @@ a:hover {
 /* Footer - Full Width (outside content-wrapper) */
 footer {
     width: 100%;
-    margin-top: calc(var(--space-section) * 2);
+    margin-top: calc(var(--space-section) * 2.5);
     padding: 0;
     border: none;
     background: #fff;
