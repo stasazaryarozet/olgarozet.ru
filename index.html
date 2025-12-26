@@ -106,11 +106,13 @@
 
     h1 {
       font-size: var(--font-size-h1);
-      font-weight: clamp(200, 300 - 5vw, 300);
-      margin-bottom: 0.5em;
-      letter-spacing: -0.03em;
+      font-weight: 200;
+      margin-bottom: 0.6em;
+      letter-spacing: 0.08em;
       color: var(--color-accent);
       line-height: 1;
+      text-transform: uppercase;
+      font-variant: small-caps;
     }
 
     .artist-highlight {
@@ -265,7 +267,7 @@
     }
 
     .social-icon:last-of-type {
-      right: clamp(18%, 12% + 5vw, 28%);
+      right: clamp(14%, 10% + 4vw, 24%);
     }
 
     .social-icon:hover {
@@ -322,7 +324,7 @@
 
 <body>
   <!-- Version badge (dev only) -->
-  <div aria-hidden="true" style="position:fixed;bottom:1rem;right:1rem;background:#000;color:#fff;padding:0.3rem 0.6rem;font-size:12px;border-radius:4px;opacity:0.7;z-index:9999;">v5.0</div>
+  <div aria-hidden="true" style="position:fixed;bottom:1rem;right:1rem;background:#000;color:#fff;padding:0.3rem 0.6rem;font-size:12px;border-radius:4px;opacity:0.7;z-index:9999;">v5.1</div>
   
   <div class="content-wrapper">
     <header>
