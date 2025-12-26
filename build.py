@@ -518,7 +518,7 @@ def build_from_config():
         'consultations': {
             'description': consultations.get('description', '').replace('\n', '<br>'),
             'price': f"{price_formatted} {consultations.get('currency', '₽')}",
-            'current_availability': consultations.get('current_availability', '').strip().replace('\n', '<br>'),
+            'current_availability': consultations.get('current_availability', '').strip().rstrip('.').replace('\n', '<br>'),
             'link': consultations.get('link', ''),
             'cta': consultations.get('cta', 'ЗАПИСАТЬСЯ')
         },
