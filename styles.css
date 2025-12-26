@@ -115,10 +115,9 @@ p {
 .inspire::before {
     content: '🔥';
     position: absolute;
-    left: -2.5em;
+    left: -1.8em;
     font-size: 2.4em;
-    top: 50%;
-    transform: translateY(-50%);
+    top: -0.2em;
     line-height: 1;
     opacity: 0.9;
 }
