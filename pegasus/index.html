@@ -5,22 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Последний шанс Пегаса — Ольга Розет</title>
-    <meta name="description"
-        content="Картина Ольги Розет. Художница жива — цена ниже рыночной. Вся сумма идёт художнице.">
+    <meta name="description" content="Картина Ольги Розет. 2004 год. Прямая продажа из мастерской.">
 
-    <!-- Fonts -->
+    <!-- Fonts: Cormorant for elegance, congruent with art -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
 
     <style>
         :root {
-            --font-main: 'Inter', -apple-system, sans-serif;
-            --color-text: #1a1a1a;
-            --color-muted: #888;
-            --color-accent: #ff0000;
-            /* From olgarozet.ru */
-            --color-bg: #ffffff;
+            /* Warm gallery palette, congruent with painting's warmth */
+            --bg-paper: #fcfbf9;
+            --text-ink: #1a1816;
+            --text-muted: #6e645a;
+            --accent-gold: #cfa878;
+            /* Echoes the ochre in the painting */
+            --accent-red: #b05050;
+            /* Muted red for discrete warnings */
         }
 
         * {
@@ -29,24 +31,29 @@
             box-sizing: border-box;
         }
 
+        html,
         body {
-            font-family: var(--font-main);
-            background: var(--color-bg);
-            color: var(--color-text);
-            line-height: 1.4;
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            background: var(--bg-paper);
+            color: var(--text-ink);
+            line-height: 1.5;
             -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
         }
 
         .container {
             display: grid;
-            grid-template-columns: 55% 45%;
+            grid-template-columns: 1fr 480px;
             min-height: 100vh;
         }
 
         /* ARTWORK SECTION */
         .artwork-section {
-            background: #ffffff;
+            background: #f0ebe5;
+            /* Subtle warmer grey to frame the art */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -55,47 +62,50 @@
         }
 
         .artwork-wrapper {
-            width: 100%;
-            max-height: 90vh;
+            position: relative;
+            max-width: 100%;
+            max-height: 85vh;
+            filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.12));
+            /* Softer shadow */
         }
 
         .artwork-wrapper img {
-            width: 100%;
+            width: auto;
             height: auto;
-            max-height: 90vh;
-            object-fit: contain;
+            max-width: 100%;
+            max-height: 85vh;
             display: block;
-            /* No shadow - clean modern look */
         }
 
         /* INFO PANEL */
         .info-panel {
-            padding: 4rem 4rem 4rem 2rem;
+            background: var(--bg-paper);
+            padding: 4rem 3.5rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            border-left: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         /* Typography */
-        h1.title {
-            font-size: clamp(2.5rem, 4vw, 5rem);
-            font-weight: 200;
-            /* Thin like Olga's H1 */
+        .title {
+            font-size: 3rem;
+            font-weight: 400;
+            /* Regular weight for Cormorant */
             line-height: 1;
             margin-bottom: 0.5rem;
-            color: var(--color-text);
-            letter-spacing: -0.03em;
-        }
-
-        h1.title span.red {
-            color: var(--color-accent);
+            color: var(--text-ink);
+            letter-spacing: -0.01em;
         }
 
         .meta {
-            font-size: 1.1rem;
-            color: var(--color-muted);
-            margin-bottom: 4rem;
-            font-weight: 300;
+            font-size: 1.25rem;
+            font-style: italic;
+            color: var(--text-muted);
+            margin-bottom: 3.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: inline-block;
         }
 
         /* Content Modules */
@@ -103,103 +113,105 @@
             margin-bottom: 3rem;
         }
 
-        .fact-list p {
-            font-size: 1.25rem;
+        .fact {
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--text-ink);
             margin-bottom: 0.5rem;
-            font-weight: 300;
         }
 
         .price-display {
             font-size: 3rem;
-            font-weight: 300;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.5rem;
+            font-weight: 400;
             display: block;
+            margin-bottom: 0.25rem;
+            line-height: 1;
         }
 
         .price-note {
-            font-size: 1.1rem;
-            color: var(--color-muted);
-            font-weight: 300;
+            font-size: 1.15rem;
+            color: var(--accent-gold);
+            font-style: italic;
         }
 
+        /* Logistics */
         .logistics {
-            font-size: 0.95rem;
+            font-size: 1.05rem;
+            color: var(--text-muted);
             line-height: 1.6;
-            color: var(--color-muted);
         }
 
         .logistics strong {
-            color: var(--color-text);
-            font-weight: 500;
+            color: var(--text-ink);
+            font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             letter-spacing: 0.05em;
             margin-right: 0.5rem;
         }
 
-        .warning {
-            color: var(--color-accent);
+        .restriction {
             display: block;
             margin-top: 0.5rem;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            color: var(--accent-red);
+            opacity: 0.9;
         }
 
         /* Contact */
         .contact-area {
             margin-top: auto;
             padding-top: 2rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .contact-label {
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.2em;
-            color: var(--color-muted);
-            margin-bottom: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
         }
 
         .email-link {
-            font-size: 2rem;
-            color: var(--color-text);
+            font-size: 1.8rem;
+            color: var(--text-ink);
             text-decoration: none;
-            font-weight: 300;
-            border-bottom: 1px solid #eee;
-            transition: border-color 0.2s;
+            border-bottom: 1px solid var(--accent-gold);
+            padding-bottom: 2px;
+            transition: all 0.2s;
         }
 
         .email-link:hover {
-            border-color: var(--color-accent);
+            border-color: transparent;
+            color: var(--accent-gold);
         }
 
-        .author {
+        .organizer {
             margin-top: 1rem;
-            color: var(--color-muted);
-            font-size: 0.9rem;
+            font-size: 1rem;
+            color: var(--text-muted);
         }
 
         /* Responsive */
-        @media (max-width: 900px) {
+        @media (max-width: 1000px) {
             .container {
                 grid-template-columns: 1fr;
             }
 
             .artwork-section {
-                padding: 1rem;
-                min-height: auto;
+                padding: 2rem;
+                background: #f0ebe5;
+                min-height: 45vh;
             }
 
             .info-panel {
-                padding: 2rem 1.5rem;
-                padding-top: 1rem;
+                padding: 3rem 2rem;
+                border: none;
             }
 
             .title {
                 font-size: 2.5rem;
-            }
-
-            .email-link {
-                font-size: 1.5rem;
             }
         }
     </style>
@@ -214,11 +226,11 @@
         </section>
 
         <section class="info-panel">
-            <h1 class="title">Последний шанс Пегаса<span class="red">.</span></h1>
+            <h1 class="title">Последний шанс Пегаса</h1>
             <p class="meta">Ольга Розет, 2004</p>
 
-            <div class="module fact-list">
-                <p>Прямая продажа из мастерской.</p>
+            <div class="module">
+                <p class="fact">Прямая продажа из мастерской.</p>
             </div>
 
             <div class="module">
@@ -228,29 +240,21 @@
 
             <div class="module logistics">
                 <p><strong>Самовывоз</strong> Москва</p>
-                <p style="margin-top:0.5rem"><strong>Доставка</strong> Организую в СНГ, Китай, ОАЭ, Турцию, Сербию, 120+
-                    стран</p>
-                <span class="warning">ЕС/США/UK: ограничения на грузы >€300</span>
+                <p style="margin-top: 0.5rem;"><strong>Доставка</strong> Организую в СНГ, Китай, ОАЭ, Турцию, Сербию,
+                    120+ стран</p>
+                <span class="restriction">ЕС/США/Великобритания: ограничения на грузы >€300</span>
             </div>
 
             <div class="contact-area">
                 <div class="contact-label">Связаться со мной</div>
                 <a href="mailto:azrozet@gmail.com" class="email-link">azrozet@gmail.com</a>
-                <p class="author">Азарья Розет, сын художницы</p>
+                <p class="organizer">Азарья Розет, сын художницы</p>
             </div>
         </section>
     </div>
 
-    <!-- Google Translate (Minimal) -->
-    <div id="google_translate_element"
-        style="position:fixed;bottom:1rem;right:1rem;opacity:0.5;transition:opacity 0.2s;"></div>
+    <div id="google_translate_element" style="position:fixed;bottom:1rem;right:1rem;opacity:0.6;"></div>
     <script>
-        document.getElementById('google_translate_element').addEventListener('mouseenter', function () {
-            this.style.opacity = '1';
-        });
-        document.getElementById('google_translate_element').addEventListener('mouseleave', function () {
-            this.style.opacity = '0.5';
-        });
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'ru',
