@@ -15,15 +15,19 @@
 
     <style>
         :root {
-            /* Immersive Palette: Deep Gallery Dark */
-            --bg-paper: #121013;
-            /* Pure dark gallery background */
+            /* Immersive Palette: High-End Gallery */
+            --bg-paper: #0f0d0f;
+            /* Even deeper black for absolute focus */
             --mat-color: #544956;
-            --frame-color: #c9a67a;
-            /* Lighter, realistic natural oak/gold */
+            --frame-color: #c4a16b;
+            /* Natural warm oak/gold */
+            --frame-shadow: #8b6d43;
+            --frame-highlight: #e4cc9f;
+            --spacer-color: #1a181a;
+            /* Dark line between frame and mat */
             --text-ink: #f2f0eb;
             --text-muted: #8d848e;
-            --accent-gold: #c9a67a;
+            --accent-gold: #c4a16b;
             --accent-red: #ff8a80;
         }
 
@@ -71,46 +75,69 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
 
-            /* Wider, simpler, more real frame */
+            /* Realistic Wooden Frame with Mitered Joints */
             background: var(--mat-color);
-            border: 45px solid var(--frame-color);
+            padding: 2px;
+            /* The dark spacer area */
+            border: 42px solid var(--frame-color);
+            border-image: conic-gradient(from 45deg,
+                    var(--frame-highlight) 90deg,
+                    var(--frame-color) 90deg 180deg,
+                    var(--frame-shadow) 180deg 270deg,
+                    var(--frame-color) 270deg) 1;
+
             box-shadow:
-                0 60px 100px rgba(0, 0, 0, 0.9),
+                0 60px 100px rgba(0, 0, 0, 0.95),
+                inset 0 0 0 1px var(--spacer-color),
                 inset 0 0 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* The Profile / Grain / Varnish effect */
+        .artwork-wrapper::after {
+            content: '';
+            position: absolute;
+            top: -42px;
+            left: -42px;
+            right: -42px;
+            bottom: -42px;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent 40%, rgba(0, 0, 0, 0.2));
+            z-index: 2;
         }
 
         /* Subtle inner shadow on the mat for depth */
         .artwork-wrapper::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
             pointer-events: none;
-            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
             z-index: 1;
         }
 
         .artwork-wrapper.is-canvas {
-            border: 3px solid rgba(255, 255, 255, 0.05);
-            /* Canvas edge thickness */
+            border: 5px solid #222;
             padding: 0;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7);
+            border-image: none;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
         }
 
-        .artwork-wrapper.is-canvas::before {
+        .artwork-wrapper.is-canvas::before,
+        .artwork-wrapper.is-canvas::after {
             display: none;
         }
 
         .artwork-wrapper img {
             width: auto;
             max-width: 100%;
-            max-height: 65vh;
+            max-height: 60vh;
             display: block;
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .artwork-wrapper.is-canvas img {
@@ -172,23 +199,26 @@
             border-left: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Typography: Standard of Excellence */
+        /* Typography: The Highest Standard */
         .title {
-            font-size: 3.5rem;
-            font-weight: 400;
-            line-height: 1.1;
-            margin-bottom: 0.75rem;
+            font-size: 3.8rem;
+            font-weight: 300;
+            /* Lighter for elegance */
+            line-height: 1.05;
+            margin-bottom: 0.8rem;
             color: var(--text-ink);
-            letter-spacing: -0.01em;
+            letter-spacing: -0.02em;
         }
 
         .meta {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 0.3em;
+            letter-spacing: 0.4em;
+            /* Wide tracking for prestige */
             color: var(--accent-gold);
-            margin-bottom: 4rem;
+            margin-bottom: 5rem;
             display: block;
+            opacity: 0.8;
         }
 
         /* Content Modules */
