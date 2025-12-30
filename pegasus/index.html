@@ -15,16 +15,16 @@
 
     <style>
         :root {
-            /* Immersive Palette: Darker Deep Purple Grey to make the Mat pop */
-            --bg-paper: #322d33;
-            --mat-color: #554957;
+            /* Immersive Palette: Deep Gallery Dark */
+            --bg-paper: #121013;
+            /* Pure dark gallery background */
+            --mat-color: #544956;
+            --frame-color: #c9a67a;
+            /* Lighter, realistic natural oak/gold */
             --text-ink: #f2f0eb;
-            /* Ivory */
-            --text-muted: #aca3ae;
-            --accent-gold: #e0c090;
-            /* Lighter gold for contrast */
+            --text-muted: #8d848e;
+            --accent-gold: #c9a67a;
             --accent-red: #ff8a80;
-            /* Lighter red */
         }
 
         * {
@@ -67,31 +67,65 @@
 
         .artwork-wrapper {
             position: relative;
-            max-width: 100%;
-            max-height: 80vh;
-            /* Deep shadow for floating effect and separation from dark background */
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
-            /* Subtle border to define the outer frame edge */
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.5s ease;
+            max-width: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+
+            /* Wider, simpler, more real frame */
+            background: var(--mat-color);
+            border: 45px solid var(--frame-color);
+            box-shadow:
+                0 60px 100px rgba(0, 0, 0, 0.9),
+                inset 0 0 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Subtle inner shadow on the mat for depth */
+        .artwork-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .artwork-wrapper.is-canvas {
+            border: 3px solid rgba(255, 255, 255, 0.05);
+            /* Canvas edge thickness */
+            padding: 0;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7);
+        }
+
+        .artwork-wrapper.is-canvas::before {
+            display: none;
         }
 
         .artwork-wrapper img {
             width: auto;
-            height: auto;
             max-width: 100%;
-            max-height: 80vh;
+            max-height: 65vh;
             display: block;
-            transition: opacity 0.3s ease;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .artwork-wrapper.is-canvas img {
+            max-height: 80vh;
         }
 
         /* View Controls */
         .view-controls {
-            margin-top: 2rem;
+            margin-top: 3.5rem;
             text-align: center;
-            font-size: 1.2rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
-            opacity: 0.6;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            opacity: 0.5;
             transition: opacity 0.3s;
         }
 
@@ -102,11 +136,12 @@
         .view-btn {
             background: none;
             border: none;
-            font-family: inherit;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
             font-size: inherit;
             color: inherit;
             cursor: pointer;
-            padding: 0 0.5rem;
+            padding: 0 1.5rem;
             border-bottom: 1px solid transparent;
             transition: all 0.2s;
         }
@@ -137,25 +172,23 @@
             border-left: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Typography */
+        /* Typography: Standard of Excellence */
         .title {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 400;
-            /* Regular weight for Cormorant */
-            line-height: 1;
-            margin-bottom: 0.5rem;
+            line-height: 1.1;
+            margin-bottom: 0.75rem;
             color: var(--text-ink);
             letter-spacing: -0.01em;
         }
 
         .meta {
-            font-size: 1.25rem;
-            font-style: italic;
-            color: var(--text-muted);
-            margin-bottom: 3rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: inline-block;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--accent-gold);
+            margin-bottom: 4rem;
+            display: block;
         }
 
         /* Content Modules */
@@ -331,15 +364,17 @@
 
         function switchView(mode) {
             const img = document.getElementById('main-artwork');
+            const wrapper = img.parentElement;
             const btns = document.querySelectorAll('.view-btn');
 
-            // Toggle active class
             if (mode === 'framed') {
                 img.src = 'artwork_master.jpg';
+                wrapper.classList.remove('is-canvas');
                 btns[0].classList.add('active');
                 btns[1].classList.remove('active');
             } else {
                 img.src = 'artwork_canvas.jpg';
+                wrapper.classList.add('is-canvas');
                 btns[0].classList.remove('active');
                 btns[1].classList.add('active');
             }
