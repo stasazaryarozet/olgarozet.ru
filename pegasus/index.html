@@ -17,14 +17,13 @@
         :root {
             /* Immersive Palette: High-End Gallery */
             --bg-paper: #0f0d0f;
-            /* Even deeper black for absolute focus */
             --mat-color: #544956;
             --frame-color: #c4a16b;
-            /* Natural warm oak/gold */
             --frame-shadow: #8b6d43;
             --frame-highlight: #e4cc9f;
+            --slip-color: #dcc296;
+            /* The light inner slip/fillet */
             --spacer-color: #1a181a;
-            /* Dark line between frame and mat */
             --text-ink: #f2f0eb;
             --text-muted: #8d848e;
             --accent-gold: #c4a16b;
@@ -80,7 +79,6 @@
             /* Realistic Wooden Frame with Mitered Joints */
             background: var(--mat-color);
             padding: 2px;
-            /* The dark spacer area */
             border: 42px solid var(--frame-color);
             border-image: conic-gradient(from 45deg,
                     var(--frame-highlight) 90deg,
@@ -90,7 +88,10 @@
 
             box-shadow:
                 0 60px 100px rgba(0, 0, 0, 0.95),
-                inset 0 0 0 1px var(--spacer-color),
+                inset 0 0 0 5px var(--slip-color),
+                /* The light slip/fillet from the photo */
+                inset 0 0 0 6px var(--spacer-color),
+                /* Transition to dark mat */
                 inset 0 0 20px rgba(0, 0, 0, 0.4);
         }
 
