@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Последний шанс Пегаса — Ольга Розет</title>
-    <meta name="description" content="Картина Ольги Розет. 2004 год. Прямая продажа из мастерской.">
+    <meta name="description" content="Картина Ольги Розет. 2004 год. Частная коллекция. Прямая продажа.">
 
     <!-- Fonts: Cormorant for elegance, congruent with art -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,6 +56,8 @@
             background: var(--bg-paper);
             /* Seamless */
             display: flex;
+            flex-direction: column;
+            /* Stack image and controls */
             align-items: center;
             justify-content: center;
             padding: 4rem;
@@ -65,17 +67,62 @@
         .artwork-wrapper {
             position: relative;
             max-width: 100%;
-            max-height: 85vh;
+            max-height: 80vh;
+            /* Reduced slightly to fit controls */
             /* No shadow needed if it blends, or subtle drop shadow for depth */
             filter: drop-shadow(0 40px 80px rgba(0, 0, 0, 0.4));
+            transition: all 0.5s ease;
         }
 
         .artwork-wrapper img {
             width: auto;
             height: auto;
             max-width: 100%;
-            max-height: 85vh;
+            max-height: 80vh;
             display: block;
+            transition: opacity 0.3s ease;
+        }
+
+        /* View Controls */
+        .view-controls {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .view-controls:hover {
+            opacity: 1;
+        }
+
+        .view-btn {
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            cursor: pointer;
+            padding: 0 0.5rem;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .view-btn:hover {
+            color: var(--text-ink);
+        }
+
+        .view-btn.active {
+            color: var(--text-ink);
+            border-bottom-color: var(--accent-gold);
+            opacity: 1;
+        }
+
+        .separator {
+            user-select: none;
+            opacity: 0.5;
+            margin: 0 0.25rem;
         }
 
         /* INFO PANEL */
@@ -208,7 +255,7 @@
             .artwork-section {
                 padding: 2rem;
                 background: var(--bg-paper);
-                min-height: 45vh;
+                min-height: 50vh;
             }
 
             .info-panel {
@@ -227,7 +274,13 @@
     <div class="container">
         <section class="artwork-section">
             <div class="artwork-wrapper">
-                <img src="artwork_final_clean.jpg" alt="Последний шанс Пегаса — Ольга Розет">
+                <img id="main-artwork" src="artwork_final_clean.jpg" alt="Последний шанс Пегаса — Ольга Розет">
+            </div>
+
+            <div class="view-controls">
+                <button class="view-btn active" onclick="switchView('framed')">В раме</button>
+                <span class="separator">/</span>
+                <button class="view-btn" onclick="switchView('canvas')">Холст</button>
             </div>
         </section>
 
@@ -256,10 +309,14 @@
                 <a href="mailto:azrozet@gmail.com" class="email-link">azrozet@gmail.com</a>
                 <p class="organizer">Азарья Розет</p>
             </div>
+
+            <!-- Preload canvas image for instant switch -->
+            <img src="artwork_canvas.jpg" style="display:none;" alt="">
         </section>
     </div>
 
     <div id="google_translate_element" style="position:fixed;bottom:1rem;right:1rem;opacity:0.6;"></div>
+
     <script>
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
@@ -268,6 +325,22 @@
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
                 autoDisplay: true
             }, 'google_translate_element');
+        }
+
+        function switchView(mode) {
+            const img = document.getElementById('main-artwork');
+            const btns = document.querySelectorAll('.view-btn');
+
+            // Toggle active class
+            if (mode === 'framed') {
+                img.src = 'artwork_final_clean.jpg';
+                btns[0].classList.add('active');
+                btns[1].classList.remove('active');
+            } else {
+                img.src = 'artwork_canvas.jpg';
+                btns[0].classList.remove('active');
+                btns[1].classList.add('active');
+            }
         }
     </script>
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
