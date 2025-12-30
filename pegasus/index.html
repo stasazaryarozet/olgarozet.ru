@@ -17,14 +17,14 @@
         :root {
             /* Palette: High-End Gallery with Physical Accuracy */
             --bg-paper: #0a090a;
-            --frame-color: #c4a16b;
+            --frame-gold: #c4a16b;
             --frame-shadow: #8b6d43;
             --frame-highlight: #e4cc9f;
 
-            --slip-color: #f2ebd5;
-            /* Cream paper tone from the photo */
-            --mat-color: #2c2826;
-            /* Deep dark brownish-black mat */
+            --outer-mat-color: #f8f6f0;
+            /* Light Paper/Cream "until the frame" */
+            --inner-mat-color: #312e33;
+            /* Dark Inner Mat */
 
             --text-ink: #f2f0eb;
             --text-muted: #8d848e;
@@ -59,55 +59,57 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
+            padding: 3rem;
             position: relative;
         }
 
-        /* THE ARTWORK PRESENTATION ENGINE */
-        .artwork-wrapper {
+        /* THE TRIPLE-LAYERED FRAME ENGINE */
+        .frame-system {
             position: relative;
-            max-width: 90%;
+            display: inline-block;
             transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
             line-height: 0;
+            cursor: zoom-in;
+        }
 
-            /* Realistic Wood Frame Layer */
-            border: 42px solid var(--frame-color);
+        /* 1. OUTER WOODEN FRAME */
+        .outer-frame {
+            border: 42px solid var(--frame-gold);
             border-image: conic-gradient(from 45deg,
                     var(--frame-highlight) 90deg,
-                    var(--frame-color) 90deg 180deg,
+                    var(--frame-gold) 90deg 180deg,
                     var(--frame-shadow) 180deg 270deg,
-                    var(--frame-color) 270deg) 1;
-
-            /* The Wide Light Slip (Paper) and Wide Dark Mat */
-            /* We use multi-layer padding/background or shadows */
-            padding: 24px;
-            /* The Light Slip Width */
-            background: var(--slip-color);
-
+                    var(--frame-gold) 270deg) 1;
             box-shadow:
-                0 60px 120px rgba(0, 0, 0, 0.9),
-                inset 0 0 10px rgba(0, 0, 0, 0.1);
-            /* Subtle paper texture depth */
+                0 80px 140px rgba(0, 0, 0, 0.95),
+                inset 0 0 15px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
 
-        /* The Dark Mat Layer */
-        .artwork-wrapper::before {
-            content: '';
-            position: absolute;
-            top: 24px;
-            left: 24px;
-            right: 24px;
-            bottom: 24px;
-            background: var(--mat-color);
-            z-index: 1;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+        /* 2. THE LIGHT "PAPER" MAT (Outer Mat) */
+        .outer-paper-mat {
+            padding: 45px;
+            /* Wide Light Edging until the frame */
+            background: var(--outer-mat-color);
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+            /* Paper texture shadow */
         }
 
-        /* Highlight/Grain on the frame */
-        .artwork-wrapper::after {
+        /* 3. THE DARK INNER MAT */
+        .inner-dark-mat {
+            padding: 65px;
+            /* Wide Dark Mat */
+            background: var(--inner-mat-color);
+            box-shadow:
+                inset 0 0 30px rgba(0, 0, 0, 0.6),
+                0 0 2px rgba(0, 0, 0, 0.3);
+            /* Bevel effect */
+            position: relative;
+        }
+
+        /* Frame Varnish/Highlight Gradient */
+        .outer-frame::after {
             content: '';
             position: absolute;
             top: -42px;
@@ -115,48 +117,46 @@
             right: -42px;
             bottom: -42px;
             pointer-events: none;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 40%, rgba(0, 0, 0, 0.2) 100%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 40%, rgba(0, 0, 0, 0.25) 100%);
             z-index: 10;
         }
 
-        /* Image sits inside the mat */
-        .artwork-wrapper img {
-            position: relative;
-            z-index: 2;
+        /* The Image */
+        .frame-system img {
+            max-height: 55vh;
             width: auto;
             max-width: 100%;
-            max-height: 50vh;
             display: block;
-            margin: 45px;
-            /* The Dark Mat width visibility */
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-            /* Artwork edge depth */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
         }
 
-        /* CANVAS VIEW OVERRIDE */
-        .artwork-wrapper.is-canvas {
+        /* CANVAS VIEW STATE (is-canvas) */
+        .frame-system.is-canvas .outer-frame {
             border: 6px solid #1a181a;
             border-image: none;
-            padding: 0;
-            background: transparent;
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
         }
 
-        .artwork-wrapper.is-canvas::before,
-        .artwork-wrapper.is-canvas::after {
+        .frame-system.is-canvas .outer-paper-mat,
+        .frame-system.is-canvas .inner-dark-mat {
+            padding: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .frame-system.is-canvas .outer-frame::after {
             display: none;
         }
 
-        .artwork-wrapper.is-canvas img {
-            margin: 0;
+        .frame-system.is-canvas img {
             max-height: 80vh;
             box-shadow: none;
         }
 
         /* TYPOGRAPHY & INTERFACE */
         .view-controls {
-            margin-top: 4rem;
+            margin-top: 3.5rem;
             text-align: center;
             font-size: 0.85rem;
             color: var(--text-muted);
@@ -200,8 +200,8 @@
         .title {
             font-size: 4rem;
             font-weight: 300;
-            line-height: 1;
-            margin-bottom: 1rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
             letter-spacing: -0.02em;
         }
 
@@ -321,8 +321,15 @@
 <body>
     <div class="container">
         <section class="artwork-section">
-            <div class="artwork-wrapper">
-                <img id="main-artwork" src="artwork_canvas.jpg" alt="Последний шанс Пегаса — Ольга Розет">
+            <div class="frame-system">
+                <div class="outer-frame">
+                    <div class="outer-paper-mat">
+                        <div class="inner-dark-mat">
+                            <img id="main-artwork" src="artwork_canvas_clean.jpg"
+                                alt="Последний шанс Пегаса — Ольга Розет">
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="view-controls">
@@ -373,15 +380,15 @@
         }
 
         function switchView(mode) {
-            const wrapper = document.querySelector('.artwork-wrapper');
+            const system = document.querySelector('.frame-system');
             const btns = document.querySelectorAll('.view-btn');
 
             if (mode === 'framed') {
-                wrapper.classList.remove('is-canvas');
+                system.classList.remove('is-canvas');
                 btns[0].classList.add('active');
                 btns[1].classList.remove('active');
             } else {
-                wrapper.classList.add('is-canvas');
+                system.classList.add('is-canvas');
                 btns[0].classList.remove('active');
                 btns[1].classList.add('active');
             }
