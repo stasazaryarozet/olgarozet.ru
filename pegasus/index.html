@@ -4,21 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Последний шанс Пегаса — Ольга Розет, 2004</title>
+    <title>Последний шанс Пегаса — Ольга Розет</title>
     <meta name="description"
         content="Картина Ольги Розет. Художница жива — цена ниже рыночной. Вся сумма идёт художнице.">
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap"
-        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --bg-paper: #fdfcf8;
-            --bg-art: #f0ebe5;
-            --text-ink: #1a1816;
-            --text-muted: #6e645a;
-            --accent-gold: #cfa878;
-            --accent-alert: #b05050;
-            --line-subtle: rgba(26, 24, 22, 0.08);
+            --font-main: 'Inter', -apple-system, sans-serif;
+            --color-text: #1a1a1a;
+            --color-muted: #888;
+            --color-accent: #ff0000;
+            /* From olgarozet.ru */
+            --color-bg: #ffffff;
         }
 
         * {
@@ -27,28 +29,24 @@
             box-sizing: border-box;
         }
 
-        html,
         body {
-            height: 100%;
-        }
-
-        body {
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            background: var(--bg-paper);
-            color: var(--text-ink);
-            line-height: 1.5;
+            font-family: var(--font-main);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.4;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
         .container {
             display: grid;
-            grid-template-columns: 1fr 480px;
+            grid-template-columns: 55% 45%;
             min-height: 100vh;
         }
 
         /* ARTWORK SECTION */
         .artwork-section {
-            background: var(--bg-art);
+            background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -57,174 +55,151 @@
         }
 
         .artwork-wrapper {
-            position: relative;
-            max-width: 100%;
-            max-height: 85vh;
-            filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.15));
-            transition: transform 0.5s ease;
-        }
-
-        .artwork-wrapper:hover {
-            transform: scale(1.01);
+            width: 100%;
+            max-height: 90vh;
         }
 
         .artwork-wrapper img {
-            width: auto;
+            width: 100%;
             height: auto;
-            max-width: 100%;
-            max-height: 85vh;
+            max-height: 90vh;
+            object-fit: contain;
             display: block;
+            /* No shadow - clean modern look */
         }
 
         /* INFO PANEL */
         .info-panel {
-            background: var(--bg-paper);
-            padding: 4rem 3.5rem;
+            padding: 4rem 4rem 4rem 2rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            border-left: 1px solid var(--line-subtle);
         }
 
         /* Typography */
-        .title {
-            font-size: 3rem;
-            font-weight: 500;
+        h1.title {
+            font-size: clamp(2.5rem, 4vw, 5rem);
+            font-weight: 200;
+            /* Thin like Olga's H1 */
             line-height: 1;
             margin-bottom: 0.5rem;
-            color: var(--text-ink);
-            letter-spacing: -0.02em;
+            color: var(--color-text);
+            letter-spacing: -0.03em;
         }
 
-        .artist {
+        h1.title span.red {
+            color: var(--color-accent);
+        }
+
+        .meta {
+            font-size: 1.1rem;
+            color: var(--color-muted);
+            margin-bottom: 4rem;
+            font-weight: 300;
+        }
+
+        /* Content Modules */
+        .module {
+            margin-bottom: 3rem;
+        }
+
+        .fact-list p {
             font-size: 1.25rem;
-            font-style: italic;
-            color: var(--text-muted);
-            margin-bottom: 3.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--line-subtle);
-            display: inline-block;
-        }
-
-        /* Context & Offer - Clean */
-        .context-block {
-            margin-bottom: 2.5rem;
-        }
-
-        .context-fact {
-            font-size: 1.35rem;
-            font-weight: 400;
-            color: var(--text-ink);
             margin-bottom: 0.5rem;
-            line-height: 1.4;
+            font-weight: 300;
         }
 
-        .offer-block {
-            margin-bottom: 3rem;
-            padding: 2rem 0;
-            border-top: 1px solid var(--line-subtle);
-            border-bottom: 1px solid var(--line-subtle);
-        }
-
-        .offer-block p:first-child {
-            font-size: 2.5rem;
-            font-weight: 400;
-            color: var(--text-ink);
-            line-height: 1.1;
+        .price-display {
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: -0.02em;
             margin-bottom: 0.5rem;
+            display: block;
         }
 
-        .offer-block p strong {
-            font-weight: 600;
-            color: var(--text-ink);
+        .price-note {
+            font-size: 1.1rem;
+            color: var(--color-muted);
+            font-weight: 300;
         }
 
-        .offer-note {
-            font-size: 1.15rem !important;
-            color: var(--accent-gold);
-            font-style: italic;
-            margin-top: 0.5rem;
+        .logistics {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--color-muted);
         }
 
-        /* Logistics */
-        .pickup-info {
-            font-size: 1rem;
-            color: var(--text-muted);
-            margin-bottom: 3rem;
-            line-height: 1.8;
-        }
-
-        .pickup-info strong {
-            color: var(--text-ink);
-            font-weight: 600;
+        .logistics strong {
+            color: var(--color-text);
+            font-weight: 500;
             text-transform: uppercase;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             letter-spacing: 0.05em;
             margin-right: 0.5rem;
         }
 
-        .restriction {
+        .warning {
+            color: var(--color-accent);
             display: block;
             margin-top: 0.5rem;
             font-size: 0.85rem;
-            color: var(--accent-alert);
-            opacity: 0.9;
         }
 
         /* Contact */
-        .contact-section {
+        .contact-area {
             margin-top: auto;
+            padding-top: 2rem;
         }
 
         .contact-label {
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.2em;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
+            color: var(--color-muted);
+            margin-bottom: 0.8rem;
         }
 
-        .contact-email {
-            font-size: 1.75rem;
-            color: var(--text-ink);
+        .email-link {
+            font-size: 2rem;
+            color: var(--color-text);
             text-decoration: none;
-            border-bottom: 1px solid var(--accent-gold);
-            padding-bottom: 2px;
-            transition: all 0.2s;
+            font-weight: 300;
+            border-bottom: 1px solid #eee;
+            transition: border-color 0.2s;
         }
 
-        .contact-email:hover {
-            color: var(--accent-gold);
-            border-bottom-color: transparent;
+        .email-link:hover {
+            border-color: var(--color-accent);
         }
 
-        .organizer {
+        .author {
             margin-top: 1rem;
-            font-size: 0.95rem;
-            color: var(--text-muted);
+            color: var(--color-muted);
+            font-size: 0.9rem;
         }
 
         /* Responsive */
-        @media (max-width: 1000px) {
+        @media (max-width: 900px) {
             .container {
                 grid-template-columns: 1fr;
             }
 
             .artwork-section {
-                padding: 2rem;
-                background: var(--bg-paper);
-                /* On mobile, unify bg */
-                min-height: 40vh;
+                padding: 1rem;
+                min-height: auto;
             }
 
             .info-panel {
-                padding: 3rem 2rem;
+                padding: 2rem 1.5rem;
                 padding-top: 1rem;
-                border: none;
             }
 
             .title {
-                font-size: 2.2rem;
+                font-size: 2.5rem;
+            }
+
+            .email-link {
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -238,37 +213,45 @@
             </div>
         </section>
 
-        <aside class="info-panel">
-            <h1 class="title">Последний шанс Пегаса</h1>
-            <p class="artist">Ольга Розет, 2004 · холст, масло</p>
+        <section class="info-panel">
+            <h1 class="title">Последний шанс Пегаса<span class="red">.</span></h1>
+            <p class="meta">Ольга Розет, 2004 · холст, масло</p>
 
-            <div class="context-block">
-                <p class="context-fact">Художница жива — цена ниже рыночной.</p>
-                <p class="context-fact">Художнице нужен отдых.</p>
+            <div class="module fact-list">
+                <p>Художница жива — цена ниже рыночной.</p>
+                <p>Художнице нужен отдых.</p>
             </div>
 
-            <div class="offer-block">
-                <p>Предлагаю картину за <strong>€10,000</strong>.</p>
-                <p class="offer-note">Вся сумма пойдёт Ольге — Отдохнуть и Порисовать.</p>
+            <div class="module">
+                <span class="price-display">€10,000</span>
+                <p class="price-note">Вся сумма пойдёт Ольге — Отдохнуть и Порисовать.</p>
             </div>
 
-            <div class="pickup-info">
-                <p><strong>Самовывоз</strong> Москва.</p>
-                <p><strong>Доставка</strong> Организую в СНГ, Китай, ОАЭ, Турцию, Сербию, 120+ стран.</p>
-                <span class="restriction">ЕС/США/Великобритания: санкционные ограничения на арт-грузы >€300.</span>
+            <div class="module logistics">
+                <p><strong>Самовывоз</strong> Москва</p>
+                <p style="margin-top:0.5rem"><strong>Доставка</strong> Организую в СНГ, Китай, ОАЭ, Турцию, Сербию, 120+
+                    стран</p>
+                <span class="warning">ЕС/США/UK: ограничения на грузы >€300</span>
             </div>
 
-            <div class="contact-section">
+            <div class="contact-area">
                 <div class="contact-label">Связаться со мной</div>
-                <a href="mailto:azrozet@gmail.com" class="contact-email">azrozet@gmail.com</a>
-                <p class="organizer">Азарья Розет, сын художницы</p>
+                <a href="mailto:azrozet@gmail.com" class="email-link">azrozet@gmail.com</a>
+                <p class="author">Азарья Розет, сын художницы</p>
             </div>
-        </aside>
+        </section>
     </div>
 
-    <!-- Google Translate -->
-    <div id="google_translate_element" style="position:fixed;bottom:1rem;right:1rem;z-index:1000;"></div>
+    <!-- Google Translate (Minimal) -->
+    <div id="google_translate_element"
+        style="position:fixed;bottom:1rem;right:1rem;opacity:0.5;transition:opacity 0.2s;"></div>
     <script>
+        document.getElementById('google_translate_element').addEventListener('mouseenter', function () {
+            this.style.opacity = '1';
+        });
+        document.getElementById('google_translate_element').addEventListener('mouseleave', function () {
+            this.style.opacity = '0.5';
+        });
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'ru',
