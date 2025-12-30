@@ -7,7 +7,7 @@
     <title>Последний шанс Пегаса — Ольга Розет</title>
     <meta name="description" content="Картина Ольги Розет. 2004 год. Частная коллекция. Прямая продажа.">
 
-    <!-- Fonts: Cormorant for elegance, congruent with art -->
+    <!-- Fonts: Standard of Excellence -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&display=swap"
@@ -15,15 +15,17 @@
 
     <style>
         :root {
-            /* Immersive Palette: High-End Gallery */
-            --bg-paper: #0f0d0f;
-            --mat-color: #544956;
+            /* Palette: High-End Gallery with Physical Accuracy */
+            --bg-paper: #0a090a;
             --frame-color: #c4a16b;
             --frame-shadow: #8b6d43;
             --frame-highlight: #e4cc9f;
-            --slip-color: #dcc296;
-            /* The light inner slip/fillet */
-            --spacer-color: #1a181a;
+
+            --slip-color: #f2ebd5;
+            /* Cream paper tone from the photo */
+            --mat-color: #2c2826;
+            /* Deep dark brownish-black mat */
+
             --text-ink: #f2f0eb;
             --text-muted: #8d848e;
             --accent-gold: #c4a16b;
@@ -36,17 +38,13 @@
             box-sizing: border-box;
         }
 
-        html,
-        body {
-            height: 100%;
-        }
-
         body {
             font-family: 'Cormorant Garamond', Georgia, serif;
             background: var(--bg-paper);
             color: var(--text-ink);
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
         .container {
@@ -57,28 +55,25 @@
 
         /* ARTWORK SECTION */
         .artwork-section {
-            background: var(--bg-paper);
-            /* Seamless */
             display: flex;
             flex-direction: column;
-            /* Stack image and controls */
             align-items: center;
             justify-content: center;
-            padding: 4rem;
+            padding: 2rem;
             position: relative;
         }
 
+        /* THE ARTWORK PRESENTATION ENGINE */
         .artwork-wrapper {
             position: relative;
             max-width: 90%;
+            transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+            line-height: 0;
 
-            /* Realistic Wooden Frame with Mitered Joints */
-            background: var(--mat-color);
-            padding: 2px;
+            /* Realistic Wood Frame Layer */
             border: 42px solid var(--frame-color);
             border-image: conic-gradient(from 45deg,
                     var(--frame-highlight) 90deg,
@@ -86,16 +81,32 @@
                     var(--frame-shadow) 180deg 270deg,
                     var(--frame-color) 270deg) 1;
 
+            /* The Wide Light Slip (Paper) and Wide Dark Mat */
+            /* We use multi-layer padding/background or shadows */
+            padding: 24px;
+            /* The Light Slip Width */
+            background: var(--slip-color);
+
             box-shadow:
-                0 60px 100px rgba(0, 0, 0, 0.95),
-                inset 0 0 0 5px var(--slip-color),
-                /* The light slip/fillet from the photo */
-                inset 0 0 0 6px var(--spacer-color),
-                /* Transition to dark mat */
-                inset 0 0 20px rgba(0, 0, 0, 0.4);
+                0 60px 120px rgba(0, 0, 0, 0.9),
+                inset 0 0 10px rgba(0, 0, 0, 0.1);
+            /* Subtle paper texture depth */
         }
 
-        /* The Profile / Grain / Varnish effect */
+        /* The Dark Mat Layer */
+        .artwork-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            right: 24px;
+            bottom: 24px;
+            background: var(--mat-color);
+            z-index: 1;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Highlight/Grain on the frame */
         .artwork-wrapper::after {
             content: '';
             position: absolute;
@@ -104,27 +115,31 @@
             right: -42px;
             bottom: -42px;
             pointer-events: none;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent 40%, rgba(0, 0, 0, 0.2));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 40%, rgba(0, 0, 0, 0.2) 100%);
+            z-index: 10;
+        }
+
+        /* Image sits inside the mat */
+        .artwork-wrapper img {
+            position: relative;
             z-index: 2;
+            width: auto;
+            max-width: 100%;
+            max-height: 50vh;
+            display: block;
+            margin: 45px;
+            /* The Dark Mat width visibility */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            /* Artwork edge depth */
+            transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
         }
 
-        /* Subtle inner shadow on the mat for depth */
-        .artwork-wrapper::before {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            right: 2px;
-            bottom: 2px;
-            pointer-events: none;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
-            z-index: 1;
-        }
-
+        /* CANVAS VIEW OVERRIDE */
         .artwork-wrapper.is-canvas {
-            border: 5px solid #222;
-            padding: 0;
+            border: 6px solid #1a181a;
             border-image: none;
+            padding: 0;
+            background: transparent;
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
         }
 
@@ -133,27 +148,21 @@
             display: none;
         }
 
-        .artwork-wrapper img {
-            width: auto;
-            max-width: 100%;
-            max-height: 60vh;
-            display: block;
-            transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
         .artwork-wrapper.is-canvas img {
+            margin: 0;
             max-height: 80vh;
+            box-shadow: none;
         }
 
-        /* View Controls */
+        /* TYPOGRAPHY & INTERFACE */
         .view-controls {
-            margin-top: 3.5rem;
+            margin-top: 4rem;
             text-align: center;
             font-size: 0.85rem;
             color: var(--text-muted);
-            letter-spacing: 0.25em;
+            letter-spacing: 0.3em;
             text-transform: uppercase;
-            opacity: 0.5;
+            opacity: 0.6;
             transition: opacity 0.3s;
         }
 
@@ -164,33 +173,21 @@
         .view-btn {
             background: none;
             border: none;
-            font-family: 'Cormorant Garamond', serif;
+            font-family: inherit;
             font-weight: 500;
             font-size: inherit;
             color: inherit;
             cursor: pointer;
-            padding: 0 1.5rem;
+            padding: 0.5rem 1.5rem;
             border-bottom: 1px solid transparent;
-            transition: all 0.2s;
-        }
-
-        .view-btn:hover {
-            color: var(--text-ink);
+            transition: all 0.3s;
         }
 
         .view-btn.active {
             color: var(--text-ink);
             border-bottom-color: var(--accent-gold);
-            opacity: 1;
         }
 
-        .separator {
-            user-select: none;
-            opacity: 0.5;
-            margin: 0 0.25rem;
-        }
-
-        /* INFO PANEL */
         .info-panel {
             background: var(--bg-paper);
             padding: 4rem 3.5rem;
@@ -200,29 +197,23 @@
             border-left: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Typography: The Highest Standard */
         .title {
-            font-size: 3.8rem;
+            font-size: 4rem;
             font-weight: 300;
-            /* Lighter for elegance */
-            line-height: 1.05;
-            margin-bottom: 0.8rem;
-            color: var(--text-ink);
+            line-height: 1;
+            margin-bottom: 1rem;
             letter-spacing: -0.02em;
         }
 
         .meta {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 0.4em;
-            /* Wide tracking for prestige */
             color: var(--accent-gold);
             margin-bottom: 5rem;
-            display: block;
             opacity: 0.8;
         }
 
-        /* Content Modules */
         .module {
             margin-bottom: 3rem;
         }
@@ -230,25 +221,23 @@
         .fact {
             font-size: 1.4rem;
             font-weight: 400;
-            color: var(--text-ink);
             margin-bottom: 0.5rem;
         }
 
         .price-display {
-            font-size: 3rem;
-            font-weight: 400;
+            font-size: 3.5rem;
+            font-weight: 300;
             display: block;
             margin-bottom: 0.25rem;
-            line-height: 1;
         }
 
         .price-note {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: var(--accent-gold);
             font-style: italic;
+            opacity: 0.9;
         }
 
-        /* Logistics */
         .logistics {
             font-size: 1.05rem;
             color: var(--text-muted);
@@ -259,8 +248,8 @@
             color: var(--text-ink);
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 0.05em;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
             margin-right: 0.5rem;
         }
 
@@ -269,13 +258,11 @@
             margin-top: 0.5rem;
             font-size: 0.9rem;
             color: var(--accent-red);
-            opacity: 0.9;
         }
 
-        /* Contact */
         .contact-area {
             margin-top: auto;
-            padding-top: 2rem;
+            padding-top: 3rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -288,40 +275,35 @@
         }
 
         .email-link {
-            font-size: 1.8rem;
+            font-size: 2rem;
             color: var(--text-ink);
             text-decoration: none;
             border-bottom: 1px solid var(--accent-gold);
-            padding-bottom: 2px;
-            transition: all 0.2s;
+            transition: color 0.3s;
         }
 
         .email-link:hover {
-            border-color: transparent;
             color: var(--accent-gold);
         }
 
         .organizer {
             margin-top: 1rem;
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: var(--text-muted);
         }
 
-        /* Translate Widget Dark Mode */
         #google_translate_element {
             filter: invert(1) hue-rotate(180deg);
         }
 
-        /* Responsive */
-        @media (max-width: 1000px) {
+        @media (max-width: 1100px) {
             .container {
                 grid-template-columns: 1fr;
             }
 
             .artwork-section {
-                padding: 2rem;
-                background: var(--bg-paper);
-                min-height: 50vh;
+                min-height: 60vh;
+                padding: 1rem;
             }
 
             .info-panel {
@@ -330,7 +312,7 @@
             }
 
             .title {
-                font-size: 2.5rem;
+                font-size: 3rem;
             }
         }
     </style>
@@ -340,12 +322,12 @@
     <div class="container">
         <section class="artwork-section">
             <div class="artwork-wrapper">
-                <img id="main-artwork" src="artwork_master.jpg" alt="Последний шанс Пегаса — Ольга Розет">
+                <img id="main-artwork" src="artwork_canvas.jpg" alt="Последний шанс Пегаса — Ольга Розет">
             </div>
 
             <div class="view-controls">
                 <button class="view-btn active" onclick="switchView('framed')">В раме</button>
-                <span class="separator">/</span>
+                <span style="opacity:0.3">/</span>
                 <button class="view-btn" onclick="switchView('canvas')">Холст</button>
             </div>
         </section>
@@ -365,7 +347,7 @@
 
             <div class="module logistics">
                 <p><strong>Самовывоз</strong> Москва</p>
-                <p style="margin-top: 0.5rem;"><strong>Доставка</strong> Организую в СНГ, Китай, ОАЭ, Турцию, Сербию,
+                <p style="margin-top: 0.75rem;"><strong>Доставка</strong> Организую в СНГ, Китай, ОАЭ, Турцию, Сербию,
                     120+ стран</p>
                 <span class="restriction">ЕС/США/Великобритания: ограничения на грузы >€300</span>
             </div>
@@ -375,9 +357,6 @@
                 <a href="mailto:azrozet@gmail.com" class="email-link">azrozet@gmail.com</a>
                 <p class="organizer">Азарья Розет</p>
             </div>
-
-            <!-- Preload canvas image for instant switch -->
-            <img src="artwork_canvas.jpg" style="display:none;" alt="">
         </section>
     </div>
 
@@ -394,17 +373,14 @@
         }
 
         function switchView(mode) {
-            const img = document.getElementById('main-artwork');
-            const wrapper = img.parentElement;
+            const wrapper = document.querySelector('.artwork-wrapper');
             const btns = document.querySelectorAll('.view-btn');
 
             if (mode === 'framed') {
-                img.src = 'artwork_master.jpg';
                 wrapper.classList.remove('is-canvas');
                 btns[0].classList.add('active');
                 btns[1].classList.remove('active');
             } else {
-                img.src = 'artwork_canvas.jpg';
                 wrapper.classList.add('is-canvas');
                 btns[0].classList.remove('active');
                 btns[1].classList.add('active');
