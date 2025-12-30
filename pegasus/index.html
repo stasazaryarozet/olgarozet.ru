@@ -15,14 +15,15 @@
 
     <style>
         :root {
-            /* Warm gallery palette, congruent with painting's warmth */
-            --bg-paper: #fcfbf9;
-            --text-ink: #1a1816;
-            --text-muted: #6e645a;
-            --accent-gold: #cfa878;
-            /* Echoes the ochre in the painting */
-            --accent-red: #b05050;
-            /* Muted red for discrete warnings */
+            /* Immersive Palette: Matching the artwork's mat */
+            --bg-paper: #554957;
+            --text-ink: #f2f0eb;
+            /* Ivory */
+            --text-muted: #aca3ae;
+            --accent-gold: #e0c090;
+            /* Lighter gold for contrast */
+            --accent-red: #ff8a80;
+            /* Lighter red */
         }
 
         * {
@@ -52,8 +53,8 @@
 
         /* ARTWORK SECTION */
         .artwork-section {
-            background: #f0ebe5;
-            /* Subtle warmer grey to frame the art */
+            background: var(--bg-paper);
+            /* Seamless */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -65,8 +66,8 @@
             position: relative;
             max-width: 100%;
             max-height: 85vh;
-            filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.12));
-            /* Softer shadow */
+            /* No shadow needed if it blends, or subtle drop shadow for depth */
+            filter: drop-shadow(0 40px 80px rgba(0, 0, 0, 0.4));
         }
 
         .artwork-wrapper img {
@@ -84,7 +85,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            border-left: 1px solid rgba(0, 0, 0, 0.05);
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         /* Typography */
@@ -102,9 +103,9 @@
             font-size: 1.25rem;
             font-style: italic;
             color: var(--text-muted);
-            margin-bottom: 3.5rem;
+            margin-bottom: 3rem;
             padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: inline-block;
         }
 
@@ -162,7 +163,7 @@
         .contact-area {
             margin-top: auto;
             padding-top: 2rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .contact-label {
@@ -193,6 +194,11 @@
             color: var(--text-muted);
         }
 
+        /* Translate Widget Dark Mode */
+        #google_translate_element {
+            filter: invert(1) hue-rotate(180deg);
+        }
+
         /* Responsive */
         @media (max-width: 1000px) {
             .container {
@@ -201,7 +207,7 @@
 
             .artwork-section {
                 padding: 2rem;
-                background: #f0ebe5;
+                background: var(--bg-paper);
                 min-height: 45vh;
             }
 
