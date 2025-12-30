@@ -15,8 +15,9 @@
 
     <style>
         :root {
-            /* Immersive Palette: Matching the artwork's mat */
-            --bg-paper: #554957;
+            /* Immersive Palette: Darker Deep Purple Grey to make the Mat pop */
+            --bg-paper: #322d33;
+            --mat-color: #554957;
             --text-ink: #f2f0eb;
             /* Ivory */
             --text-muted: #aca3ae;
@@ -68,9 +69,10 @@
             position: relative;
             max-width: 100%;
             max-height: 80vh;
-            /* Reduced slightly to fit controls */
-            /* No shadow needed if it blends, or subtle drop shadow for depth */
-            filter: drop-shadow(0 40px 80px rgba(0, 0, 0, 0.4));
+            /* Deep shadow for floating effect and separation from dark background */
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            /* Subtle border to define the outer frame edge */
+            border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.5s ease;
         }
 
@@ -274,7 +276,7 @@
     <div class="container">
         <section class="artwork-section">
             <div class="artwork-wrapper">
-                <img id="main-artwork" src="artwork_final_clean.jpg" alt="Последний шанс Пегаса — Ольга Розет">
+                <img id="main-artwork" src="artwork_master.jpg" alt="Последний шанс Пегаса — Ольга Розет">
             </div>
 
             <div class="view-controls">
@@ -333,7 +335,7 @@
 
             // Toggle active class
             if (mode === 'framed') {
-                img.src = 'artwork_final_clean.jpg';
+                img.src = 'artwork_master.jpg';
                 btns[0].classList.add('active');
                 btns[1].classList.remove('active');
             } else {
