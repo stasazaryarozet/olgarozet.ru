@@ -1,17 +1,4 @@
-# Git LFS tracking for large binary files
-# Run `git lfs install` once to enable
-
-# Images in art gallery
-art/img/*.jpg filter=lfs diff=lfs merge=lfs -text
-art/img/*.jpeg filter=lfs diff=lfs merge=lfs -text
-art/img/*.png filter=lfs diff=lfs merge=lfs -text
-art/img/*.webp filter=lfs diff=lfs merge=lfs -text
-
-# Footer and other large images
-*.png filter=lfs diff=lfs merge=lfs -text
-olga_footer.png filter=lfs diff=lfs merge=lfs -text
-
-# Ensure text files have consistent line endings
+# Text file line endings
 *.html text eol=lf
 *.css text eol=lf
 *.js text eol=lf

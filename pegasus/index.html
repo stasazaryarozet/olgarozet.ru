@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Последний шанс Пегаса — Ольга Розет</title>
-    <meta name="description" content="Картина Ольги Розет. 2004 год. Частная коллекция. Прямая продажа.">
+    <title>Пегас — Ольга Розет</title>
+    <meta name="description"
+        content="«Последний шанс» — это не метафора мифа. Это повторяющийся сценарий, за который каждый раз платится предельная цена.">
 
     <!-- Fonts: Standard of Excellence -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,16 +17,10 @@
     <style>
         :root {
             /* Palette: High-End Gallery with Physical Accuracy */
-            --bg-paper: #0a090a;
-            --frame-gold: #c4a16b;
-            --frame-shadow: #8b6d43;
-            --frame-highlight: #e4cc9f;
-
-            --outer-mat-color: #f8f6f0;
-            /* Light Paper/Cream "until the frame" */
-            --inner-mat-color: #312e33;
-            /* Dark Inner Mat */
-
+            --bg-neutral: #0a0a0a;
+            --frame-gold: #b39b7a;
+            --outer-mat-color: #f2ebd5;
+            --inner-mat-color: #2c2826;
             --text-ink: #f2f0eb;
             --text-muted: #8d848e;
             --accent-gold: #c4a16b;
@@ -40,17 +35,42 @@
 
         body {
             font-family: 'Cormorant Garamond', Georgia, serif;
-            background: var(--bg-paper);
+            background: var(--bg-neutral);
             color: var(--text-ink);
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
+            transition: background 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.is-paper-mode {
+            background-color: #000;
+            background-image: url('artwork_canvas_clean.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        body.is-paper-mode::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            /* Darken for focus on the main image */
+            backdrop-filter: blur(20px);
+            z-index: -1;
         }
 
         .container {
             display: grid;
             grid-template-columns: 1fr 480px;
             min-height: 100vh;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.is-paper-mode .container {
+            grid-template-columns: 1fr;
         }
 
         /* ARTWORK SECTION */
@@ -61,6 +81,16 @@
             justify-content: center;
             padding: 3rem;
             position: relative;
+            min-height: 100vh;
+        }
+
+        body.is-paper-mode .artwork-section {
+            padding: 0;
+            cursor: zoom-out;
+        }
+
+        body.is-paper-mode .info-panel {
+            display: none;
         }
 
         /* THE TRIPLE-LAYERED FRAME ENGINE */
@@ -73,51 +103,84 @@
         }
 
         /* 1. OUTER WOODEN FRAME */
+        /* 1. OUTER WOODEN FRAME - Wide & Slanted */
         .outer-frame {
-            border: 42px solid var(--frame-gold);
-            border-image: conic-gradient(from 45deg,
-                    var(--frame-highlight) 90deg,
-                    var(--frame-gold) 90deg 180deg,
-                    var(--frame-shadow) 180deg 270deg,
-                    var(--frame-gold) 270deg) 1;
-            box-shadow:
-                0 80px 140px rgba(0, 0, 0, 0.95),
-                inset 0 0 15px rgba(0, 0, 0, 0.2);
+            padding: 55px;
+            /* Wider wood frame */
+            background-color: #d2b48c;
+            /* Warm, golden oak tone */
+            /* High-fidelity slant simulation using multiple gradients */
+            background-image:
+                linear-gradient(to right, rgba(0, 0, 0, 0.15) 0%, transparent 15%, transparent 85%, rgba(0, 0, 0, 0.15) 100%),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 0%, transparent 20%, transparent 80%, rgba(0, 0, 0, 0.2) 100%),
+                linear-gradient(45deg, rgba(0, 0, 0, 0.05) 0%, transparent 1%),
+                linear-gradient(-45deg, rgba(0, 0, 0, 0.05) 0%, transparent 1%);
             position: relative;
+            box-shadow:
+                0 40px 80px rgba(0, 0, 0, 0.5),
+                /* Wall shadow */
+                inset 0 0 60px rgba(0, 0, 0, 0.1);
+            /* Slant depth */
+            border: 1px solid rgba(0, 0, 0, 0.2);
         }
 
-        /* 2. THE LIGHT "PAPER" MAT (Outer Mat) */
+        .outer-frame::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(45deg, rgba(0, 0, 0, 0.05) 0%, transparent 1%, transparent 99%, rgba(0, 0, 0, 0.05) 100%),
+                linear-gradient(-45deg, rgba(0, 0, 0, 0.05) 0%, transparent 1%, transparent 99%, rgba(0, 0, 0, 0.05) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Physical Texture Overlays (Noise) */
+        .outer-frame::before,
+        .outer-paper-mat::before,
+        .inner-dark-mat::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.03;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* 2. THE WIDE DARK MAT - Simulating the physical depth */
         .outer-paper-mat {
-            padding: 45px;
-            /* Wide Light Edging until the frame */
-            background: var(--outer-mat-color);
+            padding: 60px;
+            background: #2c2826;
+            /* Dark warm brown/grey from photo */
             position: relative;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
-            /* Paper texture shadow */
-        }
-
-        /* 3. THE DARK INNER MAT */
-        .inner-dark-mat {
-            padding: 65px;
-            /* Wide Dark Mat */
-            background: var(--inner-mat-color);
+            z-index: 2;
             box-shadow:
-                inset 0 0 30px rgba(0, 0, 0, 0.6),
-                0 0 2px rgba(0, 0, 0, 0.3);
-            /* Bevel effect */
-            position: relative;
+                inset 0 0 2px rgba(0, 0, 0, 0.8),
+                /* Dark cut edge */
+                0 0 0 2px #e8e2d0;
+            /* That very thin light line (slip) between frame and mat */
         }
 
-        /* Frame Varnish/Highlight Gradient */
+        .inner-dark-mat {
+            position: relative;
+            z-index: 3;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            /* Shadow of the mat window on the painting */
+        }
+
+        /* Inner Bevel for the painting */
+
+
         .outer-frame::after {
             content: '';
             position: absolute;
-            top: -42px;
-            left: -42px;
-            right: -42px;
-            bottom: -42px;
+            inset: -1px;
             pointer-events: none;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 40%, rgba(0, 0, 0, 0.25) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            /* Edge highlight */
             z-index: 10;
         }
 
@@ -127,31 +190,48 @@
             width: auto;
             max-width: 100%;
             display: block;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5), 0 0 5px rgba(0, 0, 0, 0.5);
             transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
         }
 
-        /* CANVAS VIEW STATE (is-canvas) */
-        .frame-system.is-canvas .outer-frame {
-            border: 6px solid #1a181a;
-            border-image: none;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
+        /* PAPER VIEW STATE (is-paper) */
+        .frame-system.is-paper .outer-frame {
+            padding: 0;
+            background: none;
+            box-shadow: none;
         }
 
-        .frame-system.is-canvas .outer-paper-mat,
-        .frame-system.is-canvas .inner-dark-mat {
+        .frame-system.is-paper .outer-paper-mat,
+        .frame-system.is-paper .inner-dark-mat {
             padding: 0;
             background: transparent;
             box-shadow: none;
+            border: none;
         }
 
-        .frame-system.is-canvas .outer-frame::after {
+        .frame-system.is-paper .outer-frame::after,
+        .frame-system.is-paper .outer-frame::before {
             display: none;
         }
 
-        .frame-system.is-canvas img {
-            max-height: 80vh;
-            box-shadow: none;
+        .frame-system.is-paper img {
+            max-height: 92vh;
+            max-width: 92vw;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9);
+            cursor: zoom-out;
+        }
+
+        body.is-paper-mode .view-controls {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         /* TYPOGRAPHY & INTERFACE */
@@ -198,11 +278,14 @@
         }
 
         .title {
-            font-size: 4rem;
+            font-size: 4.8rem;
             font-weight: 300;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.02em;
+            line-height: 1.05;
+            margin-bottom: 2rem;
+            letter-spacing: -0.015em;
+            font-feature-settings: "kern" 1, "onum" 1;
+            text-wrap: balance;
+            color: var(--text-ink);
         }
 
         .meta {
@@ -335,7 +418,7 @@
             <div class="view-controls">
                 <button class="view-btn active" onclick="switchView('framed')">В раме</button>
                 <span style="opacity:0.3">/</span>
-                <button class="view-btn" onclick="switchView('canvas')">Холст</button>
+                <button class="view-btn" onclick="switchView('paper')">Бумага</button>
             </div>
         </section>
 
@@ -349,18 +432,23 @@
 
             <div class="module">
                 <span class="price-display">€10,000</span>
-                <p class="price-note">Вся сумма пойдёт Ольге — Отдохнуть и Порисовать.</p>
+                <p class="price-note">Вся сумма — автору. На Жизнь и возможность продолжать.</p>
+                <p
+                    style="margin-top: 2rem; color: var(--text-muted); line-height: 1.7; font-style: italic; border-left: 2px solid var(--accent-gold); padding-left: 1.5rem;">
+                    «Последний шанс» — это не метафора мифа. Это повторяющийся сценарий, за который каждый раз платится
+                    предельная цена. Сейчас дело зашло слишком далеко.
+                </p>
             </div>
 
             <div class="module logistics">
                 <p><strong>Самовывоз</strong> Москва</p>
-                <p style="margin-top: 0.75rem;"><strong>Доставка</strong> Организую в СНГ, Китай, ОАЭ, Турцию, Сербию,
-                    120+ стран</p>
-                <span class="restriction">ЕС/США/Великобритания: ограничения на грузы >€300</span>
+                <p style="margin-top: 0.75rem;"><strong>Доставка</strong> СНГ, Китай, ОАЭ, Турция, Сербия и др. страны
+                </p>
+                <span class="restriction">Лимит на ввоз в ЕС/США/UK: до €300</span>
             </div>
 
             <div class="contact-area">
-                <div class="contact-label">Связаться со мной</div>
+                <div class="contact-label">Связь</div>
                 <a href="mailto:azrozet@gmail.com" class="email-link">azrozet@gmail.com</a>
                 <p class="organizer">Азарья Розет</p>
             </div>
@@ -382,13 +470,16 @@
         function switchView(mode) {
             const system = document.querySelector('.frame-system');
             const btns = document.querySelectorAll('.view-btn');
+            const body = document.body;
 
             if (mode === 'framed') {
-                system.classList.remove('is-canvas');
+                system.classList.remove('is-paper');
+                body.classList.remove('is-paper-mode');
                 btns[0].classList.add('active');
                 btns[1].classList.remove('active');
             } else {
-                system.classList.add('is-canvas');
+                system.classList.add('is-paper');
+                body.classList.add('is-paper-mode');
                 btns[0].classList.remove('active');
                 btns[1].classList.add('active');
             }
