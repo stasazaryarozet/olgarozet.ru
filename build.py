@@ -27,7 +27,7 @@ OUTPUT = ROOT / 'index.html'
 CONFIG_PATH = OLGA_ROOT / 'config.yaml'
 
 # Context Engine import
-sys.path.insert(0, str(ROOT.parent.parent / 'engine'))
+sys.path.insert(0, str(ROOT.parent.parent / 'lib'))
 try:
     from context import Context
     CTX = Context(OLGA_ROOT)
