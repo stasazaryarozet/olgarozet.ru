@@ -311,7 +311,8 @@ def generate_events_html(events: list) -> str:
         if event.get('title') and event.get('status'):
             html_parts.append(f'        <p>{event["title"]} · {event["status"]}</p>')
         elif event.get('title') and event.get('location'):
-            html_parts.append(f'        <p>{event["title"]} · {event["location"]}</p>')
+            html_parts.append(f'        <p>{event["title"]}</p>')
+            html_parts.append(f'        <p>{event["location"]}</p>')
         elif event.get('title'):
             html_parts.append(f'        <p>{event["title"]}</p>')
         
