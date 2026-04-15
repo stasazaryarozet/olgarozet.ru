@@ -29,9 +29,10 @@ consultations:
   duration_min: 40
   timezone: Europe/Belgrade
   calendar_id: o.g.rozet@gmail.com
-  availability: 'Онлайн
-  или
-  приехать ко мне в Сербию'
+  availability: |
+    Онлайн
+    или
+    приехать ко мне в Сербию
   link: booking/
   cta: Записаться
 events:
