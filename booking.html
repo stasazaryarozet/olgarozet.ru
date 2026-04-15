@@ -6,52 +6,45 @@
   <title>Записаться — Ольга Розет</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    .booking { max-width: 600px; margin: 2rem auto; padding: 0 1.5rem; }
-    .booking h2 { text-align: center; margin-bottom: 1rem; }
-    .slot-day { margin: 1.5rem 0; }
-    .slot-day h3 { font-size: 1rem; color: #666; margin-bottom: 0.5rem; }
-    .slot-btn { 
-      display: inline-block; padding: 0.5rem 1.2rem; margin: 0.25rem;
-      border: 1px solid #ddd; border-radius: 0.5rem; text-decoration: none;
-      color: #333; font-size: 0.95rem; transition: all 0.15s;
-    }
-    .slot-btn:hover { background: #f0f0f0; border-color: #999; }
-    .note { text-align: center; color: #888; font-size: 0.85rem; margin-top: 2rem; }
+    .booking { max-width: 400px; margin: 2rem auto; padding: 0 1.5rem; }
+    .booking h2 { text-align: center; margin-bottom: 0.5rem; }
+    .booking p { text-align: center; color: #666; }
+    .field { margin: 1rem 0; }
+    .field input { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 0.5rem; font-size: 1rem; }
+    .field input:focus { border-color: #333; outline: none; }
+    .submit { text-align: center; margin-top: 1.5rem; }
+    .submit button { padding: 0.75rem 2rem; background: #111; color: #fff; border: none;
+      border-radius: 0.5rem; font-size: 1rem; cursor: pointer; }
+    .submit button:hover { background: #333; }
+    .msg { text-align: center; margin-top: 1rem; color: #666; }
     .back { text-align: center; margin-top: 2rem; }
     .back a { color: #666; }
   </style>
 </head>
 <body>
   <div class="booking">
-    <h2>Записаться на консультацию</h2>
-    <p style="text-align:center">40 мин · 15 000 ₽ · онлайн</p>
-    <div id="slots">Загрузка...</div>
-    <p class="note">Выберите время — откроется письмо.<br>Ольга подтвердит в течение дня.</p>
+    <h2>Консультация</h2>
+    <p>40 мин · 15 000 ₽ · онлайн</p>
+    <form id="f" onsubmit="send(event)">
+      <div class="field"><input name="name" placeholder="Имя" required></div>
+      <div class="field"><input name="contact" placeholder="Телефон, Telegram или Email" required></div>
+      <div class="submit"><button type="submit">Записаться</button></div>
+    </form>
+    <div class="msg" id="msg"></div>
     <p class="back"><a href="/">← Назад</a></p>
   </div>
   <script>
-    fetch('booking.json').then(r=>r.json()).then(d=>{
-      const el = document.getElementById('slots');
-      const days = {};
-      const weekdays = {пн:'Понедельник',вт:'Вторник',ср:'Среда',чт:'Четверг',пт:'Пятница'};
-      d.slots.forEach(s => {
-        if (!days[s.date]) days[s.date] = [];
-        days[s.date].push(s);
+    function send(e) {
+      e.preventDefault();
+      var f = document.getElementById('f');
+      var d = {name: f.name.value, contact: f.contact.value};
+      var url = 'https://script.google.com/macros/s/AKfycbzeulk8nVhROOmrnysLKRLGqM_naMEgVhtPl50ch_GCilibJ7MXv2rWlGlq1hz1SWc/exec?' + new URLSearchParams(d).toString();
+      document.getElementById('msg').textContent = 'Отправка...';
+      fetch(url, {mode:'no-cors'}).then(function(){
+        document.getElementById('msg').textContent = 'Спасибо! Ольга свяжется с вами.';
+        f.reset();
       });
-      let html = '';
-      for (const [date, slots] of Object.entries(days)) {
-        const wd = weekdays[slots[0].weekday] || slots[0].weekday;
-        const [y,m,day] = date.split('-');
-        html += `<div class="slot-day"><h3>${wd}, ${+day}.${m}</h3>`;
-        slots.forEach(s => {
-          const subj = encodeURIComponent(`Консультация ${+day}.${m} ${s.time}`);
-          const body = encodeURIComponent(`Здравствуйте, Ольга!\n\nХочу записаться на консультацию:\n${wd}, ${+day}.${m} в ${s.time} (${d.timezone})\n\nМоё имя: \nТелефон/Telegram: `);
-          html += `<a class="slot-btn" href="mailto:o.g.rozet@gmail.com?subject=${subj}&body=${body}">${s.time}</a>`;
-        });
-        html += '</div>';
-      }
-      el.innerHTML = html || '<p>Нет доступных слотов</p>';
-    });
+    }
   </script>
 </body>
 </html>
