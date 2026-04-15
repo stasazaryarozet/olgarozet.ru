@@ -250,7 +250,7 @@ def p_booking(d: dict) -> str:
 <body>
 <div class="booking">
 <h2>Консультация</h2>
-<p class="sub">{cons.get('duration', '40 мин')} · {cons['price']} · онлайн</p>
+<p class="sub">{cons.get('duration_min', 40)} мин · {cons['price']} · онлайн</p>
 <p class="tz">время показано по вашему часовому поясу</p>
 <div id="slots"></div>
 <div class="more" id="more" style="display:none"><a onclick="showAll()">Показать все даты →</a></div>

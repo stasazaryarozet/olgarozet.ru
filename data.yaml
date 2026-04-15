@@ -26,6 +26,9 @@ consultations:
 
     '
   price: 15 000 ₽
+  duration_min: 40
+  timezone: Europe/Belgrade
+  calendar_id: o.g.rozet@gmail.com
   availability: 'Онлайн
 
     или приехать ко мне в Сербию
