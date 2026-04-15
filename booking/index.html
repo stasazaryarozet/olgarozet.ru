@@ -20,7 +20,7 @@
 .bk-input:focus{border-color:#1a1a1a;outline:none}
 .bk-input.err{border-color:#c00}
 .bk-btn{display:block;width:100%;padding:.75rem;margin-top:.2rem;background:#1a1a1a;color:#fff;border:none;border-radius:.5rem;font-size:.95rem;font-weight:500;cursor:pointer;font-family:inherit}
-.bk-btn:hover{background:#333}.bk-btn:disabled{background:#d0d0d0;cursor:default}
+.bk-btn:hover{background:#333}.bk-btn:disabled{background:#d0d0d0;cursor:default;pointer-events:none}
 .msg{text-align:center;padding:1rem;line-height:1.5}
 .loading{text-align:center;color:#bbb;padding:1.5rem 0;font-size:.9rem}
 .back{text-align:center;margin-top:1.5rem}
@@ -34,9 +34,9 @@
 <p class="tz">время показано по вашему часовому поясу</p>
 <div id="slots"><div class="loading" id="loading">Загрузка расписания...</div></div>
 <div class="more" id="more" style="display:none"><a onclick="showAll()">Показать все даты →</a></div>
-<input class="bk-input" id="bk-name" placeholder="Имя">
-<input class="bk-input" id="bk-contact" placeholder="Телефон, Telegram или Email">
-<button class="bk-btn" id="bk-btn" onclick="book()" disabled>Выберите время</button>
+<input class="bk-input" id="bk-name" placeholder="Имя" required minlength="2">
+<input class="bk-input" id="bk-contact" placeholder="Телефон, Telegram или Email" required minlength="3">
+<button class="bk-btn" id="bk-btn" type="button" onclick="book()" disabled>Выберите время</button>
 <div class="msg" id="bk-msg"></div>
 <p class="back"><a href="/">← Ольга Розет</a></p>
 </div>
@@ -81,18 +81,20 @@ el.classList.add("on");slot={date:d,time:t,id:id};
 document.getElementById("bk-btn").disabled=false;
 document.getElementById("bk-btn").textContent=t+" — ЗАПРОСИТЬ ВРЕМЯ";
 }
+function ok(el,msg){el.classList.add("err");document.getElementById("bk-msg").textContent=msg;el.focus();return false}
 function book(){
 if(submitted)return;
 var nameEl=document.getElementById("bk-name");
 var contactEl=document.getElementById("bk-contact");
 var msgEl=document.getElementById("bk-msg");
 nameEl.classList.remove("err");contactEl.classList.remove("err");msgEl.textContent="";
-if(!slot){msgEl.textContent="Выберите время";return}
-if(!nameEl.value.trim()){nameEl.classList.add("err");msgEl.textContent="Введите имя";nameEl.focus();return}
-if(!contactEl.value.trim()){contactEl.classList.add("err");msgEl.textContent="Введите контакт";contactEl.focus();return}
+if(!slot)return ok(nameEl,"Выберите время");
+var n=nameEl.value.trim(),c=contactEl.value.trim();
+if(n.length<2)return ok(nameEl,"Введите имя (минимум 2 символа)");
+if(c.length<3)return ok(contactEl,"Введите контакт");
+if(!/[\d@.]/.test(c))return ok(contactEl,"Введите телефон, email или Telegram");
 var btn=document.getElementById("bk-btn");
 btn.disabled=true;btn.textContent="Отправка...";
-var n=nameEl.value.trim(),c=contactEl.value.trim();
 fetch(API+"?name="+encodeURIComponent(n)+"&contact="+encodeURIComponent(c)+"&date="+slot.date+"&time="+slot.time+"&id="+slot.id)
 .then(function(r){return r.json()}).then(function(d){
 if(d.ok){submitted=true;msgEl.innerHTML="<b>Заявка отправлена!</b><br>Ольга свяжется с вами для подтверждения.";
