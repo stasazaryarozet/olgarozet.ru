@@ -216,6 +216,8 @@ def p_booking(d: dict) -> str:
     transport_url = slots_data.get("transport_url",
         "https://script.google.com/macros/s/AKfycbzeulk8nVhROOmrnysLKRLGqM_naMEgVhtPl50ch_GCilibJ7MXv2rWlGlq1hz1SWc/exec")
     slots_json = _json.dumps(slots_data.get("slots", []), ensure_ascii=False)
+    desc_plain = cons["description"].strip().replace("\n", " ").replace("  ", " ")
+    avail_plain = cons["availability"].strip().replace("\n", " ").replace("  ", " ")
 
     return f"""<!DOCTYPE html>
 <html lang="ru">
@@ -223,24 +225,43 @@ def p_booking(d: dict) -> str:
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Записаться — Ольга Розет</title>
+<meta name="description" content="{desc_plain} — {cons['price']}">
 <link rel="stylesheet" href="../styles.css">
 <style>
 .booking{{max-width:420px;margin:0 auto;padding:2.5rem 1.5rem 2rem}}
 .booking h2{{font-size:1.3rem;text-align:center;font-weight:600;margin-bottom:.2rem}}
 .sub{{text-align:center;color:#7d7d7d;font-size:.95rem}}
 .tz{{text-align:center;color:#aaa;font-size:.8rem;margin-bottom:1.2rem}}
-.day{{margin-bottom:.6rem}}
-.day-label{{font-size:.85rem;color:#999;margin-bottom:.2rem}}
-.t{{display:inline-block;padding:.35rem .9rem;margin:.12rem;border:1px solid #e5e5e5;border-radius:2rem;cursor:pointer;font-size:.9rem;transition:all .12s;user-select:none}}
-.t:hover{{border-color:#999}}.t.on{{background:#1a1a1a;color:#fff;border-color:#1a1a1a}}
+.day{{margin-bottom:.8rem}}
+.day-label{{font-size:.85rem;color:#999;margin-bottom:.3rem}}
+.slots-grid{{display:flex;flex-wrap:wrap;gap:.25rem}}
+.t{{display:inline-flex;align-items:center;justify-content:center;min-width:3.2rem;min-height:2.75rem;
+  padding:.4rem .9rem;border:1px solid #e5e5e5;border-radius:2rem;cursor:pointer;
+  font-size:.9rem;transition:border-color .12s,background .12s,color .12s,transform .1s;user-select:none;
+  -webkit-tap-highlight-color:transparent}}
+.t:hover{{border-color:#999}}
+.t:focus-visible{{outline:2px solid #1a1a1a;outline-offset:2px}}
+.t:active{{transform:scale(.95)}}
+.t.on{{background:#1a1a1a;color:#fff;border-color:#1a1a1a}}
 .more{{text-align:center;margin:.8rem 0}}
-.more a{{color:#7d7d7d;font-size:.85rem;cursor:pointer}}
-.bk-input{{display:block;width:100%;padding:.65rem .9rem;margin-bottom:.4rem;border:1px solid #e5e5e5;border-radius:.5rem;font-size:.95rem;font-family:inherit}}
+.more button{{background:none;border:none;color:#7d7d7d;font-size:.85rem;cursor:pointer;font-family:inherit;padding:.5rem 1rem}}
+.bk-form{{margin-top:.8rem}}
+.bk-label{{display:block;font-size:.8rem;color:#999;margin-bottom:.15rem}}
+.bk-input{{display:block;width:100%;padding:.7rem .9rem;margin-bottom:.5rem;border:1px solid #e5e5e5;
+  border-radius:.5rem;font-size:.95rem;font-family:inherit;transition:border-color .15s}}
 .bk-input:focus{{border-color:#1a1a1a;outline:none}}
-.bk-input.err{{border-color:#c00}}
-.bk-btn{{display:block;width:100%;padding:.75rem;margin-top:.2rem;background:#1a1a1a;color:#fff;border:none;border-radius:.5rem;font-size:.95rem;font-weight:500;cursor:pointer;font-family:inherit}}
-.bk-btn:hover{{background:#333}}.bk-btn:disabled{{background:#d0d0d0;cursor:default;pointer-events:none}}
+.bk-input.err{{border-color:#c00;animation:shake .3s}}
+@keyframes shake{{0%,100%{{transform:translateX(0)}}25%{{transform:translateX(-4px)}}75%{{transform:translateX(4px)}}}}
+.bk-btn{{display:block;width:100%;padding:.85rem;margin-top:.3rem;background:#1a1a1a;color:#fff;border:none;
+  border-radius:.5rem;font-size:.95rem;font-weight:500;cursor:pointer;font-family:inherit;
+  min-height:2.75rem;transition:background .15s,opacity .15s}}
+.bk-btn:hover:not(:disabled){{background:#333}}
+.bk-btn:focus-visible{{outline:2px solid #1a1a1a;outline-offset:2px}}
+.bk-btn:disabled{{background:#d0d0d0;cursor:default;pointer-events:none}}
+.bk-btn.sending{{opacity:.7}}
 .msg{{text-align:center;padding:1rem;line-height:1.5}}
+.msg.success{{color:#1a7a1a}}
+.msg.error{{color:#c00}}
 .back{{text-align:center;margin-top:1.5rem}}
 .back a{{color:#aaa;font-size:.85rem;text-decoration:none}}
 .no-slots{{text-align:center;color:#999;padding:1.5rem 0}}
@@ -248,18 +269,39 @@ def p_booking(d: dict) -> str:
 </style>
 </head>
 <body>
-<div class="booking">
+<div class="booking" role="main">
 <h2>Консультация</h2>
 <p class="sub">{cons.get('duration_min', 40)} мин · {cons['price']} · онлайн</p>
-<p class="tz">время показано по вашему часовому поясу</p>
-<div id="slots"></div>
-<div class="more" id="more" style="display:none"><a onclick="showAll()">Показать все даты →</a></div>
-<input class="bk-input" id="bk-name" placeholder="Имя" required minlength="2">
-<input class="bk-input" id="bk-contact" placeholder="Телефон, Telegram или Email" required minlength="3">
-<button class="bk-btn" id="bk-btn" type="button" onclick="book()" disabled>Выберите время</button>
-<div class="msg" id="bk-msg"></div>
+<p class="tz" aria-live="polite">время показано по вашему часовому поясу</p>
+
+<noscript>
+<div style="text-align:center;padding:1.5rem 0;line-height:1.6">
+<p>Для онлайн-записи включите JavaScript.</p>
+<p>Или напишите напрямую:</p>
+<p><a href="https://t.me/olgaroset">@olgaroset</a> · <a href="mailto:{cons.get('calendar_id', 'o.g.rozet@gmail.com')}">{cons.get('calendar_id', 'o.g.rozet@gmail.com')}</a></p>
+</div>
+</noscript>
+
+<div id="slots" role="listbox" aria-label="Доступное время"></div>
+<div class="more" id="more" style="display:none">
+  <button type="button" onclick="showAll()" aria-label="Показать все доступные даты">Показать все даты →</button>
+</div>
+
+<form class="bk-form" id="bk-form" onsubmit="return false" novalidate>
+  <label class="bk-label" for="bk-name">Имя</label>
+  <input class="bk-input" id="bk-name" name="name" autocomplete="name"
+         placeholder="Имя" required minlength="2" aria-required="true">
+  <label class="bk-label" for="bk-contact">Контакт</label>
+  <input class="bk-input" id="bk-contact" name="contact" autocomplete="tel"
+         placeholder="Телефон, Telegram или Email" required minlength="3" aria-required="true">
+  <button class="bk-btn" id="bk-btn" type="submit" disabled
+          aria-disabled="true" aria-live="polite">Выберите время</button>
+</form>
+
+<div class="msg" id="bk-msg" role="status" aria-live="polite"></div>
 <p class="back"><a href="/">← Ольга Розет</a></p>
 </div>
+
 <script>
 var API="{transport_url}";
 var SLOTS={slots_json};
@@ -271,7 +313,8 @@ SLOTS.forEach(function(s){{
   var dt=new Date(s.start);
   var key=dt.toISOString().slice(0,10);
   if(!days[key])days[key]=[];
-  days[key].push({{date:key,time:dt.toLocaleTimeString("ru",{{hour:"2-digit",minute:"2-digit",hour12:false}}),id:s.id,label:dt.toLocaleDateString("ru",{{weekday:"long",day:"numeric",month:"long"}})}});
+  days[key].push({{date:key,time:dt.toLocaleTimeString("ru",{{hour:"2-digit",minute:"2-digit",hour12:false}}),
+    id:s.id,label:dt.toLocaleDateString("ru",{{weekday:"long",day:"numeric",month:"long"}})}});
 }});
 allDays=Object.keys(days).map(function(k){{return{{key:k,slots:days[k]}}}});
 if(allDays.length===0){{
@@ -285,39 +328,57 @@ if(allDays.length===0){{
 function render(n){{
 var el=document.getElementById("slots");var h="";
 allDays.slice(0,n).forEach(function(d){{
-h+="<div class='day'><div class='day-label'>"+d.slots[0].label+"</div>";
-d.slots.forEach(function(s){{h+="<span class='t' onclick='pick(this,\\""+s.date+"\\",\\""+s.time+"\\",\\""+s.id+"\\")'>"+s.time+"</span>";}});
-h+="</div>";}});
+  h+="<div class='day' role='group' aria-label='"+d.slots[0].label+"'>";
+  h+="<div class='day-label'>"+d.slots[0].label+"</div><div class='slots-grid'>";
+  d.slots.forEach(function(s){{
+    h+="<button type='button' class='t' role='option' aria-selected='false' ";
+    h+="onclick='pick(this,\\""+s.date+"\\",\\""+s.time+"\\",\\""+s.id+"\\")'";
+    h+=" aria-label='"+s.time+" "+d.slots[0].label+"'>"+s.time+"</button>";
+  }});
+  h+="</div></div>";
+}});
 el.innerHTML=h;
 }}
 function showAll(){{render(allDays.length);document.getElementById("more").style.display="none"}}
 function pick(el,d,t,id){{
-document.querySelectorAll(".t").forEach(function(s){{s.classList.remove("on")}});
-el.classList.add("on");slot={{date:d,time:t,id:id}};
-document.getElementById("bk-btn").disabled=false;
-document.getElementById("bk-btn").textContent=t+" — ЗАПРОСИТЬ ВРЕМЯ";
+document.querySelectorAll(".t").forEach(function(s){{s.classList.remove("on");s.setAttribute("aria-selected","false")}});
+el.classList.add("on");el.setAttribute("aria-selected","true");
+slot={{date:d,time:t,id:id}};
+var btn=document.getElementById("bk-btn");
+btn.disabled=false;btn.setAttribute("aria-disabled","false");
+btn.textContent=t+" — ЗАПРОСИТЬ ВРЕМЯ";
+document.getElementById("bk-name").focus();
 }}
-function ok(el,msg){{el.classList.add("err");document.getElementById("bk-msg").textContent=msg;el.focus();return false}}
+function err(el,msg){{el.classList.add("err");document.getElementById("bk-msg").className="msg error";
+  document.getElementById("bk-msg").textContent=msg;el.focus();return false}}
+
+document.getElementById("bk-form").addEventListener("submit",function(e){{e.preventDefault();book()}});
 function book(){{
 if(submitted)return;
 var nameEl=document.getElementById("bk-name");
 var contactEl=document.getElementById("bk-contact");
 var msgEl=document.getElementById("bk-msg");
-nameEl.classList.remove("err");contactEl.classList.remove("err");msgEl.textContent="";
-if(!slot)return ok(nameEl,"Выберите время");
+nameEl.classList.remove("err");contactEl.classList.remove("err");msgEl.textContent="";msgEl.className="msg";
+if(!slot)return err(nameEl,"Выберите время");
 var n=nameEl.value.trim(),c=contactEl.value.trim();
-if(n.length<2)return ok(nameEl,"Введите имя (минимум 2 символа)");
-if(c.length<3)return ok(contactEl,"Введите контакт");
-if(!/[\\d@.]/.test(c))return ok(contactEl,"Введите телефон, email или Telegram");
+if(n.length<2)return err(nameEl,"Введите имя (минимум 2 символа)");
+if(c.length<3)return err(contactEl,"Введите контакт");
+if(!/[\\d@.]/.test(c))return err(contactEl,"Введите телефон, email или Telegram");
 var btn=document.getElementById("bk-btn");
-btn.disabled=true;btn.textContent="Отправка...";
+btn.disabled=true;btn.classList.add("sending");btn.textContent="Отправка...";
 fetch(API+"?name="+encodeURIComponent(n)+"&contact="+encodeURIComponent(c)+"&date="+slot.date+"&time="+slot.time+"&id="+slot.id)
 .then(function(r){{return r.json()}}).then(function(d){{
-if(d.ok){{submitted=true;msgEl.innerHTML="<b>Заявка отправлена!</b><br>Ольга свяжется с вами для подтверждения.";
-document.getElementById("slots").style.display="none";document.getElementById("more").style.display="none";
-nameEl.style.display="none";contactEl.style.display="none";btn.style.display="none";}}
-else{{msgEl.textContent=d.error==="name_required"?"Введите имя":d.error==="contact_required"?"Введите контакт":d.error==="contact_invalid"?"Некорректный контакт":"Ошибка. Попробуйте позже.";btn.disabled=false;btn.textContent="ЗАПРОСИТЬ ВРЕМЯ"}}
-}}).catch(function(){{msgEl.textContent="Ошибка сети.";btn.disabled=false;btn.textContent="ЗАПРОСИТЬ ВРЕМЯ"}});
+btn.classList.remove("sending");
+if(d.ok){{submitted=true;msgEl.className="msg success";
+  msgEl.innerHTML="<b>Заявка отправлена!</b><br>Ольга свяжется с вами для подтверждения.";
+  document.getElementById("slots").style.display="none";document.getElementById("more").style.display="none";
+  document.getElementById("bk-form").style.display="none";}}
+else{{var m={{"name_required":"Введите имя","contact_required":"Введите контакт",
+  "contact_invalid":"Некорректный контакт","slot_taken":"Время уже занято"}};
+  msgEl.className="msg error";msgEl.textContent=m[d.error]||"Ошибка. Попробуйте позже.";
+  btn.disabled=false;btn.textContent="ЗАПРОСИТЬ ВРЕМЯ"}}
+}}).catch(function(){{btn.classList.remove("sending");msgEl.className="msg error";
+  msgEl.textContent="Ошибка сети. Попробуйте ещё раз.";btn.disabled=false;btn.textContent="ЗАПРОСИТЬ ВРЕМЯ"}});
 }}
 </script>
 </body>
