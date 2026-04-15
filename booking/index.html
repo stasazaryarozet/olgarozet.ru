@@ -1,163 +1,60 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Забронировать консультацию — Ольга Розет</title>
-  <meta name="description" content="Забронировать 40-минутную консультацию с Ольгой Розет. 15 000 ₽.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Записаться — Ольга Розет</title>
   <style>
-    :root {
-      --text: #1a1a1a;
-      --bg: #fff;
-      --link: #000;
-      --border: #e0e0e0;
-      --accent: #E31B1B
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box
-    }
-
-    html {
-      font: 400 18px/1.7 -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-      -webkit-text-size-adjust: 100%;
-      -webkit-font-smoothing: antialiased
-    }
-
-    body {
-      color: var(--text);
-      background: var(--bg);
-      max-width: 38em;
-      margin: 0 auto;
-      padding: 4em 1.5em 2em;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column
-    }
-
-    main {
-      flex: 1
-    }
-
-    h1 {
-      font-size: 1.8em;
-      font-weight: 400;
-      margin-bottom: 0.2em;
-      letter-spacing: -0.01em
-    }
-
-    p {
-      margin: 0.8em 0
-    }
-
-    .breadcrumbs {
-      font-size: 0.9em;
-      margin-bottom: 2em;
-      color: #999
-    }
-
-    .breadcrumbs a {
-      color: #999;
-      border-bottom: 1px solid #ddd;
-      text-decoration: none
-    }
-
-    .info {
-      background: #fafafa;
-      padding: 1.5em;
-      margin: 2em 0;
-      border-left: 3px solid var(--accent)
-    }
-
-    .info p {
-      margin: 0.5em 0
-    }
-
-    .price {
-      font-size: 2.5em;
-      font-weight: 400;
-      margin: 1em 0 0.2em;
-      text-align: center
-    }
-
-    .cal-embed {
-      margin: 2em 0;
-      min-height: 600px
-    }
-
-    iframe {
-      border: none;
-      width: 100%;
-      min-height: 600px
-    }
-
-    footer {
-      margin-top: 4em;
-      padding-top: 2em;
-      border-top: 1px solid var(--border);
-      font-size: 0.9em;
-      color: #666;
-      text-align: center
-    }
-
-    footer a {
-      color: var(--text);
-      text-decoration: none
-    }
-
-    @media(max-width:600px) {
-      html {
-        font-size: 17px
-      }
-
-      body {
-        padding: 3em 1.2em 2em
-      }
-
-      .price {
-        font-size: 2em
-      }
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+           color: #1a1a1a; background: #fff; }
+    .page { max-width: 420px; margin: 0 auto; padding: 3rem 1.5rem 2rem; }
+    h1 { font-size: 1.3rem; text-align: center; font-weight: 600; }
+    .sub { text-align: center; color: #777; margin: .3rem 0 1.5rem; font-size: .95rem; }
+    
+    .slots { margin-bottom: 1.5rem; }
+    .day { margin-bottom: .8rem; }
+    .day-label { font-size: .85rem; color: #999; margin-bottom: .25rem; }
+    .t { display: inline-block; padding: .35rem .9rem; margin: .15rem;
+         border: 1px solid #e0e0e0; border-radius: 2rem; cursor: pointer;
+         font-size: .9rem; transition: all .15s; user-select: none; }
+    .t:hover { border-color: #999; }
+    .t.on { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+    
+    input { display: block; width: 100%; padding: .7rem .9rem; margin-bottom: .5rem;
+            border: 1px solid #e0e0e0; border-radius: .5rem; font-size: .95rem; }
+    input:focus { border-color: #1a1a1a; outline: none; }
+    
+    button { display: block; width: 100%; padding: .8rem; margin-top: .3rem;
+             background: #1a1a1a; color: #fff; border: none; border-radius: .5rem;
+             font-size: .95rem; font-weight: 500; cursor: pointer; letter-spacing: .03em; }
+    button:hover { background: #333; }
+    button:disabled { background: #d0d0d0; cursor: default; }
+    
+    .msg { text-align: center; padding: 1rem; line-height: 1.5; }
+    .msg b { display: block; margin-bottom: .3rem; }
+    .loading { text-align: center; color: #bbb; padding: 1.5rem 0; font-size: .9rem; }
+    .back { text-align: center; margin-top: 2rem; }
+    .back a { color: #aaa; font-size: .85rem; text-decoration: none; }
+    .back a:hover { color: #666; }
   </style>
 </head>
-
 <body>
-  <main>
-    <nav class="breadcrumbs">
-      <a href="/">← olgarozet.ru</a>
-    </nav>
-
-    <h1>Включить в дело</h1>
-
-    <div class="info">
-      <p><strong>Длительность:</strong> 40 минут</p>
-      <p><strong>Формат:</strong> Онлайн или лично (по договорённости)</p>
+  <div class="page">
+    <h1>Консультация</h1>
+    <p class="sub">40 мин · 15 000 ₽ · онлайн</p>
+    
+    <div class="slots" id="slots">
+      <div class="loading" id="loading">Загрузка расписания...</div>
     </div>
-
-    <div class="price">15 000 ₽</div>
-
-    <p style="text-align:center;font-size:0.9em;color:#666;margin:1.5em 0;line-height:1.6">
-      Нет 15 000 ₽? Возможно, что-нибудь придумаем. Пожалуйста, пишите: <a href="https://t.me/olgaroset"
-        style="color:var(--accent)">@olgaroset</a>
-    </p>
-
-    <div class="cal-embed">
-      <iframe src="https://cal.com/olgarozet/delo-40min?embed=true&ui=ru" loading="lazy"></iframe>
-    </div>
-
-    <p style="text-align:center;font-size:0.9em;color:#999;margin-top:2em">
-      После выбора времени вы получите подтверждение и реквизиты для оплаты.
-    </p>
-  </main>
-
-  <footer>
-    <a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a> ·
-    <a href="https://t.me/olga_rozet">Telegram</a> ·
-    <a href="https://instagram.com/olga_rozet">Instagram</a>
-  </footer>
+    
+    <input id="name" placeholder="Имя">
+    <input id="contact" placeholder="Телефон, Telegram или Email">
+    <button id="btn" onclick="book()" disabled>Выберите время</button>
+    
+    <div class="msg" id="msg"></div>
+    <p class="back"><a href="/">← Ольга Розет</a></p>
+  </div>
+  <script src="booking.js"></script>
 </body>
-
 </html>

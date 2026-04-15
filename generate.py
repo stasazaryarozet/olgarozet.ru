@@ -60,15 +60,7 @@ def p_site(d: dict) -> str:
       <h2 id="consultations-heading">Консультации:</h2>
       <p>{desc}</p>
       <p class="price">{cons['price']}</p>
-      <div id="booking">
-        <div id="slots-loading" style="text-align:center;color:#999;margin:1rem 0">Загрузка...</div>
-        <div id="slots" style="margin:1rem 0"></div>
-        <input id="bk-name" placeholder="Имя" style="width:100%;padding:.6rem;border:1px solid #ddd;border-radius:.4rem;margin:.3rem 0;font-size:1rem">
-        <input id="bk-contact" placeholder="Телефон, Telegram или Email" style="width:100%;padding:.6rem;border:1px solid #ddd;border-radius:.4rem;margin:.3rem 0;font-size:1rem">
-        <button id="bk-btn" onclick="bkBook()" disabled style="width:100%;padding:.7rem;background:#111;color:#fff;border:none;border-radius:.5rem;font-size:1rem;cursor:pointer;margin-top:.5rem">Выберите время</button>
-        <div id="bk-msg" style="text-align:center;margin-top:.5rem;color:#666"></div>
-      </div>
-      <script src="booking.js"></script>
+      <a href="{cons['link']}" class="cta">{cons['cta']}</a>
       <p class="availability">{avail}</p>
     </section>"""
 

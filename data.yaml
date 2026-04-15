@@ -31,7 +31,7 @@ consultations:
     или приехать ко мне в Сербию
 
     '
-  link: '#booking'
+  link: booking
   cta: Записаться
 events:
 - title: Париж
