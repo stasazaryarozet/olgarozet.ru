@@ -195,13 +195,12 @@ def parse_consultations(content: str) -> dict:
 
 
 def parse_events(content: str) -> list:
-    """Parse events section."""
+    """Parse events section. Every line is meaningful."""
     events = []
-    
-    # Find all ### headers and their content
+
     pattern = r'###\s+([^\n]+)\n(.*?)(?=###|\Z)'
     matches = re.findall(pattern, content, re.DOTALL)
-    
+
     for title, body in matches:
         event = {
             'title': title.strip(),
@@ -209,14 +208,15 @@ def parse_events(content: str) -> list:
             'status': '',
             'link': '',
             'link_text': '',
-            'location': ''
+            'location': '',
+            'description': [],  # all remaining lines
         }
-        
+
         for line in body.strip().split('\n'):
             line = line.strip()
             if not line:
                 continue
-            
+
             # Date (bold) **text**
             if line.startswith('**') and line.endswith('**'):
                 event['date'] = line.strip('*')
@@ -229,10 +229,10 @@ def parse_events(content: str) -> list:
                 if match:
                     event['link_text'] = match.group(1)
                     event['link'] = match.group(2)
-            # Location (plain text with arrow or specific words)
-            elif '→' in line or 'Бухара' in line or 'Самарканд' in line:
-                event['location'] = line
-        
+            # Everything else = description (no information lost)
+            else:
+                event['description'].append(line)
+
         if event['title']:
             events.append(event)
     
@@ -299,29 +299,27 @@ def generate_intro_html(intro: list) -> str:
 
 
 def generate_events_html(events: list) -> str:
-    """Generate events section HTML with proper semantics."""
+    """Generate events section. Every line from content.md → HTML. No loss."""
     html_parts = []
-    
+
     for event in events:
         html_parts.append('      <article class="event">')
-        
+
         if event.get('date'):
             html_parts.append(f'        <p class="event-date"><time>{event["date"]}</time></p>')
-        
-        if event.get('title') and event.get('status'):
-            html_parts.append(f'        <p>{event["title"]} · {event["status"]}</p>')
-        elif event.get('title') and event.get('location'):
+
+        if event.get('title'):
             html_parts.append(f'        <p>{event["title"]}</p>')
-            html_parts.append(f'        <p>{event["location"]}</p>')
-        elif event.get('title'):
-            html_parts.append(f'        <p>{event["title"]}</p>')
-        
+
+        for line in event.get('description', []):
+            html_parts.append(f'        <p>{md_to_html(line)}</p>')
+
         if event.get('link'):
             link_text = event.get('link_text', 'Подробнее →')
             html_parts.append(f'        <p class="event-details"><a href="{event["link"]}">{link_text}</a></p>')
-        
+
         html_parts.append('      </article>')
-    
+
     return '\n'.join(html_parts)
 
 
