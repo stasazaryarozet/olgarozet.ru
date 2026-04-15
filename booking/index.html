@@ -8,77 +8,95 @@
 <link rel="stylesheet" href="../styles.css">
 <style>
 .booking{max-width:420px;margin:0 auto;padding:2.5rem 1.5rem 2rem}
-.booking h2{font-size:1.3rem;text-align:center;font-weight:600;margin-bottom:.2rem}
-.sub{text-align:center;color:#7d7d7d;font-size:.95rem}
-.tz{text-align:center;color:#aaa;font-size:.8rem;margin-bottom:1.2rem}
+.booking h2{font-size:clamp(1.1rem,1rem + 0.3vw,1.3rem);text-align:center;font-weight:600;margin-bottom:.15rem}
+.sub{text-align:center;color:var(--color-muted,#666);font-size:.95rem}
+.tz{text-align:center;color:#aaa;font-size:.8rem;margin-bottom:1rem}
+
+/* Step 1: slots */
 .day{margin-bottom:.8rem}
-.day-label{font-size:.85rem;color:#999;margin-bottom:.3rem}
-.slots-grid{display:flex;flex-wrap:wrap;gap:.25rem}
-.t{display:inline-flex;align-items:center;justify-content:center;min-width:3.2rem;min-height:2.75rem;
-  padding:.4rem .9rem;border:1px solid #e5e5e5;border-radius:2rem;cursor:pointer;
-  font-size:.9rem;transition:border-color .12s,background .12s,color .12s,transform .1s;user-select:none;
-  -webkit-tap-highlight-color:transparent}
-.t:hover{border-color:#999}
-.t:focus-visible{outline:2px solid #1a1a1a;outline-offset:2px}
+.day-label{font-size:.85rem;color:var(--color-muted,#666);margin-bottom:.3rem;font-weight:500}
+.slots-grid{display:flex;flex-wrap:wrap;gap:.3rem}
+.t{display:inline-flex;align-items:center;justify-content:center;
+  min-width:3.5rem;min-height:3rem;padding:.5rem 1rem;
+  border:1px solid var(--color-border,#ddd);border-radius:2rem;cursor:pointer;
+  font-size:.95rem;transition:border-color .15s,background .15s,color .15s,transform .1s;
+  user-select:none;-webkit-tap-highlight-color:transparent}
+.t:hover{border-color:var(--color-text,#1a1a1a)}
+.t:focus-visible{outline:2px solid var(--color-text,#1a1a1a);outline-offset:2px}
 .t:active{transform:scale(.95)}
-.t.on{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
-.more{text-align:center;margin:.8rem 0}
-.more button{background:none;border:none;color:#7d7d7d;font-size:.85rem;cursor:pointer;font-family:inherit;padding:.5rem 1rem}
-.bk-form{margin-top:.8rem}
-.bk-label{display:block;font-size:.8rem;color:#999;margin-bottom:.15rem}
-.bk-input{display:block;width:100%;padding:.7rem .9rem;margin-bottom:.5rem;border:1px solid #e5e5e5;
+.t.on{background:var(--color-text,#1a1a1a);color:#fff;border-color:var(--color-text,#1a1a1a)}
+.more{text-align:center;margin:.6rem 0}
+.more button{background:none;border:none;color:var(--color-muted,#666);font-size:.85rem;
+  cursor:pointer;font-family:inherit;padding:.5rem 1rem}
+
+/* Step 2: form (hidden until slot picked) */
+.bk-form{overflow:hidden;max-height:0;opacity:0;transition:max-height .35s ease,opacity .3s ease;margin-top:0}
+.bk-form.open{max-height:20rem;opacity:1;margin-top:1rem}
+.bk-label{display:block;font-size:.8rem;color:var(--color-muted,#666);margin-bottom:.15rem;margin-top:.4rem}
+.bk-input{display:block;width:100%;padding:.75rem .9rem;border:1px solid var(--color-border,#ddd);
   border-radius:.5rem;font-size:.95rem;font-family:inherit;transition:border-color .15s}
-.bk-input:focus{border-color:#1a1a1a;outline:none}
+.bk-input:focus{border-color:var(--color-text,#1a1a1a);outline:none}
+.bk-input.ok{border-color:#2a7a2a}
 .bk-input.err{border-color:#c00;animation:shake .3s}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-.bk-btn{display:block;width:100%;padding:.85rem;margin-top:.3rem;background:#1a1a1a;color:#fff;border:none;
-  border-radius:.5rem;font-size:.95rem;font-weight:500;cursor:pointer;font-family:inherit;
-  min-height:2.75rem;transition:background .15s,opacity .15s}
+.bk-btn{display:block;width:100%;padding:.9rem;margin-top:.6rem;
+  background:var(--color-text,#1a1a1a);color:#fff;border:none;border-radius:.5rem;
+  font-size:.95rem;font-weight:500;cursor:pointer;font-family:inherit;
+  min-height:3rem;letter-spacing:.03em;transition:background .15s,opacity .15s}
 .bk-btn:hover:not(:disabled){background:#333}
-.bk-btn:focus-visible{outline:2px solid #1a1a1a;outline-offset:2px}
+.bk-btn:focus-visible{outline:2px solid var(--color-text,#1a1a1a);outline-offset:2px}
 .bk-btn:disabled{background:#d0d0d0;cursor:default;pointer-events:none}
 .bk-btn.sending{opacity:.7}
-.msg{text-align:center;padding:1rem;line-height:1.5}
-.msg.success{color:#1a7a1a}
+
+/* Step 3: result */
+.result{text-align:center;padding:2rem 0;line-height:1.6}
+.result b{display:block;font-size:1.1rem;margin-bottom:.5rem}
+.result .next{color:var(--color-muted,#666);font-size:.9rem;margin-top:.5rem}
+.msg{text-align:center;padding:.6rem;line-height:1.5;font-size:.9rem}
 .msg.error{color:#c00}
 .back{text-align:center;margin-top:1.5rem}
-.back a{color:#aaa;font-size:.85rem;text-decoration:none}
-.no-slots{text-align:center;color:#999;padding:1.5rem 0}
-.no-slots a{color:#7d7d7d}
+.back a{color:#aaa;font-size:.85rem;text-decoration:none;border:none}
+.no-slots{text-align:center;color:var(--color-muted,#666);padding:1.5rem 0;line-height:1.6}
+.no-slots a{color:var(--color-text,#1a1a1a)}
+
+@media (prefers-reduced-motion:reduce){
+  .bk-form{transition:none}.t{transition:none}.bk-input{transition:none}
+  .bk-btn{transition:none}.bk-input.err{animation:none}
+}
 </style>
 </head>
 <body>
 <div class="booking" role="main">
 <h2>Консультация</h2>
 <p class="sub">40 мин · 15 000 ₽ · онлайн</p>
-<p class="tz" aria-live="polite">время показано по вашему часовому поясу</p>
+<p class="tz" id="tz-note">время по вашему часовому поясу</p>
 
 <noscript>
-<div style="text-align:center;padding:1.5rem 0;line-height:1.6">
-<p>Для онлайн-записи включите JavaScript.</p>
-<p>Или напишите напрямую:</p>
+<div class="no-slots">
+<p>Подключить к вашему делу на 40 минут</p>
+<p>Напишите для записи:</p>
 <p><a href="https://t.me/olgaroset">@olgaroset</a> · <a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p>
 </div>
 </noscript>
 
-<div id="slots" role="listbox" aria-label="Доступное время"></div>
+<div id="step-slots" role="listbox" aria-label="Выберите время"></div>
 <div class="more" id="more" style="display:none">
-  <button type="button" onclick="showAll()" aria-label="Показать все доступные даты">Показать все даты →</button>
+  <button type="button" onclick="showAll()">ещё даты →</button>
 </div>
 
-<form class="bk-form" id="bk-form" onsubmit="return false" novalidate>
+<form class="bk-form" id="bk-form" onsubmit="return false" novalidate aria-label="Контактные данные">
   <label class="bk-label" for="bk-name">Имя</label>
   <input class="bk-input" id="bk-name" name="name" autocomplete="name"
-         placeholder="Имя" required minlength="2" aria-required="true">
-  <label class="bk-label" for="bk-contact">Контакт</label>
-  <input class="bk-input" id="bk-contact" name="contact" autocomplete="tel"
-         placeholder="Телефон, Telegram или Email" required minlength="3" aria-required="true">
+         required minlength="2" aria-required="true">
+  <label class="bk-label" for="bk-contact">Телефон, Telegram или Email</label>
+  <input class="bk-input" id="bk-contact" name="contact"
+         required minlength="3" aria-required="true">
   <button class="bk-btn" id="bk-btn" type="submit" disabled
-          aria-disabled="true" aria-live="polite">Выберите время</button>
+          aria-disabled="true">Выберите время</button>
 </form>
 
 <div class="msg" id="bk-msg" role="status" aria-live="polite"></div>
-<p class="back"><a href="/">← Ольга Розет</a></p>
+<p class="back"><a href="/">← назад</a></p>
 </div>
 
 <script>
@@ -93,43 +111,57 @@ SLOTS.forEach(function(s){
   var key=dt.toISOString().slice(0,10);
   if(!days[key])days[key]=[];
   days[key].push({date:key,time:dt.toLocaleTimeString("ru",{hour:"2-digit",minute:"2-digit",hour12:false}),
-    id:s.id,label:dt.toLocaleDateString("ru",{weekday:"long",day:"numeric",month:"long"})});
+    id:s.id,label:dt.toLocaleDateString("ru",{weekday:"short",day:"numeric",month:"short"})});
 });
 allDays=Object.keys(days).map(function(k){return{key:k,slots:days[k]}});
 if(allDays.length===0){
-  document.getElementById("slots").innerHTML="<p class='no-slots'>Свободного времени нет.<br>Напишите: <a href='https://t.me/olgaroset'>@olgaroset</a></p>";
+  document.getElementById("step-slots").innerHTML="<div class='no-slots'>Свободного времени нет.<br><a href='https://t.me/olgaroset'>Написать Ольге</a></div>";
 }else{
-  render(7);
-  if(allDays.length>7)document.getElementById("more").style.display="block";
+  render(5);
+  if(allDays.length>5)document.getElementById("more").style.display="block";
 }
 })();
 
 function render(n){
-var el=document.getElementById("slots");var h="";
-allDays.slice(0,n).forEach(function(d){
+var el=document.getElementById("step-slots");var h="";
+allDays.slice(0,n).forEach(function(d,i){
   h+="<div class='day' role='group' aria-label='"+d.slots[0].label+"'>";
   h+="<div class='day-label'>"+d.slots[0].label+"</div><div class='slots-grid'>";
   d.slots.forEach(function(s){
     h+="<button type='button' class='t' role='option' aria-selected='false' ";
-    h+="onclick='pick(this,\""+s.date+"\",\""+s.time+"\",\""+s.id+"\")'";
-    h+=" aria-label='"+s.time+" "+d.slots[0].label+"'>"+s.time+"</button>";
+    h+="data-d='"+s.date+"' data-t='"+s.time+"' data-id='"+s.id+"'";
+    h+=" aria-label='"+s.time+", "+d.slots[0].label+"'>"+s.time+"</button>";
   });
   h+="</div></div>";
 });
 el.innerHTML=h;
+el.querySelectorAll(".t").forEach(function(b){b.addEventListener("click",function(){pick(this)});});
 }
 function showAll(){render(allDays.length);document.getElementById("more").style.display="none"}
-function pick(el,d,t,id){
+function pick(el){
 document.querySelectorAll(".t").forEach(function(s){s.classList.remove("on");s.setAttribute("aria-selected","false")});
 el.classList.add("on");el.setAttribute("aria-selected","true");
-slot={date:d,time:t,id:id};
+slot={date:el.dataset.d,time:el.dataset.t,id:el.dataset.id};
 var btn=document.getElementById("bk-btn");
 btn.disabled=false;btn.setAttribute("aria-disabled","false");
-btn.textContent=t+" — ЗАПРОСИТЬ ВРЕМЯ";
-document.getElementById("bk-name").focus();
+btn.textContent=slot.time+" — записаться";
+var form=document.getElementById("bk-form");
+if(!form.classList.contains("open")){
+  form.classList.add("open");
+  setTimeout(function(){document.getElementById("bk-name").focus()},350);
 }
-function err(el,msg){el.classList.add("err");document.getElementById("bk-msg").className="msg error";
-  document.getElementById("bk-msg").textContent=msg;el.focus();return false}
+}
+
+/* inline validation */
+document.getElementById("bk-name").addEventListener("input",function(){
+  this.classList.toggle("ok",this.value.trim().length>=2);
+  this.classList.remove("err");
+});
+document.getElementById("bk-contact").addEventListener("input",function(){
+  var v=this.value.trim();
+  this.classList.toggle("ok",v.length>=3&&/[\d@.]/.test(v));
+  this.classList.remove("err");
+});
 
 document.getElementById("bk-form").addEventListener("submit",function(e){e.preventDefault();book()});
 function book(){
@@ -138,26 +170,30 @@ var nameEl=document.getElementById("bk-name");
 var contactEl=document.getElementById("bk-contact");
 var msgEl=document.getElementById("bk-msg");
 nameEl.classList.remove("err");contactEl.classList.remove("err");msgEl.textContent="";msgEl.className="msg";
-if(!slot)return err(nameEl,"Выберите время");
+if(!slot)return;
 var n=nameEl.value.trim(),c=contactEl.value.trim();
-if(n.length<2)return err(nameEl,"Введите имя (минимум 2 символа)");
-if(c.length<3)return err(contactEl,"Введите контакт");
-if(!/[\d@.]/.test(c))return err(contactEl,"Введите телефон, email или Telegram");
+if(n.length<2){nameEl.classList.add("err");nameEl.focus();return}
+if(c.length<3||!/[\d@.]/.test(c)){contactEl.classList.add("err");contactEl.focus();return}
 var btn=document.getElementById("bk-btn");
-btn.disabled=true;btn.classList.add("sending");btn.textContent="Отправка...";
+btn.disabled=true;btn.classList.add("sending");btn.textContent="отправка...";
 fetch(API+"?name="+encodeURIComponent(n)+"&contact="+encodeURIComponent(c)+"&date="+slot.date+"&time="+slot.time+"&id="+slot.id)
 .then(function(r){return r.json()}).then(function(d){
 btn.classList.remove("sending");
-if(d.ok){submitted=true;msgEl.className="msg success";
-  msgEl.innerHTML="<b>Заявка отправлена!</b><br>Ольга свяжется с вами для подтверждения.";
-  document.getElementById("slots").style.display="none";document.getElementById("more").style.display="none";
-  document.getElementById("bk-form").style.display="none";}
-else{var m={"name_required":"Введите имя","contact_required":"Введите контакт",
-  "contact_invalid":"Некорректный контакт","slot_taken":"Время уже занято"};
+if(d.ok){submitted=true;
+  document.getElementById("step-slots").style.display="none";
+  document.getElementById("more").style.display="none";
+  document.getElementById("bk-form").style.display="none";
+  msgEl.className="msg";
+  msgEl.innerHTML="<div class='result'><b>Заявка принята</b>"+slot.time+" · "+
+    new Date(slot.date).toLocaleDateString("ru",{day:"numeric",month:"long"})+
+    "<div class='next'>Ольга свяжется с вами для подтверждения</div></div>";
+}else{
+  var m={"name_required":"Введите имя","contact_required":"Введите контакт",
+    "contact_invalid":"Некорректный контакт","slot_taken":"Это время уже занято — выберите другое"};
   msgEl.className="msg error";msgEl.textContent=m[d.error]||"Ошибка. Попробуйте позже.";
-  btn.disabled=false;btn.textContent="ЗАПРОСИТЬ ВРЕМЯ"}
+  btn.disabled=false;btn.textContent=slot.time+" — записаться"}
 }).catch(function(){btn.classList.remove("sending");msgEl.className="msg error";
-  msgEl.textContent="Ошибка сети. Попробуйте ещё раз.";btn.disabled=false;btn.textContent="ЗАПРОСИТЬ ВРЕМЯ"});
+  msgEl.textContent="Ошибка сети";btn.disabled=false;btn.textContent=slot.time+" — записаться"});
 }
 </script>
 </body>
