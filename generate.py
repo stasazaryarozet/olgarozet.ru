@@ -88,7 +88,7 @@ def p_site(d: dict) -> str:
         if(!n||!c||!bkSlot)return;document.getElementById("bk-btn").disabled=true;document.getElementById("bk-btn").textContent="...";
         var u=BK_API+"?name="+encodeURIComponent(n)+"&contact="+encodeURIComponent(c)+"&date="+bkSlot.date+"&time="+bkSlot.time;
         fetch(u).then(function(r){return r.json()}).then(function(d){
-          if(d.ok)document.getElementById("bk-msg").textContent="Записано на "+bkSlot.time+"! Ольга свяжется с вами.";
+          if(d.ok){var m=document.getElementById("bk-msg");m.innerHTML="Записано на "+bkSlot.time+"!<br><a href=\\""+d.gcal+"\\" target=\\"_blank\\" style=\\"color:#111\\">Добавить в свой календарь →</a>";}
           else if(d.error=="slot_taken"){document.getElementById("bk-msg").textContent="Время занято. Выберите другое.";document.getElementById("bk-btn").disabled=false}
           else document.getElementById("bk-msg").textContent="Ошибка. Попробуйте позже.";
         }).catch(function(){document.getElementById("bk-msg").textContent="Ошибка сети.";document.getElementById("bk-btn").disabled=false})}
