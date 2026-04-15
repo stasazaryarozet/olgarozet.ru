@@ -1,0 +1,219 @@
+{
+  "generated": "2026-04-15T08:40:22.817144+00:00",
+  "duration": "40 мин",
+  "price": "15 000 ₽",
+  "timezone": "Europe/Belgrade",
+  "contact": "o.g.rozet@gmail.com",
+  "slots": [
+    {
+      "date": "2026-04-17",
+      "time": "14:00",
+      "weekday": "пт",
+      "event_id": "t8o5a4n3sk1bktid3p03ehg9ag"
+    },
+    {
+      "date": "2026-04-17",
+      "time": "18:00",
+      "weekday": "пт",
+      "event_id": "1q0c52bfs5jmjln58va4v8qt90"
+    },
+    {
+      "date": "2026-04-20",
+      "time": "18:00",
+      "weekday": "пн",
+      "event_id": "76ehcmj1rpo8ub9fkc1tka99sc"
+    },
+    {
+      "date": "2026-04-21",
+      "time": "14:00",
+      "weekday": "вт",
+      "event_id": "7e3lejug3th7i6rruov65o80eo"
+    },
+    {
+      "date": "2026-04-22",
+      "time": "14:00",
+      "weekday": "ср",
+      "event_id": "o1ldhqqokatm39k3rincgc2ovg"
+    },
+    {
+      "date": "2026-04-22",
+      "time": "18:00",
+      "weekday": "ср",
+      "event_id": "rgicqmv3n2m17j73fb7g0hf6cc"
+    },
+    {
+      "date": "2026-04-24",
+      "time": "14:00",
+      "weekday": "пт",
+      "event_id": "hbo5kuvm1lmu30h2dvaj3brk34"
+    },
+    {
+      "date": "2026-04-24",
+      "time": "18:00",
+      "weekday": "пт",
+      "event_id": "ts5k1n1kuhu88lk1piir01plnc"
+    },
+    {
+      "date": "2026-04-27",
+      "time": "14:00",
+      "weekday": "пн",
+      "event_id": "lc4em7f930bedbgkf6a7ajcldc"
+    },
+    {
+      "date": "2026-04-27",
+      "time": "18:00",
+      "weekday": "пн",
+      "event_id": "glelsod54dfltf6l3sdse6jl00"
+    },
+    {
+      "date": "2026-04-28",
+      "time": "14:00",
+      "weekday": "вт",
+      "event_id": "kj3noth8i7hodthd76lf2s4bc8"
+    },
+    {
+      "date": "2026-04-28",
+      "time": "18:00",
+      "weekday": "вт",
+      "event_id": "esnkm2umfbh85mhspb6d7s39po"
+    },
+    {
+      "date": "2026-04-29",
+      "time": "14:00",
+      "weekday": "ср",
+      "event_id": "gdjduvqhdm6s51g6fna23a7nck"
+    },
+    {
+      "date": "2026-04-29",
+      "time": "18:00",
+      "weekday": "ср",
+      "event_id": "i32k08pqti4plcgv330bsdte64"
+    },
+    {
+      "date": "2026-04-30",
+      "time": "14:00",
+      "weekday": "чт",
+      "event_id": "f4fnfphdiup0gihrpvjrfl43sk"
+    },
+    {
+      "date": "2026-04-30",
+      "time": "18:00",
+      "weekday": "чт",
+      "event_id": "53fhntqsap7s2sfjs257rl12uc"
+    },
+    {
+      "date": "2026-05-01",
+      "time": "14:00",
+      "weekday": "пт",
+      "event_id": "ffcj6b5fuo7teu7v57an9pvimo"
+    },
+    {
+      "date": "2026-05-01",
+      "time": "18:00",
+      "weekday": "пт",
+      "event_id": "nqn3suu5dnrqp89vaolvq1j66c"
+    },
+    {
+      "date": "2026-05-04",
+      "time": "14:00",
+      "weekday": "пн",
+      "event_id": "jn7491lnepsmmm1a403i40tfv0"
+    },
+    {
+      "date": "2026-05-04",
+      "time": "18:00",
+      "weekday": "пн",
+      "event_id": "mhhuu26721abbr81bbt1tj0cmk"
+    },
+    {
+      "date": "2026-05-05",
+      "time": "14:00",
+      "weekday": "вт",
+      "event_id": "065apvdsbfojibup94laa2linc"
+    },
+    {
+      "date": "2026-05-05",
+      "time": "18:00",
+      "weekday": "вт",
+      "event_id": "73fs0rkhtmf2imlgdq452bsio8"
+    },
+    {
+      "date": "2026-05-06",
+      "time": "14:00",
+      "weekday": "ср",
+      "event_id": "nknl77kp3bj9jt23td8vk9qgno"
+    },
+    {
+      "date": "2026-05-06",
+      "time": "18:00",
+      "weekday": "ср",
+      "event_id": "4rhgve8ram5nq70glrn5b673b0"
+    },
+    {
+      "date": "2026-05-07",
+      "time": "14:00",
+      "weekday": "чт",
+      "event_id": "93v87t0r1m9k6eje3b4ud4ne2o"
+    },
+    {
+      "date": "2026-05-07",
+      "time": "18:00",
+      "weekday": "чт",
+      "event_id": "lifoqto3rbggnar830lspbk3ig"
+    },
+    {
+      "date": "2026-05-08",
+      "time": "14:00",
+      "weekday": "пт",
+      "event_id": "g497a2oqkci1nknuf7euimm4gg"
+    },
+    {
+      "date": "2026-05-08",
+      "time": "18:00",
+      "weekday": "пт",
+      "event_id": "l9n75ci779kcfetj6smotmabos"
+    },
+    {
+      "date": "2026-05-11",
+      "time": "14:00",
+      "weekday": "пн",
+      "event_id": "dd17qeqt14laoki5nl6jum5s68"
+    },
+    {
+      "date": "2026-05-11",
+      "time": "18:00",
+      "weekday": "пн",
+      "event_id": "671qhudfeg8jb64oig6pm5abnk"
+    },
+    {
+      "date": "2026-05-12",
+      "time": "14:00",
+      "weekday": "вт",
+      "event_id": "08pgvrtks081smeltri3teoonc"
+    },
+    {
+      "date": "2026-05-13",
+      "time": "14:00",
+      "weekday": "ср",
+      "event_id": "vbvpt25oikkp77peahle4km9bk"
+    },
+    {
+      "date": "2026-05-13",
+      "time": "18:00",
+      "weekday": "ср",
+      "event_id": "q4t3nklogn2ih5eqvsp5jlb7r8"
+    },
+    {
+      "date": "2026-05-14",
+      "time": "14:00",
+      "weekday": "чт",
+      "event_id": "ml5kc74camu311nefovr8r80io"
+    },
+    {
+      "date": "2026-05-14",
+      "time": "18:00",
+      "weekday": "чт",
+      "event_id": "1qf1qge53nq79k3g73sl9uu9og"
+    }
+  ]
+}

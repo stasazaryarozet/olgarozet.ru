@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Записаться — Ольга Розет</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .booking { max-width: 600px; margin: 2rem auto; padding: 0 1.5rem; }
+    .booking h2 { text-align: center; margin-bottom: 1rem; }
+    .slot-day { margin: 1.5rem 0; }
+    .slot-day h3 { font-size: 1rem; color: #666; margin-bottom: 0.5rem; }
+    .slot-btn { 
+      display: inline-block; padding: 0.5rem 1.2rem; margin: 0.25rem;
+      border: 1px solid #ddd; border-radius: 0.5rem; text-decoration: none;
+      color: #333; font-size: 0.95rem; transition: all 0.15s;
+    }
+    .slot-btn:hover { background: #f0f0f0; border-color: #999; }
+    .note { text-align: center; color: #888; font-size: 0.85rem; margin-top: 2rem; }
+    .back { text-align: center; margin-top: 2rem; }
+    .back a { color: #666; }
+  </style>
+</head>
+<body>
+  <div class="booking">
+    <h2>Записаться на консультацию</h2>
+    <p style="text-align:center">40 мин · 15 000 ₽ · онлайн</p>
+    <div id="slots">Загрузка...</div>
+    <p class="note">Выберите время — откроется письмо.<br>Ольга подтвердит в течение дня.</p>
+    <p class="back"><a href="/">← Назад</a></p>
+  </div>
+  <script>
+    fetch('booking.json').then(r=>r.json()).then(d=>{
+      const el = document.getElementById('slots');
+      const days = {};
+      const weekdays = {пн:'Понедельник',вт:'Вторник',ср:'Среда',чт:'Четверг',пт:'Пятница'};
+      d.slots.forEach(s => {
+        if (!days[s.date]) days[s.date] = [];
+        days[s.date].push(s);
+      });
+      let html = '';
+      for (const [date, slots] of Object.entries(days)) {
+        const wd = weekdays[slots[0].weekday] || slots[0].weekday;
+        const [y,m,day] = date.split('-');
+        html += `<div class="slot-day"><h3>${wd}, ${+day}.${m}</h3>`;
+        slots.forEach(s => {
+          const subj = encodeURIComponent(`Консультация ${+day}.${m} ${s.time}`);
+          const body = encodeURIComponent(`Здравствуйте, Ольга!\n\nХочу записаться на консультацию:\n${wd}, ${+day}.${m} в ${s.time} (${d.timezone})\n\nМоё имя: \nТелефон/Telegram: `);
+          html += `<a class="slot-btn" href="mailto:o.g.rozet@gmail.com?subject=${subj}&body=${body}">${s.time}</a>`;
+        });
+        html += '</div>';
+      }
+      el.innerHTML = html || '<p>Нет доступных слотов</p>';
+    });
+  </script>
+</body>
+</html>
