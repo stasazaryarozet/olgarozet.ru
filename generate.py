@@ -294,7 +294,7 @@ def p_booking(d: dict) -> str:
 <div class="booking" role="main">
 <h2>Консультация</h2>
 <p class="sub">{cons.get('duration_min', 40)} мин · {cons['price']} · онлайн</p>
-<p class="tz" id="tz-note">время по вашему часовому поясу</p>
+<p class="tz" id="tz-note">выберите удобное время</p>
 
 <noscript>
 <div class="no-slots">
@@ -342,8 +342,7 @@ allDays=Object.keys(days).map(function(k){{return{{key:k,slots:days[k]}}}});
 if(allDays.length===0){{
   document.getElementById("step-slots").innerHTML="<div class='no-slots'>Свободного времени нет.<br><a href='https://t.me/olgaroset'>Написать Ольге</a></div>";
 }}else{{
-  render(5);
-  if(allDays.length>5)document.getElementById("more").style.display="block";
+  render(allDays.length);
 }}
 }})();
 
