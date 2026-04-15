@@ -83,12 +83,12 @@ def p_site(d: dict) -> str:
       }).catch(function(){document.getElementById("slots-loading").textContent=""});
       function bkPick(el,date,time){document.querySelectorAll("#slots span").forEach(function(s){s.style.background="";s.style.color=""});
         el.style.background="#111";el.style.color="#fff";bkSlot={date:date,time:time};
-        document.getElementById("bk-btn").disabled=false;document.getElementById("bk-btn").textContent=time+" — Записаться"}
+        document.getElementById("bk-btn").disabled=false;document.getElementById("bk-btn").textContent=time+" — Отправить заявку"}
       function bkBook(){var n=document.getElementById("bk-name").value;var c=document.getElementById("bk-contact").value;
         if(!n||!c||!bkSlot)return;document.getElementById("bk-btn").disabled=true;document.getElementById("bk-btn").textContent="...";
         var u=BK_API+"?name="+encodeURIComponent(n)+"&contact="+encodeURIComponent(c)+"&date="+bkSlot.date+"&time="+bkSlot.time;
         fetch(u).then(function(r){return r.json()}).then(function(d){
-          if(d.ok){var m=document.getElementById("bk-msg");m.innerHTML="Записано на "+bkSlot.time+"!<br><a href=\\""+d.gcal+"\\" target=\\"_blank\\" style=\\"color:#111\\">Добавить в свой календарь →</a>";}
+          if(d.ok){document.getElementById("bk-msg").textContent="Заявка отправлена! Ольга свяжется с вами для подтверждения.";}
           else if(d.error=="slot_taken"){document.getElementById("bk-msg").textContent="Время занято. Выберите другое.";document.getElementById("bk-btn").disabled=false}
           else document.getElementById("bk-msg").textContent="Ошибка. Попробуйте позже.";
         }).catch(function(){document.getElementById("bk-msg").textContent="Ошибка сети.";document.getElementById("bk-btn").disabled=false})}
