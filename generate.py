@@ -60,7 +60,39 @@ def p_site(d: dict) -> str:
       <h2 id="consultations-heading">Консультации:</h2>
       <p>{desc}</p>
       <p class="price">{cons['price']}</p>
-      <a href="{cons['link']}" class="cta">{cons['cta']}</a>
+      <div id="booking">
+        <div id="slots-loading" style="text-align:center;color:#999;margin:1rem 0">Загрузка...</div>
+        <div id="slots" style="margin:1rem 0"></div>
+        <input id="bk-name" placeholder="Имя" style="width:100%;padding:.6rem;border:1px solid #ddd;border-radius:.4rem;margin:.3rem 0;font-size:1rem">
+        <input id="bk-contact" placeholder="Телефон, Telegram или Email" style="width:100%;padding:.6rem;border:1px solid #ddd;border-radius:.4rem;margin:.3rem 0;font-size:1rem">
+        <button id="bk-btn" onclick="bkBook()" disabled style="width:100%;padding:.7rem;background:#111;color:#fff;border:none;border-radius:.5rem;font-size:1rem;cursor:pointer;margin-top:.5rem">Выберите время</button>
+        <div id="bk-msg" style="text-align:center;margin-top:.5rem;color:#666"></div>
+      </div>
+      <script>
+      var BK_API="https://script.google.com/macros/s/AKfycbzeulk8nVhROOmrnysLKRLGqM_naMEgVhtPl50ch_GCilibJ7MXv2rWlGlq1hz1SWc/exec";var bkSlot=null;
+      fetch(BK_API+"?action=slots").then(function(r){return r.json()}).then(function(d){
+        document.getElementById("slots-loading").style.display="none";
+        var el=document.getElementById("slots");
+        var days={};var wd={пн:"Пн",вт:"Вт",ср:"Ср",чт:"Чт",пт:"Пт"};
+        d.slots.forEach(function(s){if(!days[s.date])days[s.date]=[];days[s.date].push(s)});
+        var h="";for(var dt in days){var ss=days[dt];var p=dt.split("-");
+        h+="<div style=\"margin:.5rem 0\"><b>"+parseInt(p[2])+"."+p[1]+"</b> ";
+        ss.forEach(function(s){h+="<span onclick=\"bkPick(this,\'"+s.date+"\',\'"+s.time+"\')\""
+        +" style=\"display:inline-block;padding:.3rem .8rem;margin:.15rem;border:1px solid #ddd;border-radius:.3rem;cursor:pointer\">"+s.time+"</span>"});
+        h+="</div>"}el.innerHTML=h||"<p>Нет свободных окон</p>";
+      }).catch(function(){document.getElementById("slots-loading").textContent=""});
+      function bkPick(el,date,time){document.querySelectorAll("#slots span").forEach(function(s){s.style.background="";s.style.color=""});
+        el.style.background="#111";el.style.color="#fff";bkSlot={date:date,time:time};
+        document.getElementById("bk-btn").disabled=false;document.getElementById("bk-btn").textContent=time+" — Записаться"}
+      function bkBook(){var n=document.getElementById("bk-name").value;var c=document.getElementById("bk-contact").value;
+        if(!n||!c||!bkSlot)return;document.getElementById("bk-btn").disabled=true;document.getElementById("bk-btn").textContent="...";
+        var u=BK_API+"?name="+encodeURIComponent(n)+"&contact="+encodeURIComponent(c)+"&date="+bkSlot.date+"&time="+bkSlot.time;
+        fetch(u).then(function(r){return r.json()}).then(function(d){
+          if(d.ok)document.getElementById("bk-msg").textContent="Записано на "+bkSlot.time+"! Ольга свяжется с вами.";
+          else if(d.error=="slot_taken"){document.getElementById("bk-msg").textContent="Время занято. Выберите другое.";document.getElementById("bk-btn").disabled=false}
+          else document.getElementById("bk-msg").textContent="Ошибка. Попробуйте позже.";
+        }).catch(function(){document.getElementById("bk-msg").textContent="Ошибка сети.";document.getElementById("bk-btn").disabled=false})}
+      </script>
       <p class="availability">{avail}</p>
     </section>"""
 
