@@ -182,6 +182,25 @@ def p_telegram(d: dict) -> str:
     # Remove trailing •
     if parts and parts[-1] == "•":
         parts.pop()
+    # Consultations: description + price + availability + booking link
+    # All from data.yaml (single source)
+    cons = d.get("consultations", {})
+    if cons:
+        parts.append("")
+        parts.append("•")
+        parts.append("")
+        for line in cons["description"].strip().splitlines():
+            stripped = line.strip()
+            if stripped:
+                parts.append(stripped)
+        parts.append(cons["price"])
+        parts.append("")
+        for line in cons["availability"].strip().splitlines():
+            stripped = line.strip()
+            if stripped:
+                parts.append(stripped)
+        parts.append("")
+        parts.append("olgarozet.ru/booking")
     return "\n".join(parts)
 
 
