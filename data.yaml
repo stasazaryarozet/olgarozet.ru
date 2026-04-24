@@ -27,15 +27,14 @@ consultations:
   link: /booking/
   cta: Записаться
 
-# ── Graph entities — referenced by id; not duplicated ────────────────
+# ── Graph entities — referenced by id; values not duplicated across events ──
 people:
-  olgarozet:        { name: "Ольга Розет",       role: lead }
-  azaryarozet:      { name: "Азарья Розет",      role: co-organizer }
-  natalia_loginova: { name: "Наталья Логинова",  role: co-organizer, location: paris,
-                      channel: telegram }
-  matluba:          { name: "Матлюба",           role: co-organizer, location: uzbekistan }
-  nasullobek:       { name: "Насуллобек Раджабов", role: local-organizer, location: uzbekistan,
-                      confirmed: "2026-03-28" }
+  olgarozet:        { name: "Ольга Розет",        role: lead }
+  azaryarozet:      { name: "Азарья Розет",       role: co-organizer }
+  natalia_loginova: { name: "Наталья Логинова",   role: co-organizer, location: paris }
+  matluba:          { name: "Матлюба",            role: co-organizer, location: uzbekistan }
+  nasullobek:       { name: "Насуллобек Раджабов", role: local-organizer,
+                      location: uzbekistan, confirmed: "2026-03-28" }
 
 partners:
   bukhara_center:    { name: "Бухарский Центр Ремёсел", type: organization, location: bukhara }
@@ -45,12 +44,12 @@ partners:
                        owner: olgarozet, location: serbia }
 
 locations:
-  paris:       { name: "Париж",       country: FR }
-  serbia:      { name: "Сербия",      country: RS }
-  vrshac:      { name: "Вршац",       country: RS, region: serbia }
-  samarkand:   { name: "Самарканд",   country: UZ }
-  bukhara:     { name: "Бухара",      country: UZ }
-  uzbekistan:  { name: "Узбекистан",  country: UZ }
+  paris:       { name: "Париж",      country: FR }
+  serbia:      { name: "Сербия",     country: RS }
+  vrshac:      { name: "Вршац",      country: RS, region: serbia }
+  samarkand:   { name: "Самарканд",  country: UZ }
+  bukhara:     { name: "Бухара",     country: UZ }
+  uzbekistan:  { name: "Узбекистан", country: UZ }
 
 audience:
   architects:    архитекторы
@@ -59,7 +58,7 @@ audience:
   artists:       художники
   professionals: специалисты
 
-# ── Events — graph-aware: ids + entity refs; lines: kept for legacy column render ─
+# ── Events — graph-aware: id + entity refs; lines: kept for legacy column render ─
 events:
   - id: paris_2026_09
     title: Париж

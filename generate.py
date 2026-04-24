@@ -141,9 +141,7 @@ def sorted_events(d: dict) -> list:
 # ── Graph resolution: events reference entities by id (no value duplication) ─
 
 def resolve_refs(d: dict, kind: str, ids):
-    """Resolve a list of entity ids against d[kind] dict; non-id values fall through.
-    kind ∈ {people, partners, locations, audience}. Returns list of resolved dicts/strings.
-    """
+    """Resolve a list of entity ids against d[kind]; non-id values fall through."""
     pool = d.get(kind, {})
     out = []
     for x in (ids or []):
@@ -158,33 +156,32 @@ def resolve_refs(d: dict, kind: str, ids):
     return out
 
 
-def _schema_event(d: dict, ev: dict) -> dict:
-    """schema.org Event with refs resolved to inline schema-org sub-types."""
-    obj = {
-        "@type": "Event",
-        "name": ev.get("title", ""),
-        "startDate": ev.get("t_key", ""),
-        "eventStatus": f'https://schema.org/Event{ev.get("status", "Scheduled").title()}',
-    }
-    locs = resolve_refs(d, "locations", ev.get("locations", []))
-    if locs:
-        obj["location"] = [{"@type": "Place", "name": l.get("name", l.get("id", "")),
-                            "addressCountry": l.get("country", "")} for l in locs]
-    orgs = resolve_refs(d, "people", ev.get("organizers", []))
-    if orgs:
-        obj["organizer"] = [{"@type": "Person", "name": p.get("name", p.get("id", ""))} for p in orgs]
-    auds = resolve_refs(d, "audience", ev.get("audience", []))
-    if auds:
-        names = [a.get("name", a) if isinstance(a, dict) else a for a in auds]
-        obj["audience"] = {"@type": "Audience", "audienceType": ", ".join(names)}
-    if ev.get("link"):
-        obj["url"] = "https://olgarozet.ru" + ev["link"]
-    return obj
-
-
 def schema_events_jsonld(d: dict) -> str:
-    """Graph-rich Event markup for SEO; one ItemList wrapping the events sorted by t_key."""
-    items = [_schema_event(d, ev) for ev in sorted_events(d)]
+    """schema.org ItemList of Events with refs resolved (graph-rich SEO markup)."""
+    items = []
+    for ev in sorted_events(d):
+        obj = {
+            "@type": "Event",
+            "name": ev.get("title", ""),
+            "startDate": ev.get("t_key", ""),
+            "eventStatus": f'https://schema.org/Event{ev.get("status", "Scheduled").title()}',
+        }
+        locs = resolve_refs(d, "locations", ev.get("locations", []))
+        if locs:
+            obj["location"] = [{"@type": "Place",
+                                "name": l.get("name", l.get("id", "")),
+                                "addressCountry": l.get("country", "")} for l in locs]
+        orgs = resolve_refs(d, "people", ev.get("organizers", []))
+        if orgs:
+            obj["organizer"] = [{"@type": "Person",
+                                 "name": p.get("name", p.get("id", ""))} for p in orgs]
+        auds = resolve_refs(d, "audience", ev.get("audience", []))
+        if auds:
+            names = [a.get("name", a) if isinstance(a, dict) else a for a in auds]
+            obj["audience"] = {"@type": "Audience", "audienceType": ", ".join(names)}
+        if ev.get("link"):
+            obj["url"] = "https://olgarozet.ru" + ev["link"]
+        items.append(obj)
     if not items:
         return ""
     import json as _j
@@ -290,10 +287,11 @@ def p_site(d: dict) -> str:
         f'"sameAs": ["{ig_url}", "{tg_url}"]'
         '}'
     )
-    # Combine Person + Events ItemList in one structured-data block (graph form)
     events_jsonld = schema_events_jsonld(d)
-    structured = person_jsonld + ('\n  </script>\n  <script type="application/ld+json">' +
-                                   events_jsonld if events_jsonld else "")
+    structured = person_jsonld + (
+        '\n  </script>\n  <script type="application/ld+json">' + events_jsonld
+        if events_jsonld else ""
+    )
 
     body = f"""  <div class="content-wrapper">
     <header>
