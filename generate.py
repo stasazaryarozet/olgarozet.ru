@@ -1,37 +1,150 @@
 #!/usr/bin/env python3
-"""generate.py — Faithful projection: data.yaml → {site, telegram, channel_bio}.
+"""generate.py — Faithful projection: data.yaml → {site, art, booking, telegram, bio}.
+
+Source of truth lives in Dela: knowledge/people/olgarozet/_raw/{generate.py,data.yaml,styles.css}.
+broadcast.update_site mirrors to site-repo, runs generate.py, commits + pushes.
 
 Mathematical model:
-  Data D = structured YAML (bio, consultations, events)
-  Projection P: D → Format
-  P is injective on content lines (no information loss).
+  D           = yaml.safe_load(data.yaml)
+  P_k         : D → format_k,  k ∈ {site, art, booking, telegram, bio}
+  P_k_html    = _layout ∘ body_k  (HTML projections)
+  body_k      pure function of relevant subtree of D
+  sort inv.   events ordered ASC by t_key (chronological monotonicity)
+              sort(events) enforced by p_site; t_key absence degrades to YAML order
 
-Three projections from ONE source:
-  P_site(D)     → index.html  (HTML with SEO, styles, booking)
-  P_telegram(D) → telegram.txt (vertical text for channel post)
-  P_bio(D)      → bio.txt     (short bio for channel/IG description)
+No per-page HTML skeleton duplication. Single _layout surface.
 """
 import yaml
 from pathlib import Path
 
 ROOT = Path(__file__).parent
 DATA = ROOT / "data.yaml"
-TEMPLATE = ROOT / "template.html"
-STYLES = ROOT / "styles.css"
 
 
 def load() -> dict:
     return yaml.safe_load(DATA.read_text(encoding="utf-8"))
 
 
-# ── P_site: D → HTML ─────────────────────────────────────
+# ── Shared HTML fragments ────────────────────────────────────────────
+
+SOLAR_SCRIPT = """<script>
+// Solar-driven day/night theme. Closed-form Michalsky 1988 altitude.
+// Longitude ≈ -tzOffset/4 (15°/h). Latitude default 45° (temperate). No API, no geolocation prompt.
+(function(){
+  var r=Math.PI/180, now=new Date();
+  var J=now.valueOf()/86400000 + 2440587.5 - 2451545.0;
+  var L=(280.460+0.9856474*J)%360;
+  var g=((357.528+0.9856003*J)%360)*r;
+  var lam=(L+1.915*Math.sin(g)+0.020*Math.sin(2*g))*r;
+  var eps=(23.439-4e-7*J)*r;
+  var dec=Math.asin(Math.sin(eps)*Math.sin(lam));
+  var ra=Math.atan2(Math.cos(eps)*Math.sin(lam), Math.cos(lam));
+  var lon=-now.getTimezoneOffset()/4, lat=45;
+  var gmst=(18.697374558+24.06570982441908*J)*15;
+  var H=((gmst+lon)%360)*r - ra;
+  var alt=Math.asin(Math.sin(lat*r)*Math.sin(dec)+Math.cos(lat*r)*Math.cos(dec)*Math.cos(H));
+  document.documentElement.setAttribute('data-theme', alt>0 ? 'day' : 'night');
+})();
+</script>"""
+
+IG_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>'
+
+TG_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>'
+
+SCROLL_UP_SVG = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V4M5 11l7-7 7 7"/></svg>'
+
+
+# ── Head / Footer / Layout ───────────────────────────────────────────
+
+def _head(title: str, description: str, *, canonical: str = "https://olgarozet.ru",
+          extra: str = "", structured: str = None) -> str:
+    sd = f'\n<script type="application/ld+json">{structured}</script>' if structured else ''
+    return f"""<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{title}</title>
+<meta name="description" content="{description}">
+<link rel="canonical" href="{canonical}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{title}">
+<meta property="og:description" content="{description}">
+<meta property="og:url" content="{canonical}">
+<meta property="og:image" content="https://olgarozet.ru/olga_footer.png">
+<meta property="og:locale" content="ru_RU">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{title}">
+<meta name="twitter:description" content="{description}">
+<meta name="twitter:image" content="https://olgarozet.ru/olga_footer.png">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
+{SOLAR_SCRIPT}
+<link rel="stylesheet" href="/styles.css">{sd}
+{extra}"""
+
+
+def _footer(urls: dict, bio_title: str) -> str:
+    ig = urls.get("instagram", "https://instagram.com/olga_rozet")
+    tg = urls.get("telegram", "https://t.me/olga_rozet")
+    return f"""<footer>
+  <div class="footer-content">
+    <a href="{ig}" class="social-icon" aria-label="Instagram">{IG_SVG}</a>
+    <img src="/olga_footer.png" alt="{bio_title}" class="footer-portrait">
+    <a href="{tg}" class="social-icon" aria-label="Telegram">{TG_SVG}</a>
+  </div>
+  <a href="#" class="scroll-top" aria-label="Наверх" title="Наверх" onclick="window.scrollTo({{top:0,behavior:'smooth'}});return false;">
+    {SCROLL_UP_SVG}
+  </a>
+</footer>
+<script>
+const footer = document.querySelector('.footer-content');
+const observer = new IntersectionObserver((entries) => {{
+  entries.forEach(entry => {{ if (entry.isIntersecting) entry.target.classList.add('visible'); }});
+}}, {{ threshold: 0.1 }});
+observer.observe(footer);
+</script>"""
+
+
+def _layout(d: dict, *, title: str, description: str, body: str,
+            nav: bool = False, canonical: str = "https://olgarozet.ru",
+            extra_head: str = "", footer: bool = True, structured: str = None) -> str:
+    head = _head(title, description, canonical=canonical, extra=extra_head, structured=structured)
+    nav_html = '<nav class="nav-fade"><a href="/" aria-label="На главную">←</a></nav>' if nav else ''
+    ftr = _footer(d.get("urls", {}), d["bio"]["title"]) if footer else ''
+    return f"""<!DOCTYPE html>
+<html lang="ru">
+<head>
+{head}
+</head>
+<body>
+{nav_html}
+{body}
+{ftr}
+</body>
+</html>
+"""
+
+
+# ── Invariants ───────────────────────────────────────────────────────
+
+def sorted_events(d: dict) -> list:
+    """ASC by t_key (temporal monotonicity). Missing t_key → sort last (YAML-order preserved among fallbacks)."""
+    return sorted(d.get("events", []),
+                  key=lambda e: (e.get("t_key", "￿"), d["events"].index(e)))
+
+
+# ── P_publications: D → section HTML ────────────────────────────────
 
 _CHANNEL_LABEL = {"site": "сайт", "telegram": "Telegram", "instagram": "Instagram"}
 
 
 def p_publications(d: dict) -> str:
-    """Публикации section — semantic Сайт↔TG↔IG linkage. Empty if absent."""
-    pubs = d.get("publications", [])
+    """Публикации section — semantic Сайт↔TG↔IG linkage. Empty if absent.
+
+    Publications sorted DESC by date (newest-first feed semantics), stable on tie.
+    """
+    pubs = sorted(d.get("publications", []),
+                  key=lambda p: (p.get("date", ""), ), reverse=True)
     if not pubs:
         return ""
     items = []
@@ -52,25 +165,22 @@ def p_publications(d: dict) -> str:
     )
 
 
+# ── P_site: D → index.html ──────────────────────────────────────────
+
 def p_site(d: dict) -> str:
     bio = d["bio"]
     cons = d["consultations"]
-    events = d["events"]
+    events = sorted_events(d)
     urls = d.get("urls", {})
     publications_html = p_publications(d)
 
-    # Bio section
-    roles_html = "\n".join(f"    <p>{r};</p>" if i < len(bio["roles"]) - 1
-                           else f"    <p>{r}.</p>"
-                           for i, r in enumerate(bio.get("skills", [])))
-    # Actually: roles and skills as pairs on separate lines
+    # Bio section (roles + skills on separate lines)
     role_lines = []
     for r in bio.get("roles", []):
         role_lines.append(f"    <p>{r};</p>")
     for i, s in enumerate(bio.get("skills", [])):
         sep = ";" if i < len(bio["skills"]) - 1 else "."
         role_lines.append(f"    <p>{s}{sep}</p>")
-
     inspire = "<br>".join(bio["inspire"].strip().splitlines())
 
     bio_html = f"""      <section id="about" aria-label="О себе">
@@ -91,14 +201,14 @@ def p_site(d: dict) -> str:
       <p class="availability">{avail}</p>
     </section>"""
 
-    # Events — every line from data.yaml appears in HTML
+    # Events (sorted by t_key invariant)
     events_articles = []
     for ev in events:
         lines = [f'        <p class="event-date"><time>{ev["date"]}</time></p>',
                  f'        <p>{ev["title"]}</p>']
         for line in ev.get("lines", []):
             if line == "":
-                continue  # empty lines are paragraph separators in telegram, not in HTML
+                continue
             lines.append(f"        <p>{line}</p>")
         events_articles.append(
             "      <article class=\"event\">\n" +
@@ -106,68 +216,21 @@ def p_site(d: dict) -> str:
             "\n      </article>")
     events_html = "\n".join(events_articles)
 
-    # Social links
     ig_url = urls.get("instagram", "https://instagram.com/olga_rozet")
     tg_url = urls.get("telegram", "https://t.me/olga_rozet")
 
-    return f"""<!DOCTYPE html>
-<html lang="ru">
+    structured = (
+        '{'
+        '"@context": "https://schema.org", "@type": "Person", '
+        f'"name": "{bio["title"]}", "alternateName": "Olga Rozet", '
+        '"url": "https://olgarozet.ru", "image": "https://olgarozet.ru/olga_footer.png", '
+        '"jobTitle": ["Художник", "Дизайнер", "Искусствовед"], '
+        f'"email": "{bio["email"]}", '
+        f'"sameAs": ["{ig_url}", "{tg_url}"]'
+        '}'
+    )
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Ольга Розет — художник, дизайнер</title>
-  <meta name="description" content="Ольга Розет — художник, искусствовед, дизайнер интерьеров. Консультации, путешествия, искусство.">
-  <link rel="canonical" href="https://olgarozet.ru">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Ольга Розет">
-  <meta property="og:description" content="Художник, искусствовед, дизайнер интерьеров">
-  <meta property="og:url" content="https://olgarozet.ru">
-  <meta property="og:image" content="https://olgarozet.ru/olga_footer.png">
-  <meta property="og:locale" content="ru_RU">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Ольга Розет">
-  <meta name="twitter:description" content="Художник, искусствовед, дизайнер интерьеров">
-  <meta name="twitter:image" content="https://olgarozet.ru/olga_footer.png">
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
-  <script>
-  // Solar-driven day/night theme. Closed-form Michalsky 1988 altitude.
-  // Longitude ≈ -tzOffset/4 (15°/h). Latitude default 45° (temperate). No API, no geolocation prompt.
-  (function(){{
-    var r=Math.PI/180, now=new Date();
-    var J=now.valueOf()/86400000 + 2440587.5 - 2451545.0;
-    var L=(280.460+0.9856474*J)%360;
-    var g=((357.528+0.9856003*J)%360)*r;
-    var lam=(L+1.915*Math.sin(g)+0.020*Math.sin(2*g))*r;
-    var eps=(23.439-4e-7*J)*r;
-    var dec=Math.asin(Math.sin(eps)*Math.sin(lam));
-    var ra=Math.atan2(Math.cos(eps)*Math.sin(lam), Math.cos(lam));
-    var lon=-now.getTimezoneOffset()/4, lat=45;
-    var gmst=(18.697374558+24.06570982441908*J)*15;
-    var H=((gmst+lon)%360)*r - ra;
-    var alt=Math.asin(Math.sin(lat*r)*Math.sin(dec)+Math.cos(lat*r)*Math.cos(dec)*Math.cos(H));
-    document.documentElement.setAttribute('data-theme', alt>0 ? 'day' : 'night');
-  }})();
-  </script>
-  <script type="application/ld+json">{{
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "{bio['title']}",
-    "alternateName": "Olga Rozet",
-    "url": "https://olgarozet.ru",
-    "image": "https://olgarozet.ru/olga_footer.png",
-    "jobTitle": ["Художник", "Дизайнер", "Искусствовед"],
-    "email": "{bio['email']}",
-    "sameAs": ["{ig_url}", "{tg_url}"]
-  }}</script>
-  <link rel="stylesheet" href="styles.css">
-</head>
-
-<body>
-  <div class="content-wrapper">
+    body = f"""  <div class="content-wrapper">
     <header>
       <h1>{bio['title']}</h1>
     </header>
@@ -184,54 +247,54 @@ def p_site(d: dict) -> str:
 
 {publications_html}
     </main>
-  </div>
+  </div>"""
 
-  <footer>
-    <div class="footer-content">
-      <a href="{ig_url}" class="social-icon" aria-label="Instagram">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-      </a>
-      <img src="olga_footer.png" alt="{bio['title']}" class="footer-portrait">
-      <a href="{tg_url}" class="social-icon" aria-label="Telegram">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-      </a>
-    </div>
-    <a href="#" class="scroll-top" aria-label="Наверх" title="Наверх" onclick="window.scrollTo({{top:0,behavior:'smooth'}});return false;">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V4M5 11l7-7 7 7"/></svg>
-    </a>
-  </footer>
-
-  <script>
-    const footer = document.querySelector('.footer-content');
-    const observer = new IntersectionObserver((entries) => {{
-      entries.forEach(entry => {{
-        if (entry.isIntersecting) entry.target.classList.add('visible');
-      }});
-    }}, {{ threshold: 0.1 }});
-    observer.observe(footer);
-  </script>
-</body>
-</html>
-"""
+    return _layout(
+        d,
+        title="Ольга Розет — художник, дизайнер",
+        description="Ольга Розет — художник, искусствовед, дизайнер интерьеров. Консультации, путешествия, искусство.",
+        body=body,
+        structured=structured,
+    )
 
 
-# ── P_telegram: D → channel post text ────────────────────
+# ── P_art: D → art/index.html ───────────────────────────────────────
+
+def p_art(d: dict) -> str:
+    """Gallery projection. Artworks from data.artworks (single source)."""
+    items = "\n".join(
+        f'    <div class="artwork"><img src="img/{a}" loading="lazy" alt="Произведение Ольги Розет"></div>'
+        for a in d.get("artworks", [])
+    )
+    body = f"""  <div class="progress-bar" id="progress"></div>
+  <main class="gallery">
+{items}
+  </main>"""
+    return _layout(
+        d,
+        title="Ольга Розет — Искусство",
+        description="Картины Ольги Розет",
+        body=body,
+        nav=True,
+        canonical="https://olgarozet.ru/art/",
+        footer=False,  # gallery is immersive — no global footer
+    )
+
+
+# ── P_telegram: D → channel post text ────────────────────────────────
 
 def p_telegram(d: dict) -> str:
     """Telegram channel post. Vertical, poetic. Empty lines = paragraph breaks."""
     parts = ["СКОРО:", "", "•"]
-    for ev in d["events"]:
+    for ev in sorted_events(d):  # enforce same temporal monotonicity
         parts.append("")
         parts.append(ev["title"])
         for line in ev.get("lines", []):
             parts.append(line)
         parts.append("")
         parts.append("•")
-    # Remove trailing •
     if parts and parts[-1] == "•":
         parts.pop()
-    # Consultations: description + price + availability + booking link
-    # All from data.yaml (single source)
     cons = d.get("consultations", {})
     if cons:
         parts.append("")
@@ -252,7 +315,7 @@ def p_telegram(d: dict) -> str:
     return "\n".join(parts)
 
 
-# ── P_bio: D → short bio ─────────────────────────────────
+# ── P_bio: D → short bio ─────────────────────────────────────────────
 
 def p_bio(d: dict) -> str:
     bio = d["bio"]
@@ -264,101 +327,63 @@ def p_bio(d: dict) -> str:
     return "\n".join(lines)
 
 
-# ── P_booking: (D, slots.json) → booking/index.html ──────
+# ── P_booking: (D, slots.json) → booking/index.html ──────────────────
 
 def p_booking(d: dict) -> str:
-    """Fourth projection: consultations config + slots → booking page.
-
-    UX optimized for minimal human effort:
-    - Fitts's Law: 48px touch targets
-    - Hick's Law: "ближайшее свободное" prominent, rest progressive
-    - Progressive disclosure: form hidden until slot picked
-    - CSS custom properties from site styles.css
-    - prefers-reduced-motion respected
-    """
+    """Booking page. Uses _layout for head/footer; booking-specific CSS via extra_head."""
     import json as _json
     cons = d["consultations"]
     slots_file = ROOT / "booking.json"
-    if slots_file.exists():
-        slots_data = _json.loads(slots_file.read_text())
-    else:
-        slots_data = {"slots": [], "user": ""}
-
-    transport_url = slots_data.get("transport_url",
-        "https://script.google.com/macros/s/AKfycbzeulk8nVhROOmrnysLKRLGqM_naMEgVhtPl50ch_GCilibJ7MXv2rWlGlq1hz1SWc/exec")
+    slots_data = _json.loads(slots_file.read_text()) if slots_file.exists() else {"slots": [], "user": ""}
+    transport_url = slots_data.get(
+        "transport_url",
+        "https://script.google.com/macros/s/AKfycbzeulk8nVhROOmrnysLKRLGqM_naMEgVhtPl50ch_GCilibJ7MXv2rWlGlq1hz1SWc/exec",
+    )
     slots_json = _json.dumps(slots_data.get("slots", []), ensure_ascii=False)
     desc_plain = cons["description"].strip().replace("\n", " ").replace("  ", " ")
     contact_email = cons.get("calendar_id", "o.g.rozet@gmail.com")
 
-    return f"""<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Записаться — Ольга Розет</title>
-<meta name="description" content="{desc_plain} — {cons['price']}">
-<link rel="stylesheet" href="../styles.css">
-<style>
-.booking{{max-width:420px;margin:0 auto;padding:2.5rem 1.5rem 2rem}}
-.booking h2{{font-size:clamp(1.1rem,1rem + 0.3vw,1.3rem);text-align:center;font-weight:600;margin-bottom:.15rem}}
-.sub{{text-align:center;color:var(--color-muted,#666);font-size:.95rem}}
-.tz{{text-align:center;color:#aaa;font-size:.8rem;margin-bottom:1rem}}
+    booking_style = """<style>
+.booking{max-width:420px;margin:0 auto;padding:2.5rem 1.5rem 2rem}
+.booking h2{font-size:clamp(1.1rem,1rem + 0.3vw,1.3rem);text-align:center;font-weight:600;margin-bottom:.15rem}
+.sub{text-align:center;color:var(--color-muted,#666);font-size:.95rem}
+.tz{text-align:center;color:#aaa;font-size:.8rem;margin-bottom:1rem}
+.day{margin-bottom:.8rem}
+.day-label{font-size:.85rem;color:var(--color-muted,#666);margin-bottom:.3rem;font-weight:500}
+.slots-grid{display:flex;flex-wrap:wrap;gap:.3rem}
+.t{display:inline-flex;align-items:center;justify-content:center;min-width:3.5rem;min-height:3rem;padding:.5rem 1rem;border:1px solid var(--color-border,#ddd);border-radius:2rem;cursor:pointer;font-size:.95rem;transition:border-color .15s,background .15s,color .15s,transform .1s;user-select:none;-webkit-tap-highlight-color:transparent}
+.t:hover{border-color:var(--color-text,#1a1a1a)}
+.t:focus-visible{outline:2px solid var(--color-text,#1a1a1a);outline-offset:2px}
+.t:active{transform:scale(.95)}
+.t.on{background:var(--color-text,#1a1a1a);color:#fff;border-color:var(--color-text,#1a1a1a)}
+.more{text-align:center;margin:.6rem 0}
+.more button{background:none;border:none;color:var(--color-muted,#666);font-size:.85rem;cursor:pointer;font-family:inherit;padding:.5rem 1rem}
+.bk-form{overflow:hidden;max-height:0;opacity:0;transition:max-height .35s ease,opacity .3s ease;margin-top:0}
+.bk-form.open{max-height:20rem;opacity:1;margin-top:1rem}
+.bk-label{display:block;font-size:.8rem;color:var(--color-muted,#666);margin-bottom:.15rem;margin-top:.4rem}
+.bk-input{display:block;width:100%;padding:.75rem .9rem;border:1px solid var(--color-border,#ddd);border-radius:.5rem;font-size:.95rem;font-family:inherit;transition:border-color .15s}
+.bk-input:focus{border-color:var(--color-text,#1a1a1a);outline:none}
+.bk-input.ok{border-color:#2a7a2a}
+.bk-input.err{border-color:#c00;animation:shake .3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.bk-btn{display:block;width:100%;padding:.9rem;margin-top:.6rem;background:var(--color-text,#1a1a1a);color:#fff;border:none;border-radius:.5rem;font-size:.95rem;font-weight:500;cursor:pointer;font-family:inherit;min-height:3rem;letter-spacing:.03em;transition:background .15s,opacity .15s}
+.bk-btn:hover:not(:disabled){background:#333}
+.bk-btn:focus-visible{outline:2px solid var(--color-text,#1a1a1a);outline-offset:2px}
+.bk-btn:disabled{background:#d0d0d0;cursor:default;pointer-events:none}
+.bk-btn.sending{opacity:.7}
+.result{text-align:center;padding:2rem 0;line-height:1.6}
+.result b{display:block;font-size:1.1rem;margin-bottom:.5rem}
+.result .next{color:var(--color-muted,#666);font-size:.9rem;margin-top:.5rem}
+.msg{text-align:center;padding:.6rem;line-height:1.5;font-size:.9rem}
+.msg.error{color:#c00}
+.back{text-align:center;margin-top:1.5rem}
+.back a{color:#aaa;font-size:.85rem;text-decoration:none;border:none}
+.no-slots{text-align:center;color:var(--color-muted,#666);padding:1.5rem 0;line-height:1.6}
+.no-slots a{color:var(--color-text,#1a1a1a)}
+@media (prefers-reduced-motion:reduce){.bk-form{transition:none}.t{transition:none}.bk-input{transition:none}.bk-btn{transition:none}.bk-input.err{animation:none}}
+</style>"""
 
-/* Step 1: slots */
-.day{{margin-bottom:.8rem}}
-.day-label{{font-size:.85rem;color:var(--color-muted,#666);margin-bottom:.3rem;font-weight:500}}
-.slots-grid{{display:flex;flex-wrap:wrap;gap:.3rem}}
-.t{{display:inline-flex;align-items:center;justify-content:center;
-  min-width:3.5rem;min-height:3rem;padding:.5rem 1rem;
-  border:1px solid var(--color-border,#ddd);border-radius:2rem;cursor:pointer;
-  font-size:.95rem;transition:border-color .15s,background .15s,color .15s,transform .1s;
-  user-select:none;-webkit-tap-highlight-color:transparent}}
-.t:hover{{border-color:var(--color-text,#1a1a1a)}}
-.t:focus-visible{{outline:2px solid var(--color-text,#1a1a1a);outline-offset:2px}}
-.t:active{{transform:scale(.95)}}
-.t.on{{background:var(--color-text,#1a1a1a);color:#fff;border-color:var(--color-text,#1a1a1a)}}
-.more{{text-align:center;margin:.6rem 0}}
-.more button{{background:none;border:none;color:var(--color-muted,#666);font-size:.85rem;
-  cursor:pointer;font-family:inherit;padding:.5rem 1rem}}
-
-/* Step 2: form (hidden until slot picked) */
-.bk-form{{overflow:hidden;max-height:0;opacity:0;transition:max-height .35s ease,opacity .3s ease;margin-top:0}}
-.bk-form.open{{max-height:20rem;opacity:1;margin-top:1rem}}
-.bk-label{{display:block;font-size:.8rem;color:var(--color-muted,#666);margin-bottom:.15rem;margin-top:.4rem}}
-.bk-input{{display:block;width:100%;padding:.75rem .9rem;border:1px solid var(--color-border,#ddd);
-  border-radius:.5rem;font-size:.95rem;font-family:inherit;transition:border-color .15s}}
-.bk-input:focus{{border-color:var(--color-text,#1a1a1a);outline:none}}
-.bk-input.ok{{border-color:#2a7a2a}}
-.bk-input.err{{border-color:#c00;animation:shake .3s}}
-@keyframes shake{{0%,100%{{transform:translateX(0)}}25%{{transform:translateX(-4px)}}75%{{transform:translateX(4px)}}}}
-.bk-btn{{display:block;width:100%;padding:.9rem;margin-top:.6rem;
-  background:var(--color-text,#1a1a1a);color:#fff;border:none;border-radius:.5rem;
-  font-size:.95rem;font-weight:500;cursor:pointer;font-family:inherit;
-  min-height:3rem;letter-spacing:.03em;transition:background .15s,opacity .15s}}
-.bk-btn:hover:not(:disabled){{background:#333}}
-.bk-btn:focus-visible{{outline:2px solid var(--color-text,#1a1a1a);outline-offset:2px}}
-.bk-btn:disabled{{background:#d0d0d0;cursor:default;pointer-events:none}}
-.bk-btn.sending{{opacity:.7}}
-
-/* Step 3: result */
-.result{{text-align:center;padding:2rem 0;line-height:1.6}}
-.result b{{display:block;font-size:1.1rem;margin-bottom:.5rem}}
-.result .next{{color:var(--color-muted,#666);font-size:.9rem;margin-top:.5rem}}
-.msg{{text-align:center;padding:.6rem;line-height:1.5;font-size:.9rem}}
-.msg.error{{color:#c00}}
-.back{{text-align:center;margin-top:1.5rem}}
-.back a{{color:#aaa;font-size:.85rem;text-decoration:none;border:none}}
-.no-slots{{text-align:center;color:var(--color-muted,#666);padding:1.5rem 0;line-height:1.6}}
-.no-slots a{{color:var(--color-text,#1a1a1a)}}
-
-@media (prefers-reduced-motion:reduce){{
-  .bk-form{{transition:none}}.t{{transition:none}}.bk-input{{transition:none}}
-  .bk-btn{{transition:none}}.bk-input.err{{animation:none}}
-}}
-</style>
-</head>
-<body>
-<div class="booking" role="main">
+    body = f"""<div class="booking" role="main">
 <h2>Консультация</h2>
 <p class="sub">{cons.get('duration_min', 40)} мин · {cons['price']} · онлайн</p>
 <p class="tz" id="tz-note">выберите удобное время</p>
@@ -443,7 +468,6 @@ if(!form.classList.contains("open")){{
 }}
 }}
 
-/* inline validation */
 document.getElementById("bk-name").addEventListener("input",function(){{
   this.classList.toggle("ok",this.value.trim().length>=2);
   this.classList.remove("err");
@@ -486,29 +510,30 @@ if(d.ok){{submitted=true;
 }}).catch(function(){{btn.classList.remove("sending");msgEl.className="msg error";
   msgEl.textContent="Ошибка сети";btn.disabled=false;btn.textContent=slot.time+" — записаться"}});
 }}
-</script>
-</body>
-</html>
-"""
+</script>"""
+
+    return _layout(
+        d,
+        title="Записаться — Ольга Розет",
+        description=f"{desc_plain} — {cons['price']}",
+        body=body,
+        canonical="https://olgarozet.ru/booking/",
+        extra_head=booking_style,
+        footer=False,
+    )
 
 
-# ── Main ─────────────────────────────────────────────────
+# ── Main: regenerate all projections ─────────────────────────────────
 
 if __name__ == "__main__":
     d = load()
-
-    html = p_site(d)
-    (ROOT / "index.html").write_text(html, encoding="utf-8")
-    print(f"site: index.html")
-
-    tg = p_telegram(d)
-    (ROOT / "telegram.txt").write_text(tg, encoding="utf-8")
-    print(f"telegram: telegram.txt")
-
-    bio = p_bio(d)
-    (ROOT / "bio.txt").write_text(bio, encoding="utf-8")
-    print(f"bio: bio.txt")
-
-    booking = p_booking(d)
-    (ROOT / "booking" / "index.html").write_text(booking, encoding="utf-8")
-    print(f"booking: booking/index.html")
+    (ROOT / "index.html").write_text(p_site(d), encoding="utf-8")
+    print("site: index.html")
+    (ROOT / "art" / "index.html").write_text(p_art(d), encoding="utf-8")
+    print("art: art/index.html")
+    (ROOT / "booking" / "index.html").write_text(p_booking(d), encoding="utf-8")
+    print("booking: booking/index.html")
+    (ROOT / "telegram.txt").write_text(p_telegram(d), encoding="utf-8")
+    print("telegram: telegram.txt")
+    (ROOT / "bio.txt").write_text(p_bio(d), encoding="utf-8")
+    print("bio: bio.txt")

@@ -2,53 +2,72 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Записаться — Ольга Розет</title>
 <meta name="description" content="Подключить к вашему делу на 40 минут — 15 000 ₽">
-<link rel="stylesheet" href="../styles.css">
+<link rel="canonical" href="https://olgarozet.ru/booking/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Записаться — Ольга Розет">
+<meta property="og:description" content="Подключить к вашему делу на 40 минут — 15 000 ₽">
+<meta property="og:url" content="https://olgarozet.ru/booking/">
+<meta property="og:image" content="https://olgarozet.ru/olga_footer.png">
+<meta property="og:locale" content="ru_RU">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Записаться — Ольга Розет">
+<meta name="twitter:description" content="Подключить к вашему делу на 40 минут — 15 000 ₽">
+<meta name="twitter:image" content="https://olgarozet.ru/olga_footer.png">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
+<script>
+// Solar-driven day/night theme. Closed-form Michalsky 1988 altitude.
+// Longitude ≈ -tzOffset/4 (15°/h). Latitude default 45° (temperate). No API, no geolocation prompt.
+(function(){
+  var r=Math.PI/180, now=new Date();
+  var J=now.valueOf()/86400000 + 2440587.5 - 2451545.0;
+  var L=(280.460+0.9856474*J)%360;
+  var g=((357.528+0.9856003*J)%360)*r;
+  var lam=(L+1.915*Math.sin(g)+0.020*Math.sin(2*g))*r;
+  var eps=(23.439-4e-7*J)*r;
+  var dec=Math.asin(Math.sin(eps)*Math.sin(lam));
+  var ra=Math.atan2(Math.cos(eps)*Math.sin(lam), Math.cos(lam));
+  var lon=-now.getTimezoneOffset()/4, lat=45;
+  var gmst=(18.697374558+24.06570982441908*J)*15;
+  var H=((gmst+lon)%360)*r - ra;
+  var alt=Math.asin(Math.sin(lat*r)*Math.sin(dec)+Math.cos(lat*r)*Math.cos(dec)*Math.cos(H));
+  document.documentElement.setAttribute('data-theme', alt>0 ? 'day' : 'night');
+})();
+</script>
+<link rel="stylesheet" href="/styles.css">
 <style>
 .booking{max-width:420px;margin:0 auto;padding:2.5rem 1.5rem 2rem}
 .booking h2{font-size:clamp(1.1rem,1rem + 0.3vw,1.3rem);text-align:center;font-weight:600;margin-bottom:.15rem}
 .sub{text-align:center;color:var(--color-muted,#666);font-size:.95rem}
 .tz{text-align:center;color:#aaa;font-size:.8rem;margin-bottom:1rem}
-
-/* Step 1: slots */
 .day{margin-bottom:.8rem}
 .day-label{font-size:.85rem;color:var(--color-muted,#666);margin-bottom:.3rem;font-weight:500}
 .slots-grid{display:flex;flex-wrap:wrap;gap:.3rem}
-.t{display:inline-flex;align-items:center;justify-content:center;
-  min-width:3.5rem;min-height:3rem;padding:.5rem 1rem;
-  border:1px solid var(--color-border,#ddd);border-radius:2rem;cursor:pointer;
-  font-size:.95rem;transition:border-color .15s,background .15s,color .15s,transform .1s;
-  user-select:none;-webkit-tap-highlight-color:transparent}
+.t{display:inline-flex;align-items:center;justify-content:center;min-width:3.5rem;min-height:3rem;padding:.5rem 1rem;border:1px solid var(--color-border,#ddd);border-radius:2rem;cursor:pointer;font-size:.95rem;transition:border-color .15s,background .15s,color .15s,transform .1s;user-select:none;-webkit-tap-highlight-color:transparent}
 .t:hover{border-color:var(--color-text,#1a1a1a)}
 .t:focus-visible{outline:2px solid var(--color-text,#1a1a1a);outline-offset:2px}
 .t:active{transform:scale(.95)}
 .t.on{background:var(--color-text,#1a1a1a);color:#fff;border-color:var(--color-text,#1a1a1a)}
 .more{text-align:center;margin:.6rem 0}
-.more button{background:none;border:none;color:var(--color-muted,#666);font-size:.85rem;
-  cursor:pointer;font-family:inherit;padding:.5rem 1rem}
-
-/* Step 2: form (hidden until slot picked) */
+.more button{background:none;border:none;color:var(--color-muted,#666);font-size:.85rem;cursor:pointer;font-family:inherit;padding:.5rem 1rem}
 .bk-form{overflow:hidden;max-height:0;opacity:0;transition:max-height .35s ease,opacity .3s ease;margin-top:0}
 .bk-form.open{max-height:20rem;opacity:1;margin-top:1rem}
 .bk-label{display:block;font-size:.8rem;color:var(--color-muted,#666);margin-bottom:.15rem;margin-top:.4rem}
-.bk-input{display:block;width:100%;padding:.75rem .9rem;border:1px solid var(--color-border,#ddd);
-  border-radius:.5rem;font-size:.95rem;font-family:inherit;transition:border-color .15s}
+.bk-input{display:block;width:100%;padding:.75rem .9rem;border:1px solid var(--color-border,#ddd);border-radius:.5rem;font-size:.95rem;font-family:inherit;transition:border-color .15s}
 .bk-input:focus{border-color:var(--color-text,#1a1a1a);outline:none}
 .bk-input.ok{border-color:#2a7a2a}
 .bk-input.err{border-color:#c00;animation:shake .3s}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-.bk-btn{display:block;width:100%;padding:.9rem;margin-top:.6rem;
-  background:var(--color-text,#1a1a1a);color:#fff;border:none;border-radius:.5rem;
-  font-size:.95rem;font-weight:500;cursor:pointer;font-family:inherit;
-  min-height:3rem;letter-spacing:.03em;transition:background .15s,opacity .15s}
+.bk-btn{display:block;width:100%;padding:.9rem;margin-top:.6rem;background:var(--color-text,#1a1a1a);color:#fff;border:none;border-radius:.5rem;font-size:.95rem;font-weight:500;cursor:pointer;font-family:inherit;min-height:3rem;letter-spacing:.03em;transition:background .15s,opacity .15s}
 .bk-btn:hover:not(:disabled){background:#333}
 .bk-btn:focus-visible{outline:2px solid var(--color-text,#1a1a1a);outline-offset:2px}
 .bk-btn:disabled{background:#d0d0d0;cursor:default;pointer-events:none}
 .bk-btn.sending{opacity:.7}
-
-/* Step 3: result */
 .result{text-align:center;padding:2rem 0;line-height:1.6}
 .result b{display:block;font-size:1.1rem;margin-bottom:.5rem}
 .result .next{color:var(--color-muted,#666);font-size:.9rem;margin-top:.5rem}
@@ -58,14 +77,11 @@
 .back a{color:#aaa;font-size:.85rem;text-decoration:none;border:none}
 .no-slots{text-align:center;color:var(--color-muted,#666);padding:1.5rem 0;line-height:1.6}
 .no-slots a{color:var(--color-text,#1a1a1a)}
-
-@media (prefers-reduced-motion:reduce){
-  .bk-form{transition:none}.t{transition:none}.bk-input{transition:none}
-  .bk-btn{transition:none}.bk-input.err{animation:none}
-}
+@media (prefers-reduced-motion:reduce){.bk-form{transition:none}.t{transition:none}.bk-input{transition:none}.bk-btn{transition:none}.bk-input.err{animation:none}}
 </style>
 </head>
 <body>
+
 <div class="booking" role="main">
 <h2>Консультация</h2>
 <p class="sub">40 мин · 15 000 ₽ · онлайн</p>
@@ -151,7 +167,6 @@ if(!form.classList.contains("open")){
 }
 }
 
-/* inline validation */
 document.getElementById("bk-name").addEventListener("input",function(){
   this.classList.toggle("ok",this.value.trim().length>=2);
   this.classList.remove("err");
@@ -195,5 +210,6 @@ if(d.ok){submitted=true;
   msgEl.textContent="Ошибка сети";btn.disabled=false;btn.textContent=slot.time+" — записаться"});
 }
 </script>
+
 </body>
 </html>
