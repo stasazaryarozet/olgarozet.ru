@@ -41,7 +41,14 @@ html {
     -webkit-font-smoothing: antialiased;
     scroll-behavior: smooth;
     overscroll-behavior: none;
+    /* Root canvas bg — catches UA default #fff leakage in mask-fade zones
+       and any uncovered body area. */
+    background: var(--color-bg);
 }
+
+/* .footer-content was transparent — mask-fade on .footer-portrait could
+   expose html bg through it. Explicit bg closes the gap. */
+.footer-content { background: var(--color-bg); }
 
 body {
     color: var(--color-text);
