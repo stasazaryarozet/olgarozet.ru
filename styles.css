@@ -16,8 +16,11 @@
     --color-text: #1a1a1a;
     --color-bg: #fff;
     --color-accent: #ff0000;
+    --color-emphasis: #ff0000;     /* day: red is emphasis (h1, artist) */
     --color-muted: #666;
     --color-border: #ddd;
+    --color-cta-bg: #1a1a1a;       /* day: dark cta on white bg */
+    --color-cta-text: #fff;
     --color-overlay: rgba(255, 255, 255, 0.95);
     --color-overlay-solid: rgba(255, 255, 255, 0.98);
 }
@@ -69,7 +72,7 @@ h1 {
     font-weight: 200;
     margin-bottom: 0.6em;
     letter-spacing: -0.02em;
-    color: var(--color-accent);
+    color: var(--color-emphasis);
     line-height: 1;
 }
 
@@ -81,7 +84,7 @@ h1::after {
 }
 
 .artist-highlight {
-    color: var(--color-accent);
+    color: var(--color-emphasis);
     letter-spacing: 0.08em;
     font-weight: 600;
 }
@@ -89,7 +92,7 @@ h1::after {
 .artist-highlight a {
     color: inherit;
     text-decoration: underline;
-    text-decoration-color: var(--color-accent);
+    text-decoration-color: var(--color-emphasis);
     text-underline-offset: 0.15em;
 }
 
@@ -147,8 +150,8 @@ a:hover {
     display: inline-block;
     margin-top: 0.5em;
     padding: clamp(0.5em, 0.4em + 0.3vw, 1.2rem) clamp(1em, 0.8em + 0.5vw, 2.5rem);
-    background: var(--color-text);
-    color: var(--color-bg);
+    background: var(--color-cta-bg);
+    color: var(--color-cta-text);
     border: none;
     border-radius: 4px;
     font-size: clamp(0.9rem, 0.85rem + 0.2vw, 1.1rem);
@@ -320,13 +323,18 @@ footer {
 }
 /* ── Day/night theme: solar-driven via data-theme attribute (set by inline JS) ── */
 :root[data-theme="night"] {
-    --color-text: #e6e6e6;
-    --color-bg: #0e0e10;
-    --color-accent: #ff5a5a;
-    --color-muted: #888;
-    --color-border: #333;
-    --color-overlay: rgba(14, 14, 16, 0.95);
-    --color-overlay-solid: rgba(14, 14, 16, 0.98);
+    /* Pure black canvas; whiteness hierarchy for text emphasis;
+       red reserved for buttons only (admin spec 2026-04-25). */
+    --color-bg: #000;
+    --color-emphasis: #fff;        /* level 4: max white = max emphasis (h1, artist) */
+    --color-text: #e6e6e6;         /* level 3: body text */
+    --color-muted: #999;           /* level 2: price, captions, secondary */
+    --color-border: #444;          /* level 1: separators, borders */
+    --color-accent: #ff5a5a;       /* red — buttons only in night */
+    --color-cta-bg: var(--color-accent);  /* night: cta is red */
+    --color-cta-text: #fff;
+    --color-overlay: rgba(0, 0, 0, 0.95);
+    --color-overlay-solid: rgba(0, 0, 0, 0.98);
 }
 html, body { transition: background-color 600ms ease; }
 body, a, p, h1, h2, h3, footer, .scroll-top { transition: color 600ms ease, background-color 600ms ease; }

@@ -30,20 +30,25 @@ def load() -> dict:
 SOLAR_SCRIPT = """<script>
 // Solar-driven day/night theme. Closed-form Michalsky 1988 altitude.
 // Longitude ≈ -tzOffset/4 (15°/h). Latitude default 45° (temperate). No API, no geolocation prompt.
+// Re-evaluates every 5 min so a long session flips at sunrise/sunset automatically.
 (function(){
-  var r=Math.PI/180, now=new Date();
-  var J=now.valueOf()/86400000 + 2440587.5 - 2451545.0;
-  var L=(280.460+0.9856474*J)%360;
-  var g=((357.528+0.9856003*J)%360)*r;
-  var lam=(L+1.915*Math.sin(g)+0.020*Math.sin(2*g))*r;
-  var eps=(23.439-4e-7*J)*r;
-  var dec=Math.asin(Math.sin(eps)*Math.sin(lam));
-  var ra=Math.atan2(Math.cos(eps)*Math.sin(lam), Math.cos(lam));
-  var lon=-now.getTimezoneOffset()/4, lat=45;
-  var gmst=(18.697374558+24.06570982441908*J)*15;
-  var H=((gmst+lon)%360)*r - ra;
-  var alt=Math.asin(Math.sin(lat*r)*Math.sin(dec)+Math.cos(lat*r)*Math.cos(dec)*Math.cos(H));
-  document.documentElement.setAttribute('data-theme', alt>0 ? 'day' : 'night');
+  function setTheme(){
+    var r=Math.PI/180, now=new Date();
+    var J=now.valueOf()/86400000 + 2440587.5 - 2451545.0;
+    var L=(280.460+0.9856474*J)%360;
+    var g=((357.528+0.9856003*J)%360)*r;
+    var lam=(L+1.915*Math.sin(g)+0.020*Math.sin(2*g))*r;
+    var eps=(23.439-4e-7*J)*r;
+    var dec=Math.asin(Math.sin(eps)*Math.sin(lam));
+    var ra=Math.atan2(Math.cos(eps)*Math.sin(lam), Math.cos(lam));
+    var lon=-now.getTimezoneOffset()/4, lat=45;
+    var gmst=(18.697374558+24.06570982441908*J)*15;
+    var H=((gmst+lon)%360)*r - ra;
+    var alt=Math.asin(Math.sin(lat*r)*Math.sin(dec)+Math.cos(lat*r)*Math.cos(dec)*Math.cos(H));
+    document.documentElement.setAttribute('data-theme', alt>0 ? 'day' : 'night');
+  }
+  setTheme();
+  setInterval(setTheme, 300000);
 })();
 </script>"""
 
