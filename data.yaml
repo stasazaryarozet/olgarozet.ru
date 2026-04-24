@@ -1,5 +1,13 @@
 bio:
   title: Ольга Розет
+  tagline: художник, дизайнер
+  description: "Ольга Розет — художник, искусствовед, дизайнер интерьеров. Консультации, путешествия, искусство."
+  alternate_name: "Olga Rozet"
+  canonical: "https://olgarozet.ru"
+  portrait: olga_footer.png
+  job_title: [Художник, Дизайнер, Искусствовед]
+  art_page_label: Искусство
+  booking_page_label: Записаться
   artist:
     text: ХУДОЖНИК
     link: art/

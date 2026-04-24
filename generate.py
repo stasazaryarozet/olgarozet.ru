@@ -25,6 +25,16 @@ def load() -> dict:
     return yaml.safe_load(DATA.read_text(encoding="utf-8"))
 
 
+def _canonical(d: dict) -> str:
+    """Owner's canonical URL (no trailing slash)."""
+    return d.get("bio", {}).get("canonical", "").rstrip("/")
+
+
+def _portrait(d: dict) -> str:
+    """Owner's portrait filename (lives in repo root)."""
+    return d.get("bio", {}).get("portrait", "")
+
+
 # ── Shared HTML fragments ────────────────────────────────────────────
 
 SOLAR_SCRIPT = """<script>
@@ -61,8 +71,8 @@ SCROLL_UP_SVG = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" str
 
 # ── Head / Footer / Layout ───────────────────────────────────────────
 
-def _head(title: str, description: str, *, canonical: str = "https://olgarozet.ru",
-          extra: str = "", structured: str = None) -> str:
+def _head(title: str, description: str, *, canonical: str,
+          og_image: str = "", extra: str = "", structured: str = None) -> str:
     sd = f'\n<script type="application/ld+json">{structured}</script>' if structured else ''
     return f"""<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -73,12 +83,12 @@ def _head(title: str, description: str, *, canonical: str = "https://olgarozet.r
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{description}">
 <meta property="og:url" content="{canonical}">
-<meta property="og:image" content="https://olgarozet.ru/olga_footer.png">
+<meta property="og:image" content="{og_image}">
 <meta property="og:locale" content="ru_RU">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{title}">
 <meta name="twitter:description" content="{description}">
-<meta name="twitter:image" content="https://olgarozet.ru/olga_footer.png">
+<meta name="twitter:image" content="{og_image}">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
@@ -88,13 +98,13 @@ def _head(title: str, description: str, *, canonical: str = "https://olgarozet.r
 {extra}"""
 
 
-def _footer(urls: dict, bio_title: str) -> str:
-    ig = urls.get("instagram", "https://instagram.com/olga_rozet")
-    tg = urls.get("telegram", "https://t.me/olga_rozet")
+def _footer(urls: dict, bio_title: str, portrait: str = "") -> str:
+    ig = urls.get("instagram", "")
+    tg = urls.get("telegram", "")
     return f"""<footer>
   <div class="footer-content">
     <a href="{ig}" class="social-icon" aria-label="Instagram">{IG_SVG}</a>
-    <img src="/olga_footer.png" alt="{bio_title}" class="footer-portrait">
+    <img src="/{portrait}" alt="{bio_title}" class="footer-portrait">
     <a href="{tg}" class="social-icon" aria-label="Telegram">{TG_SVG}</a>
   </div>
   <a href="#" class="scroll-top" aria-label="Наверх" title="Наверх" onclick="window.scrollTo({{top:0,behavior:'smooth'}});return false;">
@@ -111,11 +121,16 @@ observer.observe(footer);
 
 
 def _layout(d: dict, *, title: str, description: str, body: str,
-            nav: bool = False, canonical: str = "https://olgarozet.ru",
+            nav: bool = False, canonical: str = None,
             extra_head: str = "", footer: bool = True, structured: str = None) -> str:
-    head = _head(title, description, canonical=canonical, extra=extra_head, structured=structured)
+    if canonical is None:
+        canonical = _canonical(d)
+    portrait = _portrait(d)
+    og_image = f"{_canonical(d)}/{portrait}" if portrait else ""
+    head = _head(title, description, canonical=canonical, og_image=og_image,
+                 extra=extra_head, structured=structured)
     nav_html = '<nav class="nav-fade"><a href="/" aria-label="На главную">←</a></nav>' if nav else ''
-    ftr = _footer(d.get("urls", {}), d["bio"]["title"]) if footer else ''
+    ftr = _footer(d.get("urls", {}), d["bio"]["title"], portrait) if footer else ''
     return f"""<!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -180,7 +195,7 @@ def schema_events_jsonld(d: dict) -> str:
             names = [a.get("name", a) if isinstance(a, dict) else a for a in auds]
             obj["audience"] = {"@type": "Audience", "audienceType": ", ".join(names)}
         if ev.get("link"):
-            obj["url"] = "https://olgarozet.ru" + ev["link"]
+            obj["url"] = _canonical(d) + ev["link"]
         items.append(obj)
     if not items:
         return ""
@@ -274,19 +289,27 @@ def p_site(d: dict) -> str:
             "\n      </article>")
     events_html = "\n".join(events_articles)
 
-    ig_url = urls.get("instagram", "https://instagram.com/olga_rozet")
-    tg_url = urls.get("telegram", "https://t.me/olga_rozet")
+    ig_url = urls.get("instagram", "")
+    tg_url = urls.get("telegram", "")
 
-    person_jsonld = (
-        '{'
-        '"@context": "https://schema.org", "@type": "Person", '
-        f'"name": "{bio["title"]}", "alternateName": "Olga Rozet", '
-        '"url": "https://olgarozet.ru", "image": "https://olgarozet.ru/olga_footer.png", '
-        '"jobTitle": ["Художник", "Дизайнер", "Искусствовед"], '
-        f'"email": "{bio["email"]}", '
-        f'"sameAs": ["{ig_url}", "{tg_url}"]'
-        '}'
-    )
+    canonical = _canonical(d)
+    portrait = _portrait(d)
+    image_url = f"{canonical}/{portrait}" if portrait else ""
+    import json as _j
+    person = {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": bio["title"],
+        "url": canonical,
+        "image": image_url,
+        "email": bio["email"],
+        "sameAs": [u for u in (ig_url, tg_url) if u],
+    }
+    if bio.get("alternate_name"):
+        person["alternateName"] = bio["alternate_name"]
+    if bio.get("job_title"):
+        person["jobTitle"] = list(bio["job_title"])
+    person_jsonld = _j.dumps(person, ensure_ascii=False)
     events_jsonld = schema_events_jsonld(d)
     structured = person_jsonld + (
         '\n  </script>\n  <script type="application/ld+json">' + events_jsonld
@@ -312,10 +335,13 @@ def p_site(d: dict) -> str:
     </main>
   </div>"""
 
+    title = bio["title"]
+    if bio.get("tagline"):
+        title = f"{title} — {bio['tagline']}"
     return _layout(
         d,
-        title="Ольга Розет — художник, дизайнер",
-        description="Ольга Розет — художник, искусствовед, дизайнер интерьеров. Консультации, путешествия, искусство.",
+        title=title,
+        description=bio.get("description", title),
         body=body,
         structured=structured,
     )
@@ -325,21 +351,24 @@ def p_site(d: dict) -> str:
 
 def p_art(d: dict) -> str:
     """Gallery projection. Artworks from data.artworks (single source)."""
+    bio = d["bio"]
+    alt = f"{bio['title']} — Произведение"
     items = "\n".join(
-        f'    <div class="artwork"><img src="img/{a}" loading="lazy" alt="Произведение Ольги Розет"></div>'
+        f'    <div class="artwork"><img src="img/{a}" loading="lazy" alt="{alt}"></div>'
         for a in d.get("artworks", [])
     )
     body = f"""  <div class="progress-bar" id="progress"></div>
   <main class="gallery">
 {items}
   </main>"""
+    art_label = bio.get("art_page_label", "Искусство")
     return _layout(
         d,
-        title="Ольга Розет — Искусство",
-        description="Картины Ольги Розет",
+        title=f"{bio['title']} — {art_label}",
+        description=f"{art_label} — {bio['title']}",
         body=body,
         nav=True,
-        canonical="https://olgarozet.ru/art/",
+        canonical=f"{_canonical(d)}/art/",
         footer=False,  # gallery is immersive — no global footer
     )
 
@@ -374,7 +403,8 @@ def p_telegram(d: dict) -> str:
             if stripped:
                 parts.append(stripped)
         parts.append("")
-        parts.append("olgarozet.ru/booking")
+        host = _canonical(d).replace("https://", "").replace("http://", "")
+        parts.append(f"{host}/booking")
     return "\n".join(parts)
 
 
@@ -575,12 +605,14 @@ if(d.ok){{submitted=true;
 }}
 </script>"""
 
+    bio = d["bio"]
+    booking_label = bio.get("booking_page_label", "Записаться")
     return _layout(
         d,
-        title="Записаться — Ольга Розет",
+        title=f"{booking_label} — {bio['title']}",
         description=f"{desc_plain} — {cons['price']}",
         body=body,
-        canonical="https://olgarozet.ru/booking/",
+        canonical=f"{_canonical(d)}/booking/",
         extra_head=booking_style,
         footer=False,
     )
