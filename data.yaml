@@ -1,7 +1,7 @@
 bio:
   title: Ольга Розет
   artist:
-    text: ТЕКУЩАЯ ДЕЯТЕЛЬНОСТЬ
+    text: ХУДОЖНИК
     link: art/
   roles:
     - Ученик
@@ -71,6 +71,20 @@ events:
       - "140 лет"
       - ""
       - "С Натальей Логиновой"
+
+publications:
+  - title: Программа-2027
+    channel: site
+    date: "2026-04-24"
+    link: /program-2027/
+  - title: Вршац
+    channel: telegram
+    date: "2026-04-24"
+    link: https://t.me/olga_rozet/73
+  - title: Вршац (видео)
+    channel: instagram
+    date: "2026-04-24"
+    link: https://instagram.com/p/DXg9IGXDcUu/
 
 urls:
   instagram: https://instagram.com/olga_rozet
