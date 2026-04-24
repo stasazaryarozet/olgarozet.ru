@@ -27,10 +27,54 @@ consultations:
   link: /booking/
   cta: Записаться
 
+# ── Graph entities — referenced by id; not duplicated ────────────────
+people:
+  olgarozet:        { name: "Ольга Розет",       role: lead }
+  azaryarozet:      { name: "Азарья Розет",      role: co-organizer }
+  natalia_loginova: { name: "Наталья Логинова",  role: co-organizer, location: paris,
+                      channel: telegram }
+  matluba:          { name: "Матлюба",           role: co-organizer, location: uzbekistan }
+  nasullobek:       { name: "Насуллобек Раджабов", role: local-organizer, location: uzbekistan,
+                      confirmed: "2026-03-28" }
+
+partners:
+  bukhara_center:    { name: "Бухарский Центр Ремёсел", type: organization, location: bukhara }
+  masterskaya_rozet: { name: "Мастерская «Розет»",       type: studio,       owner: olgarozet }
+  ekata_estate:      { name: "EKATA Estate",             type: estate,       location: serbia }
+  vikendica_rozet:   { name: "Семейная Викендица",       type: residence,
+                       owner: olgarozet, location: serbia }
+
+locations:
+  paris:       { name: "Париж",       country: FR }
+  serbia:      { name: "Сербия",      country: RS }
+  vrshac:      { name: "Вршац",       country: RS, region: serbia }
+  samarkand:   { name: "Самарканд",   country: UZ }
+  bukhara:     { name: "Бухара",      country: UZ }
+  uzbekistan:  { name: "Узбекистан",  country: UZ }
+
+audience:
+  architects:    архитекторы
+  designers:     дизайнеры
+  decorators:    декораторы
+  artists:       художники
+  professionals: специалисты
+
+# ── Events — graph-aware: ids + entity refs; lines: kept for legacy column render ─
 events:
-  - title: Париж
-    date: сентябрь
+  - id: paris_2026_09
+    title: Париж
     t_key: "2026-09"
+    date: сентябрь
+    audience: [architects, designers, decorators, artists]
+    organizers: [olgarozet, natalia_loginova]
+    locations: [paris]
+    concept: "100 лет обещаний дизайна + Корбюзье 140 лет"
+    format: [travel]
+    pricing:    null   # gap (sellability)
+    cohort:     null
+    duration:   null
+    registration: null
+    status: PLANNING
     lines:
       - "100 лет"
       - "обещаний дизайна"
@@ -40,9 +84,25 @@ events:
       - ""
       - "С Натальей Логиновой"
 
-  - title: Самарканд–Бухара
-    date: осень
+  - id: uzbekistan_2026_fall
+    title: Самарканд–Бухара
     t_key: "2026-10"
+    date: осень
+    audience: [professionals, designers, architects]
+    organizers: [olgarozet, matluba, nasullobek]
+    partners: [bukhara_center, masterskaya_rozet]
+    locations: [samarkand, bukhara]
+    format: [stazhirovka, master_class, excursion]
+    output: certification
+    transport: avia
+    accommodation: { level: "3-4★", area: "Старый город" }
+    pricing:    null
+    cohort:     null
+    duration:   null
+    registration: null
+    status: PLANNING
+    history:
+      - { season: spring_2026, dates: "26-30 марта", status: CANCELLED }
     lines:
       - "Учебная,"
       - "Деловая,"
@@ -62,10 +122,21 @@ events:
       - "Мастерской"
       - "«Розет»"
 
-  - title: Сербия
-    link: /program-2027/
-    date: в следующем году
+  - id: serbia_2027
+    title: Сербия
     t_key: "2027"
+    date: в следующем году
+    link: /program-2027/
+    audience: [architects, designers, decorators, artists]
+    organizers: [olgarozet]
+    partners: [vikendica_rozet, ekata_estate]
+    locations: [serbia, vrshac]
+    format: [lecture, master_class]
+    pricing:    null
+    cohort:     null
+    duration:   null
+    registration: { mailto: o.g.rozet@gmail.com, subject: "Программа в Сербию — жду" }
+    status: PLANNED
     lines:
       - "для архитекторов,"
       - "дизайнеров,"

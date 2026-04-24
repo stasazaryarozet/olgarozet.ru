@@ -138,6 +138,62 @@ def sorted_events(d: dict) -> list:
                   key=lambda e: (e.get("t_key", "￿"), d["events"].index(e)))
 
 
+# ── Graph resolution: events reference entities by id (no value duplication) ─
+
+def resolve_refs(d: dict, kind: str, ids):
+    """Resolve a list of entity ids against d[kind] dict; non-id values fall through.
+    kind ∈ {people, partners, locations, audience}. Returns list of resolved dicts/strings.
+    """
+    pool = d.get(kind, {})
+    out = []
+    for x in (ids or []):
+        if isinstance(x, str) and x in pool:
+            v = pool[x]
+            if isinstance(v, dict):
+                out.append({**v, "id": x})
+            else:
+                out.append({"id": x, "name": v})
+        else:
+            out.append(x)
+    return out
+
+
+def _schema_event(d: dict, ev: dict) -> dict:
+    """schema.org Event with refs resolved to inline schema-org sub-types."""
+    obj = {
+        "@type": "Event",
+        "name": ev.get("title", ""),
+        "startDate": ev.get("t_key", ""),
+        "eventStatus": f'https://schema.org/Event{ev.get("status", "Scheduled").title()}',
+    }
+    locs = resolve_refs(d, "locations", ev.get("locations", []))
+    if locs:
+        obj["location"] = [{"@type": "Place", "name": l.get("name", l.get("id", "")),
+                            "addressCountry": l.get("country", "")} for l in locs]
+    orgs = resolve_refs(d, "people", ev.get("organizers", []))
+    if orgs:
+        obj["organizer"] = [{"@type": "Person", "name": p.get("name", p.get("id", ""))} for p in orgs]
+    auds = resolve_refs(d, "audience", ev.get("audience", []))
+    if auds:
+        names = [a.get("name", a) if isinstance(a, dict) else a for a in auds]
+        obj["audience"] = {"@type": "Audience", "audienceType": ", ".join(names)}
+    if ev.get("link"):
+        obj["url"] = "https://olgarozet.ru" + ev["link"]
+    return obj
+
+
+def schema_events_jsonld(d: dict) -> str:
+    """Graph-rich Event markup for SEO; one ItemList wrapping the events sorted by t_key."""
+    items = [_schema_event(d, ev) for ev in sorted_events(d)]
+    if not items:
+        return ""
+    import json as _j
+    obj = {"@context": "https://schema.org", "@type": "ItemList",
+           "itemListElement": [{"@type": "ListItem", "position": i + 1, "item": e}
+                               for i, e in enumerate(items)]}
+    return _j.dumps(obj, ensure_ascii=False)
+
+
 # ── P_publications: D → section HTML ────────────────────────────────
 
 _CHANNEL_LABEL = {"site": "сайт", "telegram": "Telegram", "instagram": "Instagram"}
@@ -224,7 +280,7 @@ def p_site(d: dict) -> str:
     ig_url = urls.get("instagram", "https://instagram.com/olga_rozet")
     tg_url = urls.get("telegram", "https://t.me/olga_rozet")
 
-    structured = (
+    person_jsonld = (
         '{'
         '"@context": "https://schema.org", "@type": "Person", '
         f'"name": "{bio["title"]}", "alternateName": "Olga Rozet", '
@@ -234,6 +290,10 @@ def p_site(d: dict) -> str:
         f'"sameAs": ["{ig_url}", "{tg_url}"]'
         '}'
     )
+    # Combine Person + Events ItemList in one structured-data block (graph form)
+    events_jsonld = schema_events_jsonld(d)
+    structured = person_jsonld + ('\n  </script>\n  <script type="application/ld+json">' +
+                                   events_jsonld if events_jsonld else "")
 
     body = f"""  <div class="content-wrapper">
     <header>
