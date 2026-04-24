@@ -21,6 +21,25 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
+  <script>
+  // Solar-driven day/night theme. Closed-form Michalsky 1988 altitude.
+  // Longitude ≈ -tzOffset/4 (15°/h). Latitude default 45° (temperate). No API, no geolocation prompt.
+  (function(){
+    var r=Math.PI/180, now=new Date();
+    var J=now.valueOf()/86400000 + 2440587.5 - 2451545.0;
+    var L=(280.460+0.9856474*J)%360;
+    var g=((357.528+0.9856003*J)%360)*r;
+    var lam=(L+1.915*Math.sin(g)+0.020*Math.sin(2*g))*r;
+    var eps=(23.439-4e-7*J)*r;
+    var dec=Math.asin(Math.sin(eps)*Math.sin(lam));
+    var ra=Math.atan2(Math.cos(eps)*Math.sin(lam), Math.cos(lam));
+    var lon=-now.getTimezoneOffset()/4, lat=45;
+    var gmst=(18.697374558+24.06570982441908*J)*15;
+    var H=((gmst+lon)%360)*r - ra;
+    var alt=Math.asin(Math.sin(lat*r)*Math.sin(dec)+Math.cos(lat*r)*Math.cos(dec)*Math.cos(H));
+    document.documentElement.setAttribute('data-theme', alt>0 ? 'day' : 'night');
+  })();
+  </script>
   <script type="application/ld+json">{
     "@context": "https://schema.org",
     "@type": "Person",
@@ -98,6 +117,15 @@
         <p>С Натальей Логиновой</p>
       </article>
       </section>
+
+    <section id="publications" aria-labelledby="publications-heading">
+      <h2 id="publications-heading">Публикации:</h2>
+      <ul class="publications-list">
+        <li><a href="/program-2027/" class="pub" rel="noopener"><span class="pub-channel">сайт</span><span class="pub-title">Программа-2027</span></a></li>
+        <li><a href="https://t.me/olga_rozet/73" class="pub" rel="noopener"><span class="pub-channel">Telegram</span><span class="pub-title">Вршац</span></a></li>
+        <li><a href="https://instagram.com/p/DXg9IGXDcUu/" class="pub" rel="noopener"><span class="pub-channel">Instagram</span><span class="pub-title">Вршац (видео)</span></a></li>
+      </ul>
+    </section>
     </main>
   </div>
 
@@ -111,8 +139,8 @@
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
       </a>
     </div>
-    <a href="#" class="scroll-top" aria-label="Наверх" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+    <a href="#" class="scroll-top" aria-label="Наверх" title="Наверх" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V4M5 11l7-7 7 7"/></svg>
     </a>
   </footer>
 
