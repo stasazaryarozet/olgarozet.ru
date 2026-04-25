@@ -35,6 +35,11 @@ def _portrait(d: dict) -> str:
     return d.get("bio", {}).get("portrait", "")
 
 
+def _portrait_night(d: dict) -> str:
+    """Owner's night-mode portrait filename (optional; absent → CSS fallback to day)."""
+    return d.get("bio", {}).get("portrait_night", "")
+
+
 # ── Shared HTML fragments ────────────────────────────────────────────
 
 SOLAR_SCRIPT = """<script>
@@ -98,13 +103,18 @@ def _head(title: str, description: str, *, canonical: str,
 {extra}"""
 
 
-def _footer(urls: dict, bio_title: str, portrait: str = "") -> str:
+def _footer(urls: dict, bio_title: str, portrait: str = "", portrait_night: str = "") -> str:
     ig = urls.get("instagram", "")
     tg = urls.get("telegram", "")
+    night_img = (
+        f'<img src="/{portrait_night}" alt="" class="footer-portrait night" aria-hidden="true">'
+        if portrait_night else ''
+    )
     return f"""<footer>
   <div class="footer-content">
     <a href="{ig}" class="social-icon" aria-label="Instagram">{IG_SVG}</a>
-    <img src="/{portrait}" alt="{bio_title}" class="footer-portrait">
+    <img src="/{portrait}" alt="{bio_title}" class="footer-portrait day">
+    {night_img}
     <a href="{tg}" class="social-icon" aria-label="Telegram">{TG_SVG}</a>
   </div>
   <a href="#" class="scroll-top" aria-label="Наверх" title="Наверх" onclick="window.scrollTo({{top:0,behavior:'smooth'}});return false;">
@@ -126,11 +136,12 @@ def _layout(d: dict, *, title: str, description: str, body: str,
     if canonical is None:
         canonical = _canonical(d)
     portrait = _portrait(d)
+    portrait_night = _portrait_night(d)
     og_image = f"{_canonical(d)}/{portrait}" if portrait else ""
     head = _head(title, description, canonical=canonical, og_image=og_image,
                  extra=extra_head, structured=structured)
     nav_html = '<nav class="nav-fade"><a href="/" aria-label="На главную">←</a></nav>' if nav else ''
-    ftr = _footer(d.get("urls", {}), d["bio"]["title"], portrait) if footer else ''
+    ftr = _footer(d.get("urls", {}), d["bio"]["title"], portrait, portrait_night) if footer else ''
     return f"""<!DOCTYPE html>
 <html lang="ru">
 <head>

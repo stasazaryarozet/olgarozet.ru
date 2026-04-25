@@ -5,6 +5,7 @@ bio:
   alternate_name: "Olga Rozet"
   canonical: "https://olgarozet.ru"
   portrait: olga_footer.png
+  portrait_night: olga_footer_night.png
   job_title: [Художник, Дизайнер, Искусствовед]
   art_page_label: Искусство
   booking_page_label: Записаться

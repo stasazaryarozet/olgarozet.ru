@@ -53,12 +53,12 @@ html {
    expose html bg through it. Explicit bg closes the gap. */
 .footer-content { background: var(--color-bg); }
 
-/* Night-theme portrait inversion: image is drawn on white bg; in night mode
-   invert luminance (white→black, dark→light) + hue-rotate to keep colored
-   elements roughly intact. Preserves drawing detail; bg flips to black. */
-:root[data-theme="night"] .footer-portrait {
-    filter: invert(1) hue-rotate(180deg);
-}
+/* Night-theme portrait swap: dedicated regenerated asset (`portrait_night`),
+   not CSS inversion. Day img hidden in night mode and vice-versa. Both stack
+   in the same grid cell so layout is identical regardless of theme. */
+.footer-portrait.night { display: none; }
+:root[data-theme="night"] .footer-portrait.day { display: none; }
+:root[data-theme="night"] .footer-portrait.night { display: block; }
 
 body {
     color: var(--color-text);
