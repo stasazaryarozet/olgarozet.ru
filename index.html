@@ -22,8 +22,12 @@
 <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
 <script>
 // Solar-driven day/night theme. Closed-form Michalsky 1988 altitude.
-// Longitude ≈ -tzOffset/4 (15°/h). Latitude default 45° (temperate). No API, no geolocation prompt.
-// Re-evaluates every 5 min so a long session flips at sunrise/sunset automatically.
+// Longitude ≈ -tzOffset/4 (15°/h). Latitude default 55° (Moscow-typical
+// for primary RU/EU audience; sunset ~30 min later than the previous
+// lat=45 default). Threshold alt > -0.1 rad (≈ -5.7°) keeps the page in
+// 'day' through civil twilight — admin observed «ещё относительно светло»
+// in Moscow while the site had flipped to night.
+// Re-evaluates every 5 min so a long session flips at sunrise/sunset.
 (function(){
   function setTheme(){
     var r=Math.PI/180, now=new Date();
@@ -34,11 +38,11 @@
     var eps=(23.439-4e-7*J)*r;
     var dec=Math.asin(Math.sin(eps)*Math.sin(lam));
     var ra=Math.atan2(Math.cos(eps)*Math.sin(lam), Math.cos(lam));
-    var lon=-now.getTimezoneOffset()/4, lat=45;
+    var lon=-now.getTimezoneOffset()/4, lat=55;
     var gmst=(18.697374558+24.06570982441908*J)*15;
     var H=((gmst+lon)%360)*r - ra;
     var alt=Math.asin(Math.sin(lat*r)*Math.sin(dec)+Math.cos(lat*r)*Math.cos(dec)*Math.cos(H));
-    document.documentElement.setAttribute('data-theme', alt>0 ? 'day' : 'night');
+    document.documentElement.setAttribute('data-theme', alt > -0.1 ? 'day' : 'night');
   }
   setTheme();
   setInterval(setTheme, 300000);

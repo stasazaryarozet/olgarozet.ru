@@ -51,6 +51,8 @@ partners:
   ekata_estate:      { name: "EKATA Estate",             type: estate,       location: serbia }
   vikendica_rozet:   { name: "Семейная Викендица",       type: residence,
                        owner: olgarozet, location: serbia }
+  cdl:               { name: "ЦДЛ", full_name: "Центральный Дом Литераторов",
+                       type: venue, location: moscow }
 
 locations:
   paris:       { name: "Париж",      country: FR }
@@ -59,6 +61,43 @@ locations:
   samarkand:   { name: "Самарканд",  country: UZ }
   bukhara:     { name: "Бухара",     country: UZ }
   uzbekistan:  { name: "Узбекистан", country: UZ }
+  moscow:      { name: "Москва",     country: RU }
+
+# ── System-wide event policy (applies to all Olga's projects) ─────────────────
+event_policy:
+  accessibility:
+    discount_on_request: true
+    min_free_slots: 1
+    contact: o.g.rozet@gmail.com
+    note: "На все проекты Ольги — возможность скидки или бесплатного места по запросу. Минимум 1 бесплатное место в каждом проекте."
+  # Class-scoped: applies to events with format containing 'travel' (design tours)
+  design_travel:
+    payment:
+      prepayment_pct: 50
+    note: "Общее правило для Дизайн-Путешествий: 50% предоплата."
+
+# ── Event series — shared format/program for series of related events ─────────
+event_series:
+  meeting_chelovek_remeslo:
+    name: "Встречи с Ольгой"
+    program:
+      - kind: talk
+        by: olgarozet
+        topic_source: [design_travels, field_scouting]
+        description: "Доклад Ольги на тему, обычно связанный в т.ч. с результатами наблюдений в дизайн-путешествиях и собственных вылазках"
+      - kind: dialogue
+        with: olgarozet
+        type: professional
+        description: "Профессиональное общение с Ольгой"
+      - kind: networking
+        among: participants
+        description: "Нетворкинг участников друг с другом"
+    online_prep:
+      encouraged: true
+      recommendations:
+        - "Подготовиться к событию заранее"
+        - "Выделить место-время"
+        - "Приготовить себе еду"
 
 audience:
   architects:    архитекторы
@@ -69,17 +108,51 @@ audience:
 
 # ── Events — graph-aware: id + entity refs; lines: kept for legacy column render ─
 events:
+  - id: meeting_2026_05
+    title: Человек, Дом, Ремесло
+    t_key: "2026-05"
+    date: после майских
+    audience: []
+    organizers: [olgarozet]
+    format: [online, meeting]
+    series: meeting_chelovek_remeslo
+    first_online_in_series: true
+    pricing:
+      regular:    { amount: 5000, currency: RUB }
+      early_bird: { amount: 2500, currency: RUB, until: "2026-05-01" }
+    cohort:     null
+    duration:   null
+    registration: null
+    status: PLANNING
+    history:
+      - { season: "2025-12", venue: cdl, format: offline, occurrences: 2,
+          theme: "Человек и Ремесло", price_rub: 5000 }
+    lines:
+      - "Онлайн-встреча"
+      - ""
+      - "с Ольгой"
+
   - id: paris_2026_09
     title: Париж
     t_key: "2026-09"
     date: сентябрь
+    broadcast: [site]
     audience: [architects, designers, decorators, artists]
     organizers: [olgarozet, natalia_loginova]
     locations: [paris]
     concept: "100 лет обещаний дизайна + Корбюзье 140 лет"
     format: [travel]
-    pricing:    null   # gap (sellability)
-    cohort:     null
+    pricing:
+      team_fee:
+        amount: 2000
+        currency: EUR
+        per: participant
+        recipient: team
+      participant_expenses:
+        description: "Покрываются участником сверх team-fee"
+        items: [transport, accommodation, food, tickets_museums_events]
+    cohort:
+      max: 12
     duration:   null
     registration: null
     status: PLANNING
@@ -96,14 +169,39 @@ events:
     title: Самарканд–Бухара
     t_key: "2026-10"
     date: осень
+    broadcast: [site]
     audience: [professionals, designers, architects]
     organizers: [olgarozet, matluba, nasullobek]
     partners: [bukhara_center, masterskaya_rozet]
     locations: [samarkand, bukhara]
     format: [stazhirovka, master_class, excursion]
     output: certification
-    transport: avia
     accommodation: { level: "3-4★", area: "Старый город" }
+    inclusions:
+      model: all_except
+      excluded: [airfare_international]
+      note: "Включает всё (проживание, питание, локальный transfer, мастер-классы, экскурсии, сертификация), кроме международных авиабилетов."
+    transport:
+      mode: avia
+      airfare:
+        required: true
+        options:
+          - { mode: self_purchase, surcharge_pct: 0 }
+          - { mode: agent_purchase, surcharge_pct: 10 }
+        scheduled_flights:
+          inbound:  null   # admin to specify
+          outbound: null
+        note: "Авиабилеты на заданные рейсы. Самостоятельно или через нашего агента (+10% к стоимости)."
+      arrival_protocol:
+        default:
+          mode: centralized
+          note: "Встреча в аэропорту → вместе в Узбекистане → вместе обратно."
+        alternative:
+          mode: flexible_dates
+          constraints:
+            arrive_no_later_than:    null
+            depart_no_earlier_than: null
+          note: "Путешественник может определить даты прилёта/вылета произвольно в рамках границ."
     pricing:    null
     cohort:     null
     duration:   null
@@ -135,6 +233,7 @@ events:
     t_key: "2027"
     date: в следующем году
     link: /program-2027/
+    broadcast: [site]
     audience: [architects, designers, decorators, artists]
     organizers: [olgarozet]
     partners: [vikendica_rozet, ekata_estate]
@@ -153,6 +252,20 @@ events:
       - ""
       - "лекция"
       - "и мастер-класс"
+
+  - id: course_price_value
+    title: Цена и Ценность
+    date: анонс
+    audience: []
+    organizers: [olgarozet]
+    format: [online, course]
+    pricing:    null
+    cohort:     null
+    duration:   null
+    registration: null
+    status: PLANNING
+    lines:
+      - "Онлайн-курс"
 
 publications:
   - title: Программа-2027
