@@ -14,11 +14,154 @@ Mathematical model:
   render gate Graph membership ≠ broadcast surface. Each event projects to a
               surface k iff `k in event.broadcast`. Absence/empty = graph-only.
               Enforced in sorted_events(); same gate in broadcast.p_<surface>.
+  schema      Event entities pass through `event_schema.validate(ev) →
+              EventModel` at every render entry — fail-fast on shape errors,
+              uniform layout across renderers, no `.get(…) or {}` chains.
+  XSS         All user-derived strings escaped via `_t()` (text) before
+              entering HTML; `_h()` reserved for fields that intentionally
+              carry markup (currently only `sec.items` and certain inline
+              <strong> in editorial text — schema-marked).
 
 No per-page HTML skeleton duplication. Single _layout surface.
 """
+import html as _html
 import yaml
 from pathlib import Path
+
+try:
+    from event_schema import validate as _validate_event, InvalidEvent, EventModel  # type: ignore
+except ImportError:
+    # When generate.py is copied into a deployed repo (broadcast.update_site),
+    # event_schema lives alongside via copy step — but if missing, fall back
+    # to identity validation so legacy clones don't crash.
+    _validate_event = None
+    InvalidEvent = ValueError  # type: ignore
+    EventModel = None  # type: ignore
+
+
+import re as _re
+
+# ── HTML escape + RU-typography helpers (Inv-TYPO + XSS hygiene) ─────
+#
+# Every user-derived string rendered into HTML body MUST go through
+# `_t()` (escape) or `_h()` (curated-markup pass-through). Both apply
+# the typography pipeline `_typo()` first — single SoT of typographic
+# correctness across every surface × every owner × every event.
+# An empty/None input yields "" — never "None" — to avoid leaking sentinels.
+
+_NBSP = " "
+
+# Inv-TYPO: NBSP-glue rules loaded from System knowledge (data, not code).
+#   knowledge/system/typography/<lang>.yaml: nbsp_units + nbsp_prepositions
+# Single edit in YAML propagates across every surface × every owner × every
+# event. No hardcode — `feedback_no_hardcode_through_abstractions`.
+
+def _load_typo_rules(lang: str = "ru") -> dict:
+    """Load typography rules from System knowledge.
+
+    Falls back to empty rules (no-op _typo) if the YAML is missing —
+    allows offline / minimal-deploy scenarios to render without erroring.
+    """
+    try:
+        import yaml as _yaml
+        # Search up from this file: scripts/ → repo root → knowledge/system/typography/
+        here = Path(__file__).resolve()
+        for parent in (here.parent, *here.parents):
+            cand = parent / "knowledge" / "system" / "typography" / f"{lang}.yaml"
+            if cand.is_file():
+                return _yaml.safe_load(cand.read_text(encoding="utf-8")) or {}
+    except Exception:
+        pass
+    return {}
+
+
+def _compile_typo_regexes(rules: dict) -> tuple:
+    """Compile NBSP regex pair from rule data. One-time at module init."""
+    units = rules.get("nbsp_units") or []
+    preps = rules.get("nbsp_prepositions") or []
+    unit_re = None
+    if units:
+        unit_alt = "|".join(units)
+        unit_re = _re.compile(
+            rf"(\d+(?:[.,]\d+)?)\s+({unit_alt})(?=\W|$)",
+            _re.IGNORECASE | _re.UNICODE,
+        )
+    prep_re = None
+    if preps:
+        # Cyrillic case-insensitive: feed [Сс][Лл]ово form
+        def case_class(w):
+            out = []
+            for ch in w:
+                if ch.isalpha():
+                    out.append(f"[{ch.upper()}{ch.lower()}]")
+                else:
+                    out.append(_re.escape(ch))
+            return "".join(out)
+        prep_alt = "|".join(case_class(p) for p in preps)
+        prep_re = _re.compile(
+            rf"(?<![\w])({prep_alt})\s+(?=[\wа-яёА-ЯЁ\d«„])",
+        )
+    return unit_re, prep_re
+
+
+_TYPO_UNIT, _TYPO_PREP = _compile_typo_regexes(_load_typo_rules("ru"))
+
+
+def _typo(s: str) -> str:
+    """Apply typographic NBSP-glue per System rules (knowledge/system/typography).
+
+    Idempotent: if NBSP already present in a position the rule would insert
+    one, the regex no-op'es (whitespace class wouldn't match NBSP).
+
+    Effect-supersystem: every text-bearing field across every projection
+    (site, art, booking, telegram, bio, event-landing) typographically
+    correct without per-page intervention. Rules are data — `_load_typo_rules`
+    pulls from YAML at module load — `feedback_no_hardcode_through_abstractions`.
+    """
+    if not s:
+        return s
+    out = s
+    if _TYPO_UNIT is not None:
+        out = _TYPO_UNIT.sub(r"\1" + _NBSP + r"\2", out)
+    if _TYPO_PREP is not None:
+        out = _TYPO_PREP.sub(r"\1" + _NBSP, out)
+    return out
+
+
+def _t(s) -> str:
+    """Typography-fix + escape arbitrary text for safe HTML inclusion."""
+    if s is None:
+        return ""
+    return _html.escape(_typo(str(s)), quote=True)
+
+
+def _h(s) -> str:
+    """Typography-fix + pass-through for fields with curated markup
+    (admin-authored, schema-marked as carrying <strong>/<em>). Still
+    scrubs None → ''."""
+    return "" if s is None else _typo(str(s))
+
+
+_SAFE_URL_SCHEMES = ("http://", "https://", "mailto:", "tel:", "/", "#",
+                     "?")  # relative paths and anchors
+
+
+def _u(s) -> str:
+    """Escape URL for safe inclusion as href/src attribute, AND require a
+    safe scheme. Disallows `javascript:`, `data:`, `vbscript:` etc.
+    Returns "" for empty/disallowed values — caller should suppress link
+    when result is "".
+    """
+    if not s:
+        return ""
+    raw = str(s).strip()
+    low = raw.lower()
+    # Allow same-origin paths (start with `/`), anchors (`#`), query (`?`),
+    # or any of the explicit safe schemes.
+    if not (low.startswith(_SAFE_URL_SCHEMES) or
+            (":" not in low.split("/", 1)[0] if "/" in low else ":" not in low)):
+        return ""
+    return _html.escape(raw, quote=True)
 
 ROOT = Path(__file__).parent
 DATA = ROOT / "data.yaml"
@@ -85,22 +228,32 @@ SCROLL_UP_SVG = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" str
 
 def _head(title: str, description: str, *, canonical: str,
           og_image: str = "", extra: str = "", structured: str = None) -> str:
-    sd = f'\n<script type="application/ld+json">{structured}</script>' if structured else ''
+    # All title/description/image/canonical originate in data.yaml (admin-authored
+    # but not necessarily HTML-safe — see XSS test in tests/). Escape uniformly.
+    # `structured` is JSON serialised by the caller — JSON itself is HTML-safe
+    # except for `</`, which we neutralise so an attacker-supplied string inside
+    # the JSON-LD payload cannot break out of the <script> envelope.
+    t = _t(title); desc = _t(description); cn = _t(canonical); oi = _t(og_image)
+    sd = ""
+    if structured:
+        # Defang `</` inside JSON to prevent <script> envelope escape.
+        safe = structured.replace("</", "<\\/")
+        sd = f'\n<script type="application/ld+json">{safe}</script>'
     return f"""<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>{title}</title>
-<meta name="description" content="{description}">
-<link rel="canonical" href="{canonical}">
+<title>{t}</title>
+<meta name="description" content="{desc}">
+<link rel="canonical" href="{cn}">
 <meta property="og:type" content="website">
-<meta property="og:title" content="{title}">
-<meta property="og:description" content="{description}">
-<meta property="og:url" content="{canonical}">
-<meta property="og:image" content="{og_image}">
+<meta property="og:title" content="{t}">
+<meta property="og:description" content="{desc}">
+<meta property="og:url" content="{cn}">
+<meta property="og:image" content="{oi}">
 <meta property="og:locale" content="ru_RU">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{title}">
-<meta name="twitter:description" content="{description}">
-<meta name="twitter:image" content="{og_image}">
+<meta name="twitter:title" content="{t}">
+<meta name="twitter:description" content="{desc}">
+<meta name="twitter:image" content="{oi}">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
@@ -149,14 +302,20 @@ def _layout(d: dict, *, title: str, description: str, body: str,
                  extra=extra_head, structured=structured)
     nav_html = '<nav class="nav-fade"><a href="/" aria-label="На главную">←</a></nav>' if nav else ''
     ftr = _footer(d.get("urls", {}), d["bio"]["title"], portrait, portrait_night) if footer else ''
+    # WCAG 2.4.1 «Bypass Blocks» — single skip-link before nav, jumps to <main>.
+    # Visually hidden until keyboard focus; one definition serves every surface.
+    skip_link = ('<a class="skip-link" href="#main">Перейти к содержанию</a>')
     return f"""<!DOCTYPE html>
 <html lang="ru">
 <head>
 {head}
 </head>
 <body>
+{skip_link}
 {nav_html}
+<main id="main" role="main">
 {body}
+</main>
 {ftr}
 </body>
 </html>
@@ -367,6 +526,518 @@ def p_site(d: dict) -> str:
         description=bio.get("description", title),
         body=body,
         structured=structured,
+    )
+
+
+# ── P_event_landing: D × event_id → <slug>/index.html ──────────────
+#
+# Pure projection — landing for one Event entity, fully derived from
+# data.yaml graph (no hand-written markdown body). Used by:
+#   • site_preview server         (always-fresh, Inv-I2)
+#   • broadcast.update_site       (renders into site/<slug>/index.html
+#                                  before push — contour-first, deploy mirrors)
+# Replaces hand-authored _articles/<slug>.md when the slug == event id and
+# event has all required fields. Coexists with longform articles for
+# non-event content.
+
+def event_signup_form(slug: str, label: str, email_fallback: str) -> str:
+    """Mailto-fallback email-capture form. Async POST upgrade if
+    <slug>/signup.json::transport_url is set (zero-credential default)."""
+    from urllib.parse import quote as _q
+    # URL-encode the bits that flow into the mailto: action attribute
+    # (slug becomes subject token, label becomes body fragment, email is
+    # the action target). HTML-escape the label echoed in <p>«…».
+    # Subject = human-readable event label (NOT the dev-slug). Cleaner mailto
+    # for traveler — they see «Заявка: Париж · сентябрь 2026» in their email
+    # client, not «Заявка: paris_2026_09».
+    subj_q = _q(f"Заявка: {label}", safe="")
+    label_q = _q(label, safe="")
+    email_q = _q(email_fallback, safe="@")
+    mb = ("%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%2C%20%D0%9E%D0%BB%D1%8C%D0%B3%D0%B0.%0A%0A"
+          f"%D0%9E%D1%81%D1%82%D0%B0%D0%B2%D0%BB%D1%8F%D1%8E%20%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%20%E2%80%94%20{label_q}.%0A%0A"
+          "%D0%98%D0%BC%D1%8F:%20%0A%20Email:%20%0A"
+          "%D0%9E%20%D1%81%D0%B5%D0%B1%D0%B5%20(%D1%81%D1%84%D0%B5%D1%80%D0%B0%2C%20%D0%B3%D0%BE%D1%80%D0%BE%D0%B4):%20%0A")
+    # Slug is admin-controlled identifier — escape for safe HTML/attr/URL.
+    slug_t = _t(slug)
+    # Form heading is <h3> (parent <section class=signup-wrap> already
+    # provides the section's <h2 «Лист ожидания»>). Heading hierarchy
+    # h2 → h3 is WCAG-correct and screen-reader-friendly.
+    return f'''<section id="signup" class="signup" aria-labelledby="signup-h">
+  <h3 id="signup-h" class="signup-h3">Оставить email</h3>
+  <p>Пришлём финальную программу первыми. Без спама, без рассылки —
+     адресное сообщение с датами, ценой и форматом.</p>
+  <form id="signup-form" class="signup-form" novalidate
+        action="mailto:{email_q}?subject={subj_q}&amp;body={mb}"
+        method="post" enctype="text/plain"
+        data-slug="{slug_t}">
+    <label class="signup-label" for="su-name">Имя</label>
+    <input class="signup-input" id="su-name" name="name"
+           autocomplete="name" required minlength="2" aria-required="true">
+    <label class="signup-label" for="su-email">Email</label>
+    <input class="signup-input" id="su-email" name="email" type="email"
+           autocomplete="email" required aria-required="true">
+    <label class="signup-label" for="su-note">Коротко о себе
+      <span class="signup-hint">(сфера, город — опционально)</span></label>
+    <input class="signup-input" id="su-note" name="note" autocomplete="off">
+    <label class="signup-consent">
+      <input type="checkbox" id="su-consent" name="consent" required
+             aria-required="true">
+      <span>Согласен(-на) на обработку персональных данных для ответа по программе.</span>
+    </label>
+    <button class="signup-btn" type="submit" id="su-btn">Оставить email</button>
+  </form>
+  <div class="signup-msg" id="signup-msg" role="status" aria-live="polite"></div>
+  <noscript><p class="signup-note">Или напишите: <a href="mailto:{email_q}">{_t(email_fallback)}</a></p></noscript>
+<script>
+(function(){{
+  var f=document.getElementById("signup-form");
+  if(!f) return;
+  var btn=document.getElementById("su-btn");
+  var msg=document.getElementById("signup-msg");
+  var transport=null;
+  fetch("/{slug_t}/signup.json").then(function(r){{return r.ok?r.json():null}})
+    .then(function(d){{if(d&&d.transport_url)transport=d.transport_url;}})
+    .catch(function(){{}});
+  f.addEventListener("submit",function(e){{
+    var name=f.name.value.trim(),email=f.email.value.trim();
+    var note=f.note.value.trim(),consent=f.consent.checked;
+    if(name.length<2){{e.preventDefault();f.name.focus();return;}}
+    if(!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(email)){{e.preventDefault();f.email.focus();return;}}
+    if(!consent){{e.preventDefault();f.consent.focus();return;}}
+    if(!transport)return; // mailto: handles it
+    e.preventDefault();
+    btn.disabled=true;btn.textContent="отправка...";
+    var data=new URLSearchParams();
+    data.append("name",name);data.append("email",email);
+    data.append("note",note);data.append("consent","true");
+    fetch(transport,{{method:"POST",
+      headers:{{"Content-Type":"application/x-www-form-urlencoded"}},
+      body:data.toString()}})
+      .then(function(r){{return r.json()}})
+      .then(function(d){{
+        if(d&&d.ok){{f.style.display="none";
+          msg.innerHTML="<b>Заявка принята.</b> Свяжемся лично.";
+        }}else{{msg.textContent="Ошибка. Попробуйте ещё раз или напишите на {email_q}.";
+          btn.disabled=false;btn.textContent="Оставить email";}}
+      }})
+      .catch(function(){{msg.textContent="Ошибка сети. Email ниже работает без формы.";
+        btn.disabled=false;btn.textContent="Оставить email";}});
+  }});
+}})();
+</script>
+</section>'''
+
+
+def _event_jsonld(d: dict, ev: dict) -> str:
+    """schema.org Event — graph-resolved org + locations + audience."""
+    import json as _j
+    obj = {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": f"{ev.get('title','')} {ev.get('date','')}".strip(),
+        "description": ev.get("concept", ""),
+        "startDate": ev.get("t_key", ""),
+        "url": _event_canonical(d, ev),
+        "eventStatus": f'https://schema.org/Event{ev.get("status","Scheduled").title()}',
+    }
+    locs = resolve_refs(d, "locations", ev.get("locations", []))
+    if locs:
+        obj["location"] = [{"@type": "Place",
+                            "name": l.get("name", l.get("id", "")),
+                            "addressCountry": l.get("country", "")} for l in locs]
+    orgs = resolve_refs(d, "people", ev.get("organizers", []))
+    if orgs:
+        obj["organizer"] = [{"@type": "Person",
+                             "name": p.get("name", p.get("id", ""))} for p in orgs]
+    auds = resolve_refs(d, "audience", ev.get("audience", []))
+    if auds:
+        names = [a.get("name", a) if isinstance(a, dict) else a for a in auds]
+        obj["audience"] = {"@type": "Audience", "audienceType": ", ".join(names)}
+    pricing = ev.get("pricing", {}) or {}
+    fee = pricing.get("team_fee") or {}
+    if fee.get("amount") is not None:
+        obj["offers"] = {"@type": "Offer",
+                         "price": str(fee["amount"]),
+                         "priceCurrency": fee.get("currency", "EUR")}
+    return _j.dumps(obj, ensure_ascii=False)
+
+
+def _event_canonical(d: dict, ev: dict) -> str:
+    """Canonical URL for an Event landing.
+
+    Graph: if `ev.web_addresses[]` binds the Event to one or more Domain
+    entities, the FIRST address is the canonical landing root (no /<slug>/).
+    Tree fallback: owner-canonical + /<slug>/ — preserved for events without
+    a bound domain.
+    """
+    addrs = ev.get("web_addresses") or []
+    if addrs:
+        return f"https://{addrs[0]}"
+    return f"{_canonical(d)}/{ev['id']}/"
+
+
+def _person_display(d: dict, person_id: str) -> tuple[str, str]:
+    """(name, link) for a person ref. Falls back to id-as-name if not in graph.
+
+    People can live as dict[id]->fields OR list[{id, ...}] depending on owner.
+    """
+    people = d.get("people") or {}
+    p: dict | None = None
+    if isinstance(people, dict):
+        p = people.get(person_id)
+    elif isinstance(people, list):
+        p = next((x for x in people
+                  if isinstance(x, dict) and x.get("id") == person_id), None)
+    if not p or not isinstance(p, dict):
+        return (person_id.replace("_", " ").title(), "")
+    nm = p.get("name") or person_id
+    link = p.get("link") or p.get("url") or ""
+    return (nm, link)
+
+
+def p_event_landing(d: dict, ev: dict) -> str:
+    """Project one Event from the graph to a standalone landing HTML page.
+
+    Single render path: schema-validated essay layout. No legacy fallback.
+    Schema (see event_schema.EventModel for the source of truth):
+      lead              — single sentence, italic, frames the page
+      co_organizers     — list of person ids; rendered as «N1 и N2 — Организаторы.»
+      sections[]        — ordered essay sections, each one of:
+                          {title, intro?, pairs:[{label,text}]}    — concept-pair
+                          {title, text}                            — prose
+                          {title, intro?, items:[str]}             — list (items
+                                                                     may carry
+                                                                     <strong>)
+      open_questions[]  — graph edges {to: list[person_id], q: text}
+                          grouped by addressee on render
+      signup            — {title, note}; signup_form embedded
+      about_organizer   — {text, link_text, link_url}
+
+    Validation happens here — if the event lacks lead+sections (the only two
+    truly required fields for this projection), `event_schema.validate()`
+    raises InvalidEvent and the caller (site_preview / update_landing)
+    surfaces the message. No silent half-rendered pages.
+    """
+    bio = d.get("bio", {})
+    slug = ev["id"]
+
+    # Validate (or fall back to dict-as-is in deployed-repo edge case)
+    if _validate_event is not None:
+        m = _validate_event(ev)  # raises InvalidEvent on shape problems
+    else:
+        m = ev  # type: ignore[assignment]
+        if not (m.get("lead") and m.get("sections")):
+            raise ValueError(f"event {ev.get('id','?')!r}: lead+sections required "
+                             "(modern schema; event_schema.py not importable here)")
+
+    title_full = m.title if hasattr(m, "title") else m.get("title", "Событие")
+    date_str = m.date if hasattr(m, "date") else m.get("date", "")
+    if date_str and "·" not in title_full:
+        title_full = f"{title_full} · {date_str}"
+
+    parts: list[str] = []
+
+    # Header — h1 + lead + co_organizers.
+    # Semantic HTML5: emit <time datetime="…"> as visually-hidden a11y/SEO
+    # microdata when t_key (ISO yyyy-mm-dd) is present. JSON-LD startDate
+    # carries the structured event date in machine-readable form already;
+    # the <time> element gives screen-readers + browser-time parsers the
+    # canonical date without disrupting essay-flow visual layout.
+    h1_title = m.title if hasattr(m, "title") else m.get("title", "Событие")
+    if date_str and "·" not in h1_title:
+        h1_title = f"{h1_title} · {date_str}"
+    t_key = m.t_key if hasattr(m, "t_key") else m.get("t_key", "")
+    parts.append(f"<header><h1>{_t(h1_title)}</h1>")
+    if t_key:
+        # visually-hidden but DOM-present time element
+        parts.append(f'<time datetime="{_t(t_key)}" class="visually-hidden">'
+                     f'{_t(date_str or t_key)}</time>')
+    parts.append(f'<p class="lead"><em>{_t(m.lead if hasattr(m,"lead") else m["lead"])}</em></p>')
+
+    co_ids = m.co_organizers if hasattr(m, "co_organizers") else (m.get("co_organizers") or [])
+    if co_ids:
+        disp = []
+        for pid in co_ids:
+            nm, lk = _person_display(d, pid)
+            safe_lk = _u(lk)
+            disp.append(f'<a href="{safe_lk}">{_t(nm)}</a>' if safe_lk else _t(nm))
+        parts.append(f'<p class="organizers">{" и ".join(disp)} — Организаторы.</p>')
+    parts.append("</header>")
+
+    # Pricing display strip — editorial cover-line, schema-driven.
+    # Renders ev.pricing.team_fee.{amount,currency,note} as a hero figure
+    # if amount is set. CSS in styles.css `.pricing-display` paints it.
+    pricing = m.pricing if hasattr(m, "pricing") else (m.get("pricing") or {})
+    team_fee = (pricing or {}).get("team_fee") or {}
+    amount = team_fee.get("amount")
+    if amount is not None:
+        currency = team_fee.get("currency", "")
+        cur_glyph = {"EUR": "€", "USD": "$", "RUB": "₽", "GBP": "£"}.get(
+            str(currency).upper(), _t(currency))
+        amount_str = f"{int(amount):,}".replace(",", " ") \
+            if isinstance(amount, (int, float)) and float(amount).is_integer() \
+            else _t(amount)
+        note = team_fee.get("note") or ""
+        per = team_fee.get("per") or ""
+        label_bits = ["Стоимость"]
+        if per == "participant":
+            label_bits.append("на участника")
+        parts.append(
+            '<aside class="pricing-display" aria-label="Стоимость">'
+            f'<div class="pricing-label">{_t(" · ".join(label_bits))}</div>'
+            f'<div class="pricing-amount">{amount_str}'
+            f'<span class="currency">{cur_glyph}</span></div>'
+            + (f'<div class="pricing-note">{_t(note)}</div>' if note else '')
+            + '</aside>'
+        )
+
+    # Status banner — DRAFT/PLANNING openly stated, congruent with «программа дописывается»
+    status = m.status if hasattr(m, "status") else m.get("status", "")
+    if status in ("PLANNING", "DRAFT"):
+        # WAI-ARIA: status banner is a non-critical live region. role=status
+        # + aria-live=polite makes screen readers announce "Программа собирается"
+        # when the page first reads, without interrupting other narration.
+        parts.append('<p class="status-banner" role="status" aria-live="polite">'
+                     'Программа собирается. Лист ожидания открыт.</p>')
+
+    # Sections — schema variants (pair / text / items / intro)
+    sections = m.sections if hasattr(m, "sections") else (m.get("sections") or [])
+    for sec in sections:
+        # EventModel exposes attributes; raw dict path uses dict access
+        t = sec.title if hasattr(sec, "title") else sec.get("title", "")
+        intro = sec.intro if hasattr(sec, "intro") else sec.get("intro", "")
+        text = sec.text if hasattr(sec, "text") else sec.get("text", "")
+        pairs = sec.pairs if hasattr(sec, "pairs") else (sec.get("pairs") or [])
+        items = sec.items if hasattr(sec, "items") else (sec.get("items") or [])
+        parts.append(f"<section><h2>{_t(t)}</h2>")
+        if intro:
+            parts.append(f"<p>{_t(intro)}</p>")
+        if text:
+            parts.append(f"<p>{_t(text)}</p>")
+        if pairs:
+            # Semantic HTML5: definition list — `<dt>` is the term, `<dd>` is
+            # its description. Replaces ad-hoc `<p class="pair">` with
+            # screen-reader-correct grouping per WAI/ARIA dl pattern.
+            parts.append('<dl class="pairs">')
+            for pair in pairs:
+                label = pair.label if hasattr(pair, "label") else pair.get("label", "")
+                ptext = pair.text if hasattr(pair, "text") else pair.get("text", "")
+                parts.append(f'<dt>{_t(label)}</dt><dd>{_t(ptext)}</dd>')
+            parts.append('</dl>')
+        if items:
+            # `items` is the one schema field that intentionally carries
+            # admin-authored markup (<strong>…</strong> highlights). Curated.
+            lis = "".join(f"<li>{_h(x)}</li>" for x in items)
+            parts.append(f"<ul>{lis}</ul>")
+        parts.append("</section>")
+
+    # ── System-policy-derived sections ────────────────────────────────
+    # Pulled from `event_policy` graph node (top-level d) and rendered
+    # automatically when applicable. Single SoT — no per-event duplication.
+    # Closes typical traveler-questions (onboarding, payment timing,
+    # language, accessibility) without hand-writing copy on every
+    # Design-Travels landing.
+    fmt = m.format if hasattr(m, "format") else (m.get("format") or [])
+    policy = d.get("event_policy") or {}
+    dt_policy = policy.get("design_travel") or {} if "travel" in (fmt or []) else {}
+
+    # «Перед поездкой» — pre-travel onboarding (Design-Travels-class).
+    # Source: event_policy.design_travel.onboarding {interview, intro_meeting}.
+    # Sets traveler expectations: short online interview + mandatory online
+    # intro-meeting with Olga (offline-when-possible, in addition not in place).
+    onboarding = dt_policy.get("onboarding") or {}
+    if onboarding:
+        intro_lines: list[str] = []
+        iv = onboarding.get("interview") or {}
+        if iv:
+            iv_purpose = iv.get("purpose", "знакомство")
+            intro_lines.append(
+                f"<strong>Онлайн-собеседование с Организаторами</strong> — "
+                f"короткое, для каждого нового Путешественника: {_t(iv_purpose)}."
+            )
+        im = onboarding.get("intro_meeting") or {}
+        if im:
+            modes = im.get("modes") or []
+            if "offline" in modes and "online" in modes:
+                modes_phrase = ("онлайн обязательно для всех; оффлайн — "
+                                "при возможности, в дополнение")
+            elif "online" in modes:
+                modes_phrase = "онлайн"
+            else:
+                modes_phrase = ", ".join(modes) or "по согласованию"
+            intro_lines.append(
+                f"<strong>Встреча-знакомство-занятие с Ольгой</strong> — "
+                f"{modes_phrase}."
+            )
+        if intro_lines:
+            parts.append('<section class="onboarding"><h2>Перед поездкой</h2><ul>')
+            for it in intro_lines:
+                parts.append(f"<li>{_h(it)}</li>")
+            parts.append("</ul></section>")
+
+    terms_items: list[str] = []
+    # Payment (Design Travels invariant: prepayment_pct from System policy).
+    # Inv-FACT: only state what System Memory contains. Remainder-timing
+    # NOT in policy → not stated. Will surface if admin extends policy.
+    if dt_policy:
+        pmt = dt_policy.get("payment") or {}
+        pct = pmt.get("prepayment_pct")
+        if pct is not None:
+            terms_items.append(
+                f"<strong>Оплата:</strong> {int(pct)}% предоплата при "
+                "подтверждении участия. Условия по остатку — в финальной программе."
+            )
+    # Language (RU is owner-default; explicit terms.language can override)
+    terms_items.append(
+        "<strong>Язык:</strong> программа на русском. С партнёрами и музеями "
+        "по необходимости — наш перевод."
+    )
+    # Accessibility (System policy). Surface min_free_slots explicitly when
+    # the policy guarantees a number (≥1) — admin spec: «минимум 1 бесплатное
+    # место в каждом проекте». Falls back to soft phrasing only if policy
+    # has no slot count.
+    acc = policy.get("accessibility") or {}
+    if acc.get("discount_on_request") or acc.get("min_free_slots"):
+        contact_email = acc.get("contact") or bio.get("email", "")
+        slots = acc.get("min_free_slots") or 0
+        if slots >= 1:
+            slots_phrase = (f"<strong>Доступность:</strong> минимум "
+                            f"{int(slots)} место — бесплатно по запросу. "
+                            "Возможна скидка по запросу.")
+        else:
+            slots_phrase = ("<strong>Доступность:</strong> возможна скидка "
+                            "или бесплатное место по запросу.")
+        terms_items.append(
+            f'{slots_phrase} Пишите на '
+            f'<a href="mailto:{_t(contact_email)}">{_t(contact_email)}</a>.'
+        )
+    if terms_items:
+        parts.append('<section class="terms"><h2>Условия и сроки</h2><ul>')
+        for it in terms_items:
+            parts.append(f"<li>{_h(it)}</li>")
+        parts.append('</ul></section>')
+
+    # Open questions — graph edges, grouped by addressee-set (frozen multi-edge).
+    # Joint addressing (e.g. [olga, natalia]) renders as one shared block —
+    # no synthetic per-person split when admin says «вопросы обеим сразу».
+    oq = m.open_questions if hasattr(m, "open_questions") else (m.get("open_questions") or [])
+    if oq:
+        from collections import OrderedDict
+        by_addrs: "OrderedDict[tuple[str,...], list[str]]" = OrderedDict()
+        for item in oq:
+            to = item.to if hasattr(item, "to") else item.get("to", "?")
+            key = tuple(to) if isinstance(to, list) else (to,)
+            q = item.q if hasattr(item, "q") else item.get("q", "")
+            by_addrs.setdefault(key, []).append(q)
+        parts.append('<section class="open-questions"><h2>Вопросы</h2>'
+                     '<p class="qnote">Если знаете ответ, напишите — учтём при '
+                     'сборке программы.</p>')
+        for addr_ids, qs in by_addrs.items():
+            names = []
+            for pid in addr_ids:
+                nm, lk = _person_display(d, pid)
+                safe_lk = _u(lk)
+                names.append(f'<a href="{safe_lk}">{_t(nm)}</a>' if safe_lk else _t(nm))
+            head = " и ".join(names)
+            lis = "".join(f"<li>{_t(q)}</li>" for q in qs)
+            parts.append(f'<div class="q-group"><h3>К {head}</h3>'
+                         f'<ul>{lis}</ul></div>')
+        parts.append("</section>")
+
+    # Signup
+    signup = m.signup if hasattr(m, "signup") else m.get("signup")
+    if signup:
+        s_title = signup.title if hasattr(signup, "title") else signup.get("title", "Записаться")
+        s_note = signup.note if hasattr(signup, "note") else signup.get("note", "")
+        parts.append(f'<section class="signup-wrap"><h2>{_t(s_title)}</h2>')
+        if s_note:
+            parts.append(f'<p>{_t(s_note)}</p>')
+        ev_label = f"{m.title if hasattr(m,'title') else m.get('title','Событие')} {date_str}".strip()
+        parts.append(event_signup_form(
+            slug,
+            ev_label,
+            bio.get("email", "info@example.com"),
+        ))
+        parts.append("</section>")
+
+    # Direct-contact block — public-side, sits after signup.
+    # Schema: contact: {prompt, text, email}. Rendered iff at least one field set.
+    contact = m.contact if hasattr(m, "contact") else m.get("contact")
+    if contact:
+        c_prompt = contact.prompt if hasattr(contact, "prompt") else contact.get("prompt", "")
+        c_text = contact.text if hasattr(contact, "text") else contact.get("text", "")
+        c_email = contact.email if hasattr(contact, "email") else contact.get("email", "")
+        if c_prompt or c_text or c_email:
+            parts.append('<section class="contact"><h2>'
+                         f'{_t(c_prompt or "Связаться")}</h2>')
+            mailto_url = _u(f"mailto:{c_email}") if c_email else ""
+            if c_text:
+                if mailto_url:
+                    parts.append(f'<p>{_t(c_text)} '
+                                 f'<a href="{mailto_url}">{_t(c_email)}</a></p>')
+                else:
+                    parts.append(f'<p>{_t(c_text)}</p>')
+            elif mailto_url:
+                parts.append(f'<p><a href="{mailto_url}">{_t(c_email)}</a></p>')
+            parts.append("</section>")
+
+    # About organizers — graph-resolved from co_organizers list.
+    # Plural «Организаторы» when ≥2 (project_natalia_equal_organizer:
+    # paritetary). Auto-pulls each person's bio from people graph;
+    # falls back to event.about_organizer (legacy single-organizer).
+    co_ids = (m.co_organizers if hasattr(m, "co_organizers")
+              else (m.get("co_organizers") or []))
+    organizer_paragraphs: list[str] = []
+    for pid in co_ids:
+        person = (d.get("people") or {}).get(pid) or {}
+        nm = person.get("name") or pid
+        person_bio = person.get("bio") or ""
+        if person_bio:
+            organizer_paragraphs.append(
+                f"<p><strong>{_t(nm)}</strong> — {_t(person_bio)}.</p>"
+            )
+    about = m.about_organizer if hasattr(m, "about_organizer") else m.get("about_organizer")
+    a_link_url = ""
+    a_link_text = ""
+    if about:
+        a_link_url = about.link_url if hasattr(about, "link_url") else about.get("link_url", "")
+        a_link_text = about.link_text if hasattr(about, "link_text") else about.get("link_text", "")
+    if organizer_paragraphs:
+        title = "Об Организаторах" if len(co_ids) > 1 else "Об Организаторе"
+        link_html = ""
+        safe_link = _u(a_link_url)
+        if safe_link:
+            link_html = (f'<p class="org-link"><a href="{safe_link}">'
+                         f'{_t(a_link_text or a_link_url)}</a></p>')
+        parts.append(f'<footer class="about-organizer"><h2>{title}</h2>'
+                     f'{"".join(organizer_paragraphs)}{link_html}</footer>')
+    elif about:
+        # Legacy fallback for events without co_organizers ↔ people-bio graph
+        a_text = about.text if hasattr(about, "text") else about.get("text", "")
+        if a_text:
+            link_html = ""
+            safe_link = _u(a_link_url)
+            if safe_link:
+                link_html = (f'<br><a href="{safe_link}">'
+                             f'{_t(a_link_text or a_link_url)}</a>')
+            parts.append('<footer class="about-organizer">'
+                         f'<h2>Об Организаторе</h2><p>{_t(a_text)}{link_html}</p></footer>')
+
+    body = f'  <article class="article-wrapper">{"".join(parts)}</article>'
+
+    lead_text = m.lead if hasattr(m, "lead") else m.get("lead", "")
+    return _layout(
+        d,
+        title=title_full,
+        description=(lead_text or m.concept if hasattr(m, "concept") else m.get("concept", title_full))[:160],
+        body=body,
+        nav=True,
+        canonical=_event_canonical(d, ev),
+        structured=_event_jsonld(d, ev),
+        # Owner-portrait footer belongs to owner-site (olgarozet.ru) only —
+        # admin directive 2026-05-02. Event landings render their own
+        # contact/about-organizer block; no shared portrait/social-icons.
+        footer=False,
     )
 
 

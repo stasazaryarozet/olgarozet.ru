@@ -1,0 +1,7 @@
+{
+  "kind": "signup",
+  "slug": "serbia_2027",
+  "transport_url": "",
+  "owner_email": "o.g.rozet@gmail.com",
+  "note": "Drop Apps Script URL into transport_url to upgrade from mailto fallback."
+}

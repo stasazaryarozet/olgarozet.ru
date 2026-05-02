@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Сербия · в следующем году</title>
+<meta name="description" content="Программа 2027 года в Сербии — для архитекторов, дизайнеров, декораторов и художников. Лекция и мастер-класс на семейной викендице и в EKATA Estate (Вршац).">
+<link rel="canonical" href="https://olgarozet.ru/serbia_2027/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Сербия · в следующем году">
+<meta property="og:description" content="Программа 2027 года в Сербии — для архитекторов, дизайнеров, декораторов и художников. Лекция и мастер-класс на семейной викендице и в EKATA Estate (Вршац).">
+<meta property="og:url" content="https://olgarozet.ru/serbia_2027/">
+<meta property="og:image" content="https://olgarozet.ru/olga_footer.png">
+<meta property="og:locale" content="ru_RU">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Сербия · в следующем году">
+<meta name="twitter:description" content="Программа 2027 года в Сербии — для архитекторов, дизайнеров, декораторов и художников. Лекция и мастер-класс на семейной викендице и в EKATA Estate (Вршац).">
+<meta name="twitter:image" content="https://olgarozet.ru/olga_footer.png">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
+<script>
+// Solar-driven day/night theme. Closed-form Michalsky 1988 altitude.
+// Longitude ≈ -tzOffset/4 (15°/h). Latitude default 55° (Moscow-typical
+// for primary RU/EU audience; sunset ~30 min later than the previous
+// lat=45 default). Threshold alt > -0.1 rad (≈ -5.7°) keeps the page in
+// 'day' through civil twilight — admin observed «ещё относительно светло»
+// in Moscow while the site had flipped to night.
+// Re-evaluates every 5 min so a long session flips at sunrise/sunset.
+(function(){
+  function setTheme(){
+    var r=Math.PI/180, now=new Date();
+    var J=now.valueOf()/86400000 + 2440587.5 - 2451545.0;
+    var L=(280.460+0.9856474*J)%360;
+    var g=((357.528+0.9856003*J)%360)*r;
+    var lam=(L+1.915*Math.sin(g)+0.020*Math.sin(2*g))*r;
+    var eps=(23.439-4e-7*J)*r;
+    var dec=Math.asin(Math.sin(eps)*Math.sin(lam));
+    var ra=Math.atan2(Math.cos(eps)*Math.sin(lam), Math.cos(lam));
+    var lon=-now.getTimezoneOffset()/4, lat=55;
+    var gmst=(18.697374558+24.06570982441908*J)*15;
+    var H=((gmst+lon)%360)*r - ra;
+    var alt=Math.asin(Math.sin(lat*r)*Math.sin(dec)+Math.cos(lat*r)*Math.cos(dec)*Math.cos(H));
+    document.documentElement.setAttribute('data-theme', alt > -0.1 ? 'day' : 'night');
+  }
+  setTheme();
+  setInterval(setTheme, 300000);
+})();
+</script>
+<link rel="stylesheet" href="/styles.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Event", "name": "Сербия в следующем году", "description": "", "startDate": "2027", "url": "https://olgarozet.ru/serbia_2027/", "eventStatus": "https://schema.org/EventPlanned", "location": [{"@type": "Place", "name": "Сербия", "addressCountry": "RS"}, {"@type": "Place", "name": "Вршац", "addressCountry": "RS"}], "organizer": [{"@type": "Person", "name": "Ольга Розет"}], "audience": {"@type": "Audience", "audienceType": "архитекторы, дизайнеры, декораторы, художники"}}</script>
+
+</head>
+<body>
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+<nav class="nav-fade"><a href="/" aria-label="На главную">←</a></nav>
+<main id="main" role="main">
+  <article class="article-wrapper"><header><h1>Сербия · в следующем году</h1><time datetime="2027" class="visually-hidden">в следующем году</time><p class="lead"><em>Программа 2027 года в Сербии — для архитекторов, дизайнеров, декораторов и художников. Лекция и мастер-класс на семейной викендице и в EKATA Estate (Вршац).</em></p><p class="organizers">Ольга Розет — Организаторы.</p></header><section><h2>Аудитория</h2><p>Программа собрана для четырёх профессиональных контуров.</p><ul><li>архитекторы</li><li>дизайнеры</li><li>декораторы</li><li>художники</li></ul></section><section><h2>Формат</h2><ul><li><strong>Лекция</strong> — авторский доклад Ольги</li><li><strong>Мастер-класс</strong> — практическая часть</li><li><strong>Площадки:</strong> Семейная Викендица Розет и EKATA Estate (Вршац, Сербия)</li></ul></section><section><h2>Что уточняется</h2><p>Программа собирается. Детали — по мере готовности.</p><ul><li>точные даты</li><li>стоимость и пакет</li><li>размещение участников</li><li>темы лекции и мастер-класса</li></ul></section><section class="terms"><h2>Условия и сроки</h2><ul><li><strong>Язык:</strong> программа на русском. С партнёрами и музеями по необходимости — наш перевод.</li><li><strong>Доступность:</strong> минимум 1 место — бесплатно по запросу. Возможна скидка по запросу. Пишите на <a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a>.</li></ul></section><section class="open-questions"><h2>Вопросы</h2><p class="qnote">Если знаете ответ, напишите — учтём при сборке программы.</p><div class="q-group"><h3>К Ольга Розет</h3><ul><li>Точные даты в 2027 году — когда фиксируем?</li><li>Тема лекции и мастер-класса?</li></ul></div></section><section class="signup-wrap"><h2>Записаться в лист ожидания</h2><p>Оставьте email — пришлю программу первой при готовности. Без обязательств.</p><section id="signup" class="signup" aria-labelledby="signup-h">
+  <h3 id="signup-h" class="signup-h3">Оставить email</h3>
+  <p>Пришлём финальную программу первыми. Без спама, без рассылки —
+     адресное сообщение с датами, ценой и форматом.</p>
+  <form id="signup-form" class="signup-form" novalidate
+        action="mailto:o.g.rozet@gmail.com?subject=%D0%97%D0%B0%D1%8F%D0%B2%D0%BA%D0%B0%3A%20%D0%A1%D0%B5%D1%80%D0%B1%D0%B8%D1%8F%20%D0%B2%20%D1%81%D0%BB%D0%B5%D0%B4%D1%83%D1%8E%D1%89%D0%B5%D0%BC%20%D0%B3%D0%BE%D0%B4%D1%83&amp;body=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%2C%20%D0%9E%D0%BB%D1%8C%D0%B3%D0%B0.%0A%0A%D0%9E%D1%81%D1%82%D0%B0%D0%B2%D0%BB%D1%8F%D1%8E%20%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%20%E2%80%94%20%D0%A1%D0%B5%D1%80%D0%B1%D0%B8%D1%8F%20%D0%B2%20%D1%81%D0%BB%D0%B5%D0%B4%D1%83%D1%8E%D1%89%D0%B5%D0%BC%20%D0%B3%D0%BE%D0%B4%D1%83.%0A%0A%D0%98%D0%BC%D1%8F:%20%0A%20Email:%20%0A%D0%9E%20%D1%81%D0%B5%D0%B1%D0%B5%20(%D1%81%D1%84%D0%B5%D1%80%D0%B0%2C%20%D0%B3%D0%BE%D1%80%D0%BE%D0%B4):%20%0A"
+        method="post" enctype="text/plain"
+        data-slug="serbia_2027">
+    <label class="signup-label" for="su-name">Имя</label>
+    <input class="signup-input" id="su-name" name="name"
+           autocomplete="name" required minlength="2" aria-required="true">
+    <label class="signup-label" for="su-email">Email</label>
+    <input class="signup-input" id="su-email" name="email" type="email"
+           autocomplete="email" required aria-required="true">
+    <label class="signup-label" for="su-note">Коротко о себе
+      <span class="signup-hint">(сфера, город — опционально)</span></label>
+    <input class="signup-input" id="su-note" name="note" autocomplete="off">
+    <label class="signup-consent">
+      <input type="checkbox" id="su-consent" name="consent" required
+             aria-required="true">
+      <span>Согласен(-на) на обработку персональных данных для ответа по программе.</span>
+    </label>
+    <button class="signup-btn" type="submit" id="su-btn">Оставить email</button>
+  </form>
+  <div class="signup-msg" id="signup-msg" role="status" aria-live="polite"></div>
+  <noscript><p class="signup-note">Или напишите: <a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p></noscript>
+<script>
+(function(){
+  var f=document.getElementById("signup-form");
+  if(!f) return;
+  var btn=document.getElementById("su-btn");
+  var msg=document.getElementById("signup-msg");
+  var transport=null;
+  fetch("/serbia_2027/signup.json").then(function(r){return r.ok?r.json():null})
+    .then(function(d){if(d&&d.transport_url)transport=d.transport_url;})
+    .catch(function(){});
+  f.addEventListener("submit",function(e){
+    var name=f.name.value.trim(),email=f.email.value.trim();
+    var note=f.note.value.trim(),consent=f.consent.checked;
+    if(name.length<2){e.preventDefault();f.name.focus();return;}
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){e.preventDefault();f.email.focus();return;}
+    if(!consent){e.preventDefault();f.consent.focus();return;}
+    if(!transport)return; // mailto: handles it
+    e.preventDefault();
+    btn.disabled=true;btn.textContent="отправка...";
+    var data=new URLSearchParams();
+    data.append("name",name);data.append("email",email);
+    data.append("note",note);data.append("consent","true");
+    fetch(transport,{method:"POST",
+      headers:{"Content-Type":"application/x-www-form-urlencoded"},
+      body:data.toString()})
+      .then(function(r){return r.json()})
+      .then(function(d){
+        if(d&&d.ok){f.style.display="none";
+          msg.innerHTML="<b>Заявка принята.</b> Свяжемся лично.";
+        }else{msg.textContent="Ошибка. Попробуйте ещё раз или напишите на o.g.rozet@gmail.com.";
+          btn.disabled=false;btn.textContent="Оставить email";}
+      })
+      .catch(function(){msg.textContent="Ошибка сети. Email ниже работает без формы.";
+        btn.disabled=false;btn.textContent="Оставить email";});
+  });
+})();
+</script>
+</section></section><footer class="about-organizer"><h2>Об Организаторе</h2><p><strong>Ольга Розет</strong> — художник, искусствовед, дизайнер интерьеров.</p><p class="org-link"><a href="https://olgarozet.ru/">olgarozet.ru</a></p></footer></article>
+</main>
+
+</body>
+</html>
