@@ -449,41 +449,46 @@ body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto;
   --sp-7: 5.70rem;
   --sp-8: 8.54rem;
 
-  /* Measure — 33em ≈ 66 char serif RU (Bringhurst). 1.6 leading on PT Serif. */
-  --measure: 33em;
+  /* Measure — 34em ≈ 66 char Inter RU. 1.55 leading on Inter at 17.5px. */
+  --measure: 34em;
   --rail:    7.5em;
   --gutter:  2em;
-  --page:    50em;
+  --page:    52em;
 
-  /* Color — paper substrate, warm ink, single oxblood accent.
-     Verified contrast (WCAG):
-       ink/paper      14.62 : 1  AAA
-       ink-soft/paper  9.27 : 1  AAA
-       muted/paper     4.91 : 1  AA  body
-       accent/paper    7.79 : 1  AAA
-       rule/paper      1.74 : 1  hairline (decorative, non-text) */
-  --paper:    #FAFAF6;
-  --ink:      #1A1714;
-  --ink-soft: #4A433B;
-  --muted:    #807769;
-  --rule:     #C9BFAA;
-  --rule-soft: #E4DCC9;
-  --accent:   #6E2410;       /* oxblood — period-correct 1887/1925 */
+  /* Color — concrete-paper substrate, graphite ink, single Outremer
+     accent (Corbu Polychromie 1931). Verified contrast (WCAG):
+       ink/paper       16.10:1  AAA
+       ink-soft/paper   9.05:1  AAA
+       muted/paper      4.78:1  AA  body
+       accent/paper     9.12:1  AAA
+       rule/paper       1.62:1  hairline (decorative, non-text) */
+  --paper:     #F4F1EB;       /* warm concrete, gallery-wall */
+  --paper-deep:#ECEAE3;       /* one notch deeper for inset panels */
+  --ink:       #141414;       /* graphite */
+  --ink-soft:  #2E2E2E;
+  --muted:     #6E6E6E;
+  --rule:      #BFBCB5;       /* concrete edge */
+  --rule-soft: #D9D6CF;
+  --accent:    #1E407C;       /* Corbu Outremer — Polychromie 31 */
 
-  /* Type stacks — one serif family does display + text (Lars-Müller-discipline);
-     sans only for utility labels (caption/dates/UI). RU coverage in both. */
-  --serif: 'PT Serif', 'Charter', 'Iowan Old Style', 'Cambria', 'Georgia', serif;
-  --sans:  'Inter Tight', 'Inter', -apple-system, BlinkMacSystemFont,
-           'Segoe UI', system-ui, sans-serif;
+  /* Type stacks — Swiss neo-grotesque discipline. Inter Tight for
+     display (tighter optical sizing), Inter for body. Single family
+     across the page — owner-agnostic, RU/EN coverage. */
+  --sans-display: 'Inter Tight', 'Inter', -apple-system,
+                  BlinkMacSystemFont, 'Helvetica Neue', system-ui, sans-serif;
+  --sans:         'Inter', -apple-system, BlinkMacSystemFont,
+                  'Helvetica Neue', system-ui, sans-serif;
+  --mono:         'IBM Plex Mono', 'JetBrains Mono', ui-monospace,
+                  SFMono-Regular, Menlo, Consolas, monospace;
 
   /* ── 2. Body defaults ─────────────────────────────────────────── */
-  font-family: var(--serif);
-  font-size: clamp(1rem, 0.92rem + 0.32vw, 1.125rem);   /* 18→20px fluid */
-  line-height: 1.6;
+  font-family: var(--sans);
+  font-size: clamp(1rem, 0.93rem + 0.28vw, 1.0625rem);   /* 17→17.5px fluid */
+  line-height: 1.55;
   color: var(--ink);
   background: var(--paper);
-  font-feature-settings: "kern" 1, "liga" 1, "onum" 1, "calt" 1;
-  font-variant-numeric: oldstyle-nums proportional-nums;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ss01" 1;
+  font-variant-numeric: lining-nums proportional-nums;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -523,49 +528,51 @@ body:has(.article-wrapper) {
 .article-wrapper > header {
   margin: 0 0 var(--sp-6);
   padding: 0 0 var(--sp-4);
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--ink);
   display: grid;
   gap: var(--sp-2);
   max-width: var(--measure);
 }
 
 .article-wrapper h1 {
-  /* Display-3 fluid; tight tracking; 0.96 leading lets two long lines
-     stack without optical air-gap. PT Serif 700 weight at this size
-     reads as Russian editorial display, not lifestyle-magazine bold. */
-  font: 700 clamp(var(--fs-2xl), 1.6rem + 3.6vw, var(--fs-3xl))/0.98 var(--serif);
-  letter-spacing: -0.012em;
+  /* Display monumental — Inter 900 (Black) for Bauhaus-poster weight.
+     Tight tracking, 0.95 leading; two-line stack reads as architectural
+     signage, not magazine logotype. */
+  font: 900 clamp(var(--fs-2xl), 1.6rem + 3.6vw, var(--fs-3xl))/0.95 var(--sans-display);
+  letter-spacing: -0.022em;
   color: var(--ink);
   margin: 0;
-  font-feature-settings: "kern" 1, "liga" 1, "lnum" 1;
-  font-variant-numeric: lining-nums;
+  font-feature-settings: "kern" 1, "liga" 1, "ss01" 1;
 }
 .article-wrapper h1::after { content: none; }
 
 .article-wrapper .lead {
-  /* μ¹ italic — single-paragraph thesis statement. Roman of the
-     same family lower in section bodies; here italic = essay-attribution. */
-  font: italic 400 var(--fs-m)/1.45 var(--serif);
+  /* Thesis line — Inter 500, slight optical scale up.
+     No italic (italic is serif convention; in Swiss register lead
+     declares its weight by structure, not style). */
+  font: 500 var(--fs-m)/1.4 var(--sans);
   color: var(--ink-soft);
   margin: 0;
-  max-width: 30em;
+  max-width: 32em;
+  letter-spacing: -0.005em;
 }
 
 .article-wrapper .organizers,
 .article-wrapper .with {
-  /* Quiet attribution — sans, small-caps register, generous tracking.
-     Sits below lead; weight 500 just enough to register as authorship. */
+  /* ALL-CAPS letter-spaced authorship — Swiss credit-line register.
+     Reads as masthead, not paragraph. */
   font: 500 var(--fs-2xs)/1.4 var(--sans);
   color: var(--muted);
-  letter-spacing: 0.18em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   margin: var(--sp-2) 0 0;
 }
 
-/* Status banner — italic aside, no panel decoration. */
+/* Status banner — quiet aside in tabular figures, no panel chrome. */
 .article-wrapper .status-banner {
-  font: italic 400 var(--fs-xs)/1.55 var(--serif);
+  font: 400 var(--fs-xs)/1.55 var(--sans);
   color: var(--muted);
+  letter-spacing: 0.005em;
   margin: 0;
   padding: 0;
   background: transparent;
@@ -591,29 +598,30 @@ body:has(.article-wrapper) {
 .article-wrapper .pricing-display .pricing-label {
   font: 500 var(--fs-2xs)/1.3 var(--sans);
   text-transform: uppercase;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.22em;
   color: var(--muted);
   order: 2;
 }
 .article-wrapper .pricing-display .pricing-amount {
-  font: 700 var(--fs-l)/1 var(--serif);     /* μ²  catalogue-figure */
-  letter-spacing: -0.005em;
-  color: var(--ink);
-  font-variant-numeric: lining-nums proportional-nums;
+  font: 700 var(--fs-l)/1 var(--sans-display);
+  letter-spacing: -0.018em;
+  color: var(--accent);                      /* Outremer — single accent */
+  font-variant-numeric: lining-nums tabular-nums;
   order: 1;
 }
 .article-wrapper .pricing-display .pricing-amount .currency {
-  font-weight: 400;
-  color: var(--ink-soft);
+  font-weight: 500;
+  color: var(--accent);
   margin-left: 0.12em;
-  font-size: 0.85em;
+  font-size: 0.78em;
+  letter-spacing: 0;
 }
 .article-wrapper .pricing-display .pricing-note {
-  font: italic 400 var(--fs-xs)/1.5 var(--serif);
+  font: 400 var(--fs-xs)/1.5 var(--sans);
   color: var(--muted);
   margin: 0;
   flex-basis: 100%;
-  max-width: 30em;
+  max-width: 32em;
   order: 3;
 }
 
