@@ -625,100 +625,83 @@ body:has(.article-wrapper) {
   order: 3;
 }
 
-/* ── 5. Sections — essay rhythm, Roman numeral in margin rail ────────── */
+/* ── 5. Sections — Swiss grid rhythm, hairline boundaries ─────────── */
 
 .article-wrapper { counter-reset: secctr dayctr; }
 
 .article-wrapper > section {
   counter-increment: secctr;
-  margin: var(--sp-6) 0 0;
-  padding: 0;
+  margin: var(--sp-5) 0 0;
+  padding-top: var(--sp-5);
   border: none;
+  border-top: 1px solid var(--rule);             /* hairline = floor plan rule */
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--sp-2);
   max-width: var(--measure);
 }
+.article-wrapper > section:first-of-type { border-top: none; padding-top: 0; }
 
-/* Wide screens: Roman numeral rail — small, italic, hangs left of body.
-   Section heads sit in the same grid as the body; numeral pulls into the
-   margin via a negative inline-start margin on the heading. */
+/* Wide screens: arabic numeral in left rail — Müller-Brockmann grid.
+   Two-digit zero-padded (01, 02…) — catalogue figure, not display. */
 @media (min-width: 880px) {
   .article-wrapper > section h2 {
-    /* h2 occupies body column; ::before pulls Roman into the rail. */
     position: relative;
   }
   .article-wrapper > section h2::before {
     position: absolute;
     right: calc(100% + var(--gutter));
-    top: 0.18em;
+    top: 0.32em;
     width: var(--rail);
     text-align: right;
   }
 }
 
 .article-wrapper > section > h2 {
-  font: 500 var(--fs-l)/1.2 var(--serif);     /* μ²  display-section-head */
+  font: 700 var(--fs-l)/1.2 var(--sans-display);   /* μ² Inter Bold */
   margin: 0 0 var(--sp-3);
   color: var(--ink);
-  letter-spacing: -0.005em;
+  letter-spacing: -0.018em;
   text-transform: none;
 }
 .article-wrapper > section > h2::before {
-  content: counter(secctr, upper-roman);
-  font: italic 400 var(--fs-xs)/1.2 var(--serif);
+  content: counter(secctr, decimal-leading-zero);
+  font: 500 var(--fs-2xs)/1.2 var(--mono);
+  font-variant-numeric: tabular-nums;
   color: var(--muted);
-  letter-spacing: 0.04em;
-  margin-right: 0.6em;
+  letter-spacing: 0.05em;
+  margin-right: 0.7em;
 }
 
 .article-wrapper section h3 {
-  font: 700 var(--fs-m)/1.3 var(--serif);     /* μ¹  sub-head */
+  font: 500 var(--fs-m)/1.3 var(--sans-display);
   margin: var(--sp-3) 0 var(--sp-1);
   color: var(--ink);
-  letter-spacing: -0.003em;
+  letter-spacing: -0.012em;
 }
 
 .article-wrapper section p {
   margin: 0 0 var(--sp-3);
-  line-height: 1.65;
+  line-height: 1.6;
   color: var(--ink);
 }
 .article-wrapper section p:last-child { margin-bottom: 0; }
 
-/* ── 6. Drop cap — opening section signature, classical-editorial.
-   `initial-letter` for browsers that support it (Safari);
-   float-fallback for everywhere else. PT Serif 700 in oxblood. */
-
-@media (min-width: 700px) {
-  .article-wrapper > section:first-of-type > p:first-of-type::first-letter,
-  .article-wrapper > section.programme + section > p:first-of-type::first-letter {
-    initial-letter: 3 2;
-    -webkit-initial-letter: 3 2;
-    font-family: var(--serif);
-    font-weight: 700;
-    color: var(--accent);
-    margin-right: 0.14em;
-    line-height: 1;
-  }
-  @supports not (initial-letter: 3 2) {
-    .article-wrapper > section:first-of-type > p:first-of-type::first-letter,
-    .article-wrapper > section.programme + section > p:first-of-type::first-letter {
-      float: left;
-      font: 700 4em/0.88 var(--serif);
-      color: var(--accent);
-      padding: 0.04em 0.12em 0 0;
-      margin: 0.05em 0.04em 0 0;
-    }
-  }
+/* Opening-section first paragraph — small optical lift, no drop cap.
+   In Swiss register, the GRID is the ornament; letterforms stay calm. */
+.article-wrapper > section:first-of-type > p:first-of-type {
+  font-size: var(--fs-m);
+  line-height: 1.5;
+  color: var(--ink);
 }
 
-/* ── 7. Programme — catalogue-entry days. Margin numerals, NOT hero.
-   Each day = one catalogue entry: lining figure (small, in rail),
-   ALL-CAPS date label, italic theme, body notes. Hairline rules between. */
+/* ── 7. Programme — chart of days. Hairline-divided entries, lining
+   figure in rail, ALL-CAPS date label, neo-grotesque theme, calm body.
+   Each day reads as a floor in a section drawing. */
 
 .article-wrapper > section.programme {
-  margin-top: var(--sp-7);
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-5);
   max-width: var(--page);   /* programme breaks the measure-narrow */
 }
 
@@ -734,23 +717,22 @@ body:has(.article-wrapper) {
 .article-wrapper .days > li {
   counter-increment: dayctr;
   display: grid;
-  grid-template-columns: 3.2em 1fr;
+  grid-template-columns: 3.4em 1fr;
   column-gap: var(--gutter);
   padding: var(--sp-4) 0;
-  border-top: 1px solid var(--rule-soft);
+  border-top: 1px solid var(--rule);
   align-items: baseline;
 }
-.article-wrapper .days > li:first-child { border-top: 1px solid var(--rule); }
 .article-wrapper .days > li:last-child  { border-bottom: 1px solid var(--rule); }
 
-/* Day numeral — lining figure, μ¹ size. Catalogue-restraint, not display.
-   Sits in own column at top-baseline; same scale as the body sub-heads. */
+/* Day numeral — Inter Tight 700, lining/tabular. Catalogue figure
+   in rail, weight signals primary — not ornament. */
 .article-wrapper .days > li::before {
   content: counter(dayctr, decimal-leading-zero);
-  font: 400 var(--fs-m)/1 var(--serif);
+  font: 700 var(--fs-m)/1 var(--sans-display);
   font-variant-numeric: lining-nums tabular-nums;
-  color: var(--muted);
-  letter-spacing: 0.01em;
+  color: var(--accent);
+  letter-spacing: -0.01em;
   align-self: start;
   padding-top: 0.18em;
 }
@@ -764,20 +746,21 @@ body:has(.article-wrapper) {
   grid-column: 2;
 }
 .article-wrapper .days .day-theme {
-  font: italic 400 var(--fs-m)/1.32 var(--serif);   /* italic = essay-thesis */
+  font: 700 var(--fs-m)/1.28 var(--sans-display);
   color: var(--ink);
   margin: 0 0 var(--sp-2);
-  letter-spacing: 0;
+  letter-spacing: -0.018em;
   grid-column: 2;
 }
 .article-wrapper .days .day-notes {
-  margin: 0;
+  margin: 0 0 var(--sp-2);
   color: var(--ink-soft);
   font-size: var(--fs-s);
-  line-height: 1.65;
+  line-height: 1.6;
   grid-column: 2;
   max-width: var(--measure);
 }
+.article-wrapper .days .day-notes:last-child { margin-bottom: 0; }
 
 @media (max-width: 700px) {
   .article-wrapper .days > li {
@@ -794,29 +777,30 @@ body:has(.article-wrapper) {
   .article-wrapper .days .day-notes { grid-column: 1; }
 }
 
-/* ── 8. Definition list (concept pairs) — editorial term/definition ── */
+/* ── 8. Definition list (concept pairs) — Swiss term/definition ── */
 
 .article-wrapper dl.pairs {
   margin: var(--sp-3) 0;
   display: grid;
-  gap: var(--sp-3);
+  gap: var(--sp-4);
 }
 .article-wrapper dl.pairs dt {
-  font: italic 700 var(--fs-m)/1.3 var(--serif);
+  font: 700 var(--fs-m)/1.3 var(--sans-display);
   color: var(--ink);
   margin: 0 0 var(--sp-1);
-  letter-spacing: 0;
+  letter-spacing: -0.012em;
 }
-.article-wrapper dl.pairs dt::after {
-  content: "";
-  display: block;
-  width: 1.6em;
-  margin-top: var(--sp-1);
-  border-top: 1px solid var(--rule);
+.article-wrapper dl.pairs dt::before {
+  content: "→";
+  color: var(--accent);
+  margin-right: 0.45em;
+  font-weight: 500;
+  letter-spacing: 0;
 }
 .article-wrapper dl.pairs dd {
   margin: 0;
-  line-height: 1.65;
+  line-height: 1.6;
+  color: var(--ink-soft);
   max-width: var(--measure);
 }
 
