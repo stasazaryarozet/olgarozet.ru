@@ -804,7 +804,7 @@ body:has(.article-wrapper) {
   max-width: var(--measure);
 }
 
-/* ── 9. Lists — dash-bullet, magazine register ─────────────────────── */
+/* ── 9. Lists — chart bullets, parallel rhythm ─────────────────────── */
 
 .article-wrapper section ul {
   list-style: none;
@@ -813,46 +813,52 @@ body:has(.article-wrapper) {
 }
 .article-wrapper section ul li {
   margin: var(--sp-2) 0;
-  padding-left: 1.2em;
+  padding-left: 1.4em;
   position: relative;
-  line-height: 1.65;
+  line-height: 1.55;
+  color: var(--ink-soft);
 }
 .article-wrapper section ul li::before {
-  content: "—";
+  content: "·";
   position: absolute;
-  left: 0;
-  color: var(--muted);
-  font-weight: 400;
+  left: 0.4em;
+  top: -0.05em;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1.4em;
 }
 
-/* ── 10. Links — single rule, accent on hover/focus ─────────────────── */
+/* ── 10. Links — under-rule, focus-detected, accent on hover ────────── */
 
 .article-wrapper a {
   color: var(--ink);
   text-decoration: none;
-  border-bottom: 1px solid var(--rule);
-  transition: border-color 200ms ease, color 200ms ease;
+  border-bottom: 1px solid var(--ink-soft);
+  transition: border-color 180ms ease, color 180ms ease,
+              background-color 180ms ease;
+  padding: 0 0.04em;
 }
 .article-wrapper a:hover {
-  color: var(--accent);
+  color: var(--paper);
+  background-color: var(--accent);
   border-bottom-color: var(--accent);
 }
 .article-wrapper a:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-bottom-color: transparent;
-  border-radius: 2px;
+  border-radius: 1px;
 }
 
-/* ── 11. Signup — editorial offer, not snare-button ─────────────────── */
+/* ── 11. Signup — editorial offer, Swiss form rigor ─────────────────── */
 
 .article-wrapper section.signup-wrap {
   margin-top: var(--sp-6);
-  padding-top: var(--sp-4);
-  border-top: 1px solid var(--rule);
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--ink);
 }
 .article-wrapper section.signup-wrap > p {
-  font: italic 400 var(--fs-s)/1.6 var(--serif);
+  font: 400 var(--fs-s)/1.55 var(--sans);
   color: var(--muted);
   margin: 0 0 var(--sp-3);
 }
@@ -870,28 +876,27 @@ body:has(.article-wrapper) {
 .article-wrapper .signup-label {
   font: 400 var(--fs-xs)/1.3 var(--sans);
   color: var(--muted);
+  letter-spacing: 0.04em;
 }
-.article-wrapper .signup-hint {
-  font-style: italic;
-  opacity: 0.75;
-}
+.article-wrapper .signup-hint { opacity: 0.75; }
 .article-wrapper .signup-input {
   width: 100%;
   padding: 0.55em 0;
-  font: 400 var(--fs-s)/1.4 var(--serif);
+  font: 400 var(--fs-s)/1.4 var(--sans);
   color: var(--ink);
   background: transparent;
   border: none;
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--ink-soft);
   border-radius: 0;
-  transition: border-color 200ms ease;
+  transition: border-color 180ms ease;
 }
 .article-wrapper .signup-input:focus { outline: none; }
 .article-wrapper .signup-input:focus-visible {
-  border-bottom-color: var(--ink);
+  border-bottom-color: var(--accent);
+  border-bottom-width: 2px;
   outline: 2px solid var(--accent);
   outline-offset: 4px;
-  border-radius: 2px;
+  border-radius: 1px;
 }
 .article-wrapper .signup-consent {
   display: flex;
@@ -900,26 +905,27 @@ body:has(.article-wrapper) {
   font: 400 var(--fs-xs)/1.5 var(--sans);
   color: var(--muted);
 }
-.article-wrapper .signup-consent input { margin-top: 0.25em; }
+.article-wrapper .signup-consent input { margin-top: 0.25em; accent-color: var(--accent); }
 .article-wrapper .signup-btn {
   margin-top: var(--sp-1);
-  padding: 0.7em 1.4em;
-  background: transparent;
-  color: var(--ink);
-  border: 1px solid var(--ink);
-  border-radius: 1px;
-  font: 500 var(--fs-xs)/1 var(--sans);
-  letter-spacing: 0.14em;
+  padding: 0.85em 1.6em;
+  background: var(--accent);
+  color: var(--paper);
+  border: 1px solid var(--accent);
+  border-radius: 0;
+  font: 700 var(--fs-xs)/1 var(--sans-display);
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background 200ms ease, color 200ms ease;
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
   align-self: start;
-  min-height: 44px;        /* touch a11y */
+  min-height: 44px;
 }
 .article-wrapper .signup-btn:hover,
 .article-wrapper .signup-btn:focus-visible {
   background: var(--ink);
   color: var(--paper);
+  border-color: var(--ink);
   outline: none;
 }
 .article-wrapper .signup-btn:focus-visible {
@@ -932,19 +938,19 @@ body:has(.article-wrapper) {
   color: var(--muted);
 }
 
-/* ── 12. Contact section — soft post-signup ─────────────────────────── */
+/* ── 12. Contact section — quiet post-signup ────────────────────────── */
 
-.article-wrapper section.contact { margin-top: var(--sp-5); }
+.article-wrapper section.contact { margin-top: var(--sp-5); padding-top: 0; border-top: none; }
 .article-wrapper section.contact h2 {
-  font: 500 var(--fs-m)/1.4 var(--serif);
+  font: 700 var(--fs-m)/1.4 var(--sans-display);
   text-transform: none;
-  letter-spacing: 0;
+  letter-spacing: -0.012em;
   color: var(--ink);
   margin: 0 0 var(--sp-1);
 }
 .article-wrapper section.contact h2::before { content: none; }
 .article-wrapper section.contact p {
-  font: 400 var(--fs-s)/1.6 var(--serif);
+  font: 400 var(--fs-s)/1.6 var(--sans);
   color: var(--ink-soft);
   margin: 0;
 }
@@ -955,7 +961,7 @@ body:has(.article-wrapper) {
 /* ── 13. About-organizers — colophon, end of article ────────────────── */
 
 .article-wrapper .about-organizer {
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--ink);
   padding-top: var(--sp-4);
   margin-top: var(--sp-7);
   font-size: var(--fs-s);
@@ -965,24 +971,27 @@ body:has(.article-wrapper) {
 .article-wrapper .about-organizer h2 {
   font: 500 var(--fs-2xs)/1.3 var(--sans);
   text-transform: uppercase;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   color: var(--muted);
   margin: 0 0 var(--sp-3);
 }
 .article-wrapper .about-organizer h2::before { content: none; }
 .article-wrapper .about-organizer p {
   margin: 0 0 var(--sp-2);
-  line-height: 1.6;
+  line-height: 1.55;
 }
 .article-wrapper .about-organizer p strong {
   font-weight: 700;
   font-style: normal;
   color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.94em;
 }
 .article-wrapper .about-organizer .org-link {
   margin-top: var(--sp-3);
   font: 500 var(--fs-2xs)/1.3 var(--sans);
-  letter-spacing: 0.18em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
 }
 
