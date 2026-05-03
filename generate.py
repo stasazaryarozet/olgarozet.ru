@@ -1009,7 +1009,7 @@ def p_event_landing(d: dict, ev: dict) -> str:
 
     parts: list[str] = []
 
-    # Header — h1 + lead + co_organizers.
+    # Header — h1 + lead + organizers.
     # Semantic HTML5: emit <time datetime="…"> as visually-hidden a11y/SEO
     # microdata when t_key (ISO yyyy-mm-dd) is present. JSON-LD startDate
     # carries the structured event date in machine-readable form already;
