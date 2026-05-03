@@ -156,7 +156,6 @@ events:
       - { season: "2025-12", venue: cdl, format: offline, occurrences: 2,
           theme: "Человек и Ремесло", price_rub: 5000 }
     lead: "Первая онлайн-встреча серии «Встречи с Ольгой» — продолжение офлайн-встреч в ЦДЛ (декабрь 2025) в новом формате: доклад, диалог, нетворкинг."
-    co_organizers: [olgarozet]
     sections:
       - title: Формат
         intro: Три части одной встречи.
@@ -338,7 +337,6 @@ events:
     history:
       - { season: spring_2026, dates: "26-30 марта", status: CANCELLED }
     lead: "Учебно-деловая стажировка в Узбекистане — Самарканд и Бухара, осень 2026. Получение сертификатов Бухарского Центра Ремёсел и Мастерской «Розет»."
-    co_organizers: [olgarozet, matluba, nasullobek]
     sections:
       - title: Формат
         intro: Учебная, деловая, развлекательная — три измерения одной поездки.
@@ -414,7 +412,6 @@ events:
     registration: { mailto: o.g.rozet@gmail.com, subject: "Программа в Сербию — жду" }
     status: PLANNED
     lead: "Программа 2027 года в Сербии — для архитекторов, дизайнеров, декораторов и художников. Лекция и мастер-класс на семейной викендице и в EKATA Estate (Вршац)."
-    co_organizers: [olgarozet]
     sections:
       - title: Аудитория
         intro: Программа собрана для четырёх профессиональных контуров.
@@ -468,7 +465,6 @@ events:
     registration: null
     status: PLANNING
     lead: "Онлайн-курс «Цена и Ценность» — анонс. Программа собирается."
-    co_organizers: [olgarozet]
     sections:
       - title: Что известно
         items:
