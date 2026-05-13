@@ -1,36 +1,41 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-surface="editorial">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Сербия · в следующем году</title>
-<meta name="description" content="Программа 2027 года в Сербии — для архитекторов, дизайнеров, декораторов и художников. Лекция и мастер-класс на семейной викендице и в EKATA Estate (Вршац).">
+<meta name="description" content="Программа 2027 года в Сербии — для архитекторов, дизайнеров, декораторов и художников. Лекция и мастер-класс на семейной викендице и в EKATA Estate (Вршац).">
 <link rel="canonical" href="https://olgarozet.ru/serbia_2027/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Сербия · в следующем году">
-<meta property="og:description" content="Программа 2027 года в Сербии — для архитекторов, дизайнеров, декораторов и художников. Лекция и мастер-класс на семейной викендице и в EKATA Estate (Вршац).">
+<meta property="og:description" content="Программа 2027 года в Сербии — для архитекторов, дизайнеров, декораторов и художников. Лекция и мастер-класс на семейной викендице и в EKATA Estate (Вршац).">
 <meta property="og:url" content="https://olgarozet.ru/serbia_2027/">
 <meta property="og:image" content="https://olgarozet.ru/olga_footer.png">
 <meta property="og:locale" content="ru_RU">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Сербия · в следующем году">
-<meta name="twitter:description" content="Программа 2027 года в Сербии — для архитекторов, дизайнеров, декораторов и художников. Лекция и мастер-класс на семейной викендице и в EKATA Estate (Вршац).">
+<meta name="twitter:description" content="Программа 2027 года в Сербии — для архитекторов, дизайнеров, декораторов и художников. Лекция и мастер-класс на семейной викендице и в EKATA Estate (Вршац).">
 <meta name="twitter:image" content="https://olgarozet.ru/olga_footer.png">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
+<!-- Inv-WEB-font-preconnect (text/site.md): early DNS+TLS handshake к font CDN.
+     Reduces FCP/LCP by ~100-300ms на TLS-cold connections. -->
+<link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
+<link rel="dns-prefetch" href="https://fonts.bunny.net">
 <script>
-// Solar-driven day/night theme. Closed-form Michalsky 1988 altitude.
-// Longitude ≈ -tzOffset/4 (15°/h). Latitude default 55° (Moscow-typical
-// for primary RU/EU audience; sunset ~30 min later than the previous
-// lat=45 default). Threshold alt > -0.1 rad (≈ -5.7°) keeps the page in
-// 'day' through civil twilight — admin observed «ещё относительно светло»
-// in Moscow while the site had flipped to night.
-// Re-evaluates every 5 min so a long session flips at sunrise/sunset.
+// Day/night theme — user-override-first, then solar-automatic. FOUC-critical:
+// runs synchronously in <head> before paint. Resolution: read dela.theme.v1
+// from localStorage; if ∈ ['day', 'night'] use it (user override) else solar
+// altitude (lat 55.0° / alt-threshold -0.1 rad). Config: solar calc from
+// spec.enforcement_data.Inv-SITE-solar-theme (+ data.yaml.bio.solar_calibration
+// override); attr/key/values from spec.enforcement_data.Inv-IFACE-day-night-mode.
+// No hardcoded constants in code — both Specs are SoT, code falls back gracefully.
 (function(){
-  function setTheme(){
+  var MODE_ATTR="data-theme", MODE_VALUES=["day", "night"], STORAGE_KEY="dela.theme.v1";
+  function solarTheme(){
     var r=Math.PI/180, now=new Date();
     var J=now.valueOf()/86400000 + 2440587.5 - 2451545.0;
     var L=(280.460+0.9856474*J)%360;
@@ -39,29 +44,37 @@
     var eps=(23.439-4e-7*J)*r;
     var dec=Math.asin(Math.sin(eps)*Math.sin(lam));
     var ra=Math.atan2(Math.cos(eps)*Math.sin(lam), Math.cos(lam));
-    var lon=-now.getTimezoneOffset()/4, lat=55;
+    var lon=-now.getTimezoneOffset()/4, lat=55.0;
     var gmst=(18.697374558+24.06570982441908*J)*15;
     var H=((gmst+lon)%360)*r - ra;
     var alt=Math.asin(Math.sin(lat*r)*Math.sin(dec)+Math.cos(lat*r)*Math.cos(dec)*Math.cos(H));
-    document.documentElement.setAttribute('data-theme', alt > -0.1 ? 'day' : 'night');
+    return alt > -0.1 ? 'day' : 'night';
   }
-  setTheme();
-  setInterval(setTheme, 300000);
+  // stored override ∈ MODE_VALUES → use it; else (incl. 'auto', absent, bad) → solar.
+  window.__resolveTheme=function(){
+    var s=null; try{ s=localStorage.getItem(STORAGE_KEY); }catch(e){}
+    return (MODE_VALUES.indexOf(s) !== -1) ? s : solarTheme();
+  };
+  window.__applyTheme=function(){
+    document.documentElement.setAttribute(MODE_ATTR, window.__resolveTheme());
+  };
+  window.__applyTheme();
+  setInterval(window.__applyTheme, 300000);
 })();
 </script>
-<link rel="stylesheet" href="/styles.css?v=3709112e57">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Event", "name": "Сербия в следующем году", "description": "", "startDate": "2027", "url": "https://olgarozet.ru/serbia_2027/", "eventStatus": "https://schema.org/EventPlanned", "location": [{"@type": "Place", "name": "Сербия", "addressCountry": "RS"}, {"@type": "Place", "name": "Вршац", "addressCountry": "RS"}], "organizer": [{"@type": "Person", "name": "Ольга Розет"}], "audience": {"@type": "Audience", "audienceType": "архитекторы, дизайнеры, декораторы, художники"}}</script>
+<link rel="stylesheet" href="/styles.css?v=5581fb1e00">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Event", "name": "Сербия в следующем году", "description": "Программа 2027 года в Сербии — для архитекторов, дизайнеров, декораторов и художников. Лекция и мастер-класс на семейной викендице и в EKATA Estate (Вршац).", "url": "https://olgarozet.ru/serbia_2027/", "eventStatus": "https://schema.org/EventScheduled", "startDate": "2027", "endDate": "2027", "location": [{"@type": "Place", "name": "Сербия", "address": {"@type": "PostalAddress", "addressCountry": "RS"}}, {"@type": "Place", "name": "Вршац", "address": {"@type": "PostalAddress", "addressCountry": "RS"}}], "organizer": [{"@type": "Person", "name": "Ольга Розет"}], "audience": {"@type": "Audience", "audienceType": "архитекторы, дизайнеры, декораторы, художники"}}</script>
 
 </head>
 <body>
-<a class="skip-link" href="#main">Перейти к содержанию</a>
+<a class="skip-link" href="#main">Перейти к содержанию</a>
 <nav class="nav-fade"><a href="/" aria-label="На главную">←</a></nav>
+<button type="button" class="theme-toggle" data-theme-toggle aria-label="Тема: авто (по солнцу) — переключить">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="dela.theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());btn.addEventListener("click",function(){var i=STATES.indexOf(current());var next=STATES[(i+1)%STATES.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
 <main id="main" role="main">
-  <article class="article-wrapper"><header><h1>Сербия · в следующем году</h1><time datetime="2027" class="visually-hidden">в следующем году</time><p class="lead">Программа 2027 года в Сербии — для архитекторов, дизайнеров, декораторов и художников. Лекция и мастер-класс на семейной викендице и в EKATA Estate (Вршац).</p><p class="organizers">Ольга Розет — Организатор.</p></header><section><h2>Аудитория</h2><p>Программа собрана для четырёх профессиональных контуров.</p><ul><li>архитекторы</li><li>дизайнеры</li><li>декораторы</li><li>художники</li></ul></section><section><h2>Формат</h2><ul><li><strong>Лекция</strong> — авторский доклад Ольги</li><li><strong>Мастер-класс</strong> — практическая часть</li><li><strong>Площадки:</strong> Семейная Викендица Розет и EKATA Estate (Вршац, Сербия)</li></ul></section><section><h2>Что уточняется</h2><p>Программа собирается. Детали — по мере готовности.</p><ul><li>точные даты</li><li>стоимость и пакет</li><li>размещение участников</li><li>темы лекции и мастер-класса</li></ul></section><section class="terms"><h2>Условия и сроки</h2><ul><li><strong>Язык:</strong> программа на русском. С партнёрами и музеями по необходимости — наш перевод.</li><li><strong>Доступность:</strong> минимум 1 место — бесплатно по запросу. Возможна скидка по запросу. Пишите на <a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a>.</li></ul></section><section class="open-questions"><h2>Вопросы</h2><p class="qnote">Если знаете ответ, напишите — учтём при сборке программы.</p><div class="q-group"><h3>К Ольга Розет</h3><ul><li>Точные даты в 2027 году — когда фиксируем?</li><li>Тема лекции и мастер-класса?</li></ul></div></section><section class="signup-wrap"><h2>Записаться в лист ожидания</h2><p>Оставьте email — пришлю программу первой при готовности. Без обязательств.</p><section id="signup" class="signup" aria-labelledby="signup-h">
-  <h3 id="signup-h" class="signup-h3">Оставить email</h3>
-  <p>Пришлём финальную программу первыми. Без спама, без рассылки —
-     адресное сообщение с датами, ценой и форматом.</p>
+  <article class="article-wrapper"><header><ul class="cover-line" aria-label="Формат"><li>Дизайн-Путешествие</li><li>Лекция</li><li>По-русски</li></ul><h1>Сербия · в следующем году</h1><time datetime="2027" class="date-stamp">в следующем году</time><p class="lead">Программа 2027 года в Сербии — для архитекторов, дизайнеров, декораторов и художников. Лекция и мастер-класс на семейной викендице и в EKATA Estate (Вршац).</p></header><section><h2>Аудитория</h2><p>Программа собрана для четырёх профессиональных контуров.</p><ul><li>архитекторы</li><li>дизайнеры</li><li>декораторы</li><li>художники</li></ul></section><section><h2>Формат</h2><ul><li><strong>Лекция</strong> — авторский доклад Ольги</li><li><strong>Мастер-класс</strong> — практическая часть</li><li><strong>Площадки:</strong> Семейная Викендица Розет и EKATA Estate (Вршац, Сербия)</li></ul></section><section><h2>Что уточняется</h2><p>Программа собирается. Детали — по мере готовности.</p><ul><li>точные даты</li><li>стоимость и пакет</li><li>размещение участников</li><li>темы лекции и мастер-класса</li></ul></section><section class="onboarding"><h2>Перед поездкой</h2><ul><li>Онлайн-собеседование с Организаторами — короткое, для каждого нового Путешественника: знакомство и обсуждение индивидуальных потребностей.</li><li>Встреча-знакомство-занятие с Ольгой — онлайн обязательно для всех; оффлайн — при возможности, в дополнение.</li></ul></section><section class="terms"><h2>Условия и сроки</h2><ul><li><strong>Оплата:</strong> 50% предоплата при подтверждении участия. Условия по остатку — в финальной программе.</li><li><strong>Язык:</strong> программа на русском. С партнёрами и музеями по необходимости — наш перевод.</li><li><strong>Доступность:</strong> минимум 1 место — бесплатно по запросу. Возможна скидка по запросу. Пишите на <a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a>.</li></ul></section><section class="open-questions"><h2>Вопросы</h2><p class="qnote">Если знаете ответ, напишите — учтём при сборке программы.</p><div class="q-group"><h3>К Ольга Розет</h3><ul><li>Точные даты в 2027 году — когда фиксируем?</li><li>Тема лекции и мастер-класса?</li></ul></div></section><section class="signup-wrap"><h2>Записаться в лист ожидания</h2><p>Оставьте email — пришлю программу первой при готовности. Без обязательств.</p><section id="signup" class="signup" aria-labelledby="signup-h">
+  <h3 id="signup-h" class="signup-h3"></h3>
   <form id="signup-form" class="signup-form" novalidate
+        aria-labelledby="signup-h"
         action="mailto:o.g.rozet@gmail.com?subject=%D0%97%D0%B0%D1%8F%D0%B2%D0%BA%D0%B0%3A%20%D0%A1%D0%B5%D1%80%D0%B1%D0%B8%D1%8F%20%D0%B2%20%D1%81%D0%BB%D0%B5%D0%B4%D1%83%D1%8E%D1%89%D0%B5%D0%BC%20%D0%B3%D0%BE%D0%B4%D1%83&amp;body=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%2C%20%D0%9E%D0%BB%D1%8C%D0%B3%D0%B0.%0A%0A%D0%9E%D1%81%D1%82%D0%B0%D0%B2%D0%BB%D1%8F%D1%8E%20%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%20%E2%80%94%20%D0%A1%D0%B5%D1%80%D0%B1%D0%B8%D1%8F%20%D0%B2%20%D1%81%D0%BB%D0%B5%D0%B4%D1%83%D1%8E%D1%89%D0%B5%D0%BC%20%D0%B3%D0%BE%D0%B4%D1%83.%0A%0A%D0%98%D0%BC%D1%8F:%20%0A%20Email:%20%0A%D0%9E%20%D1%81%D0%B5%D0%B1%D0%B5%20(%D1%81%D1%84%D0%B5%D1%80%D0%B0%2C%20%D0%B3%D0%BE%D1%80%D0%BE%D0%B4):%20%0A"
         method="post" enctype="text/plain"
         data-slug="serbia_2027">
@@ -71,18 +84,19 @@
     <label class="signup-label" for="su-email">Email</label>
     <input class="signup-input" id="su-email" name="email" type="email"
            autocomplete="email" required aria-required="true">
-    <label class="signup-label" for="su-note">Коротко о себе
+    <label class="signup-label" for="su-note">Коротко о себе
       <span class="signup-hint">(сфера, город — опционально)</span></label>
     <input class="signup-input" id="su-note" name="note" autocomplete="off">
-    <label class="signup-consent">
+    <label class="signup-consent" for="su-consent">
       <input type="checkbox" id="su-consent" name="consent" required
-             aria-required="true">
-      <span>Согласен(-на) на обработку персональных данных для ответа по программе.</span>
+             aria-required="true"
+             aria-label="Согласен(-на) на обработку персональных данных для ответа по программе.">
+      <span>Согласен(-на) на обработку персональных данных для ответа по программе.</span>
     </label>
-    <button class="signup-btn" type="submit" id="su-btn">Оставить email</button>
+    <button class="signup-btn" type="submit" id="su-btn"></button>
   </form>
   <div class="signup-msg" id="signup-msg" role="status" aria-live="polite"></div>
-  <noscript><p class="signup-note">Или напишите: <a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p></noscript>
+  <noscript><p class="signup-note">Или напишите: <a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p></noscript>
 <script>
 (function(){
   var f=document.getElementById("signup-form");
@@ -111,17 +125,18 @@
       .then(function(r){return r.json()})
       .then(function(d){
         if(d&&d.ok){f.style.display="none";
-          msg.innerHTML="<b>Заявка принята.</b> Свяжемся лично.";
+          msg.textContent="Заявка принята. Свяжемся лично.";
         }else{msg.textContent="Ошибка. Попробуйте ещё раз или напишите на o.g.rozet@gmail.com.";
-          btn.disabled=false;btn.textContent="Оставить email";}
+          btn.disabled=false;btn.textContent="";}
       })
       .catch(function(){msg.textContent="Ошибка сети. Email ниже работает без формы.";
-        btn.disabled=false;btn.textContent="Оставить email";});
+        btn.disabled=false;btn.textContent="";});
   });
 })();
 </script>
-</section></section><footer class="about-organizer"><h2>Об Организаторе</h2><p>Ольга Розет — художник, искусствовед, дизайнер интерьеров. Design Travels: экспертные дизайн-путешествия (Париж, Узбекистан, Сербия).</p><p class="org-link"><a href="https://olgarozet.ru/">olgarozet.ru</a></p></footer></article>
+</section></section><footer class="about-organizer"><h2>Об Организаторе</h2><div class="org-card"><p class="org-name">Ольга Розет</p><p>художник, искусствовед, дизайнер интерьеров. Design Travels: экспертные дизайн-путешествия (Париж, Узбекистан, Сербия).</p></div><p class="org-link"><a href="https://olgarozet.ru/">olgarozet.ru</a></p></footer><footer class="legal" aria-label="Реквизиты и юридическая информация"><p class="legal-docs"><a href="https://parisinseptember.ru/privacy/">Политика конфиденциальности</a></p><p class="legal-payment">Оплата: карта · СБП · банковский перевод</p></footer></article>
 </main>
 
+<div class="cookie-banner cookie-banner--bottom" role="dialog" aria-labelledby="cookie-h" aria-describedby="cookie-d" data-cookie-banner data-key="dela.cookie.v1" hidden><h2 id="cookie-h" class="visually-hidden">Согласие на cookie</h2><p id="cookie-d" class="cookie-text">Сайт сохраняет cookie для работы формы и аналитики посещений. Подробности — в <a href="https://parisinseptember.ru/privacy/">Политике обработки персональных данных</a>.</p><div class="cookie-actions"><button type="button" class="cookie-accept" data-cookie-accept>Принимаю</button><button type="button" class="cookie-decline" data-cookie-decline>Только необходимые</button></div></div><script src="/cookie-banner.js" defer></script>
 </body>
 </html>

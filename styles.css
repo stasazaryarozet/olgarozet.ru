@@ -1,29 +1,41 @@
-:root {
-    /* Fluid type scale */
-    --font-size-base: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
-    --font-size-h1: clamp(2.5rem, 1.5rem + 5vw, 7rem);
-    --font-size-p: clamp(1rem, 0.95rem + 0.25vw, 1.35rem);
+/* @import block — MUST precede all rule sets per CSS Spec §3.
+   1. Fonts (Inter, Inter Tight — Bauhaus successor display + body).
+   2. Design tokens compiled из Spec layers (Inv-CSS-tokens-from-Spec).
+   Регенерация tokens: python3 scripts/css_compile.py --owner olgarozet */
+@import url("https://fonts.bunny.net/css?family=inter:400,500,700,900|inter-tight:400,500,700&display=swap");
+/* Relative path resolves correctly in BOTH production (site root) AND
+   path-based preview (/<fqdn>/styles.css → /<fqdn>/_tokens.generated.css).
+   Root-absolute "/_tokens.generated.css" works в production но 404'es в
+   path-based preview (admin observation 2026-05-11 «не открывается»). */
+@import url("_tokens.generated.css");
 
-    /* Fluid spacing */
-    --space-section: clamp(3rem, 2rem + 4vw, 6rem);
-    --space-padding: clamp(1.2rem, 1rem + 2vw, 3rem);
-    --space-top: clamp(6rem, 4rem + 12vh, 20vh);
-
-    /* Layout */
-    --max-width: min(50em, 90vw);
-
-    /* Colors (semantic; overridden in :root[data-theme="night"]) */
-    --color-text: #1a1a1a;
-    --color-bg: #fff;
-    --color-accent: #ff0000;
-    --color-emphasis: #ff0000;     /* day: red is emphasis (h1, artist) */
-    --color-muted: #666;
-    --color-border: #ddd;
-    --color-cta-bg: #1a1a1a;       /* day: dark cta on white bg */
-    --color-cta-text: #fff;
-    --color-overlay: rgba(255, 255, 255, 0.95);
-    --color-overlay-solid: rgba(255, 255, 255, 0.98);
+/* Inv-TYPO-font-metric-override (text/typography.md, 2026-05-12): «Inter Fallback»
+   = local Arial с metric-override declarations matching Inter's box-metrics.
+   Effect: while Inter loads (FOIT/FOUT window), text occupies the EXACT same
+   pixel-box as final Inter → CLS = 0 при font-swap (web.dev «Reduce web font CLS»).
+   Values: широко-цитируемые approximate metrics для Inter→Arial fallback (Brian
+   Loubris adjust-tool / Malte Ubl / Capsize seek-oss). Calibrate per-font if
+   precision matters. font-family stack chains: Inter → Inter Fallback → system. */
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial');
+  size-adjust: 107.4%;
+  ascent-override: 90%;
+  descent-override: 22.5%;
+  line-gap-override: 0%;
 }
+
+/* No hand-rolled :root here — every custom property is Spec-derived and lives in
+   _tokens.generated.css (Inv-CSS-tokens-from-Spec; «no hardcode»):
+     · hub fluid scale (--font-size-*, --space-*, --max-width) ← text/site.md
+     · fixed type/spacing ladders (--fs-*, --sp-*), --breakpoint, --touch-min ← text/site.md
+     · typography rhythm (--baseline, --measure, --rail, --lh-*, --tracking-caps) ← text/typography.md
+     · semantic colour palette (--surface*, --ink*, --muted, --rule*, --accent,
+       --emphasis, --cta-*, --overlay*) across hub-day / hub-night / editorial,
+       plus editorial --paris-* — ← knowledge/people/olgarozet/site/_design.yaml +
+       text/site.md / text/event-*.md. Both surface/theme modes redeclare the SAME
+       tokens — no parallel namespaces; WCAG-AA verified per pair.
+   Edit the Spec layer, regenerate: python3 scripts/css_compile.py --owner olgarozet --event paris-2026-09 */
 
 * {
     margin: 0;
@@ -46,12 +58,12 @@ html {
     overscroll-behavior: none;
     /* Root canvas bg — catches UA default #fff leakage in mask-fade zones
        and any uncovered body area. */
-    background: var(--color-bg);
+    background: var(--surface);
 }
 
 /* .footer-content was transparent — mask-fade on .footer-portrait could
    expose html bg through it. Explicit bg closes the gap. */
-.footer-content { background: var(--color-bg); }
+.footer-content { background: var(--surface); }
 
 /* Night-theme portrait swap: dedicated regenerated asset (`portrait_night`),
    not CSS inversion. Day img hidden in night mode and vice-versa. Both stack
@@ -61,8 +73,8 @@ html {
 :root[data-theme="night"] .footer-portrait.night { display: block; }
 
 body {
-    color: var(--color-text);
-    background: var(--color-bg);
+    color: var(--ink);
+    background: var(--surface);
     margin: 0;
     padding: 0;
 }
@@ -78,35 +90,35 @@ h1 {
     font-size: var(--font-size-h1);
     font-weight: 200;
     margin-bottom: 0.6em;
-    letter-spacing: -0.02em;
-    color: var(--color-emphasis);
-    line-height: 1;
+    letter-spacing: var(--tracking-display);
+    color: var(--emphasis);
+    line-height: var(--lh-flush);
 }
 
 h1::after {
     content: ' —';
-    color: var(--color-text);
+    color: var(--ink);
     font-weight: 100;
     font-size: 0.6em;
 }
 
 .artist-highlight {
-    color: var(--color-emphasis);
-    letter-spacing: 0.08em;
+    color: var(--emphasis);
+    letter-spacing: var(--tracking-caps-emphasis);
     font-weight: 600;
 }
 
 .artist-highlight a {
     color: inherit;
     text-decoration: underline;
-    text-decoration-color: var(--color-emphasis);
+    text-decoration-color: var(--emphasis);
     text-underline-offset: 0.15em;
 }
 
 section {
     margin: var(--space-section) 0;
     padding-top: calc(var(--space-section) * 0.7);
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--rule);
 }
 
 section:first-of-type {
@@ -119,14 +131,29 @@ h2 {
     font-size: clamp(0.9rem, 0.85rem + 0.2vw, 1rem);
     font-weight: 500;
     margin-bottom: 0.8em;
-    color: var(--color-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+    color: var(--muted);
 }
 
 p {
     margin: 0.8em 0;
     font-size: var(--font-size-p);
+}
+
+/* Inv-TYPO-text-wrap-pretty (text/typography.md, 2026-05-12): declarative
+   orphan/widow + last-line-balance handling for body prose and headings.
+   Chrome 117+ / Safari 26+ — older browsers fall back to default browser
+   wrap (progressive enhancement; no fallback hazard).
+   Subsumes prior authoring-discipline path of Inv-TYPO-orphan-widow.
+   Rutter R. (2024) «End to widows» — text-wrap: pretty in production. */
+p,
+li,
+h1, h2, h3, h4, h5, h6,
+.lead,
+.day-notes,
+.day-theme,
+.day-date,
+.top-banner {
+  text-wrap: pretty;
 }
 
 .inspire {
@@ -145,26 +172,35 @@ a {
 }
 
 a:hover {
-    border-color: var(--color-text);
+    border-color: var(--ink);
 }
 
 .price {
-    font-size: clamp(0.85rem, 0.8rem + 0.2vw, 1.15rem);
-    color: var(--color-muted);
+    /* Hub-site consultations pricing («15 000 ₽» в p_site). admin 2026-05-12
+       ergonomic re-audit: clamp 0.85rem-1.15rem рендеры 13.6-18.4px — нижняя
+       граница ниже body floor 14px на min viewport. Fix: max() с --fs-body-min
+       (14px floor per text/site.md::design_tokens.fs-body-min). Через token,
+       не literal — Spec-driven floor cascade. */
+    font-size: max(clamp(0.85rem, 0.8rem + 0.2vw, 1.15rem), var(--fs-body-min));
+    color: var(--muted);
 }
 
 .cta {
-    display: inline-block;
+    /* Inv-LDG-design-touch44 — interactive ≥ 44px (WCAG 2.5.5 AAA + Apple HIG).
+       admin 2026-05-12 ergonomic audit: padding alone yielded ~30px height; explicit
+       min-height ensures touch-target regardless of padding clamp at min viewport. */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--touch-min);
     margin-top: 0.5em;
     padding: clamp(0.5em, 0.4em + 0.3vw, 1.2rem) clamp(1em, 0.8em + 0.5vw, 2.5rem);
-    background: var(--color-cta-bg);
-    color: var(--color-cta-text);
+    background: var(--cta-bg);
+    color: var(--cta-text);
     border: none;
     border-radius: 4px;
     font-size: clamp(0.9rem, 0.85rem + 0.2vw, 1.1rem);
     font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
     transition: opacity 0.2s;
 }
 
@@ -185,7 +221,7 @@ a:hover {
 
 .event-details {
     font-size: clamp(0.9rem, 0.85rem + 0.15vw, 1.15rem);
-    color: var(--color-muted);
+    color: var(--muted);
     margin-top: 0.3em;
 }
 
@@ -195,7 +231,7 @@ footer {
     margin-top: calc(var(--space-section) * 2.5);
     padding: 0;
     border: none;
-    background: var(--color-bg);
+    background: var(--surface);
 }
 
 .footer-content {
@@ -267,17 +303,20 @@ footer {
 }
 
 .scroll-top {
+    /* Inv-LDG-design-touch44 — scroll-to-top tappable ≥ 44px guarantee.
+       Padding 2em ≈ 32px at root; min-height enforces ergonomic floor regardless. */
     display: block;
+    min-height: var(--touch-min);
     text-align: center;
     padding: 2em;
-    color: var(--color-border);
+    color: var(--rule);
     border: none;
-    background: var(--color-bg);
+    background: var(--surface);
     transition: color 0.3s, background 0.3s;
 }
 
 .scroll-top:hover {
-    color: var(--color-accent);
+    color: var(--accent);
     border: none;
 }
 
@@ -328,21 +367,12 @@ footer {
         transition-duration: 0.01ms !important;
     }
 }
-/* ── Day/night theme: solar-driven via data-theme attribute (set by inline JS) ── */
-:root[data-theme="night"] {
-    /* Pure black canvas; whiteness hierarchy for text emphasis;
-       red reserved for buttons only (admin spec 2026-04-25). */
-    --color-bg: #000;
-    --color-emphasis: #fff;        /* level 4: max white = max emphasis (h1, artist) */
-    --color-text: #e6e6e6;         /* level 3: body text */
-    --color-muted: #999;           /* level 2: price, captions, secondary */
-    --color-border: #444;          /* level 1: separators, borders */
-    --color-accent: #ff5a5a;       /* red — buttons only in night */
-    --color-cta-bg: var(--color-accent);  /* night: cta is red */
-    --color-cta-text: #fff;
-    --color-overlay: rgba(0, 0, 0, 0.95);
-    --color-overlay-solid: rgba(0, 0, 0, 0.98);
-}
+/* ── Day/night theme: solar-driven via data-theme attribute (set by inline JS) ──
+   The night-mode colour palette (pure black canvas; whiteness hierarchy for
+   text emphasis; red reserved for buttons only — admin spec 2026-04-25) is
+   compiled из _design.yaml (theme: night) into :root[data-theme="night"] в
+   _tokens.generated.css. Only the *transition* rules and the portrait swap
+   selectors live here. */
 html, body { transition: background-color 600ms ease; }
 body, a, p, h1, h2, h3, footer, .scroll-top { transition: color 600ms ease, background-color 600ms ease; }
 
@@ -351,21 +381,21 @@ body, a, p, h1, h2, h3, footer, .scroll-top { transition: color 600ms ease, back
 .publications-list { list-style: none; padding: 0; }
 .publications-list li { margin: 0.5em 0; }
 .pub {
+    /* Inv-LDG-design-touch44 — publications-list interactive link ≥ 44px. */
     display: inline-flex;
     gap: 0.6em;
-    align-items: baseline;
+    align-items: center;
+    min-height: var(--touch-min);
     text-decoration: none;
-    color: var(--color-text);
-    border-bottom: 1px solid var(--color-border);
+    color: var(--ink);
+    border-bottom: 1px solid var(--rule);
     padding-bottom: 0.15em;
     transition: color 200ms ease, border-color 200ms ease;
 }
-.pub:hover { color: var(--color-accent); border-color: var(--color-accent); }
+.pub:hover { color: var(--accent); border-color: var(--accent); }
 .pub-channel {
-    color: var(--color-muted);
+    color: var(--muted);
     font-size: 0.85em;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
 }
 .pub-title { font-weight: 500; }
 
@@ -377,22 +407,55 @@ body, a, p, h1, h2, h3, footer, .scroll-top { transition: color 600ms ease, back
 
 .progress-bar { position: fixed; top: 0; left: 0; height: 2px; width: 100%; background: rgba(0,0,0,0.1); transform-origin: left; transform: scaleX(0); z-index: 101; }
 
-.nav-fade { position: fixed; top: 0; left: 0; right: 0; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; opacity: 0; transition: opacity 0.3s ease; background: linear-gradient(to bottom, var(--color-overlay), transparent); pointer-events: none; z-index: 100; }
+.nav-fade { position: fixed; top: 0; left: 0; right: 0; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; opacity: 0; transition: opacity 0.3s ease; background: linear-gradient(to bottom, var(--overlay), transparent); pointer-events: none; z-index: 100; }
 body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto; }
-.nav-fade a { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 14px; color: var(--color-muted); text-decoration: none; transition: color 0.2s; }
-.nav-fade a:hover { color: var(--color-text); }
+.nav-fade a { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: var(--fs-body-min); color: var(--muted); text-decoration: none; transition: color 0.2s; display: inline-flex; align-items: center; min-height: var(--touch-min); padding: 0 0.5em; }
+.nav-fade a:hover { color: var(--ink); }
 @media (max-width: 768px) {
-  .nav-fade { opacity: 1; pointer-events: auto; background: var(--color-overlay-solid); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .nav-fade { opacity: 1; pointer-events: auto; background: var(--overlay-solid); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 }
 @media (prefers-reduced-motion: reduce) { .nav-fade { transition: none; } }
+
+/* ── Day/night toggle (Inv-IFACE-day-night-mode) — chrome on every page ──────
+   Fixed top-right (the .nav-fade back-arrow is top-left when present — no
+   overlap; on FQDN landings .nav-fade is absent so top-right is clear). The
+   glyph (◐ auto / ☀ day / ☾ night) is swapped by the inline handler in
+   _layout. Low-emphasis until hover/focus — like .nav-fade a. Uses only the
+   semantic tokens (--ink/--ink-soft/--muted/--surface/--accent/--focus-outline-min),
+   which redeclare per-mode, so it works in BOTH day and night. */
+.theme-toggle {
+  position: fixed;
+  top: 12px;
+  right: 14px;
+  z-index: 101;
+  min-width: var(--touch-min);
+  min-height: var(--touch-min);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font: 400 1.2rem/1 -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.theme-toggle:hover,
+.theme-toggle:focus-visible { opacity: 1; color: var(--ink); border-color: var(--rule); }
+.theme-toggle:focus { outline: none; }
+.theme-toggle:focus-visible { outline: var(--focus-outline-min) solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .theme-toggle { transition: none; } }
 
 /* ── Skip-link (WCAG 2.4.1 «Bypass Blocks») — visually hidden until focus ── */
 .skip-link {
   position: absolute;
   top: -100px;
   left: 0;
-  background: var(--color-text);
-  color: var(--color-bg);
+  background: var(--ink);
+  color: var(--surface);
   padding: 0.6em 1em;
   font: 500 0.95rem/1 'Inter', system-ui, sans-serif;
   text-decoration: none;
@@ -401,11 +464,17 @@ body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto;
   transition: top 150ms ease;
 }
 .skip-link:focus,
-.skip-link:focus-visible { top: 0; outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.skip-link:focus-visible { top: 0; outline: var(--focus-outline-min) solid var(--accent); outline-offset: 2px; }
 
 /* ══════════════════════════════════════════════════════════════════════
-   EVENT-LANDING · SWISS-MODERNIST · ARCHITECTURAL
+   EDITORIAL SURFACE · SWISS-MODERNIST · ARCHITECTURAL
    ──────────────────────────────────────────────────────────────────────
+   Activated by `<html data-surface="editorial">` (emitted by _layout for
+   event-landing pages and static-pages — kind-detected, no per-page CSS
+   parallelism). Same semantic token vocabulary as the hub (--surface,
+   --ink, --ink-soft, --muted, --rule, --accent…) — only the values change.
+   No parallel `--paper`/`--ink` namespace, no `:has()` cascade-promote.
+
    Neo-grotesque single family (Inter Tight + Inter). Major-third type
    scale (μ = 1.25). Hard rectilinear grid. Hairlines as ornament.
    Single accent — Corbusier Outremer. Concrete-paper substrate.
@@ -418,80 +487,135 @@ body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto;
      space     0.5rem × 1.5 geom : 0.50, 0.75, 1.13, 1.69, 2.53, 3.80,
                                    5.70, 8.54 rem
      measure   34em × 1.55 leading (≈ 66 char Inter RU)
-     contrast  ink/paper 16.1:1 AAA · muted/paper 4.78:1 AA body
-                                      accent/paper 9.12:1 AAA
+     contrast  ink/surface 16.1:1 AAA · muted/surface 4.78:1 AA body
+                                       accent/surface 9.12:1 AAA
 
    Owner-agnostic: no event-specific selectors, no paris-* hardcode.
-   Scope: `.article-wrapper` only — owner-site styles untouched.
    ══════════════════════════════════════════════════════════════════════ */
 
-@import url("https://fonts.bunny.net/css?family=inter:400,500,700,900|inter-tight:400,500,700&display=swap");
+/* @import блок выше moved-к-top — CSS Spec §3 требует @import precede rules. */
 
-/* ── 1. Tokens ───────────────────────────────────────────────────────── */
+/* ── 1. Editorial palette override — same semantic tokens, different values.
+   Concrete-paper substrate, graphite ink (NOT black — softens to read as
+   drawn-on-paper, not printed-by-laser). Single Outremer accent (Corbu
+   Polychromie 31). Accent discipline: only on price + signup-btn + day-
+   numeral. Anywhere else = ink/ink-soft/muted gradation.
+
+   These editorial colour tokens are OWNER-specific → compiled из _design.yaml
+   (surface: editorial) into :root[data-surface="editorial"] в
+   _tokens.generated.css; --accent (Corbu Outremer) и --paris-* come из
+   text/site.md / text/event-paris-2026-09.md. Verified contrast (on #F4F1EB):
+       ink/surface       11.15:1  AAA
+       ink-soft/surface   7.32:1  AAA
+       muted/surface      4.52:1  AA  body
+       accent/surface     ~9:1    AAA  (focal use only)
+       rule/surface       1.62:1  hairline (decorative, non-text — carve-out) */
+
+/* ── 2. Article-wrapper — type/space scale + grid scaffolding.
+   Color comes from the surface tokens (cascade from :root / the data-surface
+   block в _tokens.generated.css). These tokens are SCALE (μ=1.25 fs, 1.5ⁿ
+   space) — orthogonal to palette, so they remain scoped to .article-wrapper. */
 .article-wrapper {
   /* Type scale — major-third (μ = 1.250). Single SoT; reuse below. */
-  --fs-2xs: 0.640rem;   /* μ⁻²   labels  */
-  --fs-xs:  0.800rem;   /* μ⁻¹   caption */
-  --fs-s:   1.000rem;   /* μ⁰    body   ← root reference */
-  --fs-m:   1.250rem;   /* μ¹    lead, h3 */
-  --fs-l:   1.563rem;   /* μ²    h2     */
-  --fs-xl:  1.953rem;   /* μ³    display-3 */
-  --fs-2xl: 2.441rem;   /* μ⁴    display-2 */
-  --fs-3xl: 3.052rem;   /* μ⁵    h1 cap  */
 
   /* Spacing — 0.5rem × 1.5ⁿ geometric. Eight steps cover entire page. */
-  --sp-1: 0.50rem;
-  --sp-2: 0.75rem;
-  --sp-3: 1.13rem;
-  --sp-4: 1.69rem;
-  --sp-5: 2.53rem;
-  --sp-6: 3.80rem;
-  --sp-7: 5.70rem;
-  --sp-8: 8.54rem;
 
   /* Measure — 34em ≈ 66 char Inter RU. 1.55 leading on Inter at 17.5px. */
-  --measure: 34em;
-  --rail:    7.5em;
   --gutter:  2em;
   --page:    52em;
 
-  /* Color — concrete-paper substrate, graphite ink (NOT black —
-     softens to read as drawn-on-paper, not printed-by-laser).
-     Single Outremer accent (Corbu Polychromie 31).
-     Accent discipline: only on price + signup-btn. Anywhere else
-     = ink/ink-soft/muted gradation. Verified contrast (WCAG):
-       ink/paper       11.15:1  AAA
-       ink-soft/paper   7.32:1  AAA
-       muted/paper      4.78:1  AA  body
-       accent/paper     9.12:1  AAA  (focal use only)
-       rule/paper       1.62:1  hairline (decorative, non-text) */
-  --paper:     #F4F1EB;       /* warm concrete, gallery-wall */
-  --paper-deep:#ECEAE3;       /* one notch deeper for inset panels */
-  --ink:       #2A2A2A;       /* graphite — softer than black */
-  --ink-soft:  #4D4D4D;
-  --muted:     #6E6E6E;
-  --rule:      #BFBCB5;       /* concrete edge */
-  --rule-soft: #D9D6CF;
-  --accent:    #1E407C;       /* Corbu Outremer — Polychromie 31 */
-
   /* Type stacks — Swiss neo-grotesque discipline. Inter Tight for
      display (tighter optical sizing), Inter for body. Single family
-     across the page — owner-agnostic, RU/EN coverage. */
-  --sans-display: 'Inter Tight', 'Inter', -apple-system,
+     across the page — owner-agnostic, RU/EN coverage.
+     «Inter Fallback» — local Arial с metric overrides (Inv-TYPO-font-metric-
+     override, text/typography.md, 2026-05-12); matches Inter's box metrics
+     so the swap from system fallback → loaded Inter triggers CLS = 0.
+     Source: Brian Loubris / Malte Ubl adjust-tool / Capsize seek-oss
+     widely-published values для Inter; calibrate if precision needed. */
+  --sans-display: 'Inter Tight', 'Inter', 'Inter Fallback', -apple-system,
                   BlinkMacSystemFont, 'Helvetica Neue', system-ui, sans-serif;
-  --sans:         'Inter', -apple-system, BlinkMacSystemFont,
+  --sans:         'Inter', 'Inter Fallback', -apple-system, BlinkMacSystemFont,
                   'Helvetica Neue', system-ui, sans-serif;
   --mono:         'IBM Plex Mono', 'JetBrains Mono', ui-monospace,
                   SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* ── 2. Body defaults ─────────────────────────────────────────── */
+  /* --tracking-caps now compiled из Spec text/typography.md::design_tokens
+     (Inv-CSS-tokens-from-Spec). See _tokens.generated.css. */
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Inv-TYPO-caps-tracked — SINGLE typeclass instance.
+   Spec: knowledge/system/specifications/text/typography.md.
+   ALL caps containers join via:
+     (a) selector listed in :is() below — structural members
+     (b) `.is-caps` utility class — content-driven опт-in
+   Per-element CSS rules hold ONLY font/weight/size/color/margin specifics.
+   Tracking + uppercase universal через ONE assertion — no drift.
+   ───────────────────────────────────────────────────────────────── */
+:is(
+  /* Hero zone — landing three-level header */
+  .article-wrapper h1,
+  .article-wrapper .locus-h2,
+  /* Display register — pricing rhymes h1 */
+  .article-wrapper .pricing-display .pricing-amount,
+  .article-wrapper .pricing-display .pricing-label,
+  /* Section H2 — catalogue register (admin 2026-05-12 feedback.txt:
+     «См. свой ответ в клод-диалогах про конгруэнтное использование прописных
+     на Посадочной» — section h2 («Тема», «Программа», «Бронирование», …)
+     joins the Caps typeclass; restores cohesion with locus-h2 + name-stamps +
+     metadata-strips. Per Inv-TYPO-headings-weight-bound, weight remains ≤ 500;
+     only `text-transform: uppercase` + `letter-spacing: var(--tracking-caps)`
+     gained — no bold-in-body drift). */
+  .article-wrapper > section > h2,
+  /* Catalogue eyebrows + credit-lines */
+  .article-wrapper .organizers,
+  .article-wrapper .with,
+  .article-wrapper .top-banner.is-caps,
+  /* (day-numerals dropped from the Caps typeclass — Roman numerals are already
+     uppercase letterforms; their leading/tracking is set per-element below, so
+     keeping them here would force a per-element letter-spacing override — the
+     exact drift the typeclass forbids. admin-typo audit 2026-05-11.) */
+  /* Form CTA register */
+  .article-wrapper section.signup .signup-h3,
+  .article-wrapper .signup-btn,
+  /* About-Organizer section header + name-stamp */
+  .article-wrapper .about-organizer h2,
+  .article-wrapper .about-organizer .org-name,
+  .article-wrapper .about-organizer p strong,
+  /* Publications channel meta */
+  .article-wrapper .pub-channel,
+  /* Default global heading (pre-article context) */
+  body > h2,
+  /* CTA button (legacy non-article) */
+  .cta,
+  /* Universal opt-in utility: any element gains caps register through class */
+  .article-wrapper .is-caps,
+  .is-caps
+) {
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+
+/* spacer → end of typeclass; resume .article-wrapper scope (body defaults +
+   page grid). Earlier edit incorrectly placed body/layout props в :root —
+   admin diagnostic 2026-05-11 «узкая колонка слева» revealed it (display: grid
+   applied к html instead of article-wrapper). */
+.article-wrapper {
+  /* sentinel — typeclass instance assertion above must match owner CSS contract */
+  --_inv-typo-caps-tracked: enforced;
+
+  /* ── Body defaults ─────────────────────────────────────────── */
   font-family: var(--sans);
   font-size: clamp(1rem, 0.93rem + 0.28vw, 1.0625rem);   /* 17→17.5px fluid */
-  line-height: 1.55;
+  line-height: var(--lh-body);   /* Inv-TYPO-vertical-rhythm-baseline */
   color: var(--ink);
-  background: var(--paper);
+  background: var(--surface);
   font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ss01" 1;
-  font-variant-numeric: lining-nums proportional-nums;
+  /* Body — oldstyle (text figures), warmer rhythm в editorial register.
+     Pricing-amount + day-numeral re-declare lining/tabular per Bringhurst
+     §3.2.3 (titling figures only when there is no alternative — i.e.
+     when oldstyle figures break alignment). */
+  font-variant-numeric: oldstyle-nums proportional-nums;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -524,27 +648,12 @@ body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto;
   .article-wrapper > * { grid-column: 1; }
 }
 
-/* Owner-site canvas repaint (only on event-landing pages — owner index
-   uses .content-wrapper, not .article-wrapper, so untouched).
-
-   Custom properties cascade parent→child only. `--paper` declared on
-   `.article-wrapper` is INVISIBLE at html/body. We promote the two
-   canvas-critical tokens to `:root` ONLY when `.article-wrapper` is
-   present, so html and body resolve them correctly. The full token
-   palette stays inside `.article-wrapper` (owner-agnostic scope). */
-:root:has(.article-wrapper) {
-  --paper: #F4F1EB;
-  --ink:   #2A2A2A;
-  background: var(--paper);
-}
-body:has(.article-wrapper) {
-  background: var(--paper);
-  color: var(--ink);
-}
-
 .article-wrapper p,
 .article-wrapper li,
-.article-wrapper dd { text-wrap: pretty; }
+.article-wrapper dd {
+  text-wrap: pretty;                /* Inv-TYPO-orphan-widow — modern browsers */
+  hanging-punctuation: first;       /* Inv-TYPO-hanging-punctuation — Bringhurst §2.3.3 */
+}
 
 .article-wrapper h1,
 .article-wrapper h2,
@@ -568,11 +677,11 @@ body:has(.article-wrapper) {
 }
 
 .article-wrapper h1 {
-  /* Display monumental — Inter 900 (Black) for Bauhaus-poster weight.
-     Tight tracking, 0.95 leading; two-line stack reads as architectural
-     signage, not magazine logotype. */
-  font: 900 clamp(var(--fs-2xl), 1.6rem + 3.6vw, var(--fs-3xl))/0.95 var(--sans-display);
-  letter-spacing: -0.022em;
+  /* Display monumental — Inter 900 (Black). 0.95 leading; two-line stack reads
+     as architectural signage. Tracking: var(--tracking-caps) per Inv-TYPO-
+     consistent-tracking-caps (admin 2026-05-11: «прописные — разряженно»);
+     uppercase content gets positive tracking уvе-везде, including hero display. */
+  font: 900 clamp(var(--fs-2xl), 1.6rem + 3.6vw, var(--fs-3xl))/var(--lh-display) var(--sans-display);
   color: var(--ink);
   margin: 0;
   font-feature-settings: "kern" 1, "liga" 1, "ss01" 1;
@@ -583,29 +692,27 @@ body:has(.article-wrapper) {
   /* Thesis line — Inter 500, slight optical scale up.
      No italic (italic is serif convention; in Swiss register lead
      declares its weight by structure, not style). */
-  font: 500 var(--fs-m)/1.4 var(--sans);
+  font: 500 var(--fs-m)/var(--lh-tight) var(--sans);
   color: var(--ink-soft);
   margin: 0;
   max-width: 32em;
-  letter-spacing: -0.005em;
+  letter-spacing: var(--tracking-micro);
 }
 
 .article-wrapper .organizers,
 .article-wrapper .with {
   /* ALL-CAPS letter-spaced authorship — Swiss credit-line register.
      Reads as masthead, not paragraph. */
-  font: 500 var(--fs-2xs)/1.4 var(--sans);
+  font: 500 var(--fs-2xs)/var(--lh-tight) var(--sans);
   color: var(--muted);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
   margin: var(--sp-2) 0 0;
 }
 
 /* Status banner — quiet aside in tabular figures, no panel chrome. */
 .article-wrapper .status-banner {
-  font: 400 var(--fs-xs)/1.55 var(--sans);
+  font: 400 var(--fs-xs)/var(--lh-body) var(--sans);
   color: var(--muted);
-  letter-spacing: 0.005em;
+  letter-spacing: var(--tracking-spread-mild);
   margin: 0;
   padding: 0;
   background: transparent;
@@ -615,42 +722,85 @@ body:has(.article-wrapper) {
 
 /* ── 4. Pricing colophon — masthead-bottom, NOT a hero panel.
    Single-line catalogue colophon. The thesis is the hero, not the
-   price. Renders as «1 550 € · с участника · та же стоимость, что
-   в январском туре». */
+   price. Renders as «1 550 € · с участника». */
 
 .article-wrapper .pricing-display {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
+  /* Ticket-block (admin 2026-05-12 feedback.txt L19): «Цену отдельным блоком,
+     по дней тоже разделитель. Этот блок должен напоминать билет, на котором
+     цена. При этом максимально конгруэнтно всему остальному.»
+     Balance: ticket-hint через bottom-edge perforation + congruence через
+     section-rhythm preservation. Re-re-think 2026-05-12 (admin «максимально
+     конгруэтно»): 4-side ink-border (prior reconsider) перебор — diverged
+     from rest's «top-rule only» pattern. Optimum: top-rule (matches all
+     section separators) + bottom dashed --rule (perforation hint = ticket signal).
+     Внутренний padding — left/right zero (как section-rhythm); top/bottom
+     dashed = tear-edge feel. Swiss-modernist: hairline only, no full-box.
+     Universal — applies к ALL events' pricing block. */
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
   gap: var(--sp-2) var(--sp-3);
-  margin: var(--sp-3) 0 0;
-  padding: 0;
-  border: none;
+  margin: var(--sp-5) 0;
+  padding: var(--sp-4) 0 var(--sp-4);
+  border-top: 1px solid var(--rule);          /* section-rhythm separator above */
+  border-bottom: 2px dashed var(--rule);      /* perforation — ticket tear-edge */
   text-align: left;
 }
 .article-wrapper .pricing-display .pricing-label {
-  font: 500 var(--fs-2xs)/1.3 var(--sans);
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
+  font: 500 var(--fs-2xs)/var(--lh-tight) var(--sans);
   color: var(--muted);
   order: 2;
 }
 .article-wrapper .pricing-display .pricing-amount {
-  font: 700 var(--fs-l)/1 var(--sans-display);
-  letter-spacing: -0.018em;
+  /* admin 2026-05-10: «Цену крупно, и как-либо ещё в рифму основному заголовку».
+     Match h1 register: same weight (900), same display family, comparable scale,
+     same tracking-caps token (positive — per Inv-TYPO-caps-tracked).
+     Outremer accent сохранён — single-accent rule. */
+  font: 900 clamp(var(--fs-2xl), 1.6rem + 3.6vw, var(--fs-3xl))/var(--lh-display) var(--sans-display);
   color: var(--accent);                      /* Outremer — single accent */
   font-variant-numeric: lining-nums tabular-nums;
   order: 1;
 }
 .article-wrapper .pricing-display .pricing-amount .currency {
-  font-weight: 500;
+  font-weight: 700;
   color: var(--accent);
   margin-left: 0.12em;
-  font-size: 0.78em;
-  letter-spacing: 0;
+  font-size: 0.72em;
+  letter-spacing: var(--tracking-zero);
+}
+
+/* Inv-TYPO-math-rel-aligned (text/typography.md, 2026-05-12) — relation glyphs
+   (↔ ⇔ ↑ ↓ → ← ≤ ≥ < > = ≠ ≈ ≡ ⊆ ⊇ ∈ ∉ ∀ ∃ ⇒ ⇐ …) wrapped at render-time в
+   <span class="math-rel">. Vertical-align tweak corrects per-font baseline drift
+   (Inter ↔ sits below text-center; Cyrillic body baseline is higher).
+   Token --math-rel-shift declared в text/site.md design_tokens (single SoT;
+   per-font calibration без code change). display: inline-block + line-height: 1
+   ensures the vertical-align reference is the box itself, not the inline baseline. */
+.math-rel,
+.article-wrapper .math-rel {
+  display: inline-block;
+  vertical-align: var(--math-rel-shift, 0.06em);
+  line-height: 1;
+}
+
+/* H2/H3 in three-level header (admin 2026-05-10):
+   landing_h1 (концепт) → ALL-CAPS .locus-h2 (locus + дата, tracking caps,
+   smaller scale than h1) → .organizers-h3 (sentence-case credit-line, sans). */
+.article-wrapper .locus-h2 {
+  font: 700 clamp(var(--fs-l), 1.1rem + 1.6vw, var(--fs-xl))/1.1 var(--sans-display);
+  color: var(--ink);
+  margin: var(--sp-1) 0 0;
+}
+.article-wrapper .organizers-h3 {
+  font: 500 var(--fs-m)/var(--lh-tight) var(--sans);
+  color: var(--ink-soft);
+  letter-spacing: var(--tracking-zero);
+  text-transform: none;
+  margin: var(--sp-2) 0 var(--sp-3);
+  font-weight: 500;
 }
 .article-wrapper .pricing-display .pricing-note {
-  font: 400 var(--fs-xs)/1.5 var(--sans);
+  font: 400 var(--fs-xs)/var(--lh-body) var(--sans);
   color: var(--muted);
   margin: 0;
   flex-basis: 100%;
@@ -691,31 +841,37 @@ body:has(.article-wrapper) {
 }
 
 .article-wrapper > section > h2 {
-  font: 700 var(--fs-l)/1.2 var(--sans-display);   /* μ² Inter Bold */
+  font: 500 var(--fs-l)/var(--lh-tight) var(--sans-display);   /* μ² Inter Medium —
+     Inv-TYPO-headings-weight-bound: body-context headings ≤ 500 (admin 2026-05-11
+     «полужирный в body»). Hero display (.concept-h1 / .locus-h2 / .pricing-amount)
+     carry heavier weight; section subheadings — medium register, no bold-in-body. */
   margin: 0 0 var(--sp-3);
   color: var(--ink);
-  letter-spacing: -0.018em;
-  text-transform: none;
+  /* letter-spacing inherited из Caps typeclass (var(--tracking-caps), positive).
+     Earlier --tracking-display-soft (negative) was for sentence-case rendering;
+     caps register reverses sign per Bringhurst §3.2.5. text-transform: none
+     removed — section h2 joins the Caps typeclass via :is(...) selector list
+     above (admin 2026-05-12 «прописные где уместно» congruence). */
 }
 .article-wrapper > section > h2::before {
-  content: counter(secctr, decimal-leading-zero);
-  font: 500 var(--fs-2xs)/1.2 var(--mono);
+  content: counter(secctr, decimal);   /* plain «1, 2, 3 …» — admin 2026-05-11 «убери нули» */
+  font: 500 var(--fs-2xs)/var(--lh-tight) var(--mono);
   font-variant-numeric: tabular-nums;
   color: var(--muted);
-  letter-spacing: 0.05em;
+  letter-spacing: var(--tracking-caps-mid);
   margin-right: 0.7em;
 }
 
 .article-wrapper section h3 {
-  font: 500 var(--fs-m)/1.3 var(--sans-display);
+  font: 500 var(--fs-m)/var(--lh-tight) var(--sans-display);
   margin: var(--sp-3) 0 var(--sp-1);
   color: var(--ink);
-  letter-spacing: -0.012em;
+  letter-spacing: var(--tracking-tight);
 }
 
 .article-wrapper section p {
   margin: 0 0 var(--sp-3);
-  line-height: 1.6;
+  line-height: var(--lh-body);
   color: var(--ink);
 }
 .article-wrapper section p:last-child { margin-bottom: 0; }
@@ -724,23 +880,8 @@ body:has(.article-wrapper) {
    In Swiss register, the GRID is the ornament; letterforms stay calm. */
 .article-wrapper > section:first-of-type > p:first-of-type {
   font-size: var(--fs-m);
-  line-height: 1.5;
+  line-height: var(--lh-body);
   color: var(--ink);
-}
-
-/* ── 6. Inline emphasis — location / proper-noun marker ─────────────
-   Hand-authored `*name*` in md → <em class="loc"> via _inline().
-   Swiss-register discipline: italic is a serif convention, alien to
-   neo-grotesque catalogues; mark instead by weight + tightening so
-   names rise without shouting. Outremer accent stays reserved for
-   price · day-numeral · signup-btn (single-accent discipline). */
-
-.article-wrapper em.loc {
-  font-style: normal;
-  font-weight: 500;
-  color: var(--ink);
-  letter-spacing: -0.002em;
-  font-feature-settings: "kern" 1, "ss01" 1;
 }
 
 /* ── 7. Programme — chart of days. Hairline-divided entries, lining
@@ -774,37 +915,48 @@ body:has(.article-wrapper) {
 .article-wrapper .days > li:last-child  { border-bottom: 1px solid var(--rule); }
 
 /* Day numeral — Inter Tight 700, lining/tabular. Catalogue figure
-   in rail, weight signals primary — not ornament. */
+   in rail; weight signals primary; per-day accent reflects program arc
+   (Inv-PARIS-design-arc-per-day): Day 1 warm-gray / Day 2 Outremer / Day 3
+   Aalto-wood / Day 4 gallery-white. Tokens compiled из text/event-paris-2026-09.md
+   design_tokens (Inv-CSS-tokens-from-Spec). */
 .article-wrapper .days > li::before {
-  content: counter(dayctr, decimal-leading-zero);
+  content: counter(dayctr, upper-roman);   /* «I II III IV» — admin 2026-05-11 «нумерация дней — латинскими цифрами»; classical register, congruent with the «100 лет» framing */
   font: 700 var(--fs-m)/1 var(--sans-display);
-  font-variant-numeric: lining-nums tabular-nums;
   color: var(--accent);
-  letter-spacing: -0.01em;
+  letter-spacing: var(--tracking-zero);
   align-self: start;
   padding-top: 0.18em;
 }
+/* Inv-PARIS-design-arc-per-day + Inv-PARIS-day-progression-visual:
+   Per-day accent (color) + progressive rule-weight (intensity peaks Day 2 «Дорогой»).
+   Pattern: 1 / paris-rule-weight / 2 / 1 px — entry · peak · warm · terminus. */
+.article-wrapper .days > li[data-day="1"]::before { color: var(--paris-day-1-accent, var(--accent)); }
+.article-wrapper .days > li[data-day="1"]        { border-top: 1px solid var(--paris-day-1-accent, var(--rule)); }
+.article-wrapper .days > li[data-day="2"]::before { color: var(--paris-day-2-accent, var(--accent)); }
+.article-wrapper .days > li[data-day="2"]        { border-top: var(--paris-rule-weight, 3px) solid var(--paris-day-2-accent, var(--accent)); }
+.article-wrapper .days > li[data-day="3"]::before { color: var(--paris-day-3-accent, var(--accent)); }
+.article-wrapper .days > li[data-day="3"]        { border-top: 2px solid var(--paris-day-3-accent, var(--rule)); }
+.article-wrapper .days > li[data-day="4"]::before { color: var(--paris-day-4-accent, var(--accent)); }
+.article-wrapper .days > li[data-day="4"]        { border-top: 1px solid var(--paris-day-4-accent, var(--rule)); }
 
 .article-wrapper .days .day-date {
-  font: 500 var(--fs-2xs)/1.3 var(--sans);
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
+  font: 500 var(--fs-2xs)/var(--lh-tight) var(--sans);
   color: var(--muted);
   margin: 0 0 var(--sp-1);
   grid-column: 2;
 }
 .article-wrapper .days .day-theme {
-  font: 700 var(--fs-m)/1.28 var(--sans-display);
+  font: 500 var(--fs-m)/var(--lh-tight) var(--sans-display);   /* medium — Inv-TYPO-headings-weight-bound */
   color: var(--ink);
   margin: 0 0 var(--sp-2);
-  letter-spacing: -0.018em;
+  letter-spacing: var(--tracking-display-soft);
   grid-column: 2;
 }
 .article-wrapper .days .day-notes {
   margin: 0 0 var(--sp-2);
   color: var(--ink-soft);
   font-size: var(--fs-s);
-  line-height: 1.6;
+  line-height: var(--lh-body);
   grid-column: 2;
   max-width: var(--measure);
 }
@@ -833,21 +985,21 @@ body:has(.article-wrapper) {
   gap: var(--sp-4);
 }
 .article-wrapper dl.pairs dt {
-  font: 700 var(--fs-m)/1.3 var(--sans-display);
+  font: 500 var(--fs-m)/var(--lh-tight) var(--sans-display);   /* medium — Inv-TYPO-headings-weight-bound */
   color: var(--ink);
   margin: 0 0 var(--sp-1);
-  letter-spacing: -0.012em;
+  letter-spacing: var(--tracking-tight);
 }
 .article-wrapper dl.pairs dt::before {
   content: "→";
   color: var(--accent);
   margin-right: 0.45em;
   font-weight: 500;
-  letter-spacing: 0;
+  letter-spacing: var(--tracking-zero);
 }
 .article-wrapper dl.pairs dd {
   margin: 0;
-  line-height: 1.6;
+  line-height: var(--lh-body);
   color: var(--ink-soft);
   max-width: var(--measure);
 }
@@ -863,7 +1015,7 @@ body:has(.article-wrapper) {
   margin: var(--sp-2) 0;
   padding-left: 1.4em;
   position: relative;
-  line-height: 1.55;
+  line-height: var(--lh-body);
   color: var(--ink-soft);
 }
 .article-wrapper section ul li::before {
@@ -887,12 +1039,12 @@ body:has(.article-wrapper) {
   padding: 0 0.04em;
 }
 .article-wrapper a:hover {
-  color: var(--paper);
+  color: var(--surface);
   background-color: var(--accent);
   border-bottom-color: var(--accent);
 }
 .article-wrapper a:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: var(--focus-outline-min) solid var(--accent);
   outline-offset: 3px;
   border-bottom-color: transparent;
   border-radius: 1px;
@@ -906,14 +1058,19 @@ body:has(.article-wrapper) {
   border-top: 1px solid var(--ink);
 }
 .article-wrapper section.signup-wrap > p {
-  font: 400 var(--fs-s)/1.55 var(--sans);
+  font: 400 var(--fs-s)/var(--lh-body) var(--sans);
   color: var(--muted);
   margin: 0 0 var(--sp-3);
 }
+/* admin 2026-05-10 paris-landing.md: form h3 дублирует section h2 «Забронировать»;
+   visually-hidden преобразование сохраняет a11y (aria-labelledby точка-цели)
+   но удаляет визуальное дублирование. */
 .article-wrapper section.signup .signup-h3 {
-  font: 500 var(--fs-s)/1.3 var(--sans);
-  margin: 0 0 var(--sp-1);
-  color: var(--ink);
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
 }
 .article-wrapper .signup-form {
   display: grid;
@@ -922,15 +1079,16 @@ body:has(.article-wrapper) {
   margin-top: var(--sp-3);
 }
 .article-wrapper .signup-label {
-  font: 400 var(--fs-xs)/1.3 var(--sans);
+  font: 400 var(--fs-xs)/var(--lh-tight) var(--sans);
   color: var(--muted);
-  letter-spacing: 0.04em;
 }
-.article-wrapper .signup-hint { opacity: 0.75; }
+.article-wrapper .signup-hint { color: var(--ink-soft); }
+/* Was opacity:0.75 — failed Inv-SITE-a11y-six: 0.75×#6E6E6E on #F4F1EB
+   computes to 2.86 contrast ratio (<4.5). Solid --ink-soft yields 7+. */
 .article-wrapper .signup-input {
   width: 100%;
   padding: 0.55em 0;
-  font: 400 var(--fs-s)/1.4 var(--sans);
+  font: 400 var(--fs-s)/var(--lh-tight) var(--sans);
   color: var(--ink);
   background: transparent;
   border: none;
@@ -942,7 +1100,7 @@ body:has(.article-wrapper) {
 .article-wrapper .signup-input:focus-visible {
   border-bottom-color: var(--accent);
   border-bottom-width: 2px;
-  outline: 2px solid var(--accent);
+  outline: var(--focus-outline-min) solid var(--accent);
   outline-offset: 4px;
   border-radius: 1px;
 }
@@ -950,7 +1108,7 @@ body:has(.article-wrapper) {
   display: flex;
   align-items: flex-start;
   gap: 0.6em;
-  font: 400 var(--fs-xs)/1.5 var(--sans);
+  font: 400 var(--fs-xs)/var(--lh-body) var(--sans);
   color: var(--muted);
 }
 .article-wrapper .signup-consent input { margin-top: 0.25em; accent-color: var(--accent); }
@@ -958,31 +1116,29 @@ body:has(.article-wrapper) {
   margin-top: var(--sp-1);
   padding: 0.85em 1.6em;
   background: var(--accent);
-  color: var(--paper);
+  color: var(--surface);
   border: 1px solid var(--accent);
   border-radius: 0;
   font: 700 var(--fs-xs)/1 var(--sans-display);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
   cursor: pointer;
   transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
   align-self: start;
-  min-height: 44px;
+  min-height: var(--touch-min);
 }
 .article-wrapper .signup-btn:hover,
 .article-wrapper .signup-btn:focus-visible {
   background: var(--ink);
-  color: var(--paper);
+  color: var(--surface);
   border-color: var(--ink);
   outline: none;
 }
 .article-wrapper .signup-btn:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: var(--focus-outline-min) solid var(--accent);
   outline-offset: 3px;
 }
 .article-wrapper .signup-msg,
 .article-wrapper .signup-note {
-  font: 400 var(--fs-xs)/1.5 var(--sans);
+  font: 400 var(--fs-xs)/var(--lh-body) var(--sans);
   color: var(--muted);
 }
 
@@ -990,15 +1146,15 @@ body:has(.article-wrapper) {
 
 .article-wrapper section.contact { margin-top: var(--sp-5); padding-top: 0; border-top: none; }
 .article-wrapper section.contact h2 {
-  font: 700 var(--fs-m)/1.4 var(--sans-display);
+  font: 500 var(--fs-m)/var(--lh-tight) var(--sans-display);   /* medium — Inv-TYPO-headings-weight-bound */
   text-transform: none;
-  letter-spacing: -0.012em;
+  letter-spacing: var(--tracking-tight);
   color: var(--ink);
   margin: 0 0 var(--sp-1);
 }
 .article-wrapper section.contact h2::before { content: none; }
 .article-wrapper section.contact p {
-  font: 400 var(--fs-s)/1.6 var(--sans);
+  font: 400 var(--fs-s)/var(--lh-body) var(--sans);
   color: var(--ink-soft);
   margin: 0;
 }
@@ -1015,36 +1171,36 @@ body:has(.article-wrapper) {
   font-size: var(--fs-s);
   color: var(--ink-soft);
   max-width: var(--measure);
-  /* Override owner-site `footer { background: var(--color-bg) }` (≈line 197)
-     which paints white through nested footer.about-organizer and breaks the
-     paper substrate continuity. */
+  /* Editorial surface paints `footer { background: var(--surface) }` (≈line
+     199) which would push hub-canvas through nested footer.about-organizer.
+     `transparent` lets the editorial substrate flow through continuously. */
   background: transparent;
 }
 .article-wrapper .about-organizer h2 {
-  font: 500 var(--fs-2xs)/1.3 var(--sans);
-  text-transform: uppercase;
-  letter-spacing: 0.24em;
+  font: 500 var(--fs-2xs)/var(--lh-tight) var(--sans);
   color: var(--muted);
   margin: 0 0 var(--sp-3);
 }
 .article-wrapper .about-organizer h2::before { content: none; }
 .article-wrapper .about-organizer p {
   margin: 0 0 var(--sp-2);
-  line-height: 1.55;
+  line-height: var(--lh-body);
 }
+/* Inv-TYPO-no-bold-in-body: <strong> в body normalised — weight 500 (sans body
+   register), not bold. Inline emphasis preserved через caps + tracking, не weight
+   (admin 2026-05-10: «полужирный внутри body — AI-writing»). */
 .article-wrapper .about-organizer p strong {
-  font-weight: 700;
+  font-weight: 500;
   font-style: normal;
   color: var(--ink);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
   font-size: 0.94em;
 }
 .article-wrapper .about-organizer .org-link {
   margin-top: var(--sp-3);
-  font: 500 var(--fs-2xs)/1.3 var(--sans);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
+  /* admin 2026-05-12 ergonomic audit — org-link = sentence-case body register,
+     not Caps typeclass member. Migrated --fs-2xs (caps-register, ≥11.5px)
+     → --fs-xs (body-register, ≥14px floor via --fs-body-min). */
+  font: 500 var(--fs-xs)/var(--lh-tight) var(--sans);
 }
 
 /* ── 14. Open-questions — internal block, hidden on public landing ──── */
@@ -1067,7 +1223,7 @@ body:has(.article-wrapper) {
   }
   .article-wrapper h1 {
     font-size: clamp(1.6rem, 5vw + 0.6rem, var(--fs-2xl));
-    letter-spacing: -0.008em;
+    letter-spacing: var(--tracking-tight-soft);
   }
   .article-wrapper > section > h2::before {
     display: inline-block;
@@ -1079,12 +1235,12 @@ body:has(.article-wrapper) {
 
 @media print {
   body { background: #fff; color: #000; }
-  .nav-fade, .progress-bar, .scroll-top, .signup-wrap, .signup-form,
+  .nav-fade, .theme-toggle, .progress-bar, .scroll-top, .signup-wrap, .signup-form,
   footer { display: none !important; }
   .article-wrapper {
     max-width: 100%;
     font-size: 11pt;
-    line-height: 1.5;
+    line-height: var(--lh-loose);
     color: #000;
     background: #fff;
   }

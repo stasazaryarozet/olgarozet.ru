@@ -64,6 +64,11 @@ class OpenQuestion:
 class Signup:
     title: str = "Записаться"
     note: str = ""
+    cta_label: str = ""    # entity-event Spec 2026-05-10: explicit button label override
+
+    def get(self, key: str, default=None):
+        """Dict-shaped accessor. Same Spec-evolution discipline as EventModel.get."""
+        return getattr(self, key, default)
 
 
 @dataclass
@@ -118,7 +123,18 @@ class EventModel:
     cohort: dict | None = None
     duration: str = ""
     concept: str = ""
+    top_banner: str = ""
+    type: str = ""           # entity-event sub-class dispatch (entity-event Spec, 2026-05-10)
+    parent_id: str = ""      # sub-event edge — Inv-EV-parent-resolves
+    description: str = ""    # arbitrary prose for sub-events / non-landing events
+    when: str = ""           # temporal anchor for sub-events when t_key/date insufficient
+    duration_min: int = 0    # minute-precision for sub-events (presentation/lecture/meeting)
+    url: str = ""            # online-only locus (ZOOM / livestream / webinar)
     days: list[dict] = field(default_factory=list)
+    # Per-event chrome control (admin 2026-05-12 reconsider — decoupled flags
+    # for landing_terminal events: legal-footer and cookie-banner concerns orthogonal).
+    suppress_legal_footer: bool = False   # hides .legal block; legal-min privacy footer renders когда privacy_url set
+    suppress_cookie_banner: bool | None = None   # None = coupled to suppress_legal_footer (backward-compat); explicit bool decouples
     extra: dict = field(default_factory=dict)
 
     @property
@@ -129,6 +145,18 @@ class EventModel:
         broadcast_html so the schema, not the renderer, gates the surface.
         """
         return bool(self.lead and self.sections)
+
+    def get(self, key: str, default=None):
+        """Dict-shaped accessor — bridges renderer's `obj.X if hasattr(obj, X) else obj.get(X, default)`
+        pattern when EventModel lacks the requested attribute. Falls back to `extra` dict
+        for fields that data.yaml carries but the schema hasn't yet promoted to typed attrs.
+        Spec-evolution-friendly: data.yaml may add fields ahead of schema; .get() returns
+        graceful default instead of AttributeError. Closes class «schema-debt blowback» —
+        any new yaml field renders без crash even before schema upgrade.
+        """
+        if hasattr(self, key):
+            return getattr(self, key)
+        return self.extra.get(key, default) if isinstance(self.extra, dict) else default
 
 
 def _norm_str(v: Any) -> str:
@@ -184,10 +212,9 @@ def _validate_section(raw: Any, ev_id: str, idx: int) -> Section:
         if not (label and text):
             raise InvalidEvent(ev_id, f"sections[{idx}].pairs[{j}] needs label+text")
         sec.pairs.append(SectionPair(label=label, text=text))
-    # at least one of {text, items, pairs} or intro must be present (else section is empty)
-    if not (sec.intro or sec.text or sec.items or sec.pairs):
-        raise InvalidEvent(ev_id, f"sections[{idx}] {title!r} has no content "
-                                  "(intro/text/items/pairs all empty)")
+    # Empty sections are legal: title-only sentinels suppress auto-policy
+    # blocks (admin claims authorship — auto-block с тем же titlе скрывается;
+    # see scripts/site_generator.py p_event_landing _admin_section_titles).
     return sec
 
 
@@ -235,6 +262,14 @@ def validate(ev: dict) -> EventModel:
     m.status = _norm_str(ev.get("status")) or "PLANNING"
     m.duration = _norm_str(ev.get("duration"))
     m.concept = _norm_str(ev.get("concept"))
+    # entity-event Spec fields (system-layer Spec, 2026-05-10)
+    m.top_banner = _norm_str(ev.get("top_banner"))
+    m.type = _norm_str(ev.get("type"))
+    m.parent_id = _norm_str(ev.get("parent_id"))
+    m.description = _norm_str(ev.get("description"))
+    m.when = _norm_str(ev.get("when"))
+    m.duration_min = int(ev["duration_min"]) if isinstance(ev.get("duration_min"), int) else 0
+    m.url = _norm_str(ev.get("url"))
 
     sections_raw = ev.get("sections") or []
     if sections_raw and not isinstance(sections_raw, list):
@@ -266,6 +301,7 @@ def validate(ev: dict) -> EventModel:
         m.signup = Signup(
             title=_norm_str(signup.get("title")) or "Записаться",
             note=_norm_str(signup.get("note")),
+            cta_label=_norm_str(signup.get("cta_label")),
         )
     elif signup not in (None, False):
         raise InvalidEvent(ev_id, f"signup must be a mapping or null, got {type(signup).__name__}")
@@ -300,6 +336,11 @@ def validate(ev: dict) -> EventModel:
     if days and not isinstance(days, list):
         raise InvalidEvent(ev_id, "days must be a list")
     m.days = list(days)
+
+    # Per-event chrome control (Inv-LDG-design-* terminal-block + privacy compliance).
+    m.suppress_legal_footer = bool(ev.get("suppress_legal_footer", False))
+    _scb = ev.get("suppress_cookie_banner")
+    m.suppress_cookie_banner = bool(_scb) if isinstance(_scb, bool) else None
 
     # Landing-render gate: if broadcast surface includes 'site' or web_addresses
     # is non-empty, the event will be rendered as a landing — must have lead+sections.
