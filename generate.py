@@ -198,6 +198,16 @@ _HTML_TAG_RE = _re.compile(r"(<[^>]+>)")
 
 
 _MD_LINK_RE = _re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
+_HAND_RE = _re.compile(r'\{hand:([^}]+)\}')
+
+
+def _md_handwriting(s: str) -> str:
+    """`{hand:text}` → `<span class="handwriting">text</span>` (editorial accent —
+    handwriting font CSS class applied at render-time). Pure shortcode substitution;
+    applied AFTER html-escape so braces survive the escape pass. Admin 2026-05-13
+    «"в культовом ресторане" рукописно»."""
+    return _HAND_RE.sub(
+        lambda m: f'<span class="handwriting">{m.group(1)}</span>', s)
 
 
 def _md_links(s: str) -> str:
@@ -227,7 +237,7 @@ def _inline(s) -> str:
 
     Earlier proper-noun marker (`*name*` → em.loc + graph-augment) retired 2026-05-12 —
     foreign-name highlighting decommissioned."""
-    return "" if not s else _wrap_math_rel(_html.escape(_typo(str(s)), quote=True))
+    return "" if not s else _md_handwriting(_wrap_math_rel(_html.escape(_typo(str(s)), quote=True)))
 
 
 
@@ -284,11 +294,16 @@ def _no_terminal_period_cfg() -> "tuple[object, object]":
                 cfg = (fm.get("enforcement_data") or {}).get("no_terminal_period_block") or {}
             break
     strip_char = str(cfg.get("strip") or ".")
-    keep_chars = list(cfg.get("keep_terminal") or ["?", "!", "…", "»", "”", ")", ":"])
     abbrevs = list(cfg.get("keep_if_abbrev") or ["г", "гг", "руб", "р", "км", "м"])
-    no_strip_cls = "".join(_re.escape(c) for c in (*keep_chars, strip_char))
     esc_strip = _re.escape(strip_char)            # «.» → «\.» — already a literal-match atom
-    strip_re = _re.compile(rf"(?<=[^{no_strip_cls}]){esc_strip}$")
+    # Strip the terminal «.» whenever it is the last char of the fragment.
+    # Spec `keep_terminal` (?!…»”):) is informational — if the last char is one
+    # of those, the regex simply does not match `\.$` and the strip is a no-op.
+    # We do NOT block the strip via lookbehind: «(…)». inside a sentence ends
+    # with sentence-terminal «.» that still must be removed (admin 2026-05-13:
+    # day-1 «Pierre Chareau).» vs day-2 «инсталляции.» inconsistency — `)`
+    # before terminal `.` was wrongly treated as a no-strip marker).
+    strip_re = _re.compile(rf"{esc_strip}$")
     abbr_alt = "|".join(_re.escape(a) for a in sorted(abbrevs, key=len, reverse=True))
     keep_re = _re.compile(rf"(?:^|\s|\()(?:{abbr_alt}){esc_strip}$", _re.I) if abbr_alt else None
     return strip_re, keep_re
@@ -361,6 +376,45 @@ def _comparator_prose(comp: str, locale: str = "ru") -> str:
     Empty string fallback если locale/comparator не в таблице."""
     table = (_math_symbols_cfg().get("comparator_prose") or {}).get(str(locale).lower(), {})
     return table.get(str(comp).lower(), "")
+
+
+_WEEKDAY_RU_PREP = ["В понедельник", "Во вторник", "В среду", "В четверг",
+                    "В пятницу", "В субботу", "В воскресенье"]
+
+
+def _when_relative_phrase(when_iso: "str | None") -> str:
+    """ISO ts → «Сегодня» / «Завтра» / «В <weekday>» relative phrase.
+    Resolves the `{when_relative}` placeholder в subevent description (admin
+    2026-05-13). Fallback к weekday-prep когда parse fails or ts is missing."""
+    from datetime import datetime as _dt, date as _date, timedelta as _td
+    if not when_iso or not isinstance(when_iso, str):
+        return ""
+    try:
+        dt = _dt.fromisoformat(when_iso)
+        d_target = dt.date()
+    except Exception:
+        return ""
+    d_today = _date.today()
+    if d_target == d_today:
+        return "Сегодня"
+    if d_target == d_today + _td(days=1):
+        return "Завтра"
+    return _WEEKDAY_RU_PREP[d_target.weekday()]
+
+
+def _event_heading(ev: "dict | None", key: str, default: str) -> str:
+    """SoT for editorial-overridable section headings (Программа / Перед поездкой /
+    Условия и сроки / Об Организаторах). Reads `ev.headings.<key>`; falls back
+    to `default` when key absent. Explicit empty-string override = suppress
+    signal — caller emits no <h2>. Editable via landing-text-projection
+    (`=== headings.<key> ===`)."""
+    if not isinstance(ev, dict):
+        return default
+    headings = ev.get("headings") or {}
+    if key not in headings:
+        return default
+    h = headings.get(key)
+    return h.strip() if isinstance(h, str) else default
 
 
 def _drop_block_close_period(paras: "list[str]") -> "list[str]":
@@ -1074,14 +1128,18 @@ observer.observe(footer);
 def _layout(d: dict, *, title: str, description: str, body: str,
             nav: bool = False, canonical: str = None,
             extra_head: str = "", footer: bool = True, structured: str = None,
-            surface: str = "", cookie_banner_enabled: bool = True) -> str:
+            surface: str = "", cookie_banner_enabled: bool = True,
+            slug: str = "") -> str:
     if canonical is None:
         canonical = _canonical(d)
     portrait = _portrait(d)
     portrait_night = _portrait_night(d)
     og_image = f"{_canonical(d)}/{portrait}" if portrait else ""
+    # Inject `<meta name="dela:slug">` для pageview pingback script in doc
+    # skeleton (entity-statistics G-Set; admin 2026-05-13 «считает статистику»).
+    _slug_meta = f'<meta name="dela:slug" content="{_t(slug)}">\n' if slug else ""
     head = _head(title, description, canonical=canonical, og_image=og_image,
-                 extra=extra_head, structured=structured, d=d)
+                 extra=(_slug_meta + extra_head), structured=structured, d=d)
     nav_html = '<nav class="nav-fade"><a href="/" aria-label="На главную">←</a></nav>' if nav else ''
     ftr = _footer(d.get("urls", {}), d["bio"]["title"], portrait, portrait_night) if footer else ''
     # WCAG 2.4.1 «Bypass Blocks» — single skip-link before nav, jumps to <main>.
@@ -1115,6 +1173,49 @@ def _layout(d: dict, *, title: str, description: str, body: str,
 </main>
 {ftr}
 {cookie_banner}
+<script>
+/* Auto-hide blocks past their declared `data-visible-until` ISO timestamp
+   (admin 2026-05-13: «пусть блок исчезнет после 20:30 по Москве»). Runs at
+   page-load and every 30s thereafter — covers tabs left open across the
+   deadline. Idempotent: once hidden, stays hidden. */
+(function(){{
+  function _hideExpired(){{
+    var nodes = document.querySelectorAll('[data-visible-until]');
+    var now = Date.now();
+    for (var i = 0; i < nodes.length; i++) {{
+      var until = Date.parse(nodes[i].getAttribute('data-visible-until') || '');
+      if (!isNaN(until) && now >= until) nodes[i].style.display = 'none';
+    }}
+  }}
+  _hideExpired();
+  setInterval(_hideExpired, 30000);
+}})();
+
+/* Pageview pingback — entity-statistics G-Set event (admin 2026-05-13 «считает
+   статистику»). One event per page-load → CF Worker /pv → DELA_STATS KV.
+   No cookies, no client-id; idempotency via cf-ray (CF generates per request).
+   No-op gracefully if Worker unreachable (sendBeacon + fallback fetch). */
+(function(){{
+  var slug = (document.querySelector('meta[name="dela:slug"]') || {{}}).content;
+  if (!slug) return;
+  var payload = JSON.stringify({{
+    p: slug,
+    r: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() :
+       (Date.now() + '-' + Math.random().toString(36).slice(2)),
+    ref: document.referrer || ''
+  }});
+  var url = 'https://dela-edge.azaryarozet.workers.dev/pv';
+  try {{
+    var blob = new Blob([payload], {{ type: 'application/json' }});
+    if (!navigator.sendBeacon || !navigator.sendBeacon(url, blob)) {{
+      fetch(url, {{
+        method: 'POST', body: payload, keepalive: true,
+        headers: {{ 'Content-Type': 'application/json' }}
+      }}).catch(function(){{}});
+    }}
+  }} catch (e) {{ /* swallow */ }}
+}})();
+</script>
 </body>
 </html>
 """
@@ -1380,18 +1481,18 @@ _EVENT_SLUG_RE = _re.compile(r"[a-z0-9_-]+")
 
 
 def event_signup_form(slug: str, label: str, email_fallback: str,
-                      cta_label: str = "Оставить email") -> str:
-    """Mailto-fallback email-capture form. Async POST upgrade if
-    <slug>/signup.json::transport_url is set (zero-credential default).
+                      cta_label: str = "Оставить email",
+                      lead_capture: dict | None = None,
+                      transport_url: str = "") -> str:
+    """Lead-capture form с direct POST к transport_url. Per
+    `Inv-LDG-FORMS-NO-MAILTO-LOSSY-FALLBACK` (text/landing.md) — no mailto
+    fallback (silently lost leads — admin 2026-05-13 empirical: 3h live → 0
+    KV entries). Form action= the real transport URL; JS upgrades к AJAX
+    submit for in-place «Спасибо» UX, но no-JS path также submits-and-lands.
 
-    `cta_label` parametrises the heading + button text (e.g. «Забронировать»
-    when admin frames signup as Бронирование, не lead-collect). Default
-    «Оставить email» preserved for back-compat.
-
-    Slug validation: must match `[a-z0-9_-]+` (DNS-safe, URL-path-safe,
-    HTML-attr-safe by construction). Untrusted YAML carrying spaces or
-    Cyrillic в slug → раннее explicit failure, не silent broken URL /
-    signup.json fetch + corrupted form action attr.
+    `cta_label` parametrises the heading + button text. `transport_url` —
+    canonical lead endpoint (resolved by caller от secrets_manager
+    signup_capture_url). Slug validation: must match `[a-z0-9_-]+`.
     """
     if not isinstance(slug, str) or not _EVENT_SLUG_RE.fullmatch(slug):
         raise ValueError(
@@ -1408,30 +1509,77 @@ def event_signup_form(slug: str, label: str, email_fallback: str,
     subj_q = _q(f"Заявка: {label}", safe="")
     label_q = _q(label, safe="")
     email_q = _q(email_fallback, safe="@")
-    cta_html = _t(cta_label)
-    cta_js = _json.dumps(cta_label, ensure_ascii=False)
-    mb = ("%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%2C%20%D0%9E%D0%BB%D1%8C%D0%B3%D0%B0.%0A%0A"
-          f"%D0%9E%D1%81%D1%82%D0%B0%D0%B2%D0%BB%D1%8F%D1%8E%20%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%20%E2%80%94%20{label_q}.%0A%0A"
-          "%D0%98%D0%BC%D1%8F:%20%0A%20Email:%20%0A"
-          "%D0%9E%20%D1%81%D0%B5%D0%B1%D0%B5%20(%D1%81%D1%84%D0%B5%D1%80%D0%B0%2C%20%D0%B3%D0%BE%D1%80%D0%BE%D0%B4):%20%0A")
+    # Resolve user-visible labels from lead_capture (data.yaml SoT) с fallback
+    # to canonical defaults. Round-trip through landing_text_proj.py:
+    #   lead_capture.fields.<name>.label   → form input label
+    #   lead_capture.submit_label          → form button text + heading override
+    #   lead_capture.consent_text          → consent checkbox label
+    # Submit-button text precedence: lead_capture.submit_label → signup.cta_label
+    # (the `cta_label` arg passed in by _render_signup) → "Оставить email".
+    lc = lead_capture if isinstance(lead_capture, dict) else {}
+    lc_fields = lc.get("fields") or {}
+    def _lc_label(field_key: str, default: str) -> str:
+        entry = lc_fields.get(field_key) or {}
+        return str(entry.get("label") or default).strip() or default
+    submit_text = (str(lc.get("submit_label") or "").strip() or cta_label)
+    cta_html = _t(submit_text)
+    cta_js = _json.dumps(submit_text, ensure_ascii=False)
     # Slug is admin-controlled identifier — escape for safe HTML/attr/URL.
     slug_t = _t(slug)
     # Form labels — typography-cleaned (Inv-TYPO-no-hanging-words, NBSP-bind preps).
-    lbl_name    = _typo("Имя")
-    lbl_email   = _typo("Email")
-    lbl_about   = _typo("Коротко о себе")
-    lbl_about_h = _typo("(сфера, город — опционально)")
-    lbl_consent = _typo("Согласен(-на) на обработку персональных данных для ответа по программе.")
+    # «about» field is opt-in: rendered only когда lead_capture.fields.about
+    # объявлен в data.yaml (admin 2026-05-13 — paris-2026-09 dropped the field).
+    _raw_name    = _lc_label("name",  "Имя")
+    _raw_email   = _lc_label("email", "Эл. Почта")
+    lbl_name    = _typo(_raw_name)
+    lbl_email   = _typo(_raw_email)
+    _about_present = bool(lc_fields.get("about"))
+    # Mailto fallback body — data-driven from lead_capture.fields.<key>.label.
+    # Each field produces a «<Label>: \n» row в pre-populated mail body.
+    # name/email always rendered; about-row only when admin declared the field.
+    _mb_lines = ["Здравствуйте, Ольга.", "",
+                 f"Оставляю контакт — {label}.", "",
+                 f"{_raw_name}: ",
+                 f"{_raw_email}: "]
+    if _about_present:
+        _raw_about = _lc_label("about", "Коротко о себе (сфера, город — опционально)")
+        _mb_lines.append(f"{_raw_about}: ")
+        # Combined label may contain a parenthetical hint inline; split keeps
+        # the two-span shape («main + hint» on the same `<label>`).
+        if "(" in _raw_about:
+            _main, _, _hint = _raw_about.partition("(")
+            _about_main = _main.strip()
+            _about_hint = "(" + _hint.strip()
+        else:
+            _about_main, _about_hint = _raw_about.strip(), ""
+        lbl_about   = _typo(_about_main)
+        lbl_about_h = _typo(_about_hint)
+    else:
+        lbl_about = lbl_about_h = ""
+    mb = _q("\n".join(_mb_lines), safe="")
+    lbl_consent = _typo(str(lc.get("consent_text") or
+                            "Обрабатывайте персональные данные").strip())
     lbl_or      = _typo("Или напишите:")
+    _about_row = (
+        f'<label class="signup-label" for="su-note">{lbl_about}'
+        f'<span class="signup-hint">{lbl_about_h}</span></label>'
+        f'<input class="signup-input" id="su-note" name="note" autocomplete="off">'
+    ) if _about_present else ""
     # Form heading is <h3> (parent <section class=signup-wrap> already
     # provides the section's <h2 «Лист ожидания»>). Heading hierarchy
     # h2 → h3 is WCAG-correct and screen-reader-friendly.
+    # Form action = canonical transport URL (CF Worker /lead). NO mailto —
+    # Inv-LDG-FORMS-NO-MAILTO-LOSSY-FALLBACK. Empty action ('') falls back к
+    # current URL submit when transport unknown (graceful — fails loudly с
+    # 200/JSON on GH Pages instead of silently losing к user's email client).
+    _action = _t(transport_url) if transport_url else ""
+    _action_attr = f'action="{_action}"' if _action else 'action=""'
     return f'''<section id="signup" class="signup" aria-labelledby="signup-h">
   <h3 id="signup-h" class="signup-h3">{cta_html}</h3>
   <form id="signup-form" class="signup-form" novalidate
         aria-labelledby="signup-h"
-        action="mailto:{email_q}?subject={subj_q}&amp;body={mb}"
-        method="post" enctype="text/plain"
+        {_action_attr}
+        method="post" enctype="application/x-www-form-urlencoded"
         data-slug="{slug_t}">
     <label class="signup-label" for="su-name">{lbl_name}</label>
     <input class="signup-input" id="su-name" name="name"
@@ -1439,9 +1587,7 @@ def event_signup_form(slug: str, label: str, email_fallback: str,
     <label class="signup-label" for="su-email">{lbl_email}</label>
     <input class="signup-input" id="su-email" name="email" type="email"
            autocomplete="email" required aria-required="true">
-    <label class="signup-label" for="su-note">{lbl_about}
-      <span class="signup-hint">{lbl_about_h}</span></label>
-    <input class="signup-input" id="su-note" name="note" autocomplete="off">
+    {_about_row}
     <label class="signup-consent" for="su-consent">
       <input type="checkbox" id="su-consent" name="consent" required
              aria-required="true"
@@ -1453,34 +1599,40 @@ def event_signup_form(slug: str, label: str, email_fallback: str,
   <div class="signup-msg" id="signup-msg" role="status" aria-live="polite"></div>
   <noscript><p class="signup-note">{lbl_or} <a href="mailto:{email_q}">{_t(email_fallback)}</a></p></noscript>
 <script>
+/* AJAX-upgrade: form already action=transport_url (no-JS path lands lead
+   via plain POST). JS prevents default to keep user on page + show
+   «Спасибо» в place. Both paths persist к KV (Inv-LDG-FORMS-NO-MAILTO). */
 (function(){{
   var f=document.getElementById("signup-form");
   if(!f) return;
   var btn=document.getElementById("su-btn");
   var msg=document.getElementById("signup-msg");
-  var transport=null;
+  var transport=f.getAttribute("action") || "";
+  /* Optional /<slug>/signup.json override — single SoT для transport_url. */
   fetch("/{slug_t}/signup.json").then(function(r){{return r.ok?r.json():null}})
     .then(function(d){{if(d&&d.transport_url)transport=d.transport_url;}})
     .catch(function(){{}});
   f.addEventListener("submit",function(e){{
     var name=f.name.value.trim(),email=f.email.value.trim();
-    var note=f.note.value.trim(),consent=f.consent.checked;
+    var note=(f.note?f.note.value.trim():""),consent=f.consent.checked;
     if(name.length<2){{e.preventDefault();f.name.focus();return;}}
     if(!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(email)){{e.preventDefault();f.email.focus();return;}}
     if(!consent){{e.preventDefault();f.consent.focus();return;}}
-    if(!transport)return; // mailto: handles it
+    if(!transport)return; /* no-JS path: form action handles it */
     e.preventDefault();
     btn.disabled=true;btn.textContent="отправка...";
     var data=new URLSearchParams();
     data.append("name",name);data.append("email",email);
-    data.append("note",note);data.append("consent","true");
+    if(note) data.append("note",note);
+    data.append("consent","true");
+    data.append("slug",f.dataset.slug||"");
     fetch(transport,{{method:"POST",
       headers:{{"Content-Type":"application/x-www-form-urlencoded"}},
       body:data.toString()}})
       .then(function(r){{return r.json()}})
       .then(function(d){{
         if(d&&d.ok){{f.style.display="none";
-          msg.textContent="Заявка принята. Свяжемся лично.";
+          msg.innerHTML="Спасибо!<br>Свяжемся.";
         }}else{{msg.textContent="Ошибка. Попробуйте ещё раз или напишите на {email_q}.";
           btn.disabled=false;btn.textContent={cta_js};}}
       }})
@@ -1814,6 +1966,7 @@ class _LandingCtx:
     h_aug: object          # = `_h` (curated-markup pass-through; foreign-name aug retired 2026-05-12)
     breath: object         # callable(text) -> str — «one breath per line»
     ph: "dict[str, str]" = _dc_field(default_factory=dict)
+    pricing_html: str = ""  # rendered pricing-display aside; reused for duplicate-before-includes
 
 
 def _render_header(ctx: "_LandingCtx") -> "list[str]":
@@ -2001,13 +2154,19 @@ def _render_pricing_status(ctx: "_LandingCtx") -> "list[str]":
         # Label-less display: amount + currency только. aria-label сохраняет
         # screen-reader semantics. Admin: «слово "стоимость" лишнее» — цифра
         # говорит сама.
-        parts.append(
+        _pricing_aside = (
             '<aside class="pricing-display" aria-label="Стоимость">'
             f'<div class="pricing-amount">{amount_str}'
             f'<span class="currency">{cur_glyph}</span></div>'
             + (f'<div class="pricing-note">{_t(note)}</div>' if note else '')
             + '</aside>'
         )
+        parts.append(_pricing_aside)
+        # Stash for optional duplication before «Входит:» section
+        # (admin 2026-05-14: «важно сразу называть сумму; принимаю решение
+        # дублировать элемент» — оригинал у верха страницы остаётся, дубликат
+        # рендерится перед секцией «Входит:» в _render_sections_and_programme).
+        ctx.pricing_html = _pricing_aside
 
     # Render-time placeholders for section prose ({{name}}) — admin 2026-05-11 (feedback.txt):
     # «[здесь автоматическая калькуляция] — для программного разрешения».
@@ -2056,8 +2215,18 @@ def _render_sections_and_programme(ctx: "_LandingCtx") -> "list[str]":
     sections = m.sections if hasattr(m, "sections") else (m.get("sections") or [])
 
     def _render_programme_block() -> str:
-        out: list[str] = ['<section class="programme"><h2>Программа</h2>'
-                          '<ol class="days" aria-label="Программа по дням">']
+        # Evening-recur registry — admin 2026-05-13: «Вечер — вернисажи …
+        # повторяющийся элемент». Single SoT, ноль дублирования inline.
+        # Source = raw `ctx.ev` dict (EventModel validator strips unknown
+        # fields; пока evenings_recurring не lifted в EventModel — reach
+        # в ctx.ev directly). TODO: lift в event_schema.EventModel.
+        _raw_ev = ctx.ev if isinstance(ctx.ev, dict) else {}
+        _evenings_reg = _raw_ev.get("evenings_recurring") or {}
+        _h_progr = _event_heading(_raw_ev, "programme", "Программа")
+        _h_progr_html = f'<h2>{_t(_h_progr)}</h2>' if _h_progr else ''
+        _h_progr_aria = _t(_h_progr) if _h_progr else "Программа"
+        out: list[str] = [f'<section class="programme">{_h_progr_html}'
+                          f'<ol class="days" aria-label="{_h_progr_aria} по дням">']
         # Inv-PARIS-design-arc-per-day (text/event-paris-2026-09.md): каждый день-card
         # carries data-day=<index> атрибут — CSS picks per-day accent token
         # (--paris-day-{n}-accent). Day-arc visually congruent с program's three-modernism arc.
@@ -2065,6 +2234,7 @@ def _render_sections_and_programme(ctx: "_LandingCtx") -> "list[str]":
             d_date = day.get("date", "")
             d_theme = day.get("theme", "")
             d_notes = day.get("notes", "")
+            d_evening = day.get("evening", "")
             out.append(f'<li data-day="{idx}">')
             if d_date:
                 out.append(f'<p class="day-date">{_t(d_date)}</p>')
@@ -2082,6 +2252,18 @@ def _render_sections_and_programme(ctx: "_LandingCtx") -> "list[str]":
                 _day_paras = _drop_block_close_period(_day_paras)
                 for para in _day_paras:
                     out.append(f'<p class="day-notes">{inline(para)}</p>')
+            # Evening-recur tile — rendered after notes если day declares
+            # evening: <key> и key есть в registry.
+            if d_evening and isinstance(_evenings_reg, dict) and d_evening in _evenings_reg:
+                _ev = _evenings_reg[d_evening] or {}
+                _ev_prefix = _ev.get("prefix", "Вечер")
+                _ev_text = _ev.get("text", "")
+                if _ev_text:
+                    out.append(
+                        f'<p class="evening-recur" data-recur="{d_evening}">'
+                        f'<span class="evening-label">{_t(_ev_prefix)}</span>'
+                        f' — {inline(_ev_text)}</p>'
+                    )
             out.append('</li>')
         out.append('</ol></section>')
         return "".join(out)
@@ -2113,7 +2295,10 @@ def _render_sections_and_programme(ctx: "_LandingCtx") -> "list[str]":
                 parts.append(_render_programme_block())
                 programme_inserted = True
             continue
-        parts.append(f"<section><h2>{_t(t)}</h2>")
+        # Duplicate pricing-display aside перед секцией «Входит:» (admin 2026-05-14).
+        if t.strip() == "Входит:" and ctx.pricing_html:
+            parts.append(ctx.pricing_html)
+        parts.append(f"<section><h2>{_t(t)}</h2>" if t and t.strip() else "<section>")
         # admin: «one breath per line» (per-line typography) + markdown links; {{name}}
         # placeholders resolved here. A section that is prose-only and «крупнее абзаца»
         # drops its terminal «.» (Inv-TYPO-no-terminal-period-block — same _drop_block_close_period
@@ -2195,7 +2380,9 @@ def _render_sections_and_programme(ctx: "_LandingCtx") -> "list[str]":
                 f"{modes_phrase}."
             )
         if intro_lines:
-            parts.append('<section class="onboarding"><h2>Перед поездкой</h2><ul>')
+            _h_onb = _event_heading(ctx.ev if isinstance(ctx.ev, dict) else None,
+                                    "onboarding", "Перед поездкой")
+            parts.append(f'<section class="onboarding"><h2>{_t(_h_onb)}</h2><ul>')
             for it in intro_lines:
                 parts.append(f"<li>{h_aug(it)}</li>")
             parts.append("</ul></section>")
@@ -2237,7 +2424,9 @@ def _render_sections_and_programme(ctx: "_LandingCtx") -> "list[str]":
             f'<a href="mailto:{_t(contact_email)}">{_t(contact_email)}</a>.'
         )
     if terms_items and "Условия и сроки" not in _admin_section_titles:
-        parts.append('<section class="terms"><h2>Условия и сроки</h2><ul>')
+        _h_terms = _event_heading(ctx.ev if isinstance(ctx.ev, dict) else None,
+                                  "terms", "Условия и сроки")
+        parts.append(f'<section class="terms"><h2>{_t(_h_terms)}</h2><ul>')
         for it in terms_items:
             parts.append(f"<li>{h_aug(it)}</li>")
         parts.append('</ul></section>')
@@ -2290,14 +2479,29 @@ def _render_subevents(ctx: "_LandingCtx") -> "list[str]":
         se_title = se.get("title", "")
         se_desc = se.get("description", "")
         se_url = se.get("url")
-        _subev_parts.append(f'<section class="subevent subevent-{_u(se_type)}">')
+        # Resolve `{when_relative}` placeholder from subevent.when ts vs today —
+        # «Сегодня» / «Завтра» / weekday-phrase otherwise (admin 2026-05-13:
+        # «Не "В среду", а "Сегодня"» — render-time, не data-yaml hardcode).
+        if se_desc and "{when_relative}" in se_desc:
+            se_desc = se_desc.replace("{when_relative}", _when_relative_phrase(se.get("when")))
+        # Client-side auto-hide after `visible_until` (admin 2026-05-13: «пусть
+        # блок исчезнет после 20:30 по Москве»). Server-side build is too coarse —
+        # the page IS deployed before the deadline. JS reads the data attribute
+        # and hides the section at the precise moment per viewer's clock.
+        _visible_until = se.get("visible_until", "")
+        _vis_attr = (f' data-visible-until="{_t(str(_visible_until))}"'
+                     if _visible_until else "")
+        _subev_parts.append(f'<section class="subevent subevent-{_u(se_type)}"{_vis_attr}>')
         _subev_parts.append(f'<h2>{inline(se_title)}</h2>')
         if se_desc:
             # admin: «one breath per line» (per-line typography) + markdown links; «крупнее
             # абзаца» description drops its terminal «.» (Inv-TYPO-no-terminal-period-block).
             for se_para in _drop_block_close_period(_paras(se_desc)):
                 _subev_parts.append(f'<p>{_md_links(_breath(se_para))}</p>')
-        if se_url:
+        # Opt-out: subevent.suppress_link_block=true когда url используется inline
+        # в description (admin 2026-05-13 paris-2026-09-ig-live), и отдельный
+        # `<p.subevent-link>` блок дублирует ссылку.
+        if se_url and not se.get("suppress_link_block"):
             _u_url = _u(str(se_url))
             _u_text = inline(str(se.get("url_text") or se_url))
             _subev_parts.append(f'<p class="subevent-link"><a href="{_u_url}" rel="noopener">{_u_text}</a></p>')
@@ -2390,11 +2594,26 @@ def _render_signup(ctx: "_LandingCtx") -> "list[str]":
         if s_note:
             parts.append(f'<p>{inline(s_note)}</p>')
         ev_label = f"{m.title if hasattr(m,'title') else m.get('title','Событие')} {date_str}".strip()
+        lc = m.lead_capture if hasattr(m, "lead_capture") else m.get("lead_capture")
+        # Inv-LDG-FORMS-NO-MAILTO-LOSSY-FALLBACK: form action = real
+        # transport URL (CF Worker /lead). Resolved via secrets_manager
+        # signup_capture_url (canonical lead endpoint, configurable per
+        # deployment). No-JS submit lands at Worker; JS upgrades AJAX UX.
+        _transport_url = ""
+        try:
+            import sys as _sys, os as _os
+            _sys.path.insert(0, _os.path.expanduser("~/Dela/scripts"))
+            from secrets_manager import secrets as _secrets
+            _transport_url = _secrets.get_key("signup_capture_url") or ""
+        except Exception:
+            _transport_url = ""
         parts.append(event_signup_form(
             slug,
             ev_label,
             bio.get("email", "info@example.com"),
             cta_label=s_cta,
+            lead_capture=lc if isinstance(lc, dict) else None,
+            transport_url=_transport_url,
         ))
         parts.append("</section>")
     return parts
@@ -2467,7 +2686,9 @@ def _render_about_organizer(ctx: "_LandingCtx") -> "list[str]":
                 organizer_paragraphs.append(
                     f'<p><span class="org-name">{_t(nm)}</span> — {_t(person_bio)}.</p>'
                 )
-    title = _typo("Об Организаторах") if len(org_ids) > 1 else _typo("Об Организаторе")
+    _default_aoh = "Об Организаторах" if len(org_ids) > 1 else "Об Организаторе"
+    _ev_for_h = ctx.ev if isinstance(ctx.ev, dict) else None
+    title = _typo(_event_heading(_ev_for_h, "about_organizer", _default_aoh))
     link_html = ""
     safe_link = _u(a_link_url)
     if safe_link:
@@ -2576,11 +2797,49 @@ def _render_about_organizer(ctx: "_LandingCtx") -> "list[str]":
             # Each paragraph as separate <p>; link tail attaches to the last.
             p_blocks = "".join(f"<p>{_t(p)}</p>" for p in a_paras[:-1])
             p_blocks += f"<p>{_t(a_paras[-1])}{link_html}</p>"
+            _h_aoh_alt = _event_heading(ctx.ev if isinstance(ctx.ev, dict) else None,
+                                        "about_organizer", "Об Организаторе")
             parts.append('<footer class="about-organizer">'
-                         f'<h2>Об Организаторе</h2>{p_blocks}</footer>')
+                         f'<h2>{_t(_h_aoh_alt)}</h2>{p_blocks}</footer>')
 
     # (sub-events were already appended above — Об Организаторах stays the last block.)
     return parts
+
+
+def _render_landing_footer_image(ctx: "_LandingCtx") -> "list[str]":
+    """Phase between content blocks and legal footer — single editorial image
+    «в самый низ Посадочной». Admin 2026-05-13: «максимально конгруэтная
+    длинная ваза на белом фоне» + «футер ночной темы» (companion-piece для
+    night surface). Optional — rendered iff ev.landing_footer_image declares
+    {path[, path_night], alt}.
+
+    Day/night variants — when path_night provided, both <img> rendered;
+    CSS [data-theme] selectors show one and hide the other (small bytes cost
+    < theme-swap-via-JS complexity OR re-render-on-theme-toggle).
+    Sits AFTER content blocks BEFORE legal-min (Inv-SITE-trust-base preserved).
+    """
+    _raw_ev = ctx.ev if isinstance(ctx.ev, dict) else {}
+    img_cfg = _raw_ev.get("landing_footer_image") or {}
+    if not isinstance(img_cfg, dict) or not img_cfg.get("path"):
+        return []
+    path = str(img_cfg["path"]).strip().lstrip("/")
+    path_night = str(img_cfg.get("path_night") or "").strip().lstrip("/")
+    alt = str(img_cfg.get("alt") or "").strip()
+    # alt_night optional — night variant may show different object (admin
+    # 2026-05-13 «другой объект»); falls back к day alt when not declared.
+    alt_night = str(img_cfg.get("alt_night") or alt).strip()
+    if path_night:
+        return [
+            f'<figure class="landing-footer-image">'
+            f'<img class="theme-day" src="/{_t(path)}" alt="{_t(alt)}" loading="lazy">'
+            f'<img class="theme-night" src="/{_t(path_night)}" alt="{_t(alt_night)}" loading="lazy">'
+            f'</figure>'
+        ]
+    return [
+        f'<figure class="landing-footer-image">'
+        f'<img src="/{_t(path)}" alt="{_t(alt)}" loading="lazy">'
+        f'</figure>'
+    ]
 
 
 def _render_legal(ctx: "_LandingCtx") -> "list[str]":
@@ -2601,11 +2860,20 @@ def _render_legal(ctx: "_LandingCtx") -> "list[str]":
     # minimal `legal-min` footer with the privacy link alone, iff privacy_url
     # is admin-set in data.yaml.legal.
     suppress_legal = m.get("suppress_legal_footer", False) if hasattr(m, "get") else getattr(m, "suppress_legal_footer", False)
+    # admin 2026-05-13: «низ Посадочной неприемлем — пока ничего после "2024 года"
+    # не должно быть». suppress_legal_min: true → даже минимальный privacy-link
+    # footer не рендерится. Inv-SITE-trust-base временно ослаблен по admin
+    # директиве (binding «пока»). Cookie-banner отдельно через suppress_cookie_banner.
+    # Read raw `ctx.ev` (EventModel validator strips unknown fields — see same
+    # pattern с evenings_recurring earlier; TODO: lift suppress_legal_min к
+    # EventModel когда Rule-of-Three tipped).
+    _raw_ev = ctx.ev if isinstance(ctx.ev, dict) else {}
+    suppress_legal_min = bool(_raw_ev.get("suppress_legal_min", False))
     if not suppress_legal:
         legal_html = _legal_footer(d)
         if legal_html:
             parts.append(legal_html)
-    else:
+    elif not suppress_legal_min:
         privacy_url = _u(((d.get("legal") or {}).get("privacy_url")) or "")
         if privacy_url:
             parts.append(
@@ -2696,12 +2964,19 @@ def p_event_landing(d: dict, ev: dict) -> str:
     # - cookie-banner overlay separately decoupled (suppress_cookie_banner field)
     # Order remains canonical: subevents → content_tail (empty if terminal) → legal-min.
     # Natalia subevent is last CONTENT block; legal-min is footer-styled minimal privacy.
+    # arc-band footer-legend retired 2026-05-13: filled colour-bars recreate
+    # Day-2 visual peak через Outremer's natural saturation/luminance, что
+    # противоречит Inv-LDG-PARIS-days-equipotent (admin «зачем выделен один
+    # день?»). Negative space на terminus — by design (suppress_legal_footer);
+    # пусть дышит до privacy link. Polychromie-31 attribution живёт в Spec
+    # (event-paris-2026-09.md::references), не на rendered page.
     parts: list[str] = [
         *_render_header(ctx),
         *_render_pricing_status(ctx),
         *_render_sections_and_programme(ctx),
         *_render_subevents(ctx),
         *_content_tail,
+        *_render_landing_footer_image(ctx),
         *_render_legal(ctx),
     ]
 
@@ -2745,6 +3020,7 @@ def p_event_landing(d: dict, ev: dict) -> str:
         footer=False,
         surface="editorial",
         cookie_banner_enabled=not suppress_cookie,
+        slug=ev.get("id") if isinstance(ev, dict) else getattr(ev, "id", ""),
     )
 
 

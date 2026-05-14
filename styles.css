@@ -2,7 +2,7 @@
    1. Fonts (Inter, Inter Tight — Bauhaus successor display + body).
    2. Design tokens compiled из Spec layers (Inv-CSS-tokens-from-Spec).
    Регенерация tokens: python3 scripts/css_compile.py --owner olgarozet */
-@import url("https://fonts.bunny.net/css?family=inter:400,500,700,900|inter-tight:400,500,700&display=swap");
+@import url("https://fonts.bunny.net/css?family=inter:400,500,700,900|inter-tight:400,500,700|bad-script:400|marck-script:400&display=swap");
 /* Relative path resolves correctly in BOTH production (site root) AND
    path-based preview (/<fqdn>/styles.css → /<fqdn>/_tokens.generated.css).
    Root-absolute "/_tokens.generated.css" works в production но 404'es в
@@ -466,6 +466,38 @@ body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto;
 .skip-link:focus,
 .skip-link:focus-visible { top: 0; outline: var(--focus-outline-min) solid var(--accent); outline-offset: 2px; }
 
+/* Handwriting accent — render-time emitted via {hand:…} shortcode (admin 2026-05-13).
+   Caveat: warm cursive с reasonable cyrillic coverage; pair с Inter body works editorially. */
+/* Per Spec text/typography.md::Inv-TYPO-handwriting-high-calligraphy —
+   handwriting accent = HIGH calligraphy (formal pen-script). Admin 2026-05-13:
+   Marck Script «пока слабо» → escalated к Bad Script (Roman Shchyukin, Cyrillic
+   + Latin formal pen-handwriting, более pronounced stroke contrast). Size
+   bumped 1.55→1.85em + slight italic transform via skew (Bad Script ships
+   upright; visual slant 8° matches copperplate convention). */
+.handwriting {
+  font-family: 'Bad Script', 'Marck Script', cursive;
+  font-weight: 400;
+  font-size: 1.4em;            /* admin 2026-05-13 «слишком крупна, -25% точно» (1.85→1.4) */
+  line-height: 1;
+  letter-spacing: 0.01em;
+  vertical-align: -0.08em;
+  color: #C53030;
+  display: inline-block;
+  transform: skewX(-8deg);
+  transform-origin: 50% 60%;
+}
+
+/* Landing footer image — admin 2026-05-13 «в самый низ Посадочной» + «футер
+   ночной темы» (theme-companion). Alpha-PNG composites через transparency
+   on the active surface; dual-image swap для contextual congruence. */
+.landing-footer-image { margin: var(--sp-7) auto var(--sp-5); max-width: min(var(--measure), 100%); text-align: center; }
+.landing-footer-image img { width: 100%; height: auto; display: block; }
+/* Theme-conditional swap (no JS, no re-render — declarative). When both day/night
+   variants declared (img.theme-day + img.theme-night), [data-theme] attr on
+   <html> root toggles визуальное отображение. */
+[data-theme="day"] .landing-footer-image img.theme-night,
+[data-theme="night"] .landing-footer-image img.theme-day { display: none; }
+
 /* ══════════════════════════════════════════════════════════════════════
    EDITORIAL SURFACE · SWISS-MODERNIST · ARCHITECTURAL
    ──────────────────────────────────────────────────────────────────────
@@ -610,7 +642,11 @@ body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto;
   line-height: var(--lh-body);   /* Inv-TYPO-vertical-rhythm-baseline */
   color: var(--ink);
   background: var(--surface);
-  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ss01" 1;
+  /* font-feature-settings explicitly includes "onum" + "pnum" — без них
+     браузер игнорирует font-variant-numeric: oldstyle-nums (low-level features
+     overrride high-level). admin 2026-05-13 «висячие цифры» — «20-е» в body
+     должна рендериться текстовыми (oldstyle) цифрами, не titling/lining. */
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ss01" 1, "onum" 1, "pnum" 1;
   /* Body — oldstyle (text figures), warmer rhythm в editorial register.
      Pricing-amount + day-numeral re-declare lining/tabular per Bringhurst
      §3.2.3 (titling figures only when there is no alternative — i.e.
@@ -668,9 +704,12 @@ body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto;
 /* ── 3. Header — masthead, thesis-first ─────────────────────────────── */
 
 .article-wrapper > header {
+  /* admin 2026-05-13: header border-bottom удалён — дублировал .pricing-display
+     top-rule, две параллельные линии в пустоте читались как избыточность.
+     Header заканчивается визуальной массой самого hero-блока; ticket-rule
+     ниже остаётся единственным горизонтальным маркером (single ticket frame). */
   margin: 0 0 var(--sp-6);
   padding: 0 0 var(--sp-4);
-  border-bottom: 1px solid var(--ink);
   display: grid;
   gap: var(--sp-2);
   max-width: var(--measure);
@@ -725,25 +764,22 @@ body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto;
    price. Renders as «1 550 € · с участника». */
 
 .article-wrapper .pricing-display {
-  /* Ticket-block (admin 2026-05-12 feedback.txt L19): «Цену отдельным блоком,
-     по дней тоже разделитель. Этот блок должен напоминать билет, на котором
-     цена. При этом максимально конгруэнтно всему остальному.»
-     Balance: ticket-hint через bottom-edge perforation + congruence через
-     section-rhythm preservation. Re-re-think 2026-05-12 (admin «максимально
-     конгруэтно»): 4-side ink-border (prior reconsider) перебор — diverged
-     from rest's «top-rule only» pattern. Optimum: top-rule (matches all
-     section separators) + bottom dashed --rule (perforation hint = ticket signal).
-     Внутренний padding — left/right zero (как section-rhythm); top/bottom
-     dashed = tear-edge feel. Swiss-modernist: hairline only, no full-box.
-     Universal — applies к ALL events' pricing block. */
+  /* Re-think 2026-05-13 (admin): «вокруг ценника чуть побольше поля он не
+     напоминает билет. При этом очень аккуратно-конгруэтно». Dashed bottom
+     perforation removed (ticket cue retired); generous vertical breathing
+     replaces the tear-edge as the «отдельный блок» signal. Top-rule kept —
+     it's the universal section-rhythm separator, congruent с rest. Result:
+     ценник = quietly-set display block, не bordered ticket.
+     History: 2026-05-12 first iteration had 4-side ink-border (too tight);
+     reconsider дal top-rule + bottom dashed (still ticket); now: top-rule
+     only + larger field. Swiss-modernist: hairline + space, no enclosure. */
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: end;
   gap: var(--sp-2) var(--sp-3);
-  margin: var(--sp-5) 0;
-  padding: var(--sp-4) 0 var(--sp-4);
-  border-top: 1px solid var(--rule);          /* section-rhythm separator above */
-  border-bottom: 2px dashed var(--rule);      /* perforation — ticket tear-edge */
+  margin: var(--sp-6) 0;
+  padding: var(--sp-6) 0 var(--sp-6);
+  border-top: 1px solid var(--rule);          /* section-rhythm separator above (congruent) */
   text-align: left;
 }
 .article-wrapper .pricing-display .pricing-label {
@@ -813,31 +849,20 @@ body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto;
 .article-wrapper { counter-reset: secctr dayctr; }
 
 .article-wrapper > section {
+  /* counter-increment retained for back-compat (некоторые legacy templates ссылаются);
+     visual rendering numeral отвергнут — admin 2026-05-13 «убери нумерацию 1 ТЕМА,
+     2 ПРОГРАММА». Section-rhythm теперь только через padding + margin air;
+     horizontal hairlines удалены как избыточные — единственный «билет» (ticket
+     metaphor) принадлежит .pricing-display (top-rule + dashed bottom = perforation).
+     Остальные section-breaks — silent. */
   counter-increment: secctr;
   margin: var(--sp-5) 0 0;
-  padding-top: var(--sp-5);
+  padding-top: 0;
   border: none;
-  border-top: 1px solid var(--rule);             /* hairline = floor plan rule */
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--sp-2);
   max-width: var(--measure);
-}
-.article-wrapper > section:first-of-type { border-top: none; padding-top: 0; }
-
-/* Wide screens: arabic numeral in left rail — Müller-Brockmann grid.
-   Two-digit zero-padded (01, 02…) — catalogue figure, not display. */
-@media (min-width: 880px) {
-  .article-wrapper > section h2 {
-    position: relative;
-  }
-  .article-wrapper > section h2::before {
-    position: absolute;
-    right: calc(100% + var(--gutter));
-    top: 0.32em;
-    width: var(--rail);
-    text-align: right;
-  }
 }
 
 .article-wrapper > section > h2 {
@@ -854,12 +879,10 @@ body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto;
      above (admin 2026-05-12 «прописные где уместно» congruence). */
 }
 .article-wrapper > section > h2::before {
-  content: counter(secctr, decimal);   /* plain «1, 2, 3 …» — admin 2026-05-11 «убери нули» */
-  font: 500 var(--fs-2xs)/var(--lh-tight) var(--mono);
-  font-variant-numeric: tabular-nums;
-  color: var(--muted);
-  letter-spacing: var(--tracking-caps-mid);
-  margin-right: 0.7em;
+  /* Section numerals (1, 2, 3…) удалены — admin 2026-05-13 «убери нумерацию
+     1 ТЕМА, 2 ПРОГРАММА». Catalogue-figure register не нужен; section identity
+     несут сами h2-заголовки в tracking-caps. */
+  content: none;
 }
 
 .article-wrapper section h3 {
@@ -927,20 +950,34 @@ body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto;
   align-self: start;
   padding-top: 0.18em;
 }
-/* Inv-PARIS-design-arc-per-day + Inv-PARIS-day-progression-visual:
-   Per-day accent (color) + progressive rule-weight (intensity peaks Day 2 «Дорогой»).
-   Pattern: 1 / paris-rule-weight / 2 / 1 px — entry · peak · warm · terminus. */
+/* Inv-PARIS-design-arc-per-day:
+   Per-day accent (color) — четыре равноценных голоса контрапункта.
+   Single uniform rule-weight (1px). Прежняя 1/3/2/1 progression отвергнута:
+   она конструирует иерархию (Day 2 peak), что противоречит самой концепции
+   программы — «counterpoint of modernism variants», где Le Corbusier /
+   Aalto / Zadkine / Парижский ритейл = равные голоса диалектики, не
+   pyramid с центром. Арку выражает horizontal arc-band у footer
+   (4 equal-width полосы), не volume hierarchy в днях. */
 .article-wrapper .days > li[data-day="1"]::before { color: var(--paris-day-1-accent, var(--accent)); }
 .article-wrapper .days > li[data-day="1"]        { border-top: 1px solid var(--paris-day-1-accent, var(--rule)); }
 .article-wrapper .days > li[data-day="2"]::before { color: var(--paris-day-2-accent, var(--accent)); }
-.article-wrapper .days > li[data-day="2"]        { border-top: var(--paris-rule-weight, 3px) solid var(--paris-day-2-accent, var(--accent)); }
+.article-wrapper .days > li[data-day="2"]        { border-top: 1px solid var(--paris-day-2-accent, var(--accent)); }
 .article-wrapper .days > li[data-day="3"]::before { color: var(--paris-day-3-accent, var(--accent)); }
-.article-wrapper .days > li[data-day="3"]        { border-top: 2px solid var(--paris-day-3-accent, var(--rule)); }
+.article-wrapper .days > li[data-day="3"]        { border-top: 1px solid var(--paris-day-3-accent, var(--rule)); }
 .article-wrapper .days > li[data-day="4"]::before { color: var(--paris-day-4-accent, var(--accent)); }
 .article-wrapper .days > li[data-day="4"]        { border-top: 1px solid var(--paris-day-4-accent, var(--rule)); }
 
+/* arc-band footer-legend retired 2026-05-13. Filled colour-bars recreated
+   Day-2 peak через Outremer's natural saturation, contradicting
+   Inv-LDG-PARIS-days-equipotent. Polychromie-31 reference остаётся в
+   event-paris-2026-09.md::references (Spec), не на rendered page. */
+
 .article-wrapper .days .day-date {
-  font: 500 var(--fs-2xs)/var(--lh-tight) var(--sans);
+  /* admin 2026-05-13: «даты мелко — нарушает спецификацию эргономики».
+     fs-2xs (0.719rem) — это --fs-caps-min, для tracked-caps registers
+     (organizers credit-line, metadata strips). Lowercase «8 сентября» —
+     body register, должна быть ≥ --fs-body-min (fs-xs = 0.875rem). */
+  font: 500 var(--fs-xs)/var(--lh-tight) var(--sans);
   color: var(--muted);
   margin: 0 0 var(--sp-1);
   grid-column: 2;
@@ -962,6 +999,27 @@ body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto;
 }
 .article-wrapper .days .day-notes:last-child { margin-bottom: 0; }
 
+/* Evening-recur tile — повторяющийся «Вечер — вернисажи Paris Design Week»
+   (admin 2026-05-13). Структурно отделён от day-notes (data-yaml::evenings_recurring
+   registry + per-day evening: <key> reference); визуально — «вечерняя плашка»,
+   конгруэнтная содержанию: Outremer-tint background (Polychromie 31 ~5%) +
+   accent left-bar = late-day register, без shouting. Same body-size,
+   no italic (Swiss editorial register бескомпромиссно). */
+.article-wrapper .days .evening-recur {
+  margin: var(--sp-3) 0 0;
+  padding: var(--sp-2) var(--sp-3);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  border-left: 2px solid var(--accent);
+  color: var(--ink-soft);
+  font: 400 var(--fs-s)/var(--lh-body) var(--sans);
+  grid-column: 2;
+}
+.article-wrapper .days .evening-recur .evening-label {
+  font-weight: 500;
+  letter-spacing: var(--tracking-micro);
+  color: var(--accent);
+}
+
 @media (max-width: 700px) {
   .article-wrapper .days > li {
     grid-template-columns: 1fr;
@@ -974,7 +1032,8 @@ body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto;
   }
   .article-wrapper .days .day-date,
   .article-wrapper .days .day-theme,
-  .article-wrapper .days .day-notes { grid-column: 1; }
+  .article-wrapper .days .day-notes,
+  .article-wrapper .days .evening-recur { grid-column: 1; }
 }
 
 /* ── 8. Definition list (concept pairs) — Swiss term/definition ── */
@@ -1019,13 +1078,20 @@ body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto;
   color: var(--ink-soft);
 }
 .article-wrapper section ul li::before {
+  /* Interpunct «·» aligned к first line's optical baseline (admin 2026-05-13:
+     «буллиты не выровнены относительно текста и не пропорциональны»).
+     font-size 1.4em was too prominent + top:-0.05em shifted the glyph above
+     cap-height. New: 1.05em (subtle, proportional к body) + line-height
+     matching body's lh-body so the dot sits на the same baseline rhythm as
+     the «о/н/а» x-height in text. */
   content: "·";
   position: absolute;
-  left: 0.4em;
-  top: -0.05em;
+  left: 0.45em;
+  top: 0;
   color: var(--accent);
   font-weight: 700;
-  font-size: 1.4em;
+  font-size: 1.05em;
+  line-height: var(--lh-body);
 }
 
 /* ── 10. Links — under-rule, focus-detected, accent on hover ────────── */

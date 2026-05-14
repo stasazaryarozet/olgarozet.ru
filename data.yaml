@@ -13,11 +13,11 @@ bio:
     text: ХУДОЖНИК
     link: art/
   roles:
-    - Ученик
-    - Учитель
+  - Ученик
+  - Учитель
   skills:
-    - Проектировщик
-    - Дизайнер
+  - Проектировщик
+  - Дизайнер
   inspire: |
     Вдохновляю —
     за деньги
@@ -54,38 +54,27 @@ booking:
 
 # ── Graph entities — referenced by id; values not duplicated across events ──
 people:
-  olgarozet:        { name: "Ольга Розет",        name_instrumental: "Ольгой Розет",
-                      role: lead,
-                      bio: "художник, искусствовед, дизайнер интерьеров" }
-  azaryarozet:      { name: "Азарья Розет",       name_instrumental: "Азарьей Розет",
-                      role: co-organizer }
-  natalia_loginova: { name: "Наталья Логинова",   name_instrumental: "Натальей Логиновой",
-                      role: co-organizer, location: paris,
-                      instagram: "natalya_lo",   # admin 2026-05-11 — https://www.instagram.com/natalya_lo/
-                      email: "loginovanp@gmail.com",
-                      bio: "соорганизатор парижского контура Design Travels" }
-  matluba:          { name: "Матлюба",            name_instrumental: "Матлюбой",
-                      role: co-organizer, location: uzbekistan }
-  nasullobek:       { name: "Насуллобек Раджабов", role: local-organizer,
-                      location: uzbekistan, confirmed: "2026-03-28" }
+  olgarozet: {name: "Ольга Розет", name_instrumental: "Ольгой Розет", role: lead, bio: "художник, искусствовед, дизайнер интерьеров"}
+  azaryarozet: {name: "Азарья Розет", name_instrumental: "Азарьей Розет", role: co-organizer}
+  natalia_loginova: {name: "Наталья Логинова", name_instrumental: "Натальей Логиновой", role: co-organizer, location: paris, instagram: "natalya_lo", email: "loginovanp@gmail.com", bio: "соорганизатор парижского контура Design Travels; приглашённый преподаватель Высшей Британской Школы Дизайна"}
+  matluba: {name: "Матлюба", name_instrumental: "Матлюбой", role: co-organizer, location: uzbekistan}
+  nasullobek: {name: "Насуллобек Раджабов", role: local-organizer, location: uzbekistan, confirmed: "2026-03-28"}
 
 partners:
-  bukhara_center:    { name: "Бухарский Центр Ремёсел", type: organization, location: bukhara }
-  masterskaya_rozet: { name: "Мастерская «Розет»",       type: studio,       owner: olgarozet }
-  ekata_estate:      { name: "EKATA Estate",             type: estate,       location: serbia }
-  vikendica_rozet:   { name: "Семейная Викендица",       type: residence,
-                       owner: olgarozet, location: serbia }
-  cdl:               { name: "ЦДЛ", full_name: "Центральный Дом Литераторов",
-                       type: venue, location: moscow }
+  bukhara_center: {name: "Бухарский Центр Ремёсел", type: organization, location: bukhara}
+  masterskaya_rozet: {name: "Мастерская «Розет»", type: studio, owner: olgarozet}
+  ekata_estate: {name: "EKATA Estate", type: estate, location: serbia}
+  vikendica_rozet: {name: "Семейная Викендица", type: residence, owner: olgarozet, location: serbia}
+  cdl: {name: "ЦДЛ", full_name: "Центральный Дом Литераторов", type: venue, location: moscow}
 
 locations:
-  paris:       { name: "Париж",      country: FR }
-  serbia:      { name: "Сербия",     country: RS }
-  vrshac:      { name: "Вршац",      country: RS, region: serbia }
-  samarkand:   { name: "Самарканд",  country: UZ }
-  bukhara:     { name: "Бухара",     country: UZ }
-  uzbekistan:  { name: "Узбекистан", country: UZ }
-  moscow:      { name: "Москва",     country: RU }
+  paris: {name: "Париж", country: FR}
+  serbia: {name: "Сербия", country: RS}
+  vrshac: {name: "Вршац", country: RS, region: serbia}
+  samarkand: {name: "Самарканд", country: UZ}
+  bukhara: {name: "Бухара", country: UZ}
+  uzbekistan: {name: "Узбекистан", country: UZ}
+  moscow: {name: "Москва", country: RU}
 
 # ── Country → ISO lang code (Inv-SEM-lang-of-parts substrate) ─────────────────
 # Resolver in site_generator._build_lang_resolver walks places/locations/people/
@@ -107,14 +96,14 @@ legal:
   # selected for footer.legal cross-host correctness (event-bound landings on
   # parisinseptember.ru reference parisinseptember.ru/privacy/, mirrored repo).
   privacy_url: "https://parisinseptember.ru/privacy/"
-  oferta_url:  null      # admin-fill: договор-оферта not yet drafted
+  oferta_url:            # admin-fill: договор-оферта not yet drafted
   entity:
     # admin-fill: ИП / ООО реквизиты Оператора (152-ФЗ ст. 18.1 — подлежат
     # публикации в открытом доступе). Empty strings render as no-op (footer
     # bullets omit absent fields). Fill all four to publish full reqs block.
-    name:    ""          # «ИП Розет Ольга Геннадьевна»
-    inn:     ""          # 12-значный ИНН ИП
-    ogrn:    ""          # 15-значный ОГРНИП
+    name: ""             # «ИП Розет Ольга Геннадьевна»
+    inn: ""              # 12-значный ИНН ИП
+    ogrn: ""             # 15-значный ОГРНИП
     address: ""          # юр.адрес регистрации
   payment:
     # Платёжные методы листинга мероприятий (Design Travels, Встречи).
@@ -257,15 +246,15 @@ event_policy:
         modes: [online, offline]
         rule: "оффлайн только дополняет онлайн (онлайн обязательно для всех)"
     value_axes:
-      - id: learning
-        label: "Обучение"
-        description: "экспертный контент, лекции, мастер-классы, авторские маршруты"
-      - id: collaboration
-        label: "Сотрудничество"
-        description: "с Организаторами и между Путешественниками"
-      - id: entertainment
-        label: "Развлечение"
-        description: "пикники, прогулки, локальные события, эстетический отдых"
+    - id: learning
+      label: "Обучение"
+      description: "экспертный контент, лекции, мастер-классы, авторские маршруты"
+    - id: collaboration
+      label: "Сотрудничество"
+      description: "с Организаторами и между Путешественниками"
+    - id: entertainment
+      label: "Развлечение"
+      description: "пикники, прогулки, локальные события, эстетический отдых"
     note: |
       Общее правило для Дизайн-Путешествий: 50% предоплата.
       Перед каждым Путешествием новый Путешественник проходит короткое онлайн-собеседование
@@ -279,784 +268,868 @@ event_series:
   meeting_chelovek_remeslo:
     name: "Встречи с Ольгой"
     program:
-      - kind: talk
-        by: olgarozet
-        topic_source: [design_travels, field_scouting]
-        description: "Доклад Ольги на тему, обычно связанный в т.ч. с результатами наблюдений в дизайн-путешествиях и собственных вылазках"
-      - kind: dialogue
-        with: olgarozet
-        type: professional
-        description: "Профессиональное общение с Ольгой"
-      - kind: networking
-        among: participants
-        description: "Нетворкинг участников друг с другом"
+    - kind: talk
+      by: olgarozet
+      topic_source: [design_travels, field_scouting]
+      description: "Доклад Ольги на тему, обычно связанный в т.ч. с результатами наблюдений в дизайн-путешествиях и собственных вылазках"
+    - kind: dialogue
+      with: olgarozet
+      type: professional
+      description: "Профессиональное общение с Ольгой"
+    - kind: networking
+      among: participants
+      description: "Нетворкинг участников друг с другом"
     online_prep:
       encouraged: true
       recommendations:
-        - "Подготовиться к событию заранее"
-        - "Выделить место-время"
-        - "Приготовить себе еду"
+      - "Подготовиться к событию заранее"
+      - "Выделить место-время"
+      - "Приготовить себе еду"
 
 audience:
-  architects:    архитекторы
-  designers:     дизайнеры
-  decorators:    декораторы
-  artists:       художники
+  architects: архитекторы
+  designers: дизайнеры
+  decorators: декораторы
+  artists: художники
   professionals: специалисты
 
 # ── Plans — entity-plan Spec (subsystem-layer, knowledge/system/specifications/entity-plan.md)
 # Plans orchestrate intent + decomposition + outputs + criteria; Plan ⊃ Campaigns + Tasks
 # Phase 1: minimal-viable Plan instances; Campaign + Wave bindings populated as subsystems mature.
 plans:
-  - id: paris-2026-09-plan
-    title: "Paris September 2026 — Дизайн-Путешествие arc"
-    intent: |
-      Successfully run paris-2026-09 Дизайн-Путешествие 8-11 sентября 2026 с
-      cohort до 10 человек, 1600€ team-fee, авторская программа Olga + Natalia
-      (paritet'ные Организаторы), ethical broadcast (Inv-TXT-utility-on-receipt)
-      по всему promo-arc'у март-август 2026. Онлайн-презентация программы
-      (IG-Live с обеими, среда; ZOOM в августе) — knowledge transfer + relationship
-      building с potential Путешественниками.
-    status: active     # entity-plan status_taxonomy
-    temporal:
-      start_ts: "2026-03-01T00:00:00+03:00"   # promo-arc opens
-      end_ts:   "2026-09-11T23:59:59+03:00"   # trip closes Day 4 ужин
-      milestones:
-        - { ts: "2026-05-13T19:00:00+03:00", label: "Онлайн-презентация — прямой эфир с Ольгой и Натальей (Instagram Live, канал Натальи Логиновой), 19:00 МСК" }
-        - { ts: "2026-08-24T19:00:00+03:00", label: "Онлайн-презентация — ZOOM (август 2026, дата уточняется; не публикуем пока)" }
-        - { ts: "2026-09-08T09:00:00+03:00", label: "Day 1 — Система вкуса" }
-        - { ts: "2026-09-09T09:00:00+03:00", label: "Day 2 — Дорогой модернизм" }
-        - { ts: "2026-09-10T09:00:00+03:00", label: "Day 3 — Человеческий модернизм + Маркман master-class" }
-        - { ts: "2026-09-11T09:00:00+03:00", label: "Day 4 — Искусство и дизайн + Итоги" }
-    owners: [azaryarozet, olgarozet, natalia_loginova]
-    decomposition: []   # subsystem-tasks Task-id list — Phase 2: walk knowledge/system/tasks/<tid>.md
-    outputs:
-      - { kind: event,    id: paris-2026-09 }                  # main travel-event
-      - { kind: event,    id: paris-2026-09-ig-live }          # publicly-announced online-presentation (IG Live)
-      - { kind: event,    id: paris-2026-09-zoom-preshow }     # internal — Zoom in August, not published yet
-      - { kind: campaign, id: paris-2026-09-promo }            # promotional arc — Campaign below
-    resources:
-      - { class: money, amount: 1600, currency: EUR, per: participant, role: revenue_target }
-      - { class: time,  duration_min: 5760, role: trip_duration }   # 4 days × 24 hours × 60 min
-    audience: [architects, designers, decorators, artists]
-    success_criteria:
-      - "≥ 6 confirmed cohort registrations (60% of cap=10)"
-      - "Revenue ≥ 9 600 € (6 × 1600€)"
-      - "Inv-TXT-utility-on-receipt ✓ across все promotional broadcasts"
-      - "Все 4 venue-bookings confirmed by 2026-08-15: Maison La Roche, Apt Molitor (Wed-resolved), Maison Louis Carré (Thu-private), Маркман master-class"
-    audit_log: []   # KnowledgeClaim-oid retrospective entries — Phase 2
+- id: paris-2026-09-plan
+  title: "Paris September 2026 — Дизайн-Путешествие arc"
+  intent: |
+    Successfully run paris-2026-09 Дизайн-Путешествие 8-11 sентября 2026 с
+    cohort до 10 человек, 1600€ team-fee, авторская программа Olga + Natalia
+    (paritet'ные Организаторы), ethical broadcast (Inv-TXT-utility-on-receipt)
+    по всему promo-arc'у март-август 2026. Онлайн-презентация программы
+    (IG-Live с обеими, среда; ZOOM в августе) — knowledge transfer + relationship
+    building с potential Путешественниками.
+  status: active       # entity-plan status_taxonomy
+  temporal:
+    start_ts: "2026-03-01T00:00:00+03:00"     # promo-arc opens
+    end_ts: "2026-09-11T23:59:59+03:00"       # trip closes Day 4 ужин
+    milestones:
+    - {ts: "2026-05-13T19:00:00+03:00", label: "Онлайн-презентация — прямой эфир с Ольгой и Натальей (Instagram Live, канал Натальи Логиновой), 19:00 МСК"}
+    - {ts: "2026-08-24T19:00:00+03:00", label: "Онлайн-презентация — ZOOM (август 2026, дата уточняется; не публикуем пока)"}
+    - {ts: "2026-09-08T09:00:00+03:00", label: "Day 1 — Система вкуса"}
+    - {ts: "2026-09-09T09:00:00+03:00", label: "Day 2 — Дорогой модернизм"}
+    - {ts: "2026-09-10T09:00:00+03:00", label: "Day 3 — Человечный модернизм + Маркман master-class"}
+    - {ts: "2026-09-11T09:00:00+03:00", label: "Day 4 — Искусство и дизайн + Итоги"}
+  owners: [azaryarozet, olgarozet, natalia_loginova]
+  decomposition: []     # subsystem-tasks Task-id list — Phase 2: walk knowledge/system/tasks/<tid>.md
+  outputs:
+  - {kind: event, id: paris-2026-09}                           # main travel-event
+  - {kind: event, id: paris-2026-09-ig-live}                   # publicly-announced online-presentation (IG Live)
+  - {kind: event, id: paris-2026-09-zoom-preshow}              # internal — Zoom in August, not published yet
+  - {kind: campaign, id: paris-2026-09-promo}                  # promotional arc — Campaign below
+  resources:
+  - {class: money, amount: 1600, currency: EUR, per: participant, role: revenue_target}
+  - {class: time, duration_min: 5760, role: trip_duration}          # 4 days × 24 hours × 60 min
+  audience: [architects, designers, decorators, artists]
+  success_criteria:
+  - "≥ 6 confirmed cohort registrations (60% of cap=10)"
+  - "Revenue ≥ 9 600 € (6 × 1600€)"
+  - "Inv-TXT-utility-on-receipt ✓ across все promotional broadcasts"
+  - "Все 4 venue-bookings confirmed by 2026-08-15: Maison La Roche, Apt Molitor (Wed-resolved), Maison Louis Carré (Thu-private), Маркман master-class"
+  audit_log: []     # KnowledgeClaim-oid retrospective entries — Phase 2
 
 # ── Campaigns — entity-campaign Spec (subsystem-layer, knowledge/system/specifications/entity-campaign.md)
 # Campaign promotes target entities through broadcasts; governed by Inv-TXT-utility-on-receipt.
 # Phase 1: minimal Campaign instance с plan_id binding; broadcasts + materials populated по мере maturation.
 campaigns:
-  - id: paris-2026-09-promo
-    title: "paris-2026-09 promotional arc"
-    target_ids: [paris-2026-09]            # entity-campaign Inv-CMP-target-required
-    target_kind: event
-    plan_id: paris-2026-09-plan            # parent-edge — entity-campaign + entity-plan binding
-    timeline:
-      start_ts: "2026-03-01T00:00:00+03:00"
-      end_ts:   "2026-09-08T00:00:00+03:00"   # promo closes when trip starts
-    owners: [azaryarozet, olgarozet, natalia_loginova]
-    audience: [architects, designers, decorators, artists]
-    surfaces: [landing, telegram_broadcast, instagram_post]
-    description: |
-      Promotional arc для paris-2026-09 trip — landing parisinseptember.ru +
-      Telegram канал «ОЛЬГА РОЗЕТ» + Instagram @olgarozet posts. Каждый
-      broadcast carries Inv-TXT-utility-on-receipt: Внимающий получает Пользу
-      (factual / insight / aesthetic / orientation / warmth) даже без покупки
-      участия. См. exemplars: Eileen Gray Coiffeuse / Petite Coiffeuse cabinet
-      dissection (Nov-Dec 2025), 4-part Luxury taxonomy (Aug 2025), 5-lens
-      Paris-2025 framing (Aug 2025), David Lynch Surrealism reflection (Jan 2025),
-      Paris Design Trip Recap 25-locations (Sept 2024), Paris-Sept low-pressure
-      announcement (Jul 2025). Phase 2: Wave-id refs (subsystem-async-broadcast)
-      + Material-oid refs (.state/materials/*.json).
-    # Material-oid list — entity-material instances (.state/materials/*.json)
+- id: paris-2026-09-promo
+  title: "paris-2026-09 promotional arc"
+  target_ids: [paris-2026-09]              # entity-campaign Inv-CMP-target-required
+  target_kind: event
+  plan_id: paris-2026-09-plan              # parent-edge — entity-campaign + entity-plan binding
+  timeline:
+    start_ts: "2026-03-01T00:00:00+03:00"
+    end_ts: "2026-09-08T00:00:00+03:00"       # promo closes when trip starts
+  owners: [azaryarozet, olgarozet, natalia_loginova]
+  audience: [architects, designers, decorators, artists]
+  surfaces: [landing, telegram_broadcast, instagram_post]
+  description: |
+    Promotional arc для paris-2026-09 trip — landing parisinseptember.ru +
+    Telegram канал «ОЛЬГА РОЗЕТ» + Instagram @olgarozet posts. Каждый
+    broadcast carries Inv-TXT-utility-on-receipt: Внимающий получает Пользу
+    (factual / insight / aesthetic / orientation / warmth) даже без покупки
+    участия. См. exemplars: Eileen Gray Coiffeuse / Petite Coiffeuse cabinet
+    dissection (Nov-Dec 2025), 4-part Luxury taxonomy (Aug 2025), 5-lens
+    Paris-2025 framing (Aug 2025), David Lynch Surrealism reflection (Jan 2025),
+    Paris Design Trip Recap 25-locations (Sept 2024), Paris-Sept low-pressure
+    announcement (Jul 2025). Phase 2: Wave-id refs (subsystem-async-broadcast)
+    + Material-oid refs (.state/materials/*.json).
+   # Material-oid list — entity-material instances (.state/materials/*.json)
     # 7 Inv-TXT-utility-on-receipt exemplars from Olga's Instagram-Paris arc
     # (admin 2026-05-10 «посты про Эйлин Грей — экземпляры Пользы Внимающему»)
     # Each post stands alone — Внимающий receives Польза at moment of receipt
     # (factual / insight / aesthetic / orientation / warmth) без conversion-pressure.
-    materials:
-      - d3f6a8cb4eadea12   # Sept 2024 — Paris Design Trip Recap (25 locations) [DAIv5I3tq7d]
-      - 6ebce71683df2a75   # Aug 2025 — «Luxury of Attention» 4-part taxonomy [DN8bdocjDZ3]
-      - 1703eea9fc849346   # Dec 2025 — Eileen Gray «Petite Coiffeuse» прототип [DSPgR57Dciz]
-      - 0b19b617b5059dcd   # Nov 2025 — Eileen Gray «Coiffeuse E-1027» cabinet dissection [DRXLgjjjJXL] — admin's reference
-      - a9fd7404ce3929bd   # Jan 2025 — David Lynch + Surrealism reflection [DFNzrQXNJw-]
-      - e479af779f8bf020   # Jul 2025 — Paris-Sept announcement (low-pressure) [DLj8VUhtYi2]
-      - 96ca9fcd93dd2c6e   # Aug 2025 — «Paris Sept 2025» 5-lens framing [DNuYeAD0MV2]
+  materials:
+  - d3f6a8cb4eadea12       # Sept 2024 — Paris Design Trip Recap (25 locations) [DAIv5I3tq7d]
+  - 6ebce71683df2a75       # Aug 2025 — «Luxury of Attention» 4-part taxonomy [DN8bdocjDZ3]
+  - 1703eea9fc849346       # Dec 2025 — Eileen Gray «Petite Coiffeuse» прототип [DSPgR57Dciz]
+  - 0b19b617b5059dcd       # Nov 2025 — Eileen Gray «Coiffeuse E-1027» cabinet dissection [DRXLgjjjJXL] — admin's reference
+  - a9fd7404ce3929bd       # Jan 2025 — David Lynch + Surrealism reflection [DFNzrQXNJw-]
+  - e479af779f8bf020       # Jul 2025 — Paris-Sept announcement (low-pressure) [DLj8VUhtYi2]
+  - 96ca9fcd93dd2c6e       # Aug 2025 — «Paris Sept 2025» 5-lens framing [DNuYeAD0MV2]
     # broadcasts = subsystem-async-broadcast Wave dispatches; Основа (site articles,
     # IG/TG-channel posts, Landing) — отдельные потоки, не входят сюда per admin
     # 2026-05-10. Cap = 5 Async-Broadcasts.
     # Cap = 5 Async-Вещаний кроме Основы. Основа = IG + TG only (admin 2026-05-10:
     # измеряемая audience). Сайт пока без stats — Async-Broadcast, не Основа.
-    broadcasts:
-      # Commercial cold-start (admin 2026-05-12 — запускаем сначала Коммерческое):
-      - paris-2026-09-ig-post-main
-      - paris-2026-09-ig-story-1
-      - paris-2026-09-ig-story-2
-      - paris-2026-09-ig-story-3
-      - paris-2026-09-tg-announce
+  broadcasts:
+      # Commercial cold-start (admin 2026-05-12 — запускаем сначала Коммерческое;
+      # 2026-05-13 — feedback.txt explicitly listed reshare-of-Main Story before
+      # 3-part contract-Stories):
+  - paris-2026-09-ig-post-main
+  - paris-2026-09-ig-story-reshare
+  - paris-2026-09-ig-story-1
+  - paris-2026-09-ig-story-2
+  - paris-2026-09-ig-story-3
+  - paris-2026-09-tg-announce
       # Edu-commercial arc (topical вокруг commercial frame):
-      - paris-email-1-mo-guide
-      - paris-site-article-100-let
-      - paris-email-2-louis-carre
-      - paris-site-article-mo-guide
-      - paris-editorial-pitch-modernism-press
+  - paris-email-1-mo-guide
+  - paris-site-article-100-let
+  - paris-email-2-louis-carre
+  - paris-site-article-mo-guide
+  - paris-editorial-pitch-modernism-press
     # entity-campaign::Inv-CMP-resource-attestation — admin 2026-05-12 «см. Ресурс»:
     # paris-2026-09-promo — organic-only campaign (no paid_ads surface, no mailing
     # infra spend; consultations Apps Script reused). Promotional спенд = 0; revenue
     # side (team_fee × cohort) projected separately в events[paris-2026-09].pricing.
     # Inv-CMP-resource-attestation satisfied by explicit zero-attestation per Spec
     # «Free-only campaigns: budget MAY be present with amount=0».
-    budget:
-      amount: 0
-      currency: EUR
-      kind: organic-only       # Mira/Lumen-readable taxonomy
-      rationale: "no paid_ads surface, no mailing-list service, lead-capture reuses Apps Script (gratis)"
-    kpis: {}        # KPISet — subsystem-stats projection, append-only
+  budget:
+    amount: 0
+    currency: EUR
+    kind: organic-only         # Mira/Lumen-readable taxonomy
+    rationale: "no paid_ads surface, no mailing-list service, lead-capture reuses Apps Script (gratis)"
+  kpis: {}          # KPISet — subsystem-stats projection, append-only
+  highlights:
+    # IG Actuals (Highlights) per Campaign — Wave-template element
+    # (text/campaign-instance.md::π_instagram_highlight).
+    # Admin created «IX» Highlight from mobile 2026-05-13T22:06Z with
+    # paris-2026-09-ig-story-reshare as first Story. 3-part Stories planned там же.
+    - title: "IX"
+      cover_path: "knowledge/people/olgarozet/site/img/campaign/paris-2026-09-highlight-ix-cover-v1.png"
+      cover_source_kind: generated
+      cover_tool: gemini-2.5-flash-image
+      cover_pictogram_class: ig_highlight_cover
+      media_ids:
+        - paris-2026-09-ig-story-reshare         # live
+        - paris-2026-09-ig-story-1               # planned
+        - paris-2026-09-ig-story-2               # planned
+        - paris-2026-09-ig-story-3               # planned
+      created_at: "2026-05-13T22:06:28Z"
+      created_by: admin-mobile
 
 # ── Events — graph-aware: id + entity refs; lines: kept for legacy column render ─
 events:
-  - id: meeting_2026_05
-    type: meeting    # entity-event sub-class (online series — «Встреча с Ольгой»)
+- id: meeting_2026_05
+  type: meeting      # entity-event sub-class (online series — «Встреча с Ольгой»)
 
-    title: Человек, Дом, Ремесло
-    t_key: "2026-05"
-    date: после майских
-    audience: []
-    organizers: [olgarozet]
-    format: [online, meeting]
-    series: meeting_chelovek_remeslo
-    first_online_in_series: true
-    pricing:
-      regular:    { amount: 5000, currency: RUB }
-      early_bird: { amount: 2500, currency: RUB, until: "2026-05-01" }
-    cohort:     null
-    duration:   null
-    registration: null
-    status: PLANNING
-    history:
-      - { season: "2025-12", venue: cdl, format: offline, occurrences: 2,
-          theme: "Человек и Ремесло", price_rub: 5000 }
-    lead: "Первая онлайн-встреча серии «Встречи с Ольгой» — продолжение офлайн-встреч в ЦДЛ (декабрь 2025) в новом формате: доклад, диалог, нетворкинг."
-    sections:
-      - title: Формат
-        intro: Три части одной встречи.
-        items:
-          - "<strong>Доклад Ольги</strong> — наблюдения и материалы из дизайн-путешествий и собственных вылазок"
-          - "<strong>Профессиональный диалог</strong> с Ольгой"
-          - "<strong>Нетворкинг участников</strong> друг с другом"
-      - title: Стоимость
-        items:
-          - "<strong>5 000 ₽</strong> — обычная стоимость"
-          - "<strong>2 500 ₽</strong> — early-bird до 1 мая 2026"
-          - "Возможна скидка или бесплатное место по запросу — write o.g.rozet@gmail.com"
-      - title: Подготовка
-        intro: Рекомендуется заранее.
-        items:
-          - "Выделить место и время"
-          - "Приготовить себе еду"
-    signup:
-      title: "Записаться на встречу"
-      note: "Оставьте email — пришлю ссылку и точное время за день до встречи."
-    about_organizer:
-      text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров. Автор серии «Встречи»."
-      link_text: "olgarozet.ru"
-      link_url: "https://olgarozet.ru/"
-    lines:
-      - "Онлайн-встреча"
-      - ""
-      - "с Ольгой"
+  title: Человек, Дом, Ремесло
+  t_key: "2026-05"
+  date: после майских
+  audience: []
+  organizers: [olgarozet]
+  format: [online, meeting]
+  series: meeting_chelovek_remeslo
+  first_online_in_series: true
+  pricing:
+    regular: {amount: 5000, currency: RUB}
+    early_bird: {amount: 2500, currency: RUB, until: "2026-05-01"}
+  cohort:
+  duration:
+  registration:
+  status: PLANNING
+  history:
+  - {season: "2025-12", venue: cdl, format: offline, occurrences: 2, theme: "Человек и Ремесло", price_rub: 5000}
+  lead: "Первая онлайн-встреча серии «Встречи с Ольгой» — продолжение офлайн-встреч в ЦДЛ (декабрь 2025) в новом формате: доклад, диалог, нетворкинг."
+  sections:
+  - title: Формат
+    intro: Три части одной встречи.
+    items:
+    - "<strong>Доклад Ольги</strong> — наблюдения и материалы из дизайн-путешествий и собственных вылазок"
+    - "<strong>Профессиональный диалог</strong> с Ольгой"
+    - "<strong>Нетворкинг участников</strong> друг с другом"
+  - title: Стоимость
+    items:
+    - "<strong>5 000 ₽</strong> — обычная стоимость"
+    - "<strong>2 500 ₽</strong> — early-bird до 1 мая 2026"
+    - "Возможна скидка или бесплатное место по запросу — write o.g.rozet@gmail.com"
+  - title: Подготовка
+    intro: Рекомендуется заранее.
+    items:
+    - "Выделить место и время"
+    - "Приготовить себе еду"
+  signup:
+    title: "Записаться на встречу"
+    note: "Оставьте email — пришлю ссылку и точное время за день до встречи."
+  about_organizer:
+    text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров. Автор серии «Встречи»."
+    link_text: "olgarozet.ru"
+    link_url: "https://olgarozet.ru/"
+  lines:
+  - "Онлайн-встреча"
+  - ""
+  - "с Ольгой"
 
-  - id: paris-2026-09
-    type: travel    # entity-event sub-class — knowledge/system/specifications/entity-event.md
-    plan_id: paris-2026-09-plan    # parent-edge — entity-plan Spec; Plan.outputs ∋ this Event
-    campaigns: [paris-2026-09-promo]   # reverse-edge — entity-campaign Spec; C.target_ids ∋ this id
-    title: Париж · 8–11 сентября
-    t_key: "2026-09-08"
-    date: 8–11 сентября
-    broadcast: [site]
-    web_addresses: [parisinseptember.ru]
-    audience: [architects, designers, decorators, artists]
-    organizers: [olgarozet, natalia_loginova]
-    locations: [paris]
-    concept: "Сто лет обещаний дизайна. Утопия? Реальность?"
-    format: [travel]
-    cohort:
-      max: 10
-      comparator: lte    # admin 2026-05-12 feedback.txt — render «≤ 10» (math glyph), не «до 10» (word-form). Inv-TYPO-comparator-symbolic / Inv-CMP-PARIS-cohort-cap-symbolic.
-    duration: 4 дня
-    status: PLANNING
-    status_banner: false   # admin 2026-05-11 (feedback.txt): «Без "Программа собирается. Лист ожидания открыт."»
+- id: paris-2026-09
+  type: travel      # entity-event sub-class — knowledge/system/specifications/entity-event.md
+  plan_id: paris-2026-09-plan      # parent-edge — entity-plan Spec; Plan.outputs ∋ this Event
+  headings:
+    about_organizer: "Организаторы"     # admin 2026-05-13 override (default «Об Организаторах»)
+    programme: ""                       # admin 2026-05-14 (Natalia review): «убрать заголовок Программа» — содержимое остаётся, header не рендерится
+  landing_footer_image:                 # admin 2026-05-13 «в самый низ Посадочной» + «футер ночной темы конгруэтное, при этом другой объект или объекты»
+    # Day: single tall white ceramic vase + dried branch на cream surface
+    # (#F4F1EB) — RMBG-1.4 + Gaussian-dilated shadow zone.
+    # Night: Aalto Stool 60 (1933 Artek bentwood birch, three L-legs +
+    # round seat) на dark surface — DIRECT paris-2026-09 day-3 anchor
+    # (Maison Louis Carré, 1956-58, единственное здание Аалто во Франции).
+    # Honey-warm birch tone ↔ day's dried-branch bronze (palette
+    # continuity). Mask via luminance-threshold (RMBG cascade-exhausted
+    # ×2 на dark palette → analytical extraction since bg uniform #1c →
+    # trivial bright-vs-dark separation). Both → alpha PNG; CSS
+    # [data-theme] swap render-time без JS.
+    # History: book-stack (rev1) + Akari lantern (rev2) tried then retired
+    # — books read editorial-stationery, lantern читалось restaurant-style.
+    # Aalto stool: thematic anchor to landing text (day 3) + unambiguous
+    # design icon.
+    path: "img/campaign/paris-2026-09-landing-footer-vase.png"
+    path_night: "img/campaign/paris-2026-09-landing-footer-night.png"
+    alt: "Длинная керамическая ваза с одной ветвью"
+    alt_night: "Табурет Alvar Aalto Stool 60 — три L-ножки и круглое сиденье"
+  campaigns: [paris-2026-09-promo]     # reverse-edge — entity-campaign Spec; C.target_ids ∋ this id
+  title: Париж · 8–11 сентября
+  t_key: "2026-09-08"
+  date: 8–11 сентября
+  broadcast: [site]
+  web_addresses: [parisinseptember.ru]
+  audience: [architects, designers, decorators, artists]
+  organizers: [olgarozet, natalia_loginova]
+  locations: [paris]
+  concept: "Сто лет обещаний дизайна. Утопия? Реальность?"
+  format: [travel]
+  cohort:
+    max: 10
+    comparator: lte      # admin 2026-05-12 feedback.txt — render «≤ 10» (math glyph), не «до 10» (word-form). Inv-TYPO-comparator-symbolic / Inv-CMP-PARIS-cohort-cap-symbolic.
+  duration: 4 дня
+  status: PLANNING
+  status_banner: false     # admin 2026-05-11 (feedback.txt): «Без "Программа собирается. Лист ожидания открыт."»
     # admin 2026-05-12 reconsider Natalia-terminal: «не должно быть других блоков
     # после Натальи». footer.legal ушёл entirely; payment-methods переехали в
     # Бронирование section (выше); cookie-banner overlay сохранён (privacy link).
-    suppress_legal_footer: true        # .legal block hidden — Natalia subevent literally последний flow block
-    suppress_cookie_banner: false      # cookie/privacy consent overlay сохранён (legal compliance)
-    top_banner: "Дизайн-Путешествия: Обучение, Сотрудничество, Развлечение."
+  suppress_legal_footer: true          # .legal block hidden — Natalia subevent literally последний flow block
+  suppress_legal_min: true             # admin 2026-05-13: «пока ничего после "2024 года" не было» — даже минимальный privacy-link footer убран
+  suppress_cookie_banner: true         # admin 2026-05-13: temporary suppress overlay — same directive
+  top_banner: "Дизайн-Путешествия: Обучение, Сотрудничество, Развлечение."
     # admin 2026-05-10: cover-line block признан излишним — полностью suppressed.
     # Three-level header: landing_h1 (концепт) / title+date в landing_h2 / organizers в H3.
-    cover_line_suppress: ["*"]
-    landing_h1: |
-      100 ЛЕТ
-      ОБЕЩАНИЙ ДИЗАЙНА
-    # admin 2026-05-10 paris-landing.md: дата перед местом — «когда» = первичный
+  cover_line_suppress: ["*"]
+  landing_h1: |-
+    100 ЛЕТ
+    ОБЕЩАНИЙ
+   # admin 2026-05-10 paris-landing.md: дата перед местом — «когда» = первичный
     # constraint участия; «В ПАРИЖЕ» (locative) — human-natural, не каталогический ярлык.
-    landing_h2: |
-      8–11 СЕНТЯБРЯ
-      В ПАРИЖЕ
-    inclusions:
-      model: program_only
-      note: "В team-fee 1600€ входит только программа (см. секцию «Что входит»). Всё остальное — за счёт участника. Default «всё выключено» per Practice policy."
-    pricing:
-      team_fee:
-        amount: 1600     # admin 2026-05-11 (feedback.txt) «1 600»; was 1800
-        currency: EUR
-        per: participant
-        recipient: team
-      participant_expenses:
-        description: "сверх team-fee — оплачивает участник"
-        items: [transport_to_paris, accommodation, food]
+  landing_h2: |-
+    8–11 СЕНТЯБРЯ
+    В ПАРИЖЕ
+  inclusions:
+    model: program_only
+    note: "В team-fee 1600€ входит только программа (см. секцию «Что входит»). Всё остальное — за счёт участника. Default «всё выключено» per Practice policy."
+  pricing:
+    team_fee:
+      amount: 1600       # admin 2026-05-11 (feedback.txt) «1 600»; was 1800
+      currency: EUR
+      per: participant
+      recipient: team
+      label: Стоимость
+    participant_expenses:
+      description: "сверх team-fee — оплачивает участник"
+      items: [transport_to_paris, accommodation, food]
     # admin 2026-05-10 paris-landing.md: «one breath per line» — phrase-level breaks
     # (within-paragraph \n → <br>); cataloguic short-phrases без trailing period.
     # admin 2026-05-11 (feedback.txt): «10 человек — прописными» — cohort line removed here;
     # p_event_landing appends it as a .cohort.is-caps element derived from cohort.max (no hardcode).
-    lead: |
-      Посмотрим и Разберем: Теория ↔ Практика.
-      Через контрапункт вариантов модернизма
-
-      4 дня на стыке с «Maison & Objet»
-    sections:
-      - title: Тема
+  lead:
+  - "Посмотрим и Разберем: Теория ↔ Практика.\nЧерез контрапункт вариантов модернизма"
+  - 4 дня на стыке с «Maison & Objet»
+  sections:
+  - title: ""           # admin 2026-05-14 (Natalia review): «убрать заголовок Тема» — содержимое (вертикальный вопрос) остаётся, header не рендерится
         # admin 2026-05-10 paris-landing.md: question-vertical — pivot-words ALL-CAPS
         # на отдельных строках, ? как самостоятельная строка. Statement → impulse.
         # admin 2026-05-11 feedback.txt re-read 2026-05-12: «ЧТО/из развернутого[...]» —
         # «из развернутого в 20-е» идёт сразу после «ЧТО» (квалификатор того, ЧТО именно),
         # затем основной вопрос «ФУНКЦИОНИРУЕТ СЕГОДНЯ?». Не в низ.
-        text: |
-          ЧТО
-          из развернутого в 20-е
-          ФУНКЦИОНИРУЕТ
-          СЕГОДНЯ
-          ?
-      # Программа section retired — fully derived from days[] below
+    text: |-
+      ЧТО
+      из развернутого в 20-е
+      ФУНКЦИОНИРУЕТ
+      СЕГОДНЯ
+      ?
+     # Программа section retired — fully derived from days[] below
       # (Inv-PROJECTION + suppression in p_event_landing). Single SoT.
-      - title: "Входит:"
-        items:
-          - "Экскурсия с приветственным кофе"
-          - "Авторские дизайн-прогулки"
-          - "Информационные Материалы + наш Путеводитель по Maison & Objet"
-          - "Вход в музеи и на виллы по программе"
-          - "Трансфер за город на Maison Louis Carré (Aalto)"
-          - "Мастер-класс у дизайнера интерьера"
-      - title: "Не входит:"
-        items:
-          - "перелёт до Парижа и обратно"
-          - "проживание (помогаем подобрать)"
-          - "питание"
-          - "виза"
-          - "билеты на Maison & Objet и события сверх программы"
-      - title: Бронирование
+  - title: "Входит:"
+        # Inv-TYPO-parallel-list-capitalization-uniform: parallel lists
+        # («Входит» / «Не входит») должны иметь uniform initial-case
+        # на items. lowercase-initial — catalogue-fragment convention
+        # (Bringhurst §3.4), matches editorial register.
+    items:
+    - экскурсия с приветственным кофе
+    - авторские дизайн-прогулки
+    - информационные Материалы + наш Путеводитель по Maison & Objet
+    - вход в музеи и на виллы по программе
+    - трансфер за город на Maison Louis Carré (Aalto)
+    - мастер-класс у дизайнера интерьера
+  - title: "Не входит:"
+    items:
+    - перелёт до Парижа и обратно
+    - проживание (помогаем подобрать)
+    - питание
+    - виза
+    - билеты на Maison & Objet и события сверх программы
+  - title: Бронирование
         # admin 2026-05-10 paris-landing.md: active voice + agentive subject; «с Ольгой» personal;
         # «1/2 стоимости» ratio-form. admin 2026-05-11 (feedback.txt): «для программного разрешения» —
         # {{team_fee_half}} resolved at render by p_event_landing (team_fee.amount / 2, formatted).
         # admin 2026-05-12 reconsider: payment-methods line ranked from footer.legal к Бронирование
         # section — семантически принадлежит booking flow (legal-footer suppressed для landing_terminal).
-        text: |
-          Новые Путешественники
-          проходят онлайн-собеседование
-          с Ольгой.
+    text: |-
+      Новые Путешественники
+      проходят онлайн-собеседование
+      с Ольгой.
 
-          В случае подтверждения участия
-          и
-          оплаты 1/2 стоимости
-          — {{team_fee_half}} —
-          бронируем место.
-
-          Оплата: карта · СБП · банковский перевод
-      # admin 2026-05-11 (feedback.txt): new block «между 5 и 6» — Updates on the Topic:
+      В случае подтверждения участия
+      и
+      оплаты 1/2 стоимости
+      — {{team_fee_half}} —
+      бронируем место.
+     # admin 2026-05-11 (feedback.txt): new block «между 5 и 6» — Updates on the Topic:
       # follow Olga's broadcast channels (content related to this travel will land there too).
-      - title: "Обновления по Теме"
-        text: |
-          Следите за [Каналами Вещания](https://olgarozet.ru/) Ольги —
-          там будет и о связанных
-          с этим путешествием темах
-      # Title-only sentinels — suppress auto-policy blocks (event_policy.design_travel
+  - title: "Обновления по Теме"
+    text: |-
+      Следите за [Каналами Вещания](https://olgarozet.ru/) Ольги —
+      будет и о связанных с ближайшим парижским Путешествием темах
+     # Title-only sentinels — suppress auto-policy blocks (event_policy.design_travel
       # «Перед поездкой» + «Условия и сроки»). Admin's «Бронирование» section выше
       # covers the same ground (booking-flow + payment + onboarding), без duplication.
-      - title: "Перед поездкой"
-      - title: "Условия и сроки"
+  - title: "Перед поездкой"
+  - title: "Условия и сроки"
     # Internal organizer-side gaps — surfaced to admin/Lumen via System Memory,
     # NOT rendered on public traveler-facing landing (Inv-CONTENT-AUDIENCE).
-    internal_questions:
+  internal_questions:
       # Calendar feasibility checks — venues' published opening days vs trip days
       # (8/09 Tue · 9/09 Wed · 10/09 Thu · 11/09 Fri).
-      - to: [olgarozet, natalia_loginova]
-        priority: blocker
-        q: "Day 2 (9/09 Wed) — Appartement-Atelier Le Corbusier (24 rue Nungesser-et-Coli) public hours = Thu/Fri 13:30-18:00 + Sat. Wednesday — НЕ публичный день. Варианты: (a) move Apt Molitor на Day 3 PM (Thu 13:30-18:00); (b) запросить FLC private group booking на Wed; (c) Day 2 покрывает только Maison La Roche (Tue-Sat OK), Apt Molitor — на другой день."
-      - to: [olgarozet, natalia_loginova]
-        priority: blocker
-        q: "Day 3 (10/09 Thu) — Maison Louis Carré (Bazoches-sur-Guyonne, Aalto) public visits = Sat/Sun only. Группа в четверг — REQUIRES private booking off-hours (тел. +33 1 34 86 79 63). Зафиксировать слот заблаговременно."
-      - to: [olgarozet, natalia_loginova]
-        q: "Day 4 — Villa Savoye (Poissy, ~24 km, CMN) verified open Tue-Sun 10-17 — Fri 11/09 feasible. Day 2 уже покрывает Maison La Roche + Apt Molitor — финальные две точки на Day 4 нужно зафиксировать."
-      - to: [natalia_loginova]
-        q: "Maison Louis Carré — какой именно состав скульптур/современного искусства в саду на 10/09/2026 (постоянная коллекция или временная экспозиция)? Подтверждено voice'ом Ольги; нужна детализация для landing."
-      - to: [natalia_loginova]
-        q: "Master-class fallback — если Маркман не получится. Pierre Yovanovitch назван в voice — он подтверждённо доступен 10 сентября?"
-      - to: [olgarozet, natalia_loginova]
-        q: "Palais de la Porte Dorée или общественная палата — какой из дворцов входит в Day 1?"
-      - to: [olgarozet, natalia_loginova]
-        q: "Размещение — какой пакет/режим от Организаторов?"
-      - to: [olgarozet, natalia_loginova]
-        q: "Состав вернисажей и партнёров Maison & Objet — что включаем по мере готовности?"
+  - to: [olgarozet, natalia_loginova]
+    priority: blocker
+    q: "Day 2 (9/09 Wed) — Appartement-Atelier Le Corbusier (24 rue Nungesser-et-Coli) public hours = Thu/Fri 13:30-18:00 + Sat. Wednesday — НЕ публичный день. Варианты: (a) move Apt Molitor на Day 3 PM (Thu 13:30-18:00); (b) запросить FLC private group booking на Wed; (c) Day 2 покрывает только Maison La Roche (Tue-Sat OK), Apt Molitor — на другой день."
+  - to: [olgarozet, natalia_loginova]
+    priority: blocker
+    q: "Day 3 (10/09 Thu) — Maison Louis Carré (Bazoches-sur-Guyonne, Aalto) public visits = Sat/Sun only. Группа в четверг — REQUIRES private booking off-hours (тел. +33 1 34 86 79 63). Зафиксировать слот заблаговременно."
+  - to: [olgarozet, natalia_loginova]
+    q: "Day 4 — Villa Savoye (Poissy, ~24 km, CMN) verified open Tue-Sun 10-17 — Fri 11/09 feasible. Day 2 уже покрывает Maison La Roche + Apt Molitor — финальные две точки на Day 4 нужно зафиксировать."
+  - to: [natalia_loginova]
+    q: "Maison Louis Carré — какой именно состав скульптур/современного искусства в саду на 10/09/2026 (постоянная коллекция или временная экспозиция)? Подтверждено voice'ом Ольги; нужна детализация для landing."
+  - to: [natalia_loginova]
+    q: "Master-class fallback — если Маркман не получится. Pierre Yovanovitch назван в voice — он подтверждённо доступен 10 сентября?"
+  - to: [olgarozet, natalia_loginova]
+    q: "Palais de la Porte Dorée или общественная палата — какой из дворцов входит в Day 1?"
+  - to: [olgarozet, natalia_loginova]
+    q: "Размещение — какой пакет/режим от Организаторов?"
+  - to: [olgarozet, natalia_loginova]
+    q: "Состав вернисажей и партнёров Maison & Objet — что включаем по мере готовности?"
     # Declarative form schema — subsystem-landing-lead-capture §2.
     # Receiver derives canonical_host from web_addresses[0] (Inv-LLC-source-tag);
     # source_oid via sha256(host||edition||variant||canonical(contact)||ts_minute).
     # Each form_post → exactly one Participation edge stage=lead (Inv-LLC-functor).
-    lead_capture:
-      edition: paris-2026-09
-      variant: primary
-      fields:
-        name:    { label: "Имя",   required: true }
-        email:   { label: "Email", kind: email, required: true }
-        about:   { label: "Коротко о себе (сфера, город — опционально)", kind: text, required: false }
-      endpoint: dela_lead_endpoint
-      consent_text: "Согласен(-на) на обработку персональных данных для ответа по программе."
-    signup:
+  lead_capture:
+    edition: paris-2026-09
+    variant: primary
+    fields:
+      name: {label: "Имя", required: true}
+      email: {label: "Эл. Почта", kind: email, required: true}
+    endpoint: dela_lead_endpoint
+    consent_text: "Обрабатывайте персональные данные"
+  signup:
       # admin 2026-05-10 paris-landing.md: heading-as-CTA («Забронировать» инфинитив,
       # action-call); body-explanation удалён — heading carries semantic, форма
       # говорит сама.
-      title: "Забронировать"
-      cta_label: "Забронировать"
-    contact:
+    title: "Заявка"                    # admin 2026-05-13: section heading = «Заявка» (раздел), не «Забронировать»
+    cta_label: "Забронировать"         # button label keeps imperative action
+  contact:
       # admin-authored 2026-05-11 (restored after Lumen accidental overwrite during
       # bulk edit). Inv-FACT-admin-text-sacred — see text/system.md.
-      prompt: "Остался вопрос?"
-      text: "Напишите Ольге — ответит лично."
-      email: "o.g.rozet@gmail.com"
-    about_organizer:
+    prompt: "По связанным и не связанным вопросам —"
+    text: "Пишите!"
+    email: "o.g.rozet@gmail.com"
+  about_organizer:
       # Bio claims — Inv-BIO-fact-attestation (text/system.md): каждый факт verified
-      # против canonical source (people graph / admin direct). False claim про
-      # Natalia + БВШД removed 2026-05-11 — НЕ преподаватель БВШД (admin direct).
-      # Lumen earlier inferred от email subject «Договор с БВШД - Логинова Наталья»
-      # (could mean другой contract); inference without verification = fact-error class.
-      text: |
-        Ольга Розет — дизайнер-декоратор интерьеров с 1994 года. Куратор и преподаватель программ в Высшей Британской Школе Дизайна (БВШД) и iDesign School. Авторские дизайн-путешествия с 2008.
+      # против canonical source (people graph / admin direct).
+      # Naталья + БВШД: 2026-05-11 «не преподаватель БВШД» (admin direct, claim removed
+      # после Lumen-inference от email subject «Договор с БВШД»); 2026-05-14 (Olga's
+      # request via Naталья's DM #4293 → admin (8) «Принято-сделано») —
+      # «приглашённый преподаватель» добавлен. Inv-OLGA-voice-authoritative —
+      # Olga + Naталья authoritative источник про Naтальину роль в БВШД.
+    text: |-
+      Ольга Розет —
 
-        Наталья Логинова — искусствовед, куратор, парижский дизайн-гид. Авторские дизайн-туры с 2024 года.
-      link_text: "olgarozet.ru"
-      link_url: "https://olgarozet.ru/"
+      Куратор и преподаватель
+      в Высшей Британской Школе Дизайна.
+      Авторские дизайн-путешествия
+      с 2008.
+
+      Наталья Логинова —
+
+      Искусствовед, куратор, парижский дизайн-гид.
+
+      Приглашённый преподаватель
+      в Высшей Британской Школе Дизайна.
+
+      Авторские дизайн-туры
+      с 2024.
+     # admin 2026-05-13: «пока ничего после "2024 года" не было» — link
+      # «olgarozet.ru» удалён из about_organizer terminus. Восстановить
+      # когда admin снимет «пока».
+    link_text: ""
+    link_url: ""
     # Internal program notes (not rendered on public landing — used for
     # admin/operational reference and as source for Naталья's voice 185+186
     # diarized cross-check).
     # days[].notes — public, traveler-facing prose (Inv-CONTENT-AUDIENCE).
     # Internal organisational notes live in
     # knowledge/projects/paris-2026/paris-sep-2026-program-2026-04-30.md.
-    days:
-      - day: 1
-        date: "8 сентября"
-        theme: "Система вкуса"
-        notes:
-          - "Утро — встречаемся в уникальном пространстве с парижскими крышами в окнах, где работают, пьют кофе, общаются. Эргономика и эстетика."
-          - "За кофе — вводная лекция «Сто лет обещаний». Ключевые повороты столетия."
-          - "Maison & Objet. Рекомендации для тех, кто желает посетить международную выставку дизайна. Как смотреть и что видеть?"
-          - "После обеда — дизайн-пространства Hermès, Liaigre, Pierre Paulin и Musée des Arts Décoratifs."
-          - "Вечер — вернисажи в галереях-участниках «Paris Design Week» по нашим рекомендациям."
-      - day: 2
-        date: "9 сентября"
-        theme: "Дорогой модернизм"
-        notes:
-          - "Утро — Le Corbusier в двух точках: вилла Maison La Roche и жилой дом Molitor, где находится его собственная квартира."
-          - "После обеда — авторская дизайн-прогулка по району Marais."
-          - "Archives Nationales — с интерьерами и внутренним двором."
-          - "Dover Street Market и Uniqlo, занявшие исторические здания."
-          - "Gentle Monster — новая концепция ритейла."
-          - "Вечер — вернисажи в галереях-участниках «Paris Design Week» по нашим рекомендациям."
-      - day: 3
-        date: "10 сентября"
-        theme: "Человеческий модернизм"
-        notes:
-          - "Утро — выезжаем за город к Maison Louis Carré, шедевру модернизма и единственному зданию Alvar Aalto во Франции. Парк по проекту Aalto. В сентябре — выставка «Being There» фотографа Arno Rafael Minkkinen и художника Gaspard Noël."
-          - "При хорошей погоде — пикник на месте."
-          - "После обеда — мастер-класс знаменитого дизайнера интерьера Ирины Маркман на её объекте «Парижская квартира»."
-          - "Как соединять историческое наследие с современными вещами."
-      - day: 4
-        date: "11 сентября"
-        theme: "Искусство и дизайн"
-        notes:
-          - "Утро — посещение музея Musée Zadkine."
-          - "Осип Цадкин — представитель «Парижской школы» и его влияние на «органический минимализм» в современном интерьере."
-          - "Дизайн-прогулки по галереям утончённого района Saint-Germain."
-          - "Ужин в культовом ресторане. Итоги."
-    # ── Typed Schedule — temporal projection (entity-travel-schedule-and-route-map) ──
-    # Beats reference places: graph nodes; calendar feasibility checked by
-    # scripts/event_invariants.py:check_sched_feasibility against place.hours.
-    # Empty beats[] = day exists but typed beats not yet authored (notes prose
-    # remains authoritative until populated). days[] above remains rendering SoT.
-    schedule:
-      slots:
-        - day: 1
-          date: 2026-09-08    # Tuesday
-          theme: "Система вкуса"
-          beats:
-            - { when: morning,   kind: orientation, place: maison_objet }
-            - { when: afternoon, kind: visit,       place: musee_arts_decoratifs_paris }
-        - day: 2
-          date: 2026-09-09    # Wednesday — see internal_q blockers below
-          theme: "Дорогой модернизм"
-          beats:
-            - { when: morning,   kind: visit, place: maison_la_roche }
-            - { when: morning,   kind: visit, place: appartement_molitor_corbusier, via: private_booking }
-            - { when: afternoon, kind: walk,  place: archives_nationales_paris }
-        - day: 3
-          date: 2026-09-10    # Thursday — see internal_q blockers below
-          theme: "Человеческий модернизм"
-          beats:
-            - { when: morning, kind: visit, place: maison_louis_carre, via: private_booking }
-        - day: 4
-          date: 2026-09-11    # Friday
-          theme: "Искусство и дизайн"
-          beats:
-            - { when: morning,   kind: visit, place: musee_zadkine }
-            - { when: afternoon, kind: walk,  place: saint_germain_galleries }
+    # Evening-recur registry — declared once, referenced from days[].evening.
+    # Admin 2026-05-13: «Вечер — вернисажи Paris Design Week — повторяющийся
+    # элемент». Расширенная архитектурно через named registry, не inline-
+    # дублирование. Each day declares evening: <key> OR omits (no evening tile).
+  evenings_recurring:
+    paris_design_week:
+      prefix: "Вечер"
+      text: "вернисажи в галереях-участниках «Paris Design Week» по нашим рекомендациям"
+  days:
+  - day: 1
+    date: "8 сентября"
+    theme: "Система вкуса"
+    notes:
+    - Утро — встречаемся в уникальном пространстве с парижскими крышами в окнах, где работают, пьют кофе, общаются.
+    - 'Вводная лекция «Сто лет обещаний»: ключевые точки модернизма — от Парижской выставки Arts Décoratifs 1925 до Le Modulor.'
+    - Maison & Objet (4–8 сентября, Parc des Expositions Villepinte) — наши рекомендации, индивидуальный темп вместо группового обхода.
+    - Hermès, Liaigre, Pierre Paulin — современные регистры материала и интерьера.
+    - Musée des Arts Décoratifs — фундамент Art Déco (Jean Dunand, Pierre Chareau).
+    evening: paris_design_week
+  - day: 2
+    date: "9 сентября"
+    theme: "Дорогой модернизм"
+    notes:
+    - 'Le Corbusier две точки: Maison La Roche (1923–25, ныне Fondation Le Corbusier) и Molitor (1933, квартира архитектора).'
+    - Десятилетие между постройками — эволюция от raumplan-эксперимента к зрелой жилой модели.
+    - Авторская прогулка по Marais.
+    - Archives Nationales (Hôtel de Soubise) — рококовые интерьеры и внутренний двор.
+    - Dover Street Market и Uniqlo — историческая архитектура, переосмысленная ритейлом.
+    - Gentle Monster — корейская концепция ритейла-как-инсталляции.
+    evening: paris_design_week
+  - day: 3
+    date: "10 сентября"
+    theme: "Человечный модернизм"
+    notes:
+    - Maison Louis Carré (Bazoches-sur-Guyonne, ≈45 минут от Парижа) — 1956–58, единственное здание Alvar Aalto во Франции, заказчик Louis Carré, парижский галерист и коллекционер.
+    - В сентябре в стенах виллы — выставка «Being There» (Arno Rafael Minkkinen, Gaspard Noël).
+    - Парк по проекту Aalto — пикник при хорошей погоде.
+    - Кожаные ручки, волнистый потолок, многоуровневые пространства — эргономика как забота.
+    - Мастер-класс Ирины Маркман на её объекте «Парижская квартира» — теория, проверяемая в практике.
+  - day: 4
+    date: "11 сентября"
+    theme: "Искусство и дизайн"
+    notes:
+    - Musée Zadkine (100bis rue d'Assas) — недавно открывшийся после реновации (май 2026).
+    - 'Осип Цадкин: представитель «Парижской школы»; влияние на «органический минимализм» в интерьере XX века.'
+    - Дизайн-прогулки по галереям Saint-Germain — район, где дизайн XX века собран как коллекционное искусство.
+    - Ужин {hand:в культовом ресторане}.
+    - Итоги.
+  schedule:
+    slots:
+    - day: 1
+      date: 2026-09-08        # Tuesday
+      theme: "Система вкуса"
+      beats:
+      - {when: morning, kind: orientation, place: maison_objet}
+      - {when: afternoon, kind: visit, place: musee_arts_decoratifs_paris}
+    - day: 2
+      date: 2026-09-09        # Wednesday — see internal_q blockers below
+      theme: "Дорогой модернизм"
+      beats:
+      - {when: morning, kind: visit, place: maison_la_roche}
+      - {when: morning, kind: visit, place: appartement_molitor_corbusier, via: private_booking}
+      - {when: afternoon, kind: walk, place: archives_nationales_paris}
+    - day: 3
+      date: 2026-09-10        # Thursday — see internal_q blockers below
+      theme: "Человечный модернизм"
+      beats:
+      - {when: morning, kind: visit, place: maison_louis_carre, via: private_booking}
+    - day: 4
+      date: 2026-09-11        # Friday
+      theme: "Искусство и дизайн"
+      beats:
+      - {when: morning, kind: visit, place: musee_zadkine}
+      - {when: afternoon, kind: walk, place: saint_germain_galleries}
     # ── Typed RouteMap — spatial projection (ordered place_ids) ─────────────────
-    route_map:
-      waypoints:
-        - maison_objet
-        - musee_arts_decoratifs_paris
-        - maison_la_roche
-        - appartement_molitor_corbusier
-        - archives_nationales_paris
-        - maison_louis_carre
-        - musee_zadkine
-        - saint_germain_galleries
-    registration: null
-    lines:
-      - "Сто лет"
-      - "обещаний дизайна"
-      - ""
-      - "Утопия?"
-      - "Реальность?"
-      - ""
-      - "С Натальей Логиновой"
+  route_map:
+    waypoints:
+    - maison_objet
+    - musee_arts_decoratifs_paris
+    - maison_la_roche
+    - appartement_molitor_corbusier
+    - archives_nationales_paris
+    - maison_louis_carre
+    - musee_zadkine
+    - saint_germain_galleries
+  registration:
+  lines:
+  - Сто лет
+  - обещаний дизайна
+  - ''
+  - Утопия?
+  - Реальность?
+  - ''
+  - С Натальей Логиновой
+- id: paris-2026-09-zoom-preshow
+  type: presentation
+  parent_id: paris-2026-09            # Inv-EV-parent-resolves
+  parent_relation: promotes           # pre-event promotional artifact — temporal containment WAIVED per entity-event.md Inv-EV-parent-temporal-coherence
+  plan_id: paris-2026-09-plan         # parent-edge — entity-plan
+  title: "Онлайн-презентация — Zoom (август 2026)"
+  organizers: [olgarozet, natalia_loginova]
+  locations: []                        # online-only
+  url:                                 # ZOOM-link admin-fill ближе к дате (Inv-PROV-ZOOM-meeting-url shape)
+  provider: zoom                       # entity-event Spec §Optional + provider/zoom.md Spec dispatch
+  audience: open
+  when: "2026-08"                      # admin 2026-05-11: «запланирован на август»; точная дата уточняется
+  duration_min: 60                     # nominal estimate; admin-confirm
+  broadcast: []                        # admin 2026-05-11 (feedback.txt): «не публикуем» — recorded, not rendered
+  description: |
+    Знакомство с Программой и Организаторами.
 
-  # ── Sub-event: ZOOM-presentation — entity-event Spec (type: presentation) ──
-  # admin 2026-05-11 (feedback.txt): «Zoom действительно запланирован на август,
-  # запишем это, при этом не публикуем». → recorded here (when: 2026-08), but
-  # broadcast: [] — НЕ рендерится на landing'е. The publicly-announced preshow is
-  # paris-2026-09-ig-live (IG Live, эта среда) — see below.
-  - id: paris-2026-09-zoom-preshow
-    type: presentation
-    parent_id: paris-2026-09          # Inv-EV-parent-resolves
-    plan_id: paris-2026-09-plan       # parent-edge — entity-plan
-    title: "Онлайн-презентация — Zoom (август 2026)"
-    organizers: [olgarozet, natalia_loginova]
-    locations: []                      # online-only
-    url: null                          # ZOOM-link admin-fill ближе к дате (Inv-PROV-ZOOM-meeting-url shape)
-    provider: zoom                     # entity-event Spec §Optional + provider/zoom.md Spec dispatch
-    audience: open
-    when: "2026-08"                    # admin 2026-05-11: «запланирован на август»; точная дата уточняется
-    duration_min: 60                   # nominal estimate; admin-confirm
-    broadcast: []                      # admin 2026-05-11 (feedback.txt): «не публикуем» — recorded, not rendered
-    description: |
-      Знакомство с Программой и Организаторами.
-
-      Zoom в августе 2026 — дата уточняется.
-      Ссылка появится здесь и на [Каналах Вещания](https://olgarozet.ru/) Ольги
-    # admin 2026-05-10 paris-landing.md: subevent meta-list (продолжительность /
+    Zoom в августе 2026 — дата уточняется.
+    Ссылка появится здесь и на [Каналах Вещания](https://olgarozet.ru/) Ольги
+   # admin 2026-05-10 paris-landing.md: subevent meta-list (продолжительность /
     # организаторы) — избыточно (organizers уже в parent's H3 + Programme).
-    suppress_meta: true
-    resource:
-      money: { amount: 0, currency: EUR }
-      time:  { duration_min: 60 }
+  suppress_meta: true
+  resource:
+    money: {amount: 0, currency: EUR}
+    time: {duration_min: 60}
     # Edges established via entity-event Spec §Optional fields (2026-05-10):
-    materials: []                      # Material-oids — populated post-event (recording-Material via Inv-PROV-ZOOM-recording-via-material)
-    tasks: []                          # Task-ids — pre/during/post operational tasks (admin-fill via subsystem-tasks)
-    participation_funnel:              # Inv-LLC-functor: ZOOM-attendance → potential paris-2026-09 travel-lead
-      stage_in: registered_zoom
-      stage_out: lead_paris_2026_09
+  materials: []                        # Material-oids — populated post-event (recording-Material via Inv-PROV-ZOOM-recording-via-material)
+  tasks: []                            # Task-ids — pre/during/post operational tasks (admin-fill via subsystem-tasks)
+  participation_funnel:                # Inv-LLC-functor: ZOOM-attendance → potential paris-2026-09 travel-lead
+    stage_in: registered_zoom
+    stage_out: lead_paris_2026_09
 
   # ── Sub-event: Instagram Live preshow — admin 2026-05-11 (feedback.txt) ──
   # «Сейчас публикуем, что запланирован стрим от инстаграм-аккаунта Натальи Логиновой
   # [ссылка на её Инстаграм] с обеими в эту среду в 19:00 по Москве». This is the
   # publicly-rendered «Онлайн-презентация» section (broadcast: [landing_section]);
   # the August Zoom (paris-2026-09-zoom-preshow above) is recorded but not rendered.
-  - id: paris-2026-09-ig-live
-    type: presentation
-    parent_id: paris-2026-09          # Inv-EV-parent-resolves
-    plan_id: paris-2026-09-plan       # parent-edge — entity-plan
-    title: "Онлайн-презентация"
-    organizers: [olgarozet, natalia_loginova]
-    host: natalia_loginova            # stream is on Natalia's Instagram account
-    locations: []                      # online-only (Instagram Live)
-    url: "https://www.instagram.com/natalya_lo/"   # канал Натальи Логиновой — admin 2026-05-11 (handle @natalya_lo)
-    url_text: "Инстаграм Натальи Логиновой — @natalya_lo"
-    provider: instagram                # entity-event Spec §Optional + provider dispatch
-    audience: open
-    when: "2026-05-13T19:00:00+03:00"  # среда, 19:00 МСК — admin 2026-05-11 «эта среда в 19:00 по Москве» (2026-05-11 = Monday → Wed = 2026-05-13)
-    duration_min: 60                   # nominal estimate
-    broadcast: [landing_section]       # rendered as standalone section на parent's landing — the visible «Онлайн-презентация»
+- id: paris-2026-09-ig-live
+  type: presentation
+  parent_id: paris-2026-09            # Inv-EV-parent-resolves
+  parent_relation: promotes           # pre-event promotional artifact — temporal containment WAIVED per entity-event.md Inv-EV-parent-temporal-coherence
+  plan_id: paris-2026-09-plan         # parent-edge — entity-plan
+  title: "Онлайн—встреча"             # admin 2026-05-13 «Онлайн-Презентация → Онлайн—Встреча» (em-dash)
+  # visible_until снят 2026-05-13 — встреча без фиксированной даты, «объявляем
+  # впервые, на днях»; block теперь без auto-hide.
+  organizers: [olgarozet, natalia_loginova]
+  host: natalia_loginova              # stream is on Natalia's Instagram account
+  locations: []                        # online-only (Instagram Live)
+  url: "https://www.instagram.com/natalya_lo/"     # канал Натальи Логиновой — admin 2026-05-11 (handle @natalya_lo)
+  url_text: "Инстаграм Натальи Логиновой — @natalya_lo"
+  suppress_link_block: true            # url отрисован inline в description (admin 2026-05-13); standalone <p.subevent-link> подавлен
+  provider: instagram                  # entity-event Spec §Optional + provider dispatch
+  audience: open
+  when: "2026-05-13T19:00:00+03:00"    # среда, 19:00 МСК — admin 2026-05-11 «эта среда в 19:00 по Москве» (2026-05-11 = Monday → Wed = 2026-05-13)
+  duration_min: 60                     # nominal estimate
+  broadcast: [landing_section]         # rendered as standalone section на parent's landing — the visible «Онлайн-презентация»
     # admin 2026-05-11 (feedback.txt) «Пока после блока про Наталью Логинову — конец, не должно быть
     # других блоков». «Блок про Наталью» = ЭТО (IG-Live, на её канале) — re-read 2026-05-12 corrects
     # the prior misinterpretation (Об Организаторах). landing_terminal: true → render-time gate skips
     # phases (h) open_questions / (i) signup / (j) contact / (k) about_organizer for THIS parent's
     # landing. Legal footer + cookie banner are chrome — remain. Flip back to false after 2026-05-13.
-    landing_terminal: false   # 2026-05-13 un-flipped (admin «принимает заявки?» surfaced regression — signup form was suppressed; form needs к work для lead capture)
-    description: |
-      В среду, 13 мая, в 19:00 по Москве — прямой эфир
-      с Ольгой и Натальей Логиновой
-    suppress_meta: true                # organizers уже в parent's H3 + Programme (как у zoom-preshow)
-    resource:
-      money: { amount: 0, currency: EUR }
-      time:  { duration_min: 60 }
-    materials: []                      # recording-Material — populated post-stream
-    tasks: []
-    participation_funnel:              # Inv-LLC-functor: IG-Live viewers → potential paris-2026-09 travel-leads
-      stage_in: viewed_ig_live
-      stage_out: lead_paris_2026_09
+  landing_terminal: false     # 2026-05-13 un-flipped (admin «принимает заявки?» surfaced regression — signup form was suppressed; form needs к work для lead capture)
+  description: |
+    На днях
+    Онлайн-Встреча
+    С Ольгой и Натальей
+    у [Натальи](https://www.instagram.com/natalya_lo/) в Инстаграме
+  suppress_meta: true                  # organizers уже в parent's H3 + Programme (как у zoom-preshow)
+  resource:
+    money: {amount: 0, currency: EUR}
+    time: {duration_min: 60}
+  materials: []                        # recording-Material — populated post-stream
+  tasks: []
+  participation_funnel:                # Inv-LLC-functor: IG-Live viewers → potential paris-2026-09 travel-leads
+    stage_in: viewed_ig_live
+    stage_out: lead_paris_2026_09
 
-  - id: uzbekistan_2026_fall
-    type: travel    # entity-event sub-class
-    title: Самарканд–Бухара
-    t_key: "2026-10"
-    date: осень
-    broadcast: [site]
-    audience: [professionals, designers, architects]
-    organizers: [olgarozet, matluba, nasullobek]
-    partners: [bukhara_center, masterskaya_rozet]
-    locations: [samarkand, bukhara]
-    format: [travel, stazhirovka, master_class, excursion]
-    output: certification
-    accommodation: { level: "3-4★", area: "Старый город" }
-    inclusions:
-      model: all_except
-      excluded: [airfare_international]
-      note: "Включает всё (проживание, питание, локальный transfer, мастер-классы, экскурсии, сертификация), кроме международных авиабилетов."
-    transport:
-      mode: avia
-      airfare:
-        required: true
-        options:
-          - { mode: self_purchase, surcharge_pct: 0 }
-          - { mode: agent_purchase, surcharge_pct: 10 }
-        scheduled_flights:
-          inbound:  null   # admin to specify
-          outbound: null
-        note: "Авиабилеты на заданные рейсы. Самостоятельно или через нашего агента (+10% к стоимости)."
-      arrival_protocol:
-        default:
-          mode: centralized
-          note: "Встреча в аэропорту → вместе в Узбекистане → вместе обратно."
-        alternative:
-          mode: flexible_dates
-          constraints:
-            arrive_no_later_than:    null
-            depart_no_earlier_than: null
-          note: "Путешественник может определить даты прилёта/вылета произвольно в рамках границ."
+- id: uzbekistan_2026_fall
+  type: travel      # entity-event sub-class
+  title: Самарканд–Бухара
+  t_key: "2026-10"
+  date: осень
+  broadcast: [site]
+  audience: [professionals, designers, architects]
+  organizers: [olgarozet, matluba, nasullobek]
+  partners: [bukhara_center, masterskaya_rozet]
+  locations: [samarkand, bukhara]
+  format: [travel, stazhirovka, master_class, excursion]
+  output: certification
+  accommodation: {level: "3-4★", area: "Старый город"}
+  inclusions:
+    model: all_except
+    excluded: [airfare_international]
+    note: "Включает всё (проживание, питание, локальный transfer, мастер-классы, экскурсии, сертификация), кроме международных авиабилетов."
+  transport:
+    mode: avia
+    airfare:
+      required: true
+      options:
+      - {mode: self_purchase, surcharge_pct: 0}
+      - {mode: agent_purchase, surcharge_pct: 10}
+      scheduled_flights:
+        inbound:           # admin to specify
+        outbound:
+      note: "Авиабилеты на заданные рейсы. Самостоятельно или через нашего агента (+10% к стоимости)."
+    arrival_protocol:
+      default:
+        mode: centralized
+        note: "Встреча в аэропорту → вместе в Узбекистане → вместе обратно."
+      alternative:
+        mode: flexible_dates
+        constraints:
+          arrive_no_later_than:
+          depart_no_earlier_than:
+        note: "Путешественник может определить даты прилёта/вылета произвольно в рамках границ."
     # ── Typed Schedule + RouteMap — skeleton awaiting venue list ────────────
-    schedule:
-      slots: []     # populate when admin/Matluba/Nasullobek confirm venue+date list
-    route_map:
-      waypoints: [] # ⊆ ⋃ slot.beats[].place once schedule populated
-    pricing:    null
-    cohort:     null
-    duration:   null
-    registration: null
-    status: PLANNING
-    history:
-      - { season: spring_2026, dates: "26-30 марта", status: CANCELLED }
-    lead: "Учебно-деловая стажировка в Узбекистане — Самарканд и Бухара, осень 2026. Получение сертификатов Бухарского Центра Ремёсел и Мастерской «Розет»."
-    sections:
-      - title: Формат
-        intro: Учебная, деловая, развлекательная — три измерения одной поездки.
-        items:
-          - "<strong>Стажировка</strong> с получением сертификатов"
-          - "<strong>Партнёры:</strong> Бухарский Центр Ремёсел и Мастерская «Розет»"
-          - "<strong>Маршрут:</strong> Самарканд и Бухара (Старый город, 3-4★)"
-      - title: Что включено
-        intro: Модель «всё, кроме международных авиабилетов».
-        items:
-          - "проживание (3-4★ в Старом городе)"
-          - "питание"
-          - "локальный transfer"
-          - "мастер-классы"
-          - "экскурсии"
-          - "сертификация"
-      - title: Авиабилеты
-        intro: На заданные рейсы — самостоятельно или через нашего агента.
-        items:
-          - "<strong>Самостоятельно:</strong> +0% к стоимости"
-          - "<strong>Через агента:</strong> +10% к стоимости"
-          - "По умолчанию — централизованный протокол прибытия (вместе из аэропорта, вместе обратно). Альтернативно — гибкие даты в рамках границ программы."
-      - title: Что уточняется
-        items:
-          - "точные даты рейсов и стоимость"
-          - "программа мастер-классов и экскурсий"
-          - "состав партнёров местных мастерских"
-    open_questions:
-      - to: [olgarozet, matluba, nasullobek]
-        q: "Точные даты и пакет авиабилетов — когда фиксируем?"
-      - to: [olgarozet]
-        q: "Стоимость и формат early-bird?"
-    signup:
-      title: "Записаться в лист ожидания"
-      note: "Оставьте email — пришлю программу и стоимость первой при готовности. Без обязательств."
-    about_organizer:
-      text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров. Design Travels: экспертные дизайн-путешествия (Париж, Узбекистан, Сербия)."
-      link_text: "olgarozet.ru"
-      link_url: "https://olgarozet.ru/"
-    lines:
-      - "Учебная,"
-      - "Деловая,"
-      - "Развлекательная"
-      - ""
-      - "СТАЖИРОВКА"
-      - ""
-      - "с получением"
-      - "сертификатов"
-      - ""
-      - "Бухарского"
-      - "Центра"
-      - "Ремёсел"
-      - ""
-      - "и"
-      - ""
-      - "Мастерской"
-      - "«Розет»"
+  schedule:
+    slots: []       # populate when admin/Matluba/Nasullobek confirm venue+date list
+  route_map:
+    waypoints: []   # ⊆ ⋃ slot.beats[].place once schedule populated
+  pricing:
+  cohort:
+  duration:
+  registration:
+  status: PLANNING
+  history:
+  - {season: spring_2026, dates: "26-30 марта", status: CANCELLED}
+  lead: "Учебно-деловая стажировка в Узбекистане — Самарканд и Бухара, осень 2026. Получение сертификатов Бухарского Центра Ремёсел и Мастерской «Розет»."
+  sections:
+  - title: Формат
+    intro: Учебная, деловая, развлекательная — три измерения одной поездки.
+    items:
+    - "<strong>Стажировка</strong> с получением сертификатов"
+    - "<strong>Партнёры:</strong> Бухарский Центр Ремёсел и Мастерская «Розет»"
+    - "<strong>Маршрут:</strong> Самарканд и Бухара (Старый город, 3-4★)"
+  - title: Что включено
+    intro: Модель «всё, кроме международных авиабилетов».
+    items:
+    - "проживание (3-4★ в Старом городе)"
+    - "питание"
+    - "локальный transfer"
+    - "мастер-классы"
+    - "экскурсии"
+    - "сертификация"
+  - title: Авиабилеты
+    intro: На заданные рейсы — самостоятельно или через нашего агента.
+    items:
+    - "<strong>Самостоятельно:</strong> +0% к стоимости"
+    - "<strong>Через агента:</strong> +10% к стоимости"
+    - "По умолчанию — централизованный протокол прибытия (вместе из аэропорта, вместе обратно). Альтернативно — гибкие даты в рамках границ программы."
+  - title: Что уточняется
+    items:
+    - "точные даты рейсов и стоимость"
+    - "программа мастер-классов и экскурсий"
+    - "состав партнёров местных мастерских"
+  open_questions:
+  - to: [olgarozet, matluba, nasullobek]
+    q: "Точные даты и пакет авиабилетов — когда фиксируем?"
+  - to: [olgarozet]
+    q: "Стоимость и формат early-bird?"
+  signup:
+    title: "Записаться в лист ожидания"
+    note: "Оставьте email — пришлю программу и стоимость первой при готовности. Без обязательств."
+  about_organizer:
+    text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров. Design Travels: экспертные дизайн-путешествия (Париж, Узбекистан, Сербия)."
+    link_text: "olgarozet.ru"
+    link_url: "https://olgarozet.ru/"
+  lines:
+  - "Учебная,"
+  - "Деловая,"
+  - "Развлекательная"
+  - ""
+  - "СТАЖИРОВКА"
+  - ""
+  - "с получением"
+  - "сертификатов"
+  - ""
+  - "Бухарского"
+  - "Центра"
+  - "Ремёсел"
+  - ""
+  - "и"
+  - ""
+  - "Мастерской"
+  - "«Розет»"
 
-  - id: serbia_2027
-    type: travel    # entity-event sub-class
-    title: Сербия
-    t_key: "2027"
-    date: в следующем году
-    link: /program-2027/
-    broadcast: [site]
-    audience: [architects, designers, decorators, artists]
-    organizers: [olgarozet]
-    partners: [vikendica_rozet, ekata_estate]
-    locations: [serbia, vrshac]
-    format: [travel, lecture, master_class]
+- id: serbia_2027
+  type: travel      # entity-event sub-class
+  title: Сербия
+  t_key: "2027"
+  date: в следующем году
+  link: /program-2027/
+  broadcast: [site]
+  audience: [architects, designers, decorators, artists]
+  organizers: [olgarozet]
+  partners: [vikendica_rozet, ekata_estate]
+  locations: [serbia, vrshac]
+  format: [travel, lecture, master_class]
     # ── Typed Schedule + RouteMap — skeleton awaiting program details ────────
-    schedule:
-      slots: []     # populate when admin confirms 2027 dates + venue program
-    route_map:
-      waypoints: [] # ⊆ ⋃ slot.beats[].place once schedule populated
-    pricing:    null
-    cohort:     null
-    duration:   null
-    registration: { mailto: o.g.rozet@gmail.com, subject: "Программа в Сербию — жду" }
-    status: PLANNED
-    lead: "Программа 2027 года в Сербии — для архитекторов, дизайнеров, декораторов и художников. Лекция и мастер-класс на семейной викендице и в EKATA Estate (Вршац)."
-    sections:
-      - title: Аудитория
-        intro: Программа собрана для четырёх профессиональных контуров.
-        items:
-          - "архитекторы"
-          - "дизайнеры"
-          - "декораторы"
-          - "художники"
-      - title: Формат
-        items:
-          - "<strong>Лекция</strong> — авторский доклад Ольги"
-          - "<strong>Мастер-класс</strong> — практическая часть"
-          - "<strong>Площадки:</strong> Семейная Викендица Розет и EKATA Estate (Вршац, Сербия)"
-      - title: Что уточняется
-        intro: Программа собирается. Детали — по мере готовности.
-        items:
-          - "точные даты"
-          - "стоимость и пакет"
-          - "размещение участников"
-          - "темы лекции и мастер-класса"
-    open_questions:
-      - to: [olgarozet]
-        q: "Точные даты в 2027 году — когда фиксируем?"
-      - to: [olgarozet]
-        q: "Тема лекции и мастер-класса?"
-    signup:
-      title: "Записаться в лист ожидания"
-      note: "Оставьте email — пришлю программу первой при готовности. Без обязательств."
-    about_organizer:
-      text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров. Design Travels: экспертные дизайн-путешествия (Париж, Узбекистан, Сербия)."
-      link_text: "olgarozet.ru"
-      link_url: "https://olgarozet.ru/"
-    lines:
-      - "для архитекторов,"
-      - "дизайнеров,"
-      - "декораторов"
-      - "и художников"
-      - ""
-      - "лекция"
-      - "и мастер-класс"
+  schedule:
+    slots: []       # populate when admin confirms 2027 dates + venue program
+  route_map:
+    waypoints: []   # ⊆ ⋃ slot.beats[].place once schedule populated
+  pricing:
+  cohort:
+  duration:
+  registration: {mailto: o.g.rozet@gmail.com, subject: "Программа в Сербию — жду"}
+  status: PLANNED
+  lead: "Программа 2027 года в Сербии — для архитекторов, дизайнеров, декораторов и художников. Лекция и мастер-класс на семейной викендице и в EKATA Estate (Вршац)."
+  sections:
+  - title: Аудитория
+    intro: Программа собрана для четырёх профессиональных контуров.
+    items:
+    - "архитекторы"
+    - "дизайнеры"
+    - "декораторы"
+    - "художники"
+  - title: Формат
+    items:
+    - "<strong>Лекция</strong> — авторский доклад Ольги"
+    - "<strong>Мастер-класс</strong> — практическая часть"
+    - "<strong>Площадки:</strong> Семейная Викендица Розет и EKATA Estate (Вршац, Сербия)"
+  - title: Что уточняется
+    intro: Программа собирается. Детали — по мере готовности.
+    items:
+    - "точные даты"
+    - "стоимость и пакет"
+    - "размещение участников"
+    - "темы лекции и мастер-класса"
+  open_questions:
+  - to: [olgarozet]
+    q: "Точные даты в 2027 году — когда фиксируем?"
+  - to: [olgarozet]
+    q: "Тема лекции и мастер-класса?"
+  signup:
+    title: "Записаться в лист ожидания"
+    note: "Оставьте email — пришлю программу первой при готовности. Без обязательств."
+  about_organizer:
+    text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров. Design Travels: экспертные дизайн-путешествия (Париж, Узбекистан, Сербия)."
+    link_text: "olgarozet.ru"
+    link_url: "https://olgarozet.ru/"
+  lines:
+  - "для архитекторов,"
+  - "дизайнеров,"
+  - "декораторов"
+  - "и художников"
+  - ""
+  - "лекция"
+  - "и мастер-класс"
 
-  - id: course_price_value
-    type: publication    # entity-event sub-class — announcement-landing для upcoming course (not yet structured event)
-    title: Цена и Ценность
-    date: анонс
-    audience: []
-    organizers: [olgarozet]
-    format: [online, course]
-    pricing:    null
-    cohort:     null
-    duration:   null
-    registration: null
-    status: PLANNING
-    lead: "Онлайн-курс «Цена и Ценность» — анонс. Программа собирается."
-    sections:
-      - title: Что известно
-        items:
-          - "Формат: онлайн-курс"
-          - "Автор: Ольга Розет"
-      - title: Что уточняется
-        intro: Программа в работе.
-        items:
-          - "темы и количество модулей"
-          - "стоимость и формат early-bird"
-          - "даты старта"
-    signup:
-      title: "Записаться в лист ожидания"
-      note: "Оставьте email — пришлю программу и стоимость первой при готовности."
-    about_organizer:
-      text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров."
-      link_text: "olgarozet.ru"
-      link_url: "https://olgarozet.ru/"
-    lines:
-      - "Онлайн-курс"
+- id: course_price_value
+  type: publication      # entity-event sub-class — announcement-landing для upcoming course (not yet structured event)
+  title: Цена и Ценность
+  date: анонс
+  audience: []
+  organizers: [olgarozet]
+  format: [online, course]
+  pricing:
+  cohort:
+  duration:
+  registration:
+  status: PLANNING
+  lead: "Онлайн-курс «Цена и Ценность» — анонс. Программа собирается."
+  sections:
+  - title: Что известно
+    items:
+    - "Формат: онлайн-курс"
+    - "Автор: Ольга Розет"
+  - title: Что уточняется
+    intro: Программа в работе.
+    items:
+    - "темы и количество модулей"
+    - "стоимость и формат early-bird"
+    - "даты старта"
+  signup:
+    title: "Записаться в лист ожидания"
+    note: "Оставьте email — пришлю программу и стоимость первой при готовности."
+  about_organizer:
+    text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров."
+    link_text: "olgarozet.ru"
+    link_url: "https://olgarozet.ru/"
+  lines:
+  - "Онлайн-курс"
 
 publications:
   # ── Legacy entries migrated к entity-publication Spec ──────────────────
-  # utility_synopsis pending admin retrofill — checker flags для signal.
-  - id: prog-2027-site
-    channel: site
-    entity_id: program-2027
-    entity_type: article
-    status: published
-    url: /program-2027/
-    uploaded_at: "2026-04-24"
-    title: "Программа-2027"
-    schema_version: 1
+  # Backfilled 2026-05-13: uploaded_at promoted к tz-aware ISO 8601 (Inv-PUB-
+  # temporal); utility_synopsis filled per Inv-PUB-utility-on-receipt.
+  # Source-of-truth для exact timestamps: corresponding obs_* records когда
+  # platform-side authoritative; conservative-midday default иначе.
+- id: prog-2027-site
+  channel: site
+  entity_id: program-2027
+  entity_type: article
+  status: published
+  url: /program-2027/
+  uploaded_at: "2026-04-24T12:00:00+00:00"   # admin-rendered owner-site page; no platform timestamp — conservative midday default
+  title: "Программа-2027"
+  utility_synopsis: |
+    Owner-site article — Программа 2027 года Ольги Розет: список Дизайн-Путешествий,
+    Встреч, Образовательных циклов. Receiver gets full upcoming-calendar overview
+    плюс reference-anchor для cross-channel посылок (IG/TG используют /program-2027/
+    как landing-of-record). Польза Внимающему: planning-horizon visibility без обязательств.
+  schema_version: 1
 
-  - id: vrsac-tg-73
-    channel: telegram_channel
-    entity_id: vrsac-2026
-    entity_type: telegram_post
-    status: published
-    url: https://t.me/olga_rozet/73
-    uploaded_at: "2026-04-24"
-    title: "Вршац"
-    platform_id: "73"
-    schema_version: 1
+- id: vrsac-tg-73
+  channel: telegram_channel
+  entity_id: vrsac-2026
+  entity_type: telegram_post
+  status: published
+  url: https://t.me/olga_rozet/73
+  uploaded_at: "2026-04-24T12:41:10+00:00"   # exact platform timestamp via obs_olgarozet_at_telegram_ОЛЬГА_РОЗЕТ_73
+  title: "Вршац"
+  platform_id: "73"
+  utility_synopsis: |
+    TG-channel пост о Дизайн-Путешествии в Вршац (Сербия, 2026). Receiver получает
+    visual essay + program-anchor: даты, формат, organizers. Польза Внимающему:
+    architectural reference-photos из Бринье + Vrsac, useful даже без участия в Travel.
+  schema_version: 1
 
-  - id: vrsac-ig-DXg9IGXDcUu
-    channel: instagram
-    entity_id: vrsac-2026-video
-    entity_type: video
-    status: published
-    url: https://instagram.com/p/DXg9IGXDcUu/
-    uploaded_at: "2026-04-24"
-    title: "Вршац (видео)"
-    platform_id: "DXg9IGXDcUu"
-    schema_version: 1
+- id: vrsac-ig-DXg9IGXDcUu
+  channel: instagram
+  entity_id: vrsac-2026-video
+  entity_type: video
+  status: published
+  url: https://instagram.com/p/DXg9IGXDcUu/
+  uploaded_at: "2026-04-24T12:47:13+00:00"   # exact platform timestamp via obs_olgarozet_at_instagram_DXg9IGXDcUu
+  title: "Вршац (видео)"
+  platform_id: "DXg9IGXDcUu"
+  utility_synopsis: |
+    IG-видео о Вршаце — Дизайн-Путешествие в Сербию-2026: кадры архитектурных деталей,
+    intro-tour без commentary. Receiver получает 30s sensory-anchor «что такое Vrsac
+    в Travel-формате». Польза Внимающему: visual-impression без участия в Travel,
+    standalone art-object.
+  schema_version: 1
 
   # ── paris-2026-09-promo planned Wave plan ──────────────────────────────
   # Admin directive 2026-05-10: «Кампания включает Вещание. Спецификация
@@ -1070,84 +1143,125 @@ publications:
   # Body content pending admin authoring (lumen_questions.md Q1); structure
   # declared for graph completeness (Inv-CMP-STYLE-material-pool-traceable
   # + Inv-CMP-PARIS-* compliance).
-  - id: paris-2026-09-ig-post-main
-    channel: instagram
-    entity_id: paris-ig-post-main
-    entity_type: instagram_post
-    wave_type: commercial
-    status: planned
-    planned_date: "2026-05-15"
-    title: "Main IG Post — Paris в сентябре 2026"
-    utility_synopsis: |
-      PENDING admin body (lumen_questions.md Q1). Контракт сообщения: 4-дневное Дизайн-Путешествие
-      8-11 сентября 2026 с Ольгой + Натальей, ≤ 10 человек, 1600 €, three-modernisms arc, плюс
-      Польза Внимающему как gift (one observational/historical insight даже без участия) +
-      CTA → https://parisinseptember.ru/. Tone editorial, не promotional. Реф предыдущих Main
-      Posts о Paris: obs_olgarozet_at_instagram_DLj8VUhtYi2 / DNuYeAD0MV2 / DPJ1b9OjBwf.
-    materials: []
-    campaign_id: paris-2026-09-promo
-    schema_version: 1
+- id: paris-2026-09-ig-post-main
+  channel: instagram
+  entity_id: paris-ig-post-main
+  entity_type: ig_post
+  wave_type: commercial
+  status: live
+  planned_date: "2026-05-15"
+  uploaded_at: "2026-05-13T12:08:35Z"
+  external_url: "https://www.instagram.com/p/DYRzwNxiAZ6/"
+  platform_id: "18163588390430618"
+  title: "Main IG Post — Paris в сентябре 2026"
+  utility_synopsis: |
+    Live с 2026-05-13T12:08:35Z (DYRzwNxiAZ6, 30+ likes). Body — pure Staccato
+    rev15 variant (top dateline + 4 day-sections + Контракт + CTA → parisinseptember.ru).
+    Spec drift: live caption «100 ЛЕТ ОБЕЩАНИЙ ДИЗАЙНА» — pre-rev17 fact-corrected
+    к «МОДЕРНИЗМА» в draft (рев17 не докатилась к dispatch'у); collaborator + tag
+    fields wired в data но НЕ применены на live (Spec lift 1140ad495a 18:19 UTC =
+    6h после publish, post-publish Graph edit endpoint не support'ит collab/tag/caption).
+    Известный residue: либо delete+republish (теряем 30 likes + 2 comments-thread),
+    либо принять live как-есть и применить collab/tag к следующему Wave Post.
+  materials: []
+  campaign_id: paris-2026-09-promo
+  collaborators: ["natalya_lo"]      # SPEC-INTENT: IG joint-authorship invite (Inv-PUB-collaborator-typed). NOT APPLIED on live post (DYRzwNxiAZ6) — Spec lift 1140ad495a was 6h after 12:09 UTC dispatch.
+  image_user_tags:                   # SPEC-INTENT: tag-on-image. NOT APPLIED on live post.
+    - {username: "natalya_lo", x: 0.5, y: 0.5}
+  schema_version: 1
 
-  - id: paris-2026-09-ig-story-1
-    channel: instagram_story
-    entity_id: paris-ig-story-1
-    entity_type: instagram_story
-    wave_type: commercial
-    status: planned
-    planned_date: "2026-05-16"
-    title: "Стори 1/3 — основа Контракта (формат, даты)"
-    utility_synopsis: |
-      PENDING admin body. Часть 1 из 3-part commercial Stories: даты 8-11 сентября + формат
-      (Дизайн-Путешествие) + Outremer-modernism teaser. Без CTA — frame establishment.
-    materials: []
-    campaign_id: paris-2026-09-promo
-    schema_version: 1
+- id: paris-2026-09-ig-story-reshare
+  channel: instagram_story
+  entity_id: paris-ig-story-reshare
+  entity_type: ig_story
+  wave_type: commercial
+  status: live
+  planned_date: "2026-05-15"
+  uploaded_at: "2026-05-13T22:06:28Z"
+  external_url: "https://www.instagram.com/stories/olga_rozet/3896424252076133638"
+  platform_id: "18189891781372674"
+  title: "Стори — re-share Основного Поста"
+  utility_synopsis: |
+    Live с 2026-05-13T22:06:28Z (admin manual dispatch from mobile app).
+    Overlay text «В ПАРИЖЕ»; native «Share to Story» с attached_media sticker
+    к paris-2026-09-ig-post-main (DYRzwNxiAZ6). Natalya partnership invite
+    confirmed Accepted. Added к Highlight «IX» (paris-2026-09 anchor).
+  materials: []
+  campaign_id: paris-2026-09-promo
+  collaborators: ["natalya_lo"]
+  highlight: "IX"
+  schema_version: 1
 
-  - id: paris-2026-09-ig-story-2
-    channel: instagram_story
-    entity_id: paris-ig-story-2
-    entity_type: instagram_story
-    wave_type: commercial
-    status: planned
-    planned_date: "2026-05-16"
-    title: "Стори 2/3 — основа Контракта (программа, ведут)"
-    utility_synopsis: |
-      PENDING admin body. Часть 2 из 3-part: программа 4-day arc (Дорогой / Человеческий /
-      Искусство-и-дизайн modernism), Ольга + Наталья paritет-organizers. Без CTA.
-    materials: []
-    campaign_id: paris-2026-09-promo
-    schema_version: 1
+- id: paris-2026-09-ig-story-1
+  channel: instagram_story
+  entity_id: paris-ig-story-1
+  entity_type: ig_story
+  wave_type: commercial
+  status: planned
+  planned_date: "2026-05-16"
+  title: "Стори 1/3 — формат + даты"
+  utility_synopsis: |
+    Frame 1/3 commercial Stories — дата 8–11 сентября + локус Париж + paritет-organizers
+    Ольга Розет + Наталья Логинова. Visual: Maison La Roche fragment с Outremer accent.
+    Польза Внимающему: anchor-сlot «когда / где / с кем» без обязательств. Без CTA —
+    frame establishment. Draft в Agents/lumen/drafts/paris-2026-09-ig-stories-tg-draft.md.
+  materials: []
+  campaign_id: paris-2026-09-promo
+  schema_version: 1
 
-  - id: paris-2026-09-ig-story-3
-    channel: instagram_story
-    entity_id: paris-ig-story-3
-    entity_type: instagram_story
-    wave_type: commercial
-    status: planned
-    planned_date: "2026-05-16"
-    title: "Стори 3/3 — Контракт + CTA"
-    utility_synopsis: |
-      PENDING admin body. Часть 3 из 3-part: condition Контракта (cohort ≤ 10, 1600 €,
-      1/2 предоплата бронирует), CTA-link к https://parisinseptember.ru/.
-    materials: []
-    campaign_id: paris-2026-09-promo
-    schema_version: 1
+- id: paris-2026-09-ig-story-2
+  channel: instagram_story
+  entity_id: paris-ig-story-2
+  entity_type: ig_story
+  wave_type: commercial
+  status: planned
+  planned_date: "2026-05-17"
+  title: "Стори 2/3 — программа"
+  utility_synopsis: |
+    Frame 2/3 — 4-day arc на стыке с Maison & Objet; Le Corbusier / Alvar Aalto /
+    Osip Zadkine vertical-list (text-staccato semicolon-list-with-continuation,
+    compressed bullet form). Visual: triptych. Польза Внимающему: программа-skeleton
+    — receiver получает 3 modernism-anchor имени для самостоятельного контекстного
+    чтения. Без CTA. Draft в Agents/lumen/drafts/paris-2026-09-ig-stories-tg-draft.md.
+  materials: []
+  campaign_id: paris-2026-09-promo
+  schema_version: 1
 
-  - id: paris-2026-09-tg-announce
-    channel: telegram_channel
-    entity_id: paris-tg-announce
-    entity_type: telegram_post
-    wave_type: commercial
-    status: planned
-    planned_date: "2026-05-15"
-    title: "TG-объявление — Paris в сентябре 2026"
-    utility_synopsis: |
-      PENDING admin body + TG-канал выбор (lumen_questions.md Q5). Конгруэтно ТГ-каналу:
-      announcement о открытии бронирования. Контракт + Польза (gift insight) + CTA → landing.
-      Tone editorial; markdown formatting; inline-link.
-    materials: []
-    campaign_id: paris-2026-09-promo
-    schema_version: 1
+- id: paris-2026-09-ig-story-3
+  channel: instagram_story
+  entity_id: paris-ig-story-3
+  entity_type: ig_story
+  wave_type: commercial
+  status: planned
+  planned_date: "2026-05-18"
+  title: "Стори 3/3 — Контракт + CTA"
+  utility_synopsis: |
+    Frame 3/3 — Контракт: ≤ 10 человек, 1 600 € c бронированием 800 € (1/2 предоплата);
+    visa-aid stanza (constraint-then-aid-offer). Link Sticker → parisinseptember.ru.
+    Польза Внимающему: precise contract-terms перед действием — receiver принимает
+    решение informed. Draft в Agents/lumen/drafts/paris-2026-09-ig-stories-tg-draft.md.
+  materials: []
+  campaign_id: paris-2026-09-promo
+  schema_version: 1
+
+- id: paris-2026-09-tg-announce
+  channel: telegram_channel
+  entity_id: paris-tg-announce
+  entity_type: telegram_post
+  wave_type: commercial
+  status: planned
+  planned_date: "2026-05-15"
+  title: "TG-объявление — Paris в сентябре 2026"
+  utility_synopsis: |
+    TG-channel announce «ОЛЬГА РОЗЕТ» (@olga_rozet, 93 sub): markdown body ~750 chars,
+    bold title, program-arc-prose с Маркман master-class quote (NOT verbatim в Main IG
+    Post — Inv-PUB-cross-channel-MU disjoint shape), facts-block (даты / локус), CTA-tail
+    → parisinseptember.ru. Польза Внимающему: program-essence + Контракт + visa-aid
+    в одном TG-кадре. 1 hashtag (#ДизайнПутешествие campaign-evergreen). Draft в
+    Agents/lumen/drafts/paris-2026-09-ig-stories-tg-draft.md.
+  materials: []
+  campaign_id: paris-2026-09-promo
+  schema_version: 1
 
   # paris-2026-09-email-announce — РЕТРАКТ 2026-05-12. Admin feedback.txt 2026-05-12
   # listed: Сайты + Instagram + Телеграм. Email-blast НЕ в admin's directive — мoy
@@ -1157,93 +1271,93 @@ publications:
   # явным admin'овым запросом + созданием mailing infrastructure.
 
   # ── Edu-commercial Wave plan (topical posts around the commercial frame) ──
-  - id: paris-email-1-mo-guide
-    channel: email_blast
-    entity_id: paris-newsletter-2026-06
-    entity_type: newsletter_issue
-    wave_type: edu-commercial
-    status: planned
-    planned_date: "2026-06-15"
-    title: "Maison & Objet 2026 — практический путеводитель для дизайнера"
-    utility_synopsis: |
-      Что смотреть в Парк-Версаль (павильоны, этажи, talks-агенда), на что не тратить время,
-      как упаковать программу в 2 дня, какие brands собирают новинки, как избежать туристических
-      ловушек: 4-5 практических разделов с конкретными названиями, временами, маршрутом.
-    materials: []
-    campaign_id: paris-2026-09-promo
-    schema_version: 1
+- id: paris-email-1-mo-guide
+  channel: email_blast
+  entity_id: paris-newsletter-2026-06
+  entity_type: newsletter_issue
+  wave_type: edu-commercial
+  status: planned
+  planned_date: "2026-06-15"
+  title: "Maison & Objet 2026 — практический путеводитель для дизайнера"
+  utility_synopsis: |
+    Что смотреть в Парк-Версаль (павильоны, этажи, talks-агенда), на что не тратить время,
+    как упаковать программу в 2 дня, какие brands собирают новинки, как избежать туристических
+    ловушек: 4-5 практических разделов с конкретными названиями, временами, маршрутом.
+  materials: []
+  campaign_id: paris-2026-09-promo
+  schema_version: 1
 
-  - id: paris-email-2-louis-carre
-    channel: email_blast
-    entity_id: paris-newsletter-2026-07
-    entity_type: newsletter_issue
-    wave_type: edu-commercial
-    status: planned
-    planned_date: "2026-07-15"
-    title: "Maison Louis Carré — единственный дом Аалто во Франции"
-    utility_synopsis: |
-      История заказа Луи Карре, путь Аалто к проекту через парижские встречи, концепция
-      «дома как сада», особенности освещения и материалов, чем дом отличается от финских
-      работ Аалто. Условия посещения вне публичных часов (Sat/Sun open + private booking
-      для off-hours визитов через контакт +33 1 34 86 79 63).
-    materials: []
-    campaign_id: paris-2026-09-promo
-    schema_version: 1
+- id: paris-email-2-louis-carre
+  channel: email_blast
+  entity_id: paris-newsletter-2026-07
+  entity_type: newsletter_issue
+  wave_type: edu-commercial
+  status: planned
+  planned_date: "2026-07-15"
+  title: "Maison Louis Carré — единственный дом Аалто во Франции"
+  utility_synopsis: |
+    История заказа Луи Карре, путь Аалто к проекту через парижские встречи, концепция
+    «дома как сада», особенности освещения и материалов, чем дом отличается от финских
+    работ Аалто. Условия посещения вне публичных часов (Sat/Sun open + private booking
+    для off-hours визитов через контакт +33 1 34 86 79 63).
+  materials: []
+  campaign_id: paris-2026-09-promo
+  schema_version: 1
 
-  - id: paris-site-article-100-let
-    channel: site
-    entity_id: paris-article-100-let-obeshchaniy-dizayna
-    entity_type: article
-    wave_type: edu-commercial
-    status: planned
-    planned_date: "2026-05-31"
-    url: /articles/100-let-obeshchaniy-dizayna/
-    title: "Сто лет обещаний дизайна — Утопия? Реальность?"
-    utility_synopsis: |
-      Расширенный essay (~3000-4000 слов): что обещал модернизм 1920-х (Le Corbusier, Aalto,
-      Mies, Eileen Gray), что из этого функционирует сегодня в жилом дизайне (case-studies
-      Villa Savoye, Maison La Roche, E-1027), где обещания не выдержали реальности (Pessac,
-      Ronchamp), что осталось в качестве операционных принципов (modular grid, открытые
-      планы, light-as-material). Без CTA — закрытый текст.
-    materials: []
-    campaign_id: paris-2026-09-promo
-    schema_version: 1
+- id: paris-site-article-100-let
+  channel: site
+  entity_id: paris-article-100-let-obeshchaniy-dizayna
+  entity_type: article
+  wave_type: edu-commercial
+  status: planned
+  planned_date: "2026-05-31"
+  url: /articles/100-let-obeshchaniy-dizayna/
+  title: "Сто лет обещаний дизайна — Утопия? Реальность?"
+  utility_synopsis: |
+    Расширенный essay (~3000-4000 слов): что обещал модернизм 1920-х (Le Corbusier, Aalto,
+    Mies, Eileen Gray), что из этого функционирует сегодня в жилом дизайне (case-studies
+    Villa Savoye, Maison La Roche, E-1027), где обещания не выдержали реальности (Pessac,
+    Ronchamp), что осталось в качестве операционных принципов (modular grid, открытые
+    планы, light-as-material). Без CTA — закрытый текст.
+  materials: []
+  campaign_id: paris-2026-09-promo
+  schema_version: 1
 
-  - id: paris-site-article-mo-guide
-    channel: site
-    entity_id: paris-article-mo-2026-guide
-    entity_type: article
-    wave_type: edu-commercial
-    status: planned
-    planned_date: "2026-06-30"
-    url: /articles/maison-and-objet-2026-guide/
-    title: "Maison & Objet 2026 — путеводитель для дизайнера"
-    utility_synopsis: |
-      Site-version email-выпуска №1, расширенная: brand-grid (40+ брендов с адресами/павильонами),
-      2-day suggested route, talks-агенда (даты/локации), что нового в категориях furniture /
-      lighting / decor / accessory, как получить промо-вход для дизайнера-практика, советы по
-      логистике (где жить, где есть), checklist «что взять с собой», цвета/материалы тренды-2026.
-    materials: []
-    campaign_id: paris-2026-09-promo
-    schema_version: 1
+- id: paris-site-article-mo-guide
+  channel: site
+  entity_id: paris-article-mo-2026-guide
+  entity_type: article
+  wave_type: edu-commercial
+  status: planned
+  planned_date: "2026-06-30"
+  url: /articles/maison-and-objet-2026-guide/
+  title: "Maison & Objet 2026 — путеводитель для дизайнера"
+  utility_synopsis: |
+    Site-version email-выпуска №1, расширенная: brand-grid (40+ брендов с адресами/павильонами),
+    2-day suggested route, talks-агенда (даты/локации), что нового в категориях furniture /
+    lighting / decor / accessory, как получить промо-вход для дизайнера-практика, советы по
+    логистике (где жить, где есть), checklist «что взять с собой», цвета/материалы тренды-2026.
+  materials: []
+  campaign_id: paris-2026-09-promo
+  schema_version: 1
 
-  - id: paris-editorial-pitch-modernism-press
-    channel: editorial_pitch
-    entity_id: paris-pitch-modernism-press
-    entity_type: press_pitch
-    wave_type: edu-commercial
-    status: planned
-    planned_date: "2026-07-15"
-    title: "Editorial pitch — третья сторона про парижский модернизм (Natalia's network)"
-    utility_synopsis: |
-      Pitch к Domus / ArchDaily / Designboom / Forbes Russia / Tatlin через Natalia's connections
-      (Olga + Natalia paritет-organizers). Guest article или интервью про парижский модернизм
-      и practice-of-design-travel. Третья сторона = расширение reach без своего аккаунта; независимая
-      verification ценности проекта. Каждая публикация — research-quality artifact, читается
-      как standalone.
-    materials: []
-    campaign_id: paris-2026-09-promo
-    schema_version: 1
+- id: paris-editorial-pitch-modernism-press
+  channel: editorial_pitch
+  entity_id: paris-pitch-modernism-press
+  entity_type: press_pitch
+  wave_type: edu-commercial
+  status: planned
+  planned_date: "2026-07-15"
+  title: "Editorial pitch — третья сторона про парижский модернизм (Natalia's network)"
+  utility_synopsis: |
+    Pitch к Domus / ArchDaily / Designboom / Forbes Russia / Tatlin через Natalia's connections
+    (Olga + Natalia paritет-organizers). Guest article или интервью про парижский модернизм
+    и practice-of-design-travel. Третья сторона = расширение reach без своего аккаунта; независимая
+    verification ценности проекта. Каждая публикация — research-quality artifact, читается
+    как standalone.
+  materials: []
+  campaign_id: paris-2026-09-promo
+  schema_version: 1
 
 
 urls:
@@ -1252,98 +1366,98 @@ urls:
   telegram_handle: "@olgaroset"
 
 artworks:
-  - 04.jpg
-  - 05.jpg
-  - 06.jpg
-  - 07.jpg
-  - 08.jpg
-  - 09.jpg
-  - 43.jpg
-  - 5777.jpg
-  - 5779.jpg
-  - Antib1.jpg
-  - Antib3.jpg
-  - Dozhd_na_ozere_Garda.jpg
-  - Eshchë_maki_provansa.jpg
-  - Ivan_Stenin.jpg
-  - KARTINA1.jpg
-  - KONI.jpg
-  - Letyashchaya_v_tishine_(Olga_Marusina).jpg
-  - MOË.jpg
-  - Medlennye_sumerki_proshedshego.jpg
-  - NIMFEI.jpg
-  - Nakhodka.jpg
-  - ONI.jpg
-  - "Pegasus'es Last Chance.jpg"
-  - Sher_v_Bilbao.jpg
-  - Sole.jpg
-  - Syna,_let_10_bolshoĭ.jpg
-  - T8LPnmJYCcgbD9Y3LEYGwA-article.jpg
-  - Ya_prishla_syuda.....jpg
-  - Zhizn._kotoraya_khochet._chtoby_eë_razdelili_vdvoem.jpg
-  - angl.jpg
-  - antib.jpg
-  - ausser.jpg
-  - belgrad.jpg
-  - byloe_i_dumy.jpg
-  - chereshnya_i_krasnye_kryshi.jpeg
-  - dunaĭ.jpg
-  - esfir.jpg
-  - eskizy_2003.jpg
-  - etrog_braĭt.jpg
-  - fff.jpg
-  - gerbera.jpg
-  - id-5-Cvet-na-vode-i-svet-na-pikah-gor.jpg
-  - img014.JPG
-  - iris.jpg
-  - ital.jpg
-  - kamin_tsv.jpg
-  - katya_bilbao.jpg
-  - liliya_menora.jpg
-  - lost.jpg
-  - maki_provans.jpg
-  - maki_provans_2.jpg
-  - menora.jpg
-  - metafora.jpg
-  - monokhrom_3.jpg
-  - more.jpg
-  - motherhorse.jpg
-  - nartsissy.jpg
-  - natyurmort.jpg
-  - nefertitti_1.jpg
-  - obratnaya_storona_solntsa33.jpg
-  - obratnaya_storona_solntsa_1.jpg
-  - obratnaya_storona_solntsa_2.jpg
-  - otkrytka_iris.jpg
-  - parizha_dereva_1.jpg
-  - pavliny.jpg
-  - prosto_belgrad.jpg
-  - rozety.jpg
-  - rut.jpg
-  - shishki_i_khvoya.jpeg
-  - skettchers_(1).jpg
-  - skettchers_(2).jpg
-  - sredizemnoe_more.jpg
-  - syn__2016.jpg
-  - terblansh.jpg
-  - trikotazhnye_nayady_1.jpg
-  - trikotazhnye_nayady_3.jpg
-  - tsv.jpg
-  - tsvety_na_vode.jpg
-  - u1.jpg
-  - u2.jpg
-  - u3.jpg
-  - ulita_na_kholste.jpg
-  - ulity1.jpg
-  - ulity2.jpg
-  - ulity3.jpg
-  - ulity5.jpg
-  - verdon_chb.jpg
-  - work-002-full.jpg
-  - work-005-full.jpg
-  - work-007-full.jpg
-  - work-011-full.jpg
-  - work-012-full.jpg
-  - work-013-full.jpg
-  - z_4f61effe.jpg
-  - zoloto_lyubvi.jpg
+- 04.jpg
+- 05.jpg
+- 06.jpg
+- 07.jpg
+- 08.jpg
+- 09.jpg
+- 43.jpg
+- 5777.jpg
+- 5779.jpg
+- Antib1.jpg
+- Antib3.jpg
+- Dozhd_na_ozere_Garda.jpg
+- Eshchë_maki_provansa.jpg
+- Ivan_Stenin.jpg
+- KARTINA1.jpg
+- KONI.jpg
+- Letyashchaya_v_tishine_(Olga_Marusina).jpg
+- MOË.jpg
+- Medlennye_sumerki_proshedshego.jpg
+- NIMFEI.jpg
+- Nakhodka.jpg
+- ONI.jpg
+- "Pegasus'es Last Chance.jpg"
+- Sher_v_Bilbao.jpg
+- Sole.jpg
+- Syna,_let_10_bolshoĭ.jpg
+- T8LPnmJYCcgbD9Y3LEYGwA-article.jpg
+- Ya_prishla_syuda.....jpg
+- Zhizn._kotoraya_khochet._chtoby_eë_razdelili_vdvoem.jpg
+- angl.jpg
+- antib.jpg
+- ausser.jpg
+- belgrad.jpg
+- byloe_i_dumy.jpg
+- chereshnya_i_krasnye_kryshi.jpeg
+- dunaĭ.jpg
+- esfir.jpg
+- eskizy_2003.jpg
+- etrog_braĭt.jpg
+- fff.jpg
+- gerbera.jpg
+- id-5-Cvet-na-vode-i-svet-na-pikah-gor.jpg
+- img014.JPG
+- iris.jpg
+- ital.jpg
+- kamin_tsv.jpg
+- katya_bilbao.jpg
+- liliya_menora.jpg
+- lost.jpg
+- maki_provans.jpg
+- maki_provans_2.jpg
+- menora.jpg
+- metafora.jpg
+- monokhrom_3.jpg
+- more.jpg
+- motherhorse.jpg
+- nartsissy.jpg
+- natyurmort.jpg
+- nefertitti_1.jpg
+- obratnaya_storona_solntsa33.jpg
+- obratnaya_storona_solntsa_1.jpg
+- obratnaya_storona_solntsa_2.jpg
+- otkrytka_iris.jpg
+- parizha_dereva_1.jpg
+- pavliny.jpg
+- prosto_belgrad.jpg
+- rozety.jpg
+- rut.jpg
+- shishki_i_khvoya.jpeg
+- skettchers_(1).jpg
+- skettchers_(2).jpg
+- sredizemnoe_more.jpg
+- syn__2016.jpg
+- terblansh.jpg
+- trikotazhnye_nayady_1.jpg
+- trikotazhnye_nayady_3.jpg
+- tsv.jpg
+- tsvety_na_vode.jpg
+- u1.jpg
+- u2.jpg
+- u3.jpg
+- ulita_na_kholste.jpg
+- ulity1.jpg
+- ulity2.jpg
+- ulity3.jpg
+- ulity5.jpg
+- verdon_chb.jpg
+- work-002-full.jpg
+- work-005-full.jpg
+- work-007-full.jpg
+- work-011-full.jpg
+- work-012-full.jpg
+- work-013-full.jpg
+- z_4f61effe.jpg
+- zoloto_lyubvi.jpg
