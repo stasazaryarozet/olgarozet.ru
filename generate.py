@@ -1501,11 +1501,21 @@ def p_site(d: dict) -> str:
     # Consultations
     desc = "<br>".join(cons["description"].strip().splitlines())
     avail = "<br>".join(cons["availability"].strip().splitlines())
+    # admin 2026-05-15: «Никакой ссылки на Бронирование быть не может, пока не
+    # восстановим». booking_disabled gate: replace CTA с inline placeholder
+    # «пока времён нет» (caps tracking-caps, design tokens — congruent с section).
+    if d.get("booking_disabled"):
+        cta_block = (
+            '      <p class="empty-eyebrow no-time">пока времён нет'
+            '<span class="rule" aria-hidden="true"></span></p>'
+        )
+    else:
+        cta_block = f'      <a href="{cons["link"]}" class="cta">{cons["cta"]}</a>'
     cons_html = f"""    <section id="consultations" aria-labelledby="consultations-heading">
       <h2 id="consultations-heading">Консультации:</h2>
       <p>{desc}</p>
       <p class="price">{cons['price']}</p>
-      <a href="{cons['link']}" class="cta">{cons['cta']}</a>
+{cta_block}
       <p class="availability">{avail}</p>
     </section>"""
 
@@ -3780,8 +3790,17 @@ if __name__ == "__main__":
     print("site: index.html")
     (ROOT / "art" / "index.html").write_text(p_art(d), encoding="utf-8")
     print("art: art/index.html")
-    (ROOT / "booking" / "index.html").write_text(p_booking(d), encoding="utf-8")
-    print("booking: booking/index.html")
+    if d.get("booking_disabled"):
+        # admin 2026-05-15: «Никакой ссылки на Бронирование, пока не восстановим».
+        # Remove booking/ artifacts entirely so orphan page can't be linked.
+        booking_dir = ROOT / "booking"
+        if booking_dir.is_dir():
+            import shutil as _sh
+            _sh.rmtree(booking_dir)
+        print("booking: omitted (booking_disabled)")
+    else:
+        (ROOT / "booking" / "index.html").write_text(p_booking(d), encoding="utf-8")
+        print("booking: booking/index.html")
     (ROOT / "telegram.txt").write_text(p_telegram(d), encoding="utf-8")
     print("telegram: telegram.txt")
     (ROOT / "bio.txt").write_text(p_bio(d), encoding="utf-8")

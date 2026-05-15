@@ -1,4 +1,5 @@
 suppress_publications: true     # admin 2026-05-15: hide «Публикации» section на главной (per-owner toggle, data-driven; render-time gate в site_generator.p_publications)
+booking_disabled: true          # admin 2026-05-15: «Никакой ссылки на Бронирование быть не может, пока не восстановим». OAuth o.g.rozet@gmail.com REVOKED — substrate-chain returns []. Main page Консультации shows «пока времён нет» placeholder вместо CTA; /booking/ page omitted from build. Clear когда substrate restored (oauth re-grant OR service_account active OR manual_slots populated).
 
 bio:
   title: Ольга Розет
