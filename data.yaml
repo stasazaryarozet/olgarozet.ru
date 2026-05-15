@@ -1,3 +1,5 @@
+suppress_publications: true     # admin 2026-05-15: hide «Публикации» section на главной (per-owner toggle, data-driven; render-time gate в site_generator.p_publications)
+
 bio:
   title: Ольга Розет
   tagline: художник, дизайнер

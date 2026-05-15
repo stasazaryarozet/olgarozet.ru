@@ -1439,6 +1439,8 @@ def p_publications(d: dict) -> str:
     Status literal validated against entity-publication.status_taxonomy
     (Spec single SoT) — drift catches Spec mismatch at first render.
     """
+    if d.get("suppress_publications"):
+        return ""
     from publication_invariants import _canonical_state as _pub_state
     _published = _pub_state("published")
     pubs = sorted(
