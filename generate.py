@@ -123,6 +123,34 @@ def _typo_compiled(lang: str) -> tuple:
     return _compile_typo_regexes(_load_typo_rules(lang))
 
 
+@_lru_cache(maxsize=1)
+def _vulgar_fraction_table() -> "tuple[dict, str]":
+    """Inv-TYPO-vulgar-fraction-glyph data — table of «N/M» → Unicode vulgar
+    fraction glyph; plus fraction_slash codepoint (U+2044) для non-standard pairs."""
+    cfg = _math_symbols_cfg()
+    return (cfg.get("vulgar_fractions") or {}, cfg.get("fraction_slash") or "⁄")
+
+
+_VULGAR_FRAC_RE = _re.compile(r"(?<![\d/\w])(\d+)/(\d+)(?![\d/])")
+
+
+def _vulgar_fractions_apply(s: str) -> str:
+    """Convert ASCII «N/M» → Unicode vulgar fraction glyph (½, ⅓, ¾, ...) per
+    Inv-TYPO-vulgar-fraction-glyph. Table-driven via Spec data; non-standard
+    pairs fallback к fraction-slash form `N⁄M` (U+2044, font kern'd-fraction).
+    Conservative lookbehind/lookahead excludes dates (1/2/2026), versions
+    (v1/2), digit-runs. Idempotent."""
+    table, slash = _vulgar_fraction_table()
+    if not table:
+        return s
+    def repl(m: "_re.Match") -> str:
+        key = f"{m.group(1)}/{m.group(2)}"
+        if key in table:
+            return table[key]
+        return f"{m.group(1)}{slash}{m.group(2)}"
+    return _VULGAR_FRAC_RE.sub(repl, s)
+
+
 def _typo(s: str, lang: str = "ru") -> str:
     """Apply typographic NBSP-glue per System rules (knowledge/system/typography).
 
@@ -146,6 +174,9 @@ def _typo(s: str, lang: str = "ru") -> str:
     # Inv-TYPO-apostrophe-curly: straight ' → curly ’ (U+2019).
     # Conservative: only between alphanumeric boundaries (don't touch code/quotes).
     out = _re.sub(r"(\w)'(\w)", r"\1’\2", out, flags=_re.UNICODE)
+    # Inv-TYPO-vulgar-fraction-glyph: «1/2» → «½», «3/4» → «¾», etc.
+    # Non-standard pairs (5/9, 7/13, …) → fraction-slash form `N⁄M`.
+    out = _vulgar_fractions_apply(out)
     # Inv-TYPO-en-dash-vs-em — Spec proof is `deferred` (Phase 3: text-scan + admin
     # discipline). The earlier eager `(\d)-(\d)→\1–\2` substitution mangled ISO dates
     # «2026-05-13»→«2026–05–13» and phone numbers system-wide; removed to match the Spec.
@@ -1223,14 +1254,100 @@ def _layout(d: dict, *, title: str, description: str, body: str,
 
 # ── Invariants ───────────────────────────────────────────────────────
 
-def sorted_events(d: dict, surface: str = "site") -> list:
-    """Events filtered by render-surface marker, ASC by t_key.
+def _parse_event_date(s: str | None):
+    """Parse t_key / t_end into ISO date string for comparison; tolerate partial
+    anchors ('2026-09' → '2026-09-01', '2027' → '2027-01-01'). Returns None
+    if unparseable. Comparison-safe ISO-8601 lexicographic ordering.
+    """
+    if not s or not isinstance(s, str):
+        return None
+    s = s.strip()
+    # ISO datetime → first 10 chars (date portion); ISO date → as-is;
+    # YYYY-MM → assume month-start; YYYY → year-start.
+    if len(s) >= 10 and s[4] == "-" and s[7] == "-":
+        return s[:10]
+    if len(s) == 7 and s[4] == "-":
+        return s + "-01"
+    if len(s) == 4 and s.isdigit():
+        return s + "-01-01"
+    return None
 
-    Render gate: event projects to `surface` iff `surface in event.broadcast`.
-    Absence/empty list = graph-only (admin-explicit opt-in required).
+
+def _effective_stage(event: dict, now_iso: str | None = None) -> str:
+    """Inv-EV-stage-time-derived (entity-event.md::stage_time_derivation).
+
+    Computes the effective lifecycle stage from stored stage + temporal anchors:
+      - now > t_end          → CONCLUDED   (past event — Системно-математически excluded)
+      - t_key ≤ now ≤ t_end  → ONGOING     (live event — when stored ∈ {OPEN, CLOSED})
+      - otherwise             → stored stage unchanged
+
+    `now_iso` defaults к today's date (UTC); pass explicit value for deterministic tests.
+    """
+    import datetime as _dt
+    if now_iso is None:
+        now_iso = _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%d")
+    stored = (event.get("status") or event.get("lifecycle", {}).get("stage") or "PLANNING")
+    t_key = _parse_event_date(event.get("t_key"))
+    t_end = _parse_event_date(event.get("t_end"))
+    if t_end and now_iso > t_end:
+        return "CONCLUDED"
+    if t_key and t_end and t_key <= now_iso <= t_end and stored in ("OPEN", "CLOSED"):
+        return "ONGOING"
+    return stored
+
+
+@_functools.lru_cache(maxsize=1)
+def _renderable_for() -> dict[str, frozenset[str]]:
+    """Spec-loaded per-surface stage gate. Reads entity-event.md::enforcement_data
+    .renderable_for. Cached — Spec is immutable per process."""
+    try:
+        from spec_data import frontmatter
+        fm = frontmatter("entity-event")
+        data = fm.get("enforcement_data", {}).get("renderable_for", {})
+        return {surface: frozenset(stages) for surface, stages in data.items()}
+    except Exception:
+        return {}
+
+
+@_functools.lru_cache(maxsize=1)
+def _all_stages_non_terminal() -> frozenset[str]:
+    """Universal fallback: lifecycle_status_taxonomy \\ {PRE_DRAFT, CONCLUDED}.
+    Spec-loaded — adding new stage = YAML edit, no code change."""
+    try:
+        from spec_data import frontmatter
+        fm = frontmatter("entity-event")
+        taxonomy = fm.get("enforcement_data", {}).get("lifecycle_status_taxonomy", [])
+        return frozenset(s for s in taxonomy if s not in ("PRE_DRAFT", "CONCLUDED"))
+    except Exception:
+        return frozenset({"PLANNING", "DRAFT", "OPEN", "CLOSED", "POSTPONED",
+                          "MOVEDONLINE", "CANCELLED", "ONGOING", "PLANNED"})
+
+
+def sorted_events(d: dict, surface: str = "site", now_iso: str | None = None) -> list:
+    """Events filtered by render-surface marker AND effective stage, ASC by t_key.
+
+    Render gate (Inv-EV-stage-time-derived):
+      visible(E, σ) ⇔ σ ∈ broadcast(E) ∧ effective_stage(E, now) ∈ renderable_for[σ]
+
+    CONCLUDED stage (now > t_end) auto-excluded from ALL surfaces except `archive`
+    — admin'ское «должно быть исключено Системно-математически». Surfaces
+    without explicit renderable_for[σ] table entry fall back к excluding только
+    PRE_DRAFT и CONCLUDED (broadcast field stays primary gate).
+
+    NO-HARDCODE: renderable_for[σ] table loaded from entity-event.md Spec
+    (admin'ское «без хардкода в каких-либо проявлениях на каждом уровне и насквозь»).
+
     Stable sort: missing t_key → last; ties resolved by YAML order.
     """
-    pool = [e for e in d.get("events", []) if surface in (e.get("broadcast") or [])]
+    allowed = _renderable_for().get(surface, _all_stages_non_terminal())
+
+    pool = []
+    for e in d.get("events", []):
+        if surface not in (e.get("broadcast") or []):
+            continue
+        if _effective_stage(e, now_iso) not in allowed:
+            continue
+        pool.append(e)
     return sorted(pool, key=lambda e: e.get("t_key", "￿"))
 
 
@@ -1264,16 +1381,7 @@ def schema_events_jsonld(d: dict) -> str:
         }
         locs = resolve_refs(d, "locations", ev.get("locations", []))
         if locs:
-            # Schema.org: addressCountry is on PostalAddress, not Place.
-            # Place.address → PostalAddress.addressCountry. (Inv-SEM-jsonld-valid)
-            obj["location"] = [
-                {"@type": "Place",
-                 "name": l.get("name", l.get("id", "")),
-                 **({"address": {"@type": "PostalAddress",
-                                 "addressCountry": l.get("country", "")}}
-                    if l.get("country") else {})}
-                for l in locs
-            ]
+            obj["location"] = [_place_jsonld(l) for l in locs]
         orgs = resolve_refs(d, "people", ev.get("organizers", []))
         if orgs:
             obj["organizer"] = [{"@type": "Person",
@@ -1380,33 +1488,12 @@ def p_site(d: dict) -> str:
       <p class="availability">{avail}</p>
     </section>"""
 
-    # Events (sorted by t_key invariant)
-    events_articles = []
-    for ev in events:
-        lines = [f'        <p class="event-date"><time>{ev["date"]}</time></p>',
-                 f'        <p>{ev["title"]}</p>']
-        for line in ev.get("lines", []):
-            if line == "":
-                continue
-            lines.append(f"        <p>{line}</p>")
-        # Hub-card CTA-link к dedicated FQDN landing (admin 2026-05-12 feedback.txt:
-        # «вписать Событие и Кампанию вокруг него»). Inv-CMP-STYLE-CTA-anchor-uniform —
-        # hub-event-card carries same canonical URL as campaign-style.cta_anchor.
-        # Universal: ANY event с web_addresses gains a clickable «Подробнее» CTA;
-        # not paris-specific. No data-flag (Genius Simplification — presence of
-        # web_addresses already declares «has dedicated landing»).
-        addrs = ev.get("web_addresses") or []
-        if addrs:
-            landing_url = f"https://{addrs[0]}/"
-            lines.append(
-                f'        <p class="event-cta">'
-                f'<a href="{_t(landing_url)}" class="cta">Подробнее</a></p>'
-            )
-        events_articles.append(
-            "      <article class=\"event\">\n" +
-            "\n".join(lines) +
-            "\n      </article>")
-    events_html = "\n".join(events_articles)
+    # Events Skoro digest — delegates к skoro.render (monoidal functor, Genius Simplification C).
+    # Per Inv-CMP-STYLE-CTA-anchor-uniform: hub-event-card CTA points к canonical FQDN landing
+    # (event.web_addresses[0]). SkoroSpec encapsulates entry formatting per Surface; site
+    # variant reads same Spec table.
+    from skoro import render as render_skoro_digest_dispatch
+    events_html = render_skoro_digest_dispatch(d, "site")
 
     ig_url = urls.get("instagram", "")
     tg_url = urls.get("telegram", "")
@@ -1646,6 +1733,23 @@ def event_signup_form(slug: str, label: str, email_fallback: str,
 
 # Schema.org EventStatus enum — Spec-driven SoT.
 # Admin-side `status` (PLANNING/DRAFT/OPEN/CLOSED) is project-lifecycle,
+def _place_jsonld(loc: dict, fallback_name: str = "") -> dict:
+    """Schema.org Place — single SoT used by schema_events_jsonld + _event_jsonld
+    flat-path + _event_jsonld itinerary-path. Inv-SEM-jsonld-valid:
+    addressCountry на PostalAddress (not Place); free-form address strings
+    pass through unchanged. fallback_name для places_table entries where
+    the dict key (not "id" field) is the canonical reference."""
+    obj: dict = {"@type": "Place",
+                 "name": loc.get("name") or loc.get("id") or fallback_name}
+    addr = loc.get("address")
+    if isinstance(addr, str) and addr:
+        obj["address"] = addr
+    elif loc.get("country"):
+        obj["address"] = {"@type": "PostalAddress",
+                          "addressCountry": loc["country"]}
+    return obj
+
+
 # NOT Schema.org event-lifecycle. Mapping lives в
 # entity-event.md::enforcement_data.schema_org_event_status.
 # Adding a new lifecycle state = Spec edit only, no code change here
@@ -1830,17 +1934,9 @@ def _event_jsonld(d: dict, ev: dict) -> str:
 
     locs = resolve_refs(d, "locations", ev.get("locations", []))
     if locs:
-        # Schema.org: addressCountry on PostalAddress, not Place. (Inv-SEM-jsonld-valid)
-        loc_list = [
-            {"@type": "Place",
-             "name": l.get("name", l.get("id", "")),
-             **({"address": {"@type": "PostalAddress",
-                             "addressCountry": l.get("country", "")}}
-                if l.get("country") else {})}
-            for l in locs
-        ]
         # TouristTrip: location is the trip's geographic scope.
         # Single-location trips render as one object (less syntactic noise).
+        loc_list = [_place_jsonld(l) for l in locs]
         obj["location"] = loc_list[0] if len(loc_list) == 1 else loc_list
 
     orgs = resolve_refs(d, "people", ev.get("organizers", []))
@@ -1896,13 +1992,9 @@ def _event_jsonld(d: dict, ev: dict) -> str:
         itin_items: list[dict] = []
         for pos, pid in enumerate(rm, start=1):
             p = places_table.get(pid) or {}
-            place_obj: dict = {"@type": "Place",
-                               "name": p.get("name", pid)}
-            if p.get("address"):
-                place_obj["address"] = p["address"]
             itin_items.append({"@type": "ListItem",
                                "position": pos,
-                               "item": place_obj})
+                               "item": _place_jsonld(p, fallback_name=pid)})
         if itin_items:
             obj["itinerary"] = {"@type": "ItemList",
                                 "itemListElement": itin_items}
@@ -1941,6 +2033,13 @@ def _person_display(d: dict, person_id: str) -> tuple[str, str]:
     nm = p.get("name") or person_id
     link = p.get("link") or p.get("url") or ""
     return (nm, link)
+
+
+def _person_link_html(d: dict, person_id: str, escape) -> str:
+    """Anchor-wrapped person name. escape ∈ {_t, _inline}; single SoT для 3 sites."""
+    nm, lk = _person_display(d, person_id)
+    safe_lk = _u(lk)
+    return f'<a href="{safe_lk}">{escape(nm)}</a>' if safe_lk else escape(nm)
 
 
 @dataclass
@@ -2122,9 +2221,7 @@ def _render_header(ctx: "_LandingCtx") -> "list[str]":
     if not landing_h1 and org_ids and not abt_text:
         disp = []
         for pid in org_ids:
-            nm, lk = _person_display(d, pid)
-            safe_lk = _u(lk)
-            disp.append(f'<a href="{safe_lk}">{_t(nm)}</a>' if safe_lk else _t(nm))
+            disp.append(_person_link_html(d, pid, _t))
         label = "Организатор" if len(org_ids) == 1 else "Организаторы"
         parts.append(f'<p class="organizers">{" и ".join(disp)} — {label}.</p>')
     parts.append("</header>")
@@ -2521,9 +2618,7 @@ def _render_subevents(ctx: "_LandingCtx") -> "list[str]":
         if se_orgs:
             org_names = []
             for oid in se_orgs:
-                nm, lk = _person_display(d, oid)
-                safe_lk = _u(lk)
-                org_names.append(f'<a href="{safe_lk}">{inline(nm)}</a>' if safe_lk else inline(nm))
+                org_names.append(_person_link_html(d, oid, inline))
             meta_bits.append(f"Организаторы: {', '.join(org_names)}")
         if meta_bits:
             _subev_parts.append('<ul class="subevent-meta">')
@@ -2566,9 +2661,7 @@ def _render_open_questions(ctx: "_LandingCtx") -> "list[str]":
         for addr_ids, qs in by_addrs.items():
             names = []
             for pid in addr_ids:
-                nm, lk = _person_display(d, pid)
-                safe_lk = _u(lk)
-                names.append(f'<a href="{safe_lk}">{inline(nm)}</a>' if safe_lk else inline(nm))
+                names.append(_person_link_html(d, pid, inline))
             head = " и ".join(names)
             lis = "".join(f"<li>{inline(q)}</li>" for q in qs)
             parts.append(f'<div class="q-group"><h3>К {head}</h3>'
@@ -3226,20 +3319,145 @@ def p_art(d: dict) -> str:
     )
 
 
-# ── P_telegram: D → channel post text ────────────────────────────────
+# ── P_telegram: D → channel post text (Skoro digest) ─────────────────
+
+def _telegram_channel_url(d: dict) -> str | None:
+    """Resolve TG channel URL для anchor link insertion.
+
+    Source priority:
+      1. data.yaml::urls.telegram         (canonical, e.g. https://t.me/olga_rozet)
+      2. data.yaml::urls.telegram_handle  (e.g. @olgaroset → derive https://t.me/olgaroset)
+      3. None (no link insertion possible)
+    """
+    urls = d.get("urls") or {}
+    url = urls.get("telegram")
+    if url:
+        return url.rstrip("/")
+    handle = urls.get("telegram_handle")
+    if handle:
+        h = handle.lstrip("@")
+        return f"https://t.me/{h}"
+    return None
+
+
+# ── π_anchor : Event × Publications → (Channel → Maybe URLLocator) ────
+#
+# Genius Simplification 2026-05-15: stored event.anchors field eliminated as
+# duplicative SoT. Single source = publications[].
+#
+# NO-HARDCODE 2026-05-15: per-Channel URL-locator extraction rules loaded from
+# channel.md::enforcement_data.url_locator_extraction (Spec-driven). Adding new
+# Channel = YAML edit, no code change. Canonical anchor key = channel-id itself
+# (mapping для compatibility resolved at usage site).
+
+import re as _re_anchor
+
+
+def _load_anchor_extractors() -> dict:
+    """Load per-Channel URL-locator extraction rules from channel.md Spec.
+
+    Returns: channel-id → {'source', 'transform', 'regex'?} dict.
+    """
+    try:
+        from spec_data import frontmatter
+        fm = frontmatter("channel")
+        return fm.get("enforcement_data", {}).get("url_locator_extraction", {})
+    except Exception:
+        return {}
+
+
+_ANCHOR_RULES = _load_anchor_extractors()
+
+
+def _anchor_key_for(channel: str) -> str:
+    """Resolve anchor namespace key for Channel — Spec-loaded (channel.md::url_locator_extraction.<ch>.anchor_key).
+
+    Lift 2026-05-15: was inline _ANCHOR_KEY_ALIASES table; now Spec-driven uniform с
+    extraction rules. Fallback to channel-id itself когда anchor_key absent.
+    """
+    return (_ANCHOR_RULES.get(channel) or {}).get("anchor_key", channel)
+
+
+def _apply_extractor(rule: dict, external_url: str | None, platform_id):
+    """Apply Spec-defined extractor rule. Returns extracted locator OR None."""
+    source = rule.get("source", "")
+    transform = rule.get("transform", "passthrough")
+    raw = external_url if source == "external_url" else platform_id
+    if raw is None:
+        return None
+    if transform == "passthrough":
+        return raw
+    if transform == "int_or_none":
+        try:
+            s = str(raw).lstrip("-")
+            return int(raw) if s.isdigit() else None
+        except (ValueError, TypeError):
+            return None
+    if transform == "regex_extract":
+        pattern = rule.get("regex", "")
+        if not pattern:
+            return None
+        m = _re_anchor.search(pattern, raw or "")
+        return m.group(1) if m else None
+    return None
+
+
+def event_anchors(d: dict, event_id: str, only_live: bool = True) -> dict:
+    """π_anchor functor: derive anchor URL-locators per Channel from publications[].
+
+    Replaces stored event.anchors as single SoT = publications. For each Channel σ
+    where event has Main Post: returns canonical anchor key + extracted locator.
+
+    Bidirectional consistency check (Inv-EV-anchor-coherence): for any stored
+    event.anchors, derived value MUST match (admin can override via stored field
+    if publication entry lags, but mismatch = warning).
+
+    only_live: if True, only publications с status=live count; else include planned.
+    Default True (admin'ское «оформившееся событие имеет Главный Пост» — Main Post
+    must be live к момент anchor-resolution).
+    """
+    anchors: dict = {}
+    for p in d.get("publications", []):
+        if p.get("kind") != "main_post":
+            continue
+        if p.get("target_event") != event_id:
+            continue
+        if only_live and p.get("status") != "live":
+            continue
+        channel = p.get("channel")
+        rule = _ANCHOR_RULES.get(channel)
+        if not rule:
+            continue
+        canonical_key = _anchor_key_for(channel)
+        locator = _apply_extractor(rule, p.get("external_url"), p.get("platform_id"))
+        if locator is not None:
+            anchors[canonical_key] = locator
+    # Augment с landing URL when explicit publication absent but event.web_addresses present.
+    # admin'ская модель: «Кампания основную информацию вещает через Посадочную» —
+    # landing is canonical и rarely needs separate Publication entry.
+    if "landing" not in anchors:
+        ev = next((e for e in d.get("events", []) if e.get("id") == event_id), None)
+        if ev:
+            web_addrs = ev.get("web_addresses") or []
+            if web_addrs:
+                addr = web_addrs[0]
+                anchors["landing"] = addr if addr.startswith("http") else f"https://{addr}"
+    return anchors
+
 
 def p_telegram(d: dict) -> str:
-    """Telegram channel post. Vertical, poetic. Empty lines = paragraph breaks."""
-    parts = ["СКОРО:", "", "•"]
-    for ev in sorted_events(d):  # enforce same temporal monotonicity
-        parts.append("")
-        parts.append(ev["title"])
-        for line in ev.get("lines", []):
-            parts.append(line)
-        parts.append("")
-        parts.append("•")
-    if parts and parts[-1] == "•":
-        parts.pop()
+    """Telegram channel Skoro digest — delegates к skoro.render (monoidal functor).
+
+    Realises admin'ская модель «Скоро коротко сообщает о Событиях и отсылает к
+    соответствующим Основным Постам». Refactored 2026-05-15 (Genius Simplification
+    C): copy-paste imperative loop collapsed в declarative `Render_σ : List E → Output_σ`
+    via skoro.SurfaceSkoroSpec + SKORO_TG_SPEC. Footer (consultations) composed
+    AFTER digest body.
+    """
+    from skoro import render as render_skoro_digest_dispatch
+    body = render_skoro_digest_dispatch(d, "telegram_channel")
+    # Construct parts list для consultations footer (preserving original divider semantics)
+    parts = body.split("\n") if body else ["СКОРО:"]
     cons = d.get("consultations", {})
     if cons:
         parts.append("")

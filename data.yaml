@@ -68,13 +68,16 @@ partners:
   cdl: {name: "ЦДЛ", full_name: "Центральный Дом Литераторов", type: venue, location: moscow}
 
 locations:
-  paris: {name: "Париж", country: FR}
-  serbia: {name: "Сербия", country: RS}
-  vrshac: {name: "Вршац", country: RS, region: serbia}
-  samarkand: {name: "Самарканд", country: UZ}
-  bukhara: {name: "Бухара", country: UZ}
-  uzbekistan: {name: "Узбекистан", country: UZ}
-  moscow: {name: "Москва", country: RU}
+  # name_accusative — для «В X» motion-to (admin'ская TG Скоро «В ПАРИЖ»)
+  # name_prepositional — для «В X» location-at (landing «В ПАРИЖЕ»)
+  # Pattern parallel к people[X].name_instrumental — Russian-case storage convention
+  paris: {name: "Париж", name_accusative: "Париж", name_prepositional: "Париже", country: FR}
+  serbia: {name: "Сербия", name_accusative: "Сербию", name_prepositional: "Сербии", country: RS}
+  vrshac: {name: "Вршац", name_accusative: "Вршац", name_prepositional: "Вршаце", country: RS, region: serbia}
+  samarkand: {name: "Самарканд", name_accusative: "Самарканд", name_prepositional: "Самарканде", country: UZ}
+  bukhara: {name: "Бухара", name_accusative: "Бухару", name_prepositional: "Бухаре", country: UZ}
+  uzbekistan: {name: "Узбекистан", name_accusative: "Узбекистан", name_prepositional: "Узбекистане", country: UZ}
+  moscow: {name: "Москва", name_accusative: "Москву", name_prepositional: "Москве", country: RU}
 
 # ── Country → ISO lang code (Inv-SEM-lang-of-parts substrate) ─────────────────
 # Resolver in site_generator._build_lang_resolver walks places/locations/people/
@@ -479,6 +482,7 @@ events:
 
 - id: paris-2026-09
   type: travel      # entity-event sub-class — knowledge/system/specifications/entity-event.md
+  project: design-travels   # type_phrase[travel__design-travels] → «ДИЗАЙН—ПУТЕШЕСТВИЕ В {locus_acc}»
   plan_id: paris-2026-09-plan      # parent-edge — entity-plan Spec; Plan.outputs ∋ this Event
   headings:
     about_organizer: "Организаторы"     # admin 2026-05-13 override (default «Об Организаторах»)
@@ -505,19 +509,26 @@ events:
   campaigns: [paris-2026-09-promo]     # reverse-edge — entity-campaign Spec; C.target_ids ∋ this id
   title: Париж · 8–11 сентября
   t_key: "2026-09-08"
+  t_end: "2026-09-11"    # Inv-EV-stage-time-derived — explicit end anchor enables auto-transition к ONGOING (8-11 Sept) и CONCLUDED (after 11 Sept); stale-exclusion системно-математична
   date: 8–11 сентября
-  broadcast: [site]
+  broadcast: [site, telegram_channel]   # paris видим на Site + в TG Skoro digest (@olga_rozet). Per Inv-EV-anchor-coherence: oформившееся OPEN → Главный Пост per Канал.
+  # anchors: ← stored field deprecated 2026-05-15 (Genius Simplification). Derived
+  # via π_anchor functor (site_generator.event_anchors(d, event_id)) из publications[]
+  # — single SoT. publication.kind=main_post + .target_event=paris-2026-09 entries
+  # автоматически resolved per Channel: extractor regex для IG shortcode, msg_id для TG,
+  # external_url для web. Inv-EV-anchor-coherence: derived anchors ⇔ publications[]
+  # by construction (bidirectional consistency автоматически).
   web_addresses: [parisinseptember.ru]
   audience: [architects, designers, decorators, artists]
   organizers: [olgarozet, natalia_loginova]
   locations: [paris]
-  concept: "Сто лет обещаний дизайна. Утопия? Реальность?"
+  concept: "Сто лет обещаний дизайна"  # admin 2026-05-15: «не Вещать про утопию-реальность» (Inv-PARIS-no-utopia-reality-broadcast)
   format: [travel]
   cohort:
     max: 10
     comparator: lte      # admin 2026-05-12 feedback.txt — render «≤ 10» (math glyph), не «до 10» (word-form). Inv-TYPO-comparator-symbolic / Inv-CMP-PARIS-cohort-cap-symbolic.
   duration: 4 дня
-  status: PLANNING
+  status: OPEN           # 2026-05-15: parisinseptember.ru live + lead-capture form active + IG Main Post live (DYRzwNxiAZ6) + TG announce scheduled — registration accepting per admin'ская «оформившееся событие». Per Inv-EV-lifecycle-monotone PLANNING → DRAFT → OPEN; current transition skips DRAFT (admin direct PLANNING→OPEN when program structurally complete).
   status_banner: false     # admin 2026-05-11 (feedback.txt): «Без "Программа собирается. Лист ожидания открыт."»
     # admin 2026-05-12 reconsider Natalia-terminal: «не должно быть других блоков
     # после Натальи». footer.legal ушёл entirely; payment-methods переехали в
@@ -791,10 +802,8 @@ events:
   - Сто лет
   - обещаний дизайна
   - ''
-  - Утопия?
-  - Реальность?
-  - ''
   - С Натальей Логиновой
+  # admin 2026-05-15: «не Вещать про утопию-реальность» — dropped «Утопия?»/«Реальность?» beat (Inv-PARIS-no-utopia-reality-broadcast)
 - id: paris-2026-09-zoom-preshow
   type: presentation
   parent_id: paris-2026-09            # Inv-EV-parent-resolves
@@ -877,7 +886,7 @@ events:
   title: Самарканд–Бухара
   t_key: "2026-10"
   date: осень
-  broadcast: [site]
+  broadcast: [site, telegram_channel]   # Skoro digest entry only (неоформившееся — нет Main Post); Inv-EV-anchor-coherence: anchors[] absent ⇒ TG entry без link
   audience: [professionals, designers, architects]
   organizers: [olgarozet, matluba, nasullobek]
   partners: [bukhara_center, masterskaya_rozet]
@@ -981,13 +990,13 @@ events:
   - "Мастерской"
   - "«Розет»"
 
-- id: serbia_2027
+- id: serbia_2027  # 2026-05-15: status taxonomy alignment — PLANNED (legacy) → PLANNING (canonical per entity-event.md::lifecycle_status_taxonomy)
   type: travel      # entity-event sub-class
   title: Сербия
   t_key: "2027"
   date: в следующем году
   link: /program-2027/
-  broadcast: [site]
+  broadcast: [site, telegram_channel]   # Skoro digest entry only (неоформившееся — нет Main Post)
   audience: [architects, designers, decorators, artists]
   organizers: [olgarozet]
   partners: [vikendica_rozet, ekata_estate]
@@ -1002,7 +1011,7 @@ events:
   cohort:
   duration:
   registration: {mailto: o.g.rozet@gmail.com, subject: "Программа в Сербию — жду"}
-  status: PLANNED
+  status: PLANNING       # 2026-05-15: legacy PLANNED → canonical PLANNING per entity-event.md::lifecycle_status_taxonomy
   lead: "Программа 2027 года в Сербии — для архитекторов, дизайнеров, декораторов и художников. Лекция и мастер-класс на семейной викендице и в EKATA Estate (Вршац)."
   sections:
   - title: Аудитория
@@ -1143,10 +1152,37 @@ publications:
   # Body content pending admin authoring (lumen_questions.md Q1); structure
   # declared for graph completeness (Inv-CMP-STYLE-material-pool-traceable
   # + Inv-CMP-PARIS-* compliance).
+- id: olga-tg-skoro-digest
+  channel: telegram_channel
+  entity_id: olga-tg-skoro
+  entity_type: telegram_post
+  kind: skoro_digest                 # entity-publication.md::Inv-PUB-kind-typed — Skoro digest per Канал (один per @olga_rozet, не per-Event). admin'ская модель 2026-05-15 «блок Скоро».
+  target_event: null                 # Skoro digest НЕ Event-bound — per-Channel singular publication. cardinality_per_event_channel[skoro_digest] = null.
+  status: live
+  uploaded_at: "2026-04-15T07:47:43Z"  # original hand-authored timestamp
+  external_url: "https://t.me/olga_rozet/62"
+  platform_id: "62"
+  title: "Skoro digest @olga_rozet"
+  utility_synopsis: |
+    Live Skoro digest на @olga_rozet (TG msg #62, 2026-04-15 hand-authored). Текущая версия
+    listsует Paris+Uzbekistan (Serbia добавлен позже только в data.yaml). Per admin'ская
+    модель 2026-05-15 — Skoro digest должен auto-генерироваться из sorted_events(d, 'telegram_channel')
+    via site_generator.p_telegram(d); auto-edit msg #62 при event-set change через TelegramAdapter.upsert
+    (Phase 2.5 — edit_message_text path, deferred за Rule-of-Three). Currently manual.
+  campaign_id: null                  # Skoro digest persona-channel-scope, не campaign-scope
+  schema_version: 1
+  # post-2026-05-15 plan: re-render via p_telegram(d) → edit msg #62 to reflect:
+  #   - Paris (formed, OPEN) с link к t.me/olga_rozet/{anchors.telegram}
+  #   - Uzbekistan (unformed, PLANNING) — only Skoro entry, no link
+  #   - Serbia (unformed, PLANNING) — only Skoro entry, no link
+  # Auto-excludes CONCLUDED per Inv-EV-stage-time-derived.
+
 - id: paris-2026-09-ig-post-main
   channel: instagram
   entity_id: paris-ig-post-main
   entity_type: ig_post
+  kind: main_post                    # entity-publication.md::Inv-PUB-kind-typed — Главный Пост per (paris-2026-09, instagram). admin'ская модель 2026-05-15.
+  target_event: paris-2026-09        # Inv-PUB-anchor-uniqueness — group key для cardinality check (≤1 main_post per (Event, Channel))
   wave_type: commercial
   status: live
   planned_date: "2026-05-15"
@@ -1155,14 +1191,13 @@ publications:
   platform_id: "18163588390430618"
   title: "Main IG Post — Paris в сентябре 2026"
   utility_synopsis: |
-    Live с 2026-05-13T12:08:35Z (DYRzwNxiAZ6, 30+ likes). Body — pure Staccato
-    rev15 variant (top dateline + 4 day-sections + Контракт + CTA → parisinseptember.ru).
-    Spec drift: live caption «100 ЛЕТ ОБЕЩАНИЙ ДИЗАЙНА» — pre-rev17 fact-corrected
-    к «МОДЕРНИЗМА» в draft (рев17 не докатилась к dispatch'у); collaborator + tag
-    fields wired в data но НЕ применены на live (Spec lift 1140ad495a 18:19 UTC =
-    6h после publish, post-publish Graph edit endpoint не support'ит collab/tag/caption).
-    Известный residue: либо delete+republish (теряем 30 likes + 2 comments-thread),
-    либо принять live как-есть и применить collab/tag к следующему Wave Post.
+    Польза Внимающему: получает программу путешествия как самодостаточный
+    dépliant. Видит концепт «Сто лет обещаний дизайна», три-модернистский
+    арк (Корбюзье — Аалто — Saint-Germain) в 4 day-sections с конкретными
+    локусами (Maison La Roche, Apt Molitor, Maison Louis Carré, Musée Zadkine),
+    Контракт (даты, формат, со-организация Olga + Natalya, cohort cap),
+    эстетический регистр (Outremer accent — Le Corbusier Polychromie 31).
+    Закрытый-текст: содержание имеет ценность без перехода по ссылке.
   materials: []
   campaign_id: paris-2026-09-promo
   collaborators: ["natalya_lo"]      # SPEC-INTENT: IG joint-authorship invite (Inv-PUB-collaborator-typed). NOT APPLIED on live post (DYRzwNxiAZ6) — Spec lift 1140ad495a was 6h after 12:09 UTC dispatch.
@@ -1248,6 +1283,8 @@ publications:
   channel: telegram_channel
   entity_id: paris-tg-announce
   entity_type: telegram_post
+  kind: main_post                    # entity-publication.md::Inv-PUB-kind-typed — Главный Пост per (paris-2026-09, telegram_channel). Scheduled msg #3 в @olga_rozet к 10:00 MSK 2026-05-15.
+  target_event: paris-2026-09        # Inv-PUB-anchor-uniqueness
   wave_type: commercial
   status: planned
   planned_date: "2026-05-15"
@@ -1312,7 +1349,7 @@ publications:
   status: planned
   planned_date: "2026-05-31"
   url: /articles/100-let-obeshchaniy-dizayna/
-  title: "Сто лет обещаний дизайна — Утопия? Реальность?"
+  title: "Сто лет обещаний дизайна"  # admin 2026-05-15: «не Вещать про утопию-реальность» (Inv-PARIS-no-utopia-reality-broadcast)
   utility_synopsis: |
     Расширенный essay (~3000-4000 слов): что обещал модернизм 1920-х (Le Corbusier, Aalto,
     Mies, Eileen Gray), что из этого функционирует сегодня в жилом дизайне (case-studies
