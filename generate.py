@@ -1499,23 +1499,26 @@ def p_site(d: dict) -> str:
       </section>"""
 
     # Consultations
-    desc = "<br>".join(cons["description"].strip().splitlines())
-    avail = "<br>".join(cons["availability"].strip().splitlines())
-    # admin 2026-05-15: «Никакой ссылки на Бронирование быть не может, пока не
-    # восстановим». booking_disabled gate: replace CTA с inline placeholder
-    # «пока времён нет» (caps tracking-caps, design tokens — congruent с section).
+    # admin 2026-05-15: «Никакой ссылки на Бронирование, пока не восстановим. Текст
+    # под надписью тоже становится не релевантным. Конгруэтной табличкой» —
+    # description/price/availability promote service, which user can't book; они
+    # дезинформируют. booking_disabled → section показывает heading + standalone
+    # card «пока времён нет» (Inv-PROV-substrate-diversity restore = remove gate).
     if d.get("booking_disabled"):
-        cta_block = (
-            '      <p class="empty-eyebrow no-time">пока времён нет'
-            '<span class="rule" aria-hidden="true"></span></p>'
-        )
+        cons_html = """    <section id="consultations" aria-labelledby="consultations-heading">
+      <h2 id="consultations-heading">Консультации:</h2>
+      <aside class="booking-empty" role="status" aria-live="polite">
+        <p class="empty-eyebrow">пока времён нет<span class="rule" aria-hidden="true"></span></p>
+      </aside>
+    </section>"""
     else:
-        cta_block = f'      <a href="{cons["link"]}" class="cta">{cons["cta"]}</a>'
-    cons_html = f"""    <section id="consultations" aria-labelledby="consultations-heading">
+        desc = "<br>".join(cons["description"].strip().splitlines())
+        avail = "<br>".join(cons["availability"].strip().splitlines())
+        cons_html = f"""    <section id="consultations" aria-labelledby="consultations-heading">
       <h2 id="consultations-heading">Консультации:</h2>
       <p>{desc}</p>
       <p class="price">{cons['price']}</p>
-{cta_block}
+      <a href="{cons['link']}" class="cta">{cons['cta']}</a>
       <p class="availability">{avail}</p>
     </section>"""
 

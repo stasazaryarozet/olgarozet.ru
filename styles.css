@@ -204,18 +204,27 @@ a:hover {
     transition: opacity 0.2s;
 }
 
-/* admin 2026-05-15: «Пока времён нет — это на Главную». Inline placeholder
-   занимает место CTA «Записаться» в Консультации section while substrate-chain
-   к Календарю не восстановлен. Caps tracking — congruent с дизайном. */
-.empty-eyebrow.no-time {
+/* admin 2026-05-15: «Пока времён нет — это на Главную; конгруэтной табличкой».
+   Standalone card в Консультации section while substrate-chain к Календарю
+   не восстановлен. Theme-agnostic via design tokens. */
+.booking-empty {
+    max-width: 520px;
+    margin: 1.5rem auto;
+    padding: clamp(2rem, 1.5rem + 1.5vw, 3.5rem) clamp(1.5rem, 1rem + 1vw, 2.5rem);
+    text-align: center;
+    border: 1px solid var(--rule);
+    border-radius: .5rem;
+    background: var(--surface);
+}
+.booking-empty .empty-eyebrow {
     text-transform: uppercase;
     letter-spacing: var(--tracking-caps);
     font-size: clamp(.95rem, .85rem + .4vw, 1.15rem);
     font-weight: 500;
     color: var(--ink);
-    margin: 0.5em 0 0 0;
+    margin: 0;
 }
-.empty-eyebrow.no-time .rule {
+.booking-empty .empty-eyebrow .rule {
     display: block;
     width: 2.5rem;
     height: 1px;
