@@ -3524,6 +3524,7 @@ def p_booking(d: dict) -> str:
     Slots source: same files (booking.json or engage.json), `slots` key. Empty list OK.
     """
     import json as _json
+    bio = d["bio"]
     cons = d["consultations"]
     # Slots-bundle file (engage_transport writes engage.json; legacy: booking.json).
     slots_data: dict = {"slots": [], "user": ""}
@@ -3531,20 +3532,23 @@ def p_booking(d: dict) -> str:
         if cand.exists():
             slots_data = _json.loads(cand.read_text())
             break
-    # transport_url resolution — fail-loud if neither SoT carries it.
+    slots_list = slots_data.get("slots", [])
+    slots_json = _json.dumps(slots_list, ensure_ascii=False)
+    desc_plain = cons["description"].strip().replace("\n", " ").replace("  ", " ")
+    contact_email = cons.get("calendar_id", "o.g.rozet@gmail.com")
+    no_slots = not slots_list
+    # transport_url resolution required only когда we actually render the JS-driven
+    # booking form (i.e., slots present). Empty-state placeholder doesn't need it.
     transport_url = (
         ((d.get("booking") or {}).get("transport_url"))
         or slots_data.get("transport_url")
     )
-    if not transport_url:
+    if not no_slots and not transport_url:
         owner = (d.get("bio") or {}).get("canonical") or (d.get("bio") or {}).get("title") or "<unknown>"
         raise RuntimeError(
             f"booking transport_url required (data.yaml.booking.transport_url "
             f"or booking.json/engage.json::transport_url) for owner {owner!r}"
         )
-    slots_json = _json.dumps(slots_data.get("slots", []), ensure_ascii=False)
-    desc_plain = cons["description"].strip().replace("\n", " ").replace("  ", " ")
-    contact_email = cons.get("calendar_id", "o.g.rozet@gmail.com")
 
     booking_style = """<style>
 .booking{max-width:420px;margin:0 auto;padding:2.5rem 1.5rem 2rem}
@@ -3583,8 +3587,49 @@ def p_booking(d: dict) -> str:
 .back a{color:#aaa;font-size:.85rem;text-decoration:none;border:none}
 .no-slots{text-align:center;color:var(--muted,#666);padding:1.5rem 0;line-height:1.6}
 .no-slots a{color:var(--ink,#1a1a1a)}
-@media (prefers-reduced-motion:reduce){.bk-form{transition:none}.t{transition:none}.bk-input{transition:none}.bk-btn{transition:none}.bk-input.err{animation:none}}
+.booking-empty{max-width:520px;margin:3rem auto 4rem;padding:clamp(2rem,1.5rem + 1.5vw,3.5rem) clamp(1.5rem,1rem + 1vw,2.5rem);text-align:center;border:1px solid var(--rule);border-radius:.5rem;background:var(--surface)}
+.empty-eyebrow{text-transform:uppercase;letter-spacing:var(--tracking-caps);font-size:clamp(.95rem,.85rem + .4vw,1.15rem);font-weight:500;margin:0 0 1.6em;color:var(--ink)}
+.empty-eyebrow .rule{display:block;width:2.5rem;height:1px;background:var(--rule);margin:1.2em auto 0}
+.empty-hint{color:var(--muted);font-size:.95rem;margin:0 0 .8em;line-height:1.5}
+.empty-contact{margin:0;font-size:.95rem;line-height:1.7}
+.empty-contact a{color:var(--ink);border-bottom:1px solid var(--rule);text-decoration:none;padding-bottom:.05em;transition:border-color .15s}
+.empty-contact a:hover{border-bottom-color:var(--ink)}
+.empty-divider{color:var(--muted);margin:0 .5rem}
+@media (prefers-reduced-motion:reduce){.bk-form{transition:none}.t{transition:none}.bk-input{transition:none}.bk-btn{transition:none}.bk-input.err{animation:none}.empty-contact a{transition:none}}
 </style>"""
+
+    # No-slots placeholder: substrate-chain returned no future free slots (per
+    # provider.md::Inv-PROV-substrate-diversity). Server-rendered высококачественная
+    # табличка, theme-agnostic via design tokens, NO JS-driven UI surfaces (no form,
+    # no slot grid, no transport_url call — clean placeholder). Admin 2026-05-15:
+    # «до реабилитации связи Бронирования с Календарем сгенерируй конгруэтную табличку».
+    if no_slots:
+        body = f"""<div class="booking" role="main">
+<h2>Консультация</h2>
+<p class="sub">{cons.get('duration_min', 40)} мин · {cons['price']} · онлайн</p>
+
+<aside class="booking-empty" role="status" aria-live="polite">
+  <p class="empty-eyebrow">пока времён нет<span class="rule" aria-hidden="true"></span></p>
+  <p class="empty-hint">Напишите Ольге напрямую —<br>предложу время:</p>
+  <p class="empty-contact">
+    <a href="https://t.me/olgaroset" rel="noopener">@olgaroset</a>
+    <span class="empty-divider" aria-hidden="true">·</span>
+    <a href="mailto:{contact_email}">{contact_email}</a>
+  </p>
+</aside>
+
+<p class="back"><a href="/">← назад</a></p>
+</div>"""
+        booking_label = bio.get("booking_page_label", "Записаться")
+        return _layout(
+            d,
+            title=f"{booking_label} — {bio['title']}",
+            description=f"{desc_plain} — {cons['price']}",
+            body=body,
+            canonical=f"{_canonical(d)}/booking/",
+            extra_head=booking_style,
+            footer=False,
+        )
 
     body = f"""<div class="booking" role="main">
 <h2>Консультация</h2>
@@ -3715,7 +3760,6 @@ if(d.ok){{submitted=true;
 }}
 </script>"""
 
-    bio = d["bio"]
     booking_label = bio.get("booking_page_label", "Записаться")
     return _layout(
         d,
