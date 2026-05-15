@@ -273,7 +273,7 @@ a:hover {
     content: "+";
     display: block;
     margin: 0.5em 0;
-    color: color-mix(in srgb, currentColor 80%, transparent);   /* 80% от surrounding text (admin 2026-05-15) */
+    color: color-mix(in srgb, currentColor 66%, transparent);   /* 66% от surrounding text (admin 2026-05-15 refinement) */
 }
 .event .conjunction {
     margin: 0.5em 0;
