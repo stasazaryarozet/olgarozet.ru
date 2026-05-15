@@ -21,16 +21,21 @@
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
+<!-- Inv-WEB-font-preconnect (text/site.md): early DNS+TLS handshake к font CDN.
+     Reduces FCP/LCP by ~100-300ms на TLS-cold connections. -->
+<link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
+<link rel="dns-prefetch" href="https://fonts.bunny.net">
 <script>
-// Solar-driven day/night theme. Closed-form Michalsky 1988 altitude.
-// Longitude ≈ -tzOffset/4 (15°/h). Latitude default 55° (Moscow-typical
-// for primary RU/EU audience; sunset ~30 min later than the previous
-// lat=45 default). Threshold alt > -0.1 rad (≈ -5.7°) keeps the page in
-// 'day' through civil twilight — admin observed «ещё относительно светло»
-// in Moscow while the site had flipped to night.
-// Re-evaluates every 5 min so a long session flips at sunrise/sunset.
+// Day/night theme — user-override-first, then solar-automatic. FOUC-critical:
+// runs synchronously in <head> before paint. Resolution: read dela.theme.v1
+// from localStorage; if ∈ ['day', 'night'] use it (user override) else solar
+// altitude (lat 55.0° / alt-threshold -0.1 rad). Config: solar calc from
+// spec.enforcement_data.Inv-SITE-solar-theme (+ data.yaml.bio.solar_calibration
+// override); attr/key/values from spec.enforcement_data.Inv-IFACE-day-night-mode.
+// No hardcoded constants in code — both Specs are SoT, code falls back gracefully.
 (function(){
-  function setTheme(){
+  var MODE_ATTR="data-theme", MODE_VALUES=["day", "night"], STORAGE_KEY="dela.theme.v1";
+  function solarTheme(){
     var r=Math.PI/180, now=new Date();
     var J=now.valueOf()/86400000 + 2440587.5 - 2451545.0;
     var L=(280.460+0.9856474*J)%360;
@@ -39,60 +44,69 @@
     var eps=(23.439-4e-7*J)*r;
     var dec=Math.asin(Math.sin(eps)*Math.sin(lam));
     var ra=Math.atan2(Math.cos(eps)*Math.sin(lam), Math.cos(lam));
-    var lon=-now.getTimezoneOffset()/4, lat=55;
+    var lon=-now.getTimezoneOffset()/4, lat=55.0;
     var gmst=(18.697374558+24.06570982441908*J)*15;
     var H=((gmst+lon)%360)*r - ra;
     var alt=Math.asin(Math.sin(lat*r)*Math.sin(dec)+Math.cos(lat*r)*Math.cos(dec)*Math.cos(H));
-    document.documentElement.setAttribute('data-theme', alt > -0.1 ? 'day' : 'night');
+    return alt > -0.1 ? 'day' : 'night';
   }
-  setTheme();
-  setInterval(setTheme, 300000);
+  // stored override ∈ MODE_VALUES → use it; else (incl. 'auto', absent, bad) → solar.
+  window.__resolveTheme=function(){
+    var s=null; try{ s=localStorage.getItem(STORAGE_KEY); }catch(e){}
+    return (MODE_VALUES.indexOf(s) !== -1) ? s : solarTheme();
+  };
+  window.__applyTheme=function(){
+    document.documentElement.setAttribute(MODE_ATTR, window.__resolveTheme());
+  };
+  window.__applyTheme();
+  setInterval(window.__applyTheme, 300000);
 })();
 </script>
-<link rel="stylesheet" href="/styles.css?v=3709112e57">
+<link rel="stylesheet" href="/styles.css?v=5a55801438">
 <style>
 .booking{max-width:420px;margin:0 auto;padding:2.5rem 1.5rem 2rem}
 .booking h2{font-size:clamp(1.1rem,1rem + 0.3vw,1.3rem);text-align:center;font-weight:600;margin-bottom:.15rem}
-.sub{text-align:center;color:var(--color-muted,#666);font-size:.95rem}
+.sub{text-align:center;color:var(--muted,#666);font-size:.95rem}
 .tz{text-align:center;color:#aaa;font-size:.8rem;margin-bottom:1rem}
 .day{margin-bottom:.8rem}
-.day-label{font-size:.85rem;color:var(--color-muted,#666);margin-bottom:.3rem;font-weight:500}
+.day-label{font-size:.85rem;color:var(--muted,#666);margin-bottom:.3rem;font-weight:500}
 .slots-grid{display:flex;flex-wrap:wrap;gap:.3rem}
-.t{display:inline-flex;align-items:center;justify-content:center;min-width:3.5rem;min-height:3rem;padding:.5rem 1rem;border:1px solid var(--color-border,#ddd);border-radius:2rem;cursor:pointer;font-size:.95rem;transition:border-color .15s,background .15s,color .15s,transform .1s;user-select:none;-webkit-tap-highlight-color:transparent}
-.t:hover{border-color:var(--color-text,#1a1a1a)}
-.t:focus-visible{outline:2px solid var(--color-text,#1a1a1a);outline-offset:2px}
+.t{display:inline-flex;align-items:center;justify-content:center;min-width:3.5rem;min-height:3rem;padding:.5rem 1rem;border:1px solid var(--rule,#ddd);border-radius:2rem;cursor:pointer;font-size:.95rem;transition:border-color .15s,background .15s,color .15s,transform .1s;user-select:none;-webkit-tap-highlight-color:transparent}
+.t:hover{border-color:var(--ink,#1a1a1a)}
+.t:focus-visible{outline:2px solid var(--ink,#1a1a1a);outline-offset:2px}
 .t:active{transform:scale(.95)}
-.t.on{background:var(--color-text,#1a1a1a);color:#fff;border-color:var(--color-text,#1a1a1a)}
+.t.on{background:var(--ink,#1a1a1a);color:#fff;border-color:var(--ink,#1a1a1a)}
 .more{text-align:center;margin:.6rem 0}
-.more button{background:none;border:none;color:var(--color-muted,#666);font-size:.85rem;cursor:pointer;font-family:inherit;padding:.5rem 1rem}
+.more button{background:none;border:none;color:var(--muted,#666);font-size:.85rem;cursor:pointer;font-family:inherit;padding:.5rem 1rem}
 .bk-form{overflow:hidden;max-height:0;opacity:0;transition:max-height .35s ease,opacity .3s ease;margin-top:0}
 .bk-form.open{max-height:20rem;opacity:1;margin-top:1rem}
-.bk-label{display:block;font-size:.8rem;color:var(--color-muted,#666);margin-bottom:.15rem;margin-top:.4rem}
-.bk-input{display:block;width:100%;padding:.75rem .9rem;border:1px solid var(--color-border,#ddd);border-radius:.5rem;font-size:.95rem;font-family:inherit;transition:border-color .15s}
-.bk-input:focus{border-color:var(--color-text,#1a1a1a);outline:none}
+.bk-label{display:block;font-size:.8rem;color:var(--muted,#666);margin-bottom:.15rem;margin-top:.4rem}
+.bk-input{display:block;width:100%;padding:.75rem .9rem;border:1px solid var(--rule,#ddd);border-radius:.5rem;font-size:.95rem;font-family:inherit;transition:border-color .15s}
+.bk-input:focus{border-color:var(--ink,#1a1a1a);outline:none}
 .bk-input.ok{border-color:#2a7a2a}
 .bk-input.err{border-color:#c00;animation:shake .3s}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-.bk-btn{display:block;width:100%;padding:.9rem;margin-top:.6rem;background:var(--color-text,#1a1a1a);color:#fff;border:none;border-radius:.5rem;font-size:.95rem;font-weight:500;cursor:pointer;font-family:inherit;min-height:3rem;letter-spacing:.03em;transition:background .15s,opacity .15s}
+.bk-btn{display:block;width:100%;padding:.9rem;margin-top:.6rem;background:var(--ink,#1a1a1a);color:#fff;border:none;border-radius:.5rem;font-size:.95rem;font-weight:500;cursor:pointer;font-family:inherit;min-height:3rem;letter-spacing:.03em;transition:background .15s,opacity .15s}
 .bk-btn:hover:not(:disabled){background:#333}
-.bk-btn:focus-visible{outline:2px solid var(--color-text,#1a1a1a);outline-offset:2px}
+.bk-btn:focus-visible{outline:2px solid var(--ink,#1a1a1a);outline-offset:2px}
 .bk-btn:disabled{background:#d0d0d0;cursor:default;pointer-events:none}
 .bk-btn.sending{opacity:.7}
 .result{text-align:center;padding:2rem 0;line-height:1.6}
 .result b{display:block;font-size:1.1rem;margin-bottom:.5rem}
-.result .next{color:var(--color-muted,#666);font-size:.9rem;margin-top:.5rem}
+.result .next{color:var(--muted,#666);font-size:.9rem;margin-top:.5rem}
 .msg{text-align:center;padding:.6rem;line-height:1.5;font-size:.9rem}
 .msg.error{color:#c00}
 .back{text-align:center;margin-top:1.5rem}
 .back a{color:#aaa;font-size:.85rem;text-decoration:none;border:none}
-.no-slots{text-align:center;color:var(--color-muted,#666);padding:1.5rem 0;line-height:1.6}
-.no-slots a{color:var(--color-text,#1a1a1a)}
+.no-slots{text-align:center;color:var(--muted,#666);padding:1.5rem 0;line-height:1.6}
+.no-slots a{color:var(--ink,#1a1a1a)}
 @media (prefers-reduced-motion:reduce){.bk-form{transition:none}.t{transition:none}.bk-input{transition:none}.bk-btn{transition:none}.bk-input.err{animation:none}}
 </style>
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
 
+<button type="button" class="theme-toggle" data-theme-toggle aria-label="Тема: авто (по солнцу) — переключить">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="dela.theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());btn.addEventListener("click",function(){var i=STATES.indexOf(current());var next=STATES[(i+1)%STATES.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
 <main id="main" role="main">
 <div class="booking" role="main">
 <h2>Консультация</h2>
@@ -210,7 +224,7 @@ if(d.ok){submitted=true;
   document.getElementById("more").style.display="none";
   document.getElementById("bk-form").style.display="none";
   msgEl.className="msg";
-  msgEl.innerHTML="<div class='result'><b>Заявка принята</b>"+slot.time+" · "+
+  msgEl.innerHTML="<div class='result'><span class='result-headline'>Заявка принята</span> "+slot.time+" · "+
     new Date(slot.date).toLocaleDateString("ru",{day:"numeric",month:"long"})+
     "<div class='next'>Ольга свяжется с вами для подтверждения</div></div>";
 }else{
@@ -224,5 +238,49 @@ if(d.ok){submitted=true;
 </script>
 </main>
 
+<div class="cookie-banner cookie-banner--bottom" role="dialog" aria-labelledby="cookie-h" aria-describedby="cookie-d" data-cookie-banner data-key="dela.cookie.v1" hidden><h2 id="cookie-h" class="visually-hidden">Согласие на cookie</h2><p id="cookie-d" class="cookie-text">Сайт сохраняет cookie для работы формы и аналитики посещений. Подробности — в <a href="https://parisinseptember.ru/privacy/">Политике обработки персональных данных</a>.</p><div class="cookie-actions"><button type="button" class="cookie-accept" data-cookie-accept>Принимаю</button><button type="button" class="cookie-decline" data-cookie-decline>Только необходимые</button></div></div><script src="/cookie-banner.js" defer></script>
+<script>
+/* Auto-hide blocks past their declared `data-visible-until` ISO timestamp
+   (admin 2026-05-13: «пусть блок исчезнет после 20:30 по Москве»). Runs at
+   page-load and every 30s thereafter — covers tabs left open across the
+   deadline. Idempotent: once hidden, stays hidden. */
+(function(){
+  function _hideExpired(){
+    var nodes = document.querySelectorAll('[data-visible-until]');
+    var now = Date.now();
+    for (var i = 0; i < nodes.length; i++) {
+      var until = Date.parse(nodes[i].getAttribute('data-visible-until') || '');
+      if (!isNaN(until) && now >= until) nodes[i].style.display = 'none';
+    }
+  }
+  _hideExpired();
+  setInterval(_hideExpired, 30000);
+})();
+
+/* Pageview pingback — entity-statistics G-Set event (admin 2026-05-13 «считает
+   статистику»). One event per page-load → CF Worker /pv → DELA_STATS KV.
+   No cookies, no client-id; idempotency via cf-ray (CF generates per request).
+   No-op gracefully if Worker unreachable (sendBeacon + fallback fetch). */
+(function(){
+  var slug = (document.querySelector('meta[name="dela:slug"]') || {}).content;
+  if (!slug) return;
+  var payload = JSON.stringify({
+    p: slug,
+    r: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() :
+       (Date.now() + '-' + Math.random().toString(36).slice(2)),
+    ref: document.referrer || ''
+  });
+  var url = 'https://dela-edge.azaryarozet.workers.dev/pv';
+  try {
+    var blob = new Blob([payload], { type: 'application/json' });
+    if (!navigator.sendBeacon || !navigator.sendBeacon(url, blob)) {
+      fetch(url, {
+        method: 'POST', body: payload, keepalive: true,
+        headers: { 'Content-Type': 'application/json' }
+      }).catch(function(){});
+    }
+  } catch (e) { /* swallow */ }
+})();
+</script>
 </body>
 </html>

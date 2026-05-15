@@ -225,6 +225,68 @@ a:hover {
     margin-top: 0.3em;
 }
 
+/* ── Скоро section — role-tagged semantic structure ──
+   Per /tmp/skoro-proposal/skoro-site-proposal.md (admin'ская approval 2026-05-15).
+   `caps` / `proper-case` are role-driven register classes; specific roles
+   (when, type, concept, organizer, detail, audience, partner, link,
+   conjunction, multi-component) provide structural hooks. */
+
+.event .caps {
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-caps, 0.04em);
+    font-feature-settings: "kern" 1, "ss01" 1;
+}
+.event > * {
+    margin: 0 0 0.8em 0;
+    line-height: 1.4;
+}
+.event {
+    margin-bottom: 2em;
+    padding: 0;
+    border: none;
+}
+.event .concept.quoted::before { content: "«"; }
+.event .concept.quoted::after  { content: "»"; }
+.event .when.caps {
+    font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.1rem);
+    font-weight: 500;
+}
+.event .when.proper-case {
+    font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.1rem);
+    color: var(--muted);
+}
+.event h3.type {
+    font-size: clamp(1.05rem, 1rem + 0.25vw, 1.25rem);
+    font-weight: 600;
+    margin: 0 0 0.4em 0;
+}
+.event .multi-component {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.8em 0;
+}
+.event .multi-component li {
+    margin-bottom: 0.7em;
+    position: relative;
+}
+.event .multi-component li + li::before {
+    content: "+";
+    display: block;
+    margin: 0.5em 0;
+    color: var(--accent);
+}
+.event .conjunction {
+    margin: 0.5em 0;
+    color: var(--muted);
+}
+.event .link a {
+    color: var(--accent);
+    text-decoration: underline;
+}
+.event .audience { color: var(--muted); }
+.event .partner.proper-case { /* same styling as detail */ }
+.event .detail.proper-case { color: var(--muted); }
+
 /* Footer - Full Width (outside content-wrapper) */
 footer {
     width: 100%;

@@ -476,10 +476,21 @@ events:
     text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров. Автор серии «Встречи»."
     link_text: "olgarozet.ru"
     link_url: "https://olgarozet.ru/"
-  lines:                                # admin 2026-05-15 TG правка lines mirror
+  skoro_state: pending                  # ev-{state} class for site article — proximal | pending | concrete | period
+  beats:                                # admin 2026-05-15 TG правка → site role-tagged semantic structure
+  - {role: when, register: proper-case, lines: ["Дату-время объявим:"]}
+  - {role: type, lines: ["Онлайн-Встреча"]}
+  - {role: detail, lines: ["на манер наших оффлайновых:"]}
+  - role: multi-component
+    items:
+    - ["Доклад"]
+    - ["🔥"]
+    - ["деловое и личное общение", "со мной и друг-другом"]
+    - ["еда у экрана"]
+  lines:                                # fallback when beats consumer не доступен (legacy renderers)
   - "Дату-время объявим"
   - ""
-  - "Онлайн-встреча"
+  - "Онлайн-Встреча"
   - "на манер наших оффлайновых:"
   - ""
   - "Доклад"
@@ -809,7 +820,14 @@ events:
     - musee_zadkine
     - saint_germain_galleries
   registration:
-  lines:
+  skoro_state: concrete                 # ev-concrete class — date known
+  beats:                                # role-tagged semantic site rendering (proposal)
+  - {role: when, register: caps, lines: ["8–11", "сентября"]}
+  - {role: organizer, lines: ["Совместно", "с Натальей Логиновой"]}
+  - {role: type, lines: ["Дизайн-Путешествие", "в Париж"]}
+  - {role: concept, lines: ["Сто лет", "обещаний"], trailing: ":"}
+  - {role: link, url: "parisinseptember.ru", lines: []}  # post-10:00 MSK 2026-05-15 → t.me/olga_rozet/<live_id> per Inv-TG-SKORO-anchor-to-main-post (π_anchor pending impl)
+  lines:                                # legacy / fallback
   - Сто лет
   - обещаний дизайна
   - ''
@@ -860,7 +878,13 @@ events:
   status: PLANNING                    # admin 2026-05-15 TG Скоро revision — re-announcement upcoming, дата объявляется
   t_key: "2026-05-W1"                 # «На днях» = proximal in May; sorts FIRST per admin's TG Скоро order
   title: "Онлайн-встреча про Париж"   # admin 2026-05-15 TG правка: «ОНЛАЙН-ВСТРЕЧА / ПРО ПАРИЖ»; compound hyphen (Inv-TYPO-em-dash-not-hyphen)
-  lines:
+  skoro_state: proximal               # ev-proximal class — «На днях» admin's variant
+  beats:                              # role-tagged semantic site rendering (proposal /tmp/skoro-proposal/skoro-site-proposal.md)
+  - {role: when, register: proper-case, lines: ["На днях —", "дату-время объявим:"]}
+  - {role: type, lines: ["Онлайн-Встреча", "про Париж"]}
+  - {role: organizer, lines: ["со мной и Натальей Логиновой"]}
+  - {role: link, url: "instagram.com/natalya_lo", lines: ["у Натальи", "в Инстаграм-аккаунте"]}
+  lines:                              # legacy / fallback for renderers без beats consumer
   - "На днях —"
   - "дату-время объявим"
   - ""
@@ -993,6 +1017,16 @@ events:
     text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров. Design Travels: экспертные дизайн-путешествия (Париж, Узбекистан, Сербия)."
     link_text: "olgarozet.ru"
     link_url: "https://olgarozet.ru/"
+  skoro_state: period                   # ev-period class — season anchor
+  beats:                                # role-tagged semantic site rendering
+  - {role: when, register: caps, lines: ["осенью"]}
+  - {role: type, lines: ["Самарканд–Бухара"]}
+  - {role: detail, lines: ["Учебная,", "Деловая,", "Развлекательная"]}
+  - {role: type, lines: ["Стажировка"]}
+  - {role: detail, lines: ["с получением", "сертификатов"]}
+  - {role: partner, lines: ["Бухарского", "Центра", "Ремёсел"]}
+  - {role: conjunction, lines: ["и"]}
+  - {role: partner, lines: ["Мастерской", "«Розет»"]}
   lines:
   - "Учебная,"
   - "Деловая,"
@@ -1067,6 +1101,11 @@ events:
     text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров. Design Travels: экспертные дизайн-путешествия (Париж, Узбекистан, Сербия)."
     link_text: "olgarozet.ru"
     link_url: "https://olgarozet.ru/"
+  skoro_state: period                   # ev-period class — year anchor
+  beats:                                # role-tagged semantic site rendering
+  - {role: when, register: caps, lines: ["2027"]}
+  - {role: type, lines: ["Сербия"]}
+  - {role: audience, lines: ["для архитекторов,", "дизайнеров,", "декораторов", "и художников"]}
   lines:
   - "для архитекторов,"
   - "дизайнеров,"
@@ -1080,7 +1119,12 @@ events:
   type: publication      # entity-event sub-class — announcement-landing для upcoming course (not yet structured event)
   broadcast: [site, telegram_channel]   # admin 2026-05-15 TG Скоро: event mirrored on site Скоро
   t_key: "2026-06"                      # ordering placeholder; refined when actual schedule announced
-  lines:                                # admin's TG Скоро body per event
+  skoro_state: pending                  # ev-pending class — date not announced
+  beats:                                # role-tagged semantic site rendering
+  - {role: when, register: proper-case, lines: ["Дату объявим:"]}
+  - {role: type, lines: ["Мультимедийный", "рассказ:"]}
+  - {role: concept, lines: ["Цена и Ценность"]}
+  lines:                                # legacy / fallback
   - "Дату объявим"
   - ""
   - "Мультимедийный"
