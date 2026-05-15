@@ -245,8 +245,8 @@ a:hover {
     padding: 0;
     border: none;
 }
-.event .concept.quoted::before { content: "«"; }
-.event .concept.quoted::after  { content: "»"; }
+.event .concept .quoted::before { content: "«"; }
+.event .concept .quoted::after  { content: "»"; }
 .event .when.caps {
     font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.1rem);
     font-weight: 500;
