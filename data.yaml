@@ -432,9 +432,10 @@ campaigns:
 events:
 - id: meeting_2026_05
   type: meeting      # entity-event sub-class (online series — «Встреча с Ольгой»)
+  broadcast: [site, telegram_channel]   # admin 2026-05-15: Скоро digest mirror across surfaces — TG msg #62 references this event
 
   title: Человек, Дом, Ремесло
-  t_key: "2026-05"
+  t_key: "2026-05-W3"      # «после майских» — week 3 of May; sorts AFTER paris-ig-live (W1)
   date: после майских
   audience: []
   organizers: [olgarozet]
@@ -475,14 +476,24 @@ events:
     text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров. Автор серии «Встречи»."
     link_text: "olgarozet.ru"
     link_url: "https://olgarozet.ru/"
-  lines:
-  - "Онлайн-встреча"
+  lines:                                # admin 2026-05-15 TG правка lines mirror
+  - "Дату-время объявим"
   - ""
-  - "с Ольгой"
+  - "Онлайн-встреча"
+  - "на манер наших оффлайновых:"
+  - ""
+  - "Доклад"
+  - "+"
+  - "🔥"
+  - "+"
+  - "деловое и личное общение"
+  - "со мной и друг-другом"
+  - "+"
+  - "еда у экрана"
 
 - id: paris-2026-09
   type: travel      # entity-event sub-class — knowledge/system/specifications/entity-event.md
-  project: design-travels   # type_phrase[travel__design-travels] → «ДИЗАЙН—ПУТЕШЕСТВИЕ В {locus_acc}»
+  project: design-travels   # type_phrase[travel__design-travels] → «ДИЗАЙН-ПУТЕШЕСТВИЕ В {locus_acc}» (hyphen в compound — Inv-TYPO-em-dash-not-hyphen)
   plan_id: paris-2026-09-plan      # parent-edge — entity-plan Spec; Plan.outputs ∋ this Event
   headings:
     about_organizer: "Организаторы"     # admin 2026-05-13 override (default «Об Организаторах»)
@@ -846,7 +857,18 @@ events:
   parent_id: paris-2026-09            # Inv-EV-parent-resolves
   parent_relation: promotes           # pre-event promotional artifact — temporal containment WAIVED per entity-event.md Inv-EV-parent-temporal-coherence
   plan_id: paris-2026-09-plan         # parent-edge — entity-plan
-  title: "Онлайн—встреча"             # admin 2026-05-13 «Онлайн-Презентация → Онлайн—Встреча» (em-dash)
+  status: PLANNING                    # admin 2026-05-15 TG Скоро revision — re-announcement upcoming, дата объявляется
+  t_key: "2026-05-W1"                 # «На днях» = proximal in May; sorts FIRST per admin's TG Скоро order
+  title: "Онлайн-встреча про Париж"   # admin 2026-05-15 TG правка: «ОНЛАЙН-ВСТРЕЧА / ПРО ПАРИЖ»; compound hyphen (Inv-TYPO-em-dash-not-hyphen)
+  lines:
+  - "На днях —"
+  - "дату-время объявим"
+  - ""
+  - "со мной"
+  - "и Натальей Логиновой"
+  - ""
+  - "у Натальи в Инстаграм-аккаунте"
+  - "instagram.com/natalya_lo"
   # visible_until снят 2026-05-13 — встреча без фиксированной даты, «объявляем
   # впервые, на днях»; block теперь без auto-hide.
   organizers: [olgarozet, natalia_loginova]
@@ -859,7 +881,7 @@ events:
   audience: open
   when: "2026-05-13T19:00:00+03:00"    # среда, 19:00 МСК — admin 2026-05-11 «эта среда в 19:00 по Москве» (2026-05-11 = Monday → Wed = 2026-05-13)
   duration_min: 60                     # nominal estimate
-  broadcast: [landing_section]         # rendered as standalone section на parent's landing — the visible «Онлайн-презентация»
+  broadcast: [landing_section, site, telegram_channel]   # admin 2026-05-15 TG Скоро: event mirrored on site Скоро + parent's landing
     # admin 2026-05-11 (feedback.txt) «Пока после блока про Наталью Логинову — конец, не должно быть
     # других блоков». «Блок про Наталью» = ЭТО (IG-Live, на её канале) — re-read 2026-05-12 corrects
     # the prior misinterpretation (Об Организаторах). landing_terminal: true → render-time gate skips
@@ -1056,6 +1078,15 @@ events:
 
 - id: course_price_value
   type: publication      # entity-event sub-class — announcement-landing для upcoming course (not yet structured event)
+  broadcast: [site, telegram_channel]   # admin 2026-05-15 TG Скоро: event mirrored on site Скоро
+  t_key: "2026-06"                      # ordering placeholder; refined when actual schedule announced
+  lines:                                # admin's TG Скоро body per event
+  - "Дату объявим"
+  - ""
+  - "Мультимедийный"
+  - "рассказ:"
+  - ""
+  - "«Цена и Ценность»"
   title: Цена и Ценность
   date: анонс
   audience: []
@@ -1085,8 +1116,6 @@ events:
     text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров."
     link_text: "olgarozet.ru"
     link_url: "https://olgarozet.ru/"
-  lines:
-  - "Онлайн-курс"
 
 publications:
   # ── Legacy entries migrated к entity-publication Spec ──────────────────
@@ -1283,11 +1312,13 @@ publications:
   channel: telegram_channel
   entity_id: paris-tg-announce
   entity_type: telegram_post
-  kind: main_post                    # entity-publication.md::Inv-PUB-kind-typed — Главный Пост per (paris-2026-09, telegram_channel). Scheduled msg #3 в @olga_rozet к 10:00 MSK 2026-05-15.
+  kind: main_post                    # entity-publication.md::Inv-PUB-kind-typed — Главный Пост per (paris-2026-09, telegram_channel).
   target_event: paris-2026-09        # Inv-PUB-anchor-uniqueness
   wave_type: commercial
-  status: planned
+  status: scheduled                  # 2026-05-15 07:05 MSK: server-side scheduled (Inv-PROV-schedule-server-side) via conn.send(schedule=2026-05-15T07:00:00Z). Telegram dispatches autonomously at scheduled_at — survives /clear, agent reboot, OOM.
   planned_date: "2026-05-15"
+  scheduled_at: "2026-05-15T10:00:00+03:00"
+  platform_id: 4                     # Telegram scheduled-msg id (channel @olga_rozet); resolve via iter_messages(scheduled=True)
   title: "TG-объявление — Paris в сентябре 2026"
   utility_synopsis: |
     TG-channel announce «ОЛЬГА РОЗЕТ» (@olga_rozet, 93 sub): markdown body ~750 chars,

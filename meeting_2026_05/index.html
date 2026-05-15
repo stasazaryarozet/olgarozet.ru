@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru" data-surface="editorial">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Человек, Дом, Ремесло · после майских</title>
+<meta name="description" content="Первая онлайн-встреча серии «Встречи с Ольгой» — продолжение офлайн-встреч в ЦДЛ (декабрь 2025) в новом формате: доклад, диалог, нетворкинг.">
+<link rel="canonical" href="https://olgarozet.ru/meeting_2026_05/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Человек, Дом, Ремесло · после майских">
+<meta property="og:description" content="Первая онлайн-встреча серии «Встречи с Ольгой» — продолжение офлайн-встреч в ЦДЛ (декабрь 2025) в новом формате: доклад, диалог, нетворкинг.">
+<meta property="og:url" content="https://olgarozet.ru/meeting_2026_05/">
+<meta property="og:image" content="https://olgarozet.ru/olga_footer.png">
+<meta property="og:locale" content="ru_RU">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Человек, Дом, Ремесло · после майских">
+<meta name="twitter:description" content="Первая онлайн-встреча серии «Встречи с Ольгой» — продолжение офлайн-встреч в ЦДЛ (декабрь 2025) в новом формате: доклад, диалог, нетворкинг.">
+<meta name="twitter:image" content="https://olgarozet.ru/olga_footer.png">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
+<!-- Inv-WEB-font-preconnect (text/site.md): early DNS+TLS handshake к font CDN.
+     Reduces FCP/LCP by ~100-300ms на TLS-cold connections. -->
+<link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
+<link rel="dns-prefetch" href="https://fonts.bunny.net">
+<script>
+// Day/night theme — user-override-first, then solar-automatic. FOUC-critical:
+// runs synchronously in <head> before paint. Resolution: read dela.theme.v1
+// from localStorage; if ∈ ['day', 'night'] use it (user override) else solar
+// altitude (lat 55.0° / alt-threshold -0.1 rad). Config: solar calc from
+// spec.enforcement_data.Inv-SITE-solar-theme (+ data.yaml.bio.solar_calibration
+// override); attr/key/values from spec.enforcement_data.Inv-IFACE-day-night-mode.
+// No hardcoded constants in code — both Specs are SoT, code falls back gracefully.
+(function(){
+  var MODE_ATTR="data-theme", MODE_VALUES=["day", "night"], STORAGE_KEY="dela.theme.v1";
+  function solarTheme(){
+    var r=Math.PI/180, now=new Date();
+    var J=now.valueOf()/86400000 + 2440587.5 - 2451545.0;
+    var L=(280.460+0.9856474*J)%360;
+    var g=((357.528+0.9856003*J)%360)*r;
+    var lam=(L+1.915*Math.sin(g)+0.020*Math.sin(2*g))*r;
+    var eps=(23.439-4e-7*J)*r;
+    var dec=Math.asin(Math.sin(eps)*Math.sin(lam));
+    var ra=Math.atan2(Math.cos(eps)*Math.sin(lam), Math.cos(lam));
+    var lon=-now.getTimezoneOffset()/4, lat=55.0;
+    var gmst=(18.697374558+24.06570982441908*J)*15;
+    var H=((gmst+lon)%360)*r - ra;
+    var alt=Math.asin(Math.sin(lat*r)*Math.sin(dec)+Math.cos(lat*r)*Math.cos(dec)*Math.cos(H));
+    return alt > -0.1 ? 'day' : 'night';
+  }
+  // stored override ∈ MODE_VALUES → use it; else (incl. 'auto', absent, bad) → solar.
+  window.__resolveTheme=function(){
+    var s=null; try{ s=localStorage.getItem(STORAGE_KEY); }catch(e){}
+    return (MODE_VALUES.indexOf(s) !== -1) ? s : solarTheme();
+  };
+  window.__applyTheme=function(){
+    document.documentElement.setAttribute(MODE_ATTR, window.__resolveTheme());
+  };
+  window.__applyTheme();
+  setInterval(window.__applyTheme, 300000);
+})();
+</script>
+<link rel="stylesheet" href="/styles.css?v=feec00a693">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Event", "name": "Человек, Дом, Ремесло после майских", "description": "Первая онлайн-встреча серии «Встречи с Ольгой» — продолжение офлайн-встреч в ЦДЛ (декабрь 2025) в новом формате: доклад, диалог, нетворкинг.", "url": "https://olgarozet.ru/meeting_2026_05/", "eventStatus": "https://schema.org/EventScheduled", "startDate": "2026-05-W3", "endDate": "2026-05-W3", "organizer": [{"@type": "Person", "name": "Ольга Розет"}]}</script>
+<meta name="dela:slug" content="meeting_2026_05">
+
+</head>
+<body>
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+<nav class="nav-fade"><a href="/" aria-label="На главную">←</a></nav>
+<button type="button" class="theme-toggle" data-theme-toggle aria-label="Тема: авто (по солнцу) — переключить">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="dela.theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());btn.addEventListener("click",function(){var i=STATES.indexOf(current());var next=STATES[(i+1)%STATES.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
+<main id="main" role="main">
+  <article class="article-wrapper"><header><ul class="cover-line" aria-label="Формат"><li>Встреча</li><li>По-русски</li></ul><h1>Человек, Дом, Ремесло · после майских</h1><time datetime="2026-05-W3" class="date-stamp">после майских</time><p class="lead">Первая онлайн-встреча серии «Встречи с Ольгой» — продолжение офлайн-встреч в ЦДЛ (декабрь 2025) в новом формате: доклад, диалог, нетворкинг.</p></header><p class="status-banner" role="status" aria-live="polite">Программа собирается. Лист ожидания открыт.</p><section><h2>Формат</h2><p>Три части одной встречи.</p><ul><li><strong>Доклад Ольги</strong> — наблюдения и материалы из дизайн-путешествий и собственных вылазок</li><li><strong>Профессиональный диалог</strong> с Ольгой</li><li><strong>Нетворкинг участников</strong> друг с другом</li></ul></section><section><h2>Стоимость</h2><ul><li><strong>5 000 ₽</strong> — обычная стоимость</li><li><strong>2 500 ₽</strong> — early-bird до 1 мая 2026</li><li>Возможна скидка или бесплатное место по запросу — write o.g.rozet@gmail.com</li></ul></section><section><h2>Подготовка</h2><p>Рекомендуется заранее.</p><ul><li>Выделить место и время</li><li>Приготовить себе еду</li></ul></section><section class="terms"><h2>Условия и сроки</h2><ul><li><strong>Язык:</strong> программа на русском. С партнёрами и музеями по необходимости — наш перевод.</li><li><strong>Доступность:</strong> минимум 1 место — бесплатно по запросу. Возможна скидка по запросу. Пишите на <a href=«mailto:o.g.rozet@gmail.com»>o.g.rozet@gmail.com</a>.</li></ul></section><section class="signup-wrap"><h2>Записаться на встречу</h2><p>Оставьте email — пришлю ссылку и точное время за день до встречи.</p><section id="signup" class="signup" aria-labelledby="signup-h">
+  <h3 id="signup-h" class="signup-h3"></h3>
+  <form id="signup-form" class="signup-form" novalidate
+        aria-labelledby="signup-h"
+        action="https://dela-edge.azaryarozet.workers.dev/lead"
+        method="post" enctype="application/x-www-form-urlencoded"
+        data-slug="meeting_2026_05">
+    <label class="signup-label" for="su-name">Имя</label>
+    <input class="signup-input" id="su-name" name="name"
+           autocomplete="name" required minlength="2" aria-required="true">
+    <label class="signup-label" for="su-email">Эл. Почта</label>
+    <input class="signup-input" id="su-email" name="email" type="email"
+           autocomplete="email" required aria-required="true">
+    
+    <label class="signup-consent" for="su-consent">
+      <input type="checkbox" id="su-consent" name="consent" required
+             aria-required="true"
+             aria-label="Обрабатывайте персональные данные">
+      <span>Обрабатывайте персональные данные</span>
+    </label>
+    <button class="signup-btn" type="submit" id="su-btn"></button>
+  </form>
+  <div class="signup-msg" id="signup-msg" role="status" aria-live="polite"></div>
+  <noscript><p class="signup-note">Или напишите: <a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p></noscript>
+<script>
+/* AJAX-upgrade: form already action=transport_url (no-JS path lands lead
+   via plain POST). JS prevents default to keep user on page + show
+   «Спасибо» в place. Both paths persist к KV (Inv-LDG-FORMS-NO-MAILTO). */
+(function(){
+  var f=document.getElementById("signup-form");
+  if(!f) return;
+  var btn=document.getElementById("su-btn");
+  var msg=document.getElementById("signup-msg");
+  var transport=f.getAttribute("action") || "";
+  /* Optional /<slug>/signup.json override — single SoT для transport_url. */
+  fetch("/meeting_2026_05/signup.json").then(function(r){return r.ok?r.json():null})
+    .then(function(d){if(d&&d.transport_url)transport=d.transport_url;})
+    .catch(function(){});
+  f.addEventListener("submit",function(e){
+    var name=f.name.value.trim(),email=f.email.value.trim();
+    var note=(f.note?f.note.value.trim():""),consent=f.consent.checked;
+    if(name.length<2){e.preventDefault();f.name.focus();return;}
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){e.preventDefault();f.email.focus();return;}
+    if(!consent){e.preventDefault();f.consent.focus();return;}
+    if(!transport)return; /* no-JS path: form action handles it */
+    e.preventDefault();
+    btn.disabled=true;btn.textContent="отправка...";
+    var data=new URLSearchParams();
+    data.append("name",name);data.append("email",email);
+    if(note) data.append("note",note);
+    data.append("consent","true");
+    data.append("slug",f.dataset.slug||"");
+    fetch(transport,{method:"POST",
+      headers:{"Content-Type":"application/x-www-form-urlencoded"},
+      body:data.toString()})
+      .then(function(r){return r.json()})
+      .then(function(d){
+        if(d&&d.ok){f.style.display="none";
+          msg.innerHTML="Спасибо!<br>Свяжемся.";
+        }else{msg.textContent="Ошибка. Попробуйте ещё раз или напишите на o.g.rozet@gmail.com.";
+          btn.disabled=false;btn.textContent="";}
+      })
+      .catch(function(){msg.textContent="Ошибка сети. Email ниже работает без формы.";
+        btn.disabled=false;btn.textContent="";});
+  });
+})();
+</script>
+</section></section><footer class="about-organizer"><h2>Об Организаторе</h2><div class="org-card"><p class="org-name">Ольга Розет</p><p>художник, искусствовед, дизайнер интерьеров. Автор серии «Встречи»</p></div><p class="org-link"><a href="https://olgarozet.ru/">olgarozet.ru</a></p></footer><footer class="legal" aria-label="Реквизиты и юридическая информация"><p class="legal-docs"><a href="https://parisinseptember.ru/privacy/">Политика конфиденциальности</a></p><p class="legal-payment">Оплата: карта · СБП · банковский перевод</p></footer></article>
+</main>
+
+<div class="cookie-banner cookie-banner--bottom" role="dialog" aria-labelledby="cookie-h" aria-describedby="cookie-d" data-cookie-banner data-key="dela.cookie.v1" hidden><h2 id="cookie-h" class="visually-hidden">Согласие на cookie</h2><p id="cookie-d" class="cookie-text">Сайт сохраняет cookie для работы формы и аналитики посещений. Подробности — в <a href="https://parisinseptember.ru/privacy/">Политике обработки персональных данных</a>.</p><div class="cookie-actions"><button type="button" class="cookie-accept" data-cookie-accept>Принимаю</button><button type="button" class="cookie-decline" data-cookie-decline>Только необходимые</button></div></div><script src="/cookie-banner.js" defer></script>
+<script>
+/* Auto-hide blocks past their declared `data-visible-until` ISO timestamp
+   (admin 2026-05-13: «пусть блок исчезнет после 20:30 по Москве»). Runs at
+   page-load and every 30s thereafter — covers tabs left open across the
+   deadline. Idempotent: once hidden, stays hidden. */
+(function(){
+  function _hideExpired(){
+    var nodes = document.querySelectorAll('[data-visible-until]');
+    var now = Date.now();
+    for (var i = 0; i < nodes.length; i++) {
+      var until = Date.parse(nodes[i].getAttribute('data-visible-until') || '');
+      if (!isNaN(until) && now >= until) nodes[i].style.display = 'none';
+    }
+  }
+  _hideExpired();
+  setInterval(_hideExpired, 30000);
+})();
+
+/* Pageview pingback — entity-statistics G-Set event (admin 2026-05-13 «считает
+   статистику»). One event per page-load → CF Worker /pv → DELA_STATS KV.
+   No cookies, no client-id; idempotency via cf-ray (CF generates per request).
+   No-op gracefully if Worker unreachable (sendBeacon + fallback fetch). */
+(function(){
+  var slug = (document.querySelector('meta[name="dela:slug"]') || {}).content;
+  if (!slug) return;
+  var payload = JSON.stringify({
+    p: slug,
+    r: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() :
+       (Date.now() + '-' + Math.random().toString(36).slice(2)),
+    ref: document.referrer || ''
+  });
+  var url = 'https://dela-edge.azaryarozet.workers.dev/pv';
+  try {
+    var blob = new Blob([payload], { type: 'application/json' });
+    if (!navigator.sendBeacon || !navigator.sendBeacon(url, blob)) {
+      fetch(url, {
+        method: 'POST', body: payload, keepalive: true,
+        headers: { 'Content-Type': 'application/json' }
+      }).catch(function(){});
+    }
+  } catch (e) { /* swallow */ }
+})();
+</script>
+</body>
+</html>

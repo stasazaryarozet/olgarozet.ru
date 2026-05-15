@@ -174,6 +174,25 @@ def _typo(s: str, lang: str = "ru") -> str:
     # Inv-TYPO-apostrophe-curly: straight ' → curly ’ (U+2019).
     # Conservative: only between alphanumeric boundaries (don't touch code/quotes).
     out = _re.sub(r"(\w)'(\w)", r"\1’\2", out, flags=_re.UNICODE)
+    # Inv-TYPO-typographic-quotes: ASCII " → locale's outer guillemets via pair-walk.
+    # Governing locale = text's overall locale (admin 2026-05-11). Pair-walk depth:
+    # 0 = next " is OPEN, 1 = next " is CLOSE. Idempotent (no ASCII " → no-op).
+    rules = _load_typo_rules(lang)
+    quotes = (rules.get("quotes") or {}).get("outer") or []
+    if quotes and len(quotes) == 2 and '"' in out:
+        q_open, q_close = quotes
+        buf, depth = [], 0
+        for ch in out:
+            if ch == '"':
+                buf.append(q_open if depth == 0 else q_close)
+                depth ^= 1
+            else:
+                buf.append(ch)
+        out = "".join(buf)
+    # Inv-TYPO-em-dash-not-hyphen (compound case): «\w+—\w+» tight em-dash between
+    # word-chars (no surrounding spaces) = compound word with WRONG em-dash; fix к hyphen.
+    # Spaces around em-dash preserved (parenthetical/dialogue context).
+    out = _re.sub(r"(?<=\w)—(?=\w)", "-", out, flags=_re.UNICODE)
     # Inv-TYPO-vulgar-fraction-glyph: «1/2» → «½», «3/4» → «¾», etc.
     # Non-standard pairs (5/9, 7/13, …) → fraction-slash form `N⁄M`.
     out = _vulgar_fractions_apply(out)
