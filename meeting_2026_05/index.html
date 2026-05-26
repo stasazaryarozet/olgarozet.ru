@@ -79,6 +79,7 @@
         action="https://dela-edge.azaryarozet.workers.dev/lead"
         method="post" enctype="application/x-www-form-urlencoded"
         data-slug="meeting_2026_05">
+    
     <label class="signup-label" for="su-name">Имя</label>
     <input class="signup-input" id="su-name" name="name"
            autocomplete="name" required minlength="2" aria-required="true">
@@ -97,9 +98,9 @@
   <div class="signup-msg" id="signup-msg" role="status" aria-live="polite"></div>
   <noscript><p class="signup-note">Или напишите: <a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p></noscript>
 <script>
-/* AJAX-upgrade: form already action=transport_url (no-JS path lands lead
-   via plain POST). JS prevents default to keep user on page + show
-   «Спасибо» в place. Both paths persist к KV (Inv-LDG-FORMS-NO-MAILTO). */
+/* AJAX-upgrade: FormData captures ALL named inputs (incl. hidden edition+
+   variant). consent checkbox state forced к "true" canonical. Both no-JS
+   и JS paths persist via Worker KV (Inv-LDG-FORMS-NO-MAILTO). */
 (function(){
   var f=document.getElementById("signup-form");
   if(!f) return;
@@ -112,21 +113,17 @@
     .catch(function(){});
   f.addEventListener("submit",function(e){
     var name=f.name.value.trim(),email=f.email.value.trim();
-    var note=(f.note?f.note.value.trim():""),consent=f.consent.checked;
     if(name.length<2){e.preventDefault();f.name.focus();return;}
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){e.preventDefault();f.email.focus();return;}
-    if(!consent){e.preventDefault();f.consent.focus();return;}
+    if(!f.consent.checked){e.preventDefault();f.consent.focus();return;}
     if(!transport)return; /* no-JS path: form action handles it */
     e.preventDefault();
     btn.disabled=true;btn.textContent="отправка...";
-    var data=new URLSearchParams();
-    data.append("name",name);data.append("email",email);
-    if(note) data.append("note",note);
-    data.append("consent","true");
-    data.append("slug",f.dataset.slug||"");
+    var fd=new FormData(f);fd.set("consent","true");
+    fd.set("slug",f.dataset.slug||"");
     fetch(transport,{method:"POST",
       headers:{"Content-Type":"application/x-www-form-urlencoded"},
-      body:data.toString()})
+      body:new URLSearchParams(fd).toString()})
       .then(function(r){return r.json()})
       .then(function(d){
         if(d&&d.ok){f.style.display="none";
