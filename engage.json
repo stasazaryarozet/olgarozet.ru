@@ -1,56 +1,7 @@
 {
-  "generated": "2026-06-21T23:45:28.576178+00:00",
+  "generated": "2026-06-22T00:00:29.067697+00:00",
   "user": "olgarozet",
   "slots": [
-    {
-      "id": "es_ee8a97217e85",
-      "start": "2026-06-22T10:00:00+02:00",
-      "duration": 40,
-      "tz": "Europe/Belgrade",
-      "event_id": "1fbd1n288baonuqfioin4fqke0"
-    },
-    {
-      "id": "es_7aa0a9384396",
-      "start": "2026-06-22T11:00:00+02:00",
-      "duration": 40,
-      "tz": "Europe/Belgrade",
-      "event_id": "iaqbcmfklijg0neg1p5irgqcuk"
-    },
-    {
-      "id": "es_0ace4da835de",
-      "start": "2026-06-22T12:00:00+02:00",
-      "duration": 40,
-      "tz": "Europe/Belgrade",
-      "event_id": "c6piltqs7jnf748oei643gq10c"
-    },
-    {
-      "id": "es_c6c5a253d901",
-      "start": "2026-06-22T14:00:00+02:00",
-      "duration": 40,
-      "tz": "Europe/Belgrade",
-      "event_id": "pfgi0tpmml5j3fsjn4l8h14qfk"
-    },
-    {
-      "id": "es_9a5baf59c8b0",
-      "start": "2026-06-22T15:00:00+02:00",
-      "duration": 40,
-      "tz": "Europe/Belgrade",
-      "event_id": "s48j4ct4077dqlgu0a66uheiak"
-    },
-    {
-      "id": "es_2c0266a6c728",
-      "start": "2026-06-22T16:00:00+02:00",
-      "duration": 40,
-      "tz": "Europe/Belgrade",
-      "event_id": "2tnhn7pg0u10f2vbad4e8d3r28"
-    },
-    {
-      "id": "es_5b9c461ee448",
-      "start": "2026-06-22T17:00:00+02:00",
-      "duration": 40,
-      "tz": "Europe/Belgrade",
-      "event_id": "vkrqbg7pdbp3ovnokprpec6r38"
-    },
     {
       "id": "es_e833559c98da",
       "start": "2026-06-30T10:00:00+02:00",
