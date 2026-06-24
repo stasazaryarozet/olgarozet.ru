@@ -63,6 +63,33 @@ _NBSP = " "
 # Single edit in YAML propagates across every surface × every owner × every
 # event. No hardcode — `feedback_no_hardcode_through_abstractions`.
 
+import logging as _logging
+_LOG = _logging.getLogger("site_generator")
+
+
+def _spec_ed(inv: str) -> dict:
+    """enforcement_data for `inv` from the Spec. Fail-LOUD (Inv-CS-fail-loud): a read failure is
+    LOGGED (never a silent swallow) then degrades to {} so the projection stays total. Collapses
+    the former per-call try/except-empty pattern (5 call sites) to ONE seam."""
+    try:
+        from spec_data import enforcement_data_for_invariant
+        return enforcement_data_for_invariant(inv) or {}
+    except Exception as e:
+        _LOG.warning("spec enforcement_data(%s) unread (%s) — degrading to {}", inv, type(e).__name__)
+        return {}
+
+
+def _spec_fm(name: str) -> dict:
+    """frontmatter for Spec `name`. Fail-LOUD (log then {}). Collapses the per-call
+    try/except-empty frontmatter reads (flagged sites)."""
+    try:
+        from spec_data import frontmatter
+        return frontmatter(name) or {}
+    except Exception as e:
+        _LOG.warning("spec frontmatter(%s) unread (%s) — degrading to {}", name, type(e).__name__)
+        return {}
+
+
 def _load_typo_rules(lang: str = "ru") -> dict[str, Any]:
     """Load typography rules from System knowledge.
 
@@ -448,7 +475,7 @@ def _when_relative_phrase(when_iso: "str | None") -> str:
     try:
         dt = _dt.fromisoformat(when_iso)
         d_target = dt.date()
-    except Exception:
+    except (ValueError, TypeError):       # malformed iso — narrow, not a silent catch-all
         return ""
     d_today = _date.today()
     if d_target == d_today:
@@ -814,16 +841,8 @@ def _theme_script(d: dict[str, Any]) -> str:
     every refresh_ms so a long session in `auto` flips at sunrise/sunset (a
     fixed override is re-asserted harmlessly).
     """
-    try:
-        from spec_data import enforcement_data_for_invariant as _spec_enforcement_data
-        solar = _spec_enforcement_data("Inv-SITE-solar-theme") or {}
-    except Exception:
-        solar = {}
-    try:
-        from spec_data import enforcement_data_for_invariant as _sed2
-        iface = _sed2("Inv-IFACE-day-night-mode") or {}
-    except Exception:
-        iface = {}
+    solar = _spec_ed("Inv-SITE-solar-theme")
+    iface = _spec_ed("Inv-IFACE-day-night-mode")
     cal = ((d.get("bio") or {}).get("solar_calibration") or {}) \
         if isinstance(d, dict) else {}
     lat = float(cal.get("latitude_deg",
@@ -984,11 +1003,7 @@ def _cookie_banner(d: dict[str, Any]) -> str:
     # banner that ships «{{undefined}}» to users is a 152-ФЗ violation worse
     # than no banner). Required keys: storage_key, heading, body_template,
     # privacy_link_text, accept_label, decline_label.
-    try:
-        from spec_data import enforcement_data_for_invariant as _spec_enforcement_data
-        copy = _spec_enforcement_data("Inv-COOKIE-banner") or {}
-    except Exception:
-        copy = {}
+    copy = _spec_ed("Inv-COOKIE-banner")
     required_keys = ("storage_key", "heading", "body_template",
                      "privacy_link_text", "accept_label", "decline_label")
     missing = [k for k in required_keys if not copy.get(k)]
@@ -1072,11 +1087,7 @@ def _theme_toggle(d: dict[str, Any] | None = None) -> str:
     screen readers (no separate live region needed). Honours prefers-reduced-motion
     via CSS (.theme-toggle transition guarded by the media query).
     """
-    try:
-        from spec_data import enforcement_data_for_invariant as _spec_enforcement_data
-        iface = _spec_enforcement_data("Inv-IFACE-day-night-mode") or {}
-    except Exception:
-        iface = {}
+    iface = _spec_ed("Inv-IFACE-day-night-mode")
     toggle_states = list(iface.get("toggle_states") or ["auto", "day", "night"])
     storage_key = str(iface.get("storage_key") or "dela.theme.v1")
     mode_values = list(iface.get("mode_values") or ["day", "night"])
@@ -1165,11 +1176,7 @@ def _legal_footer(d: dict[str, Any]) -> str:
         # Labels live in spec.enforcement_data.Inv-SITE-trust-base.payment_labels —
         # single SoT, не code-level dict. Fail-loud on unknown code: silently
         # echoing the raw enum to user-visible HTML breaks trust hygiene.
-        try:
-            from spec_data import enforcement_data_for_invariant as _spec_enforcement_data
-            trust_ed = _spec_enforcement_data("Inv-SITE-trust-base") or {}
-        except Exception:
-            trust_ed = {}
+        trust_ed = _spec_ed("Inv-SITE-trust-base")
         labels = trust_ed.get("payment_labels") or {}
         if not labels:
             raise RuntimeError(
@@ -1362,13 +1369,9 @@ def _effective_stage(event: dict[str, Any], now_iso: str | None = None) -> str:
 def _renderable_for() -> dict[str, frozenset[str]]:
     """Spec-loaded per-surface stage gate. Reads entity-event.md::enforcement_data
     .renderable_for. Cached — Spec is immutable per process."""
-    try:
-        from spec_data import frontmatter
-        fm = frontmatter("entity-event")
-        data = fm.get("enforcement_data", {}).get("renderable_for", {})
-        return {surface: frozenset(stages) for surface, stages in data.items()}
-    except Exception:
-        return {}
+    fm = _spec_fm("entity-event")
+    data = fm.get("enforcement_data", {}).get("renderable_for", {})
+    return {surface: frozenset(stages) for surface, stages in data.items()}
 
 
 @_functools.lru_cache(maxsize=1)
@@ -2791,7 +2794,8 @@ def _render_signup(ctx: "_LandingCtx") -> "list[str]":
             _sys.path.insert(0, _os.path.expanduser("~/Dela/scripts"))
             from secrets_manager import secrets as _secrets
             _transport_url = _secrets.get_key("signup_capture_url") or ""
-        except Exception:
+        except Exception as _e:
+            _LOG.warning("signup_capture_url unread (%s) — empty transport", type(_e).__name__)
             _transport_url = ""
         parts.append(event_signup_form(
             slug,
@@ -3453,13 +3457,9 @@ def _load_anchor_extractors() -> dict[str, Any]:
 
     Returns: channel-id → {'source', 'transform', 'regex'?} dict.
     """
-    try:
-        from spec_data import frontmatter
-        fm = frontmatter("channel")
-        rules: dict[str, Any] = fm.get("enforcement_data", {}).get("url_locator_extraction", {})
-        return rules
-    except Exception:
-        return {}
+    fm = _spec_fm("channel")
+    rules: dict[str, Any] = fm.get("enforcement_data", {}).get("url_locator_extraction", {})
+    return rules
 
 
 _ANCHOR_RULES = _load_anchor_extractors()
