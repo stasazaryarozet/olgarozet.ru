@@ -1,55 +1,69 @@
 {
-  "generated": "2026-06-24T19:00:25.942472+00:00",
+  "generated": "2026-06-24T19:15:20.030188+00:00",
   "user": "olgarozet",
   "slots": [
     {
-      "id": "es_e833559c98da",
-      "start": "2026-06-30T10:00:00+02:00",
+      "id": "es_b898bb29f3a3",
+      "start": "2026-06-26T10:00:00+03:00",
       "duration": 40,
-      "tz": "Europe/Belgrade",
+      "tz": "Europe/Moscow",
+      "event_id": "36bb033mlcom230b6lakt51700"
+    },
+    {
+      "id": "es_9102df69b2e8",
+      "start": "2026-06-30T10:00:00+03:00",
+      "duration": 40,
+      "tz": "Europe/Moscow",
+      "event_id": "ak4ot8pfq03rg1g2mu0k5nvpo4"
+    },
+    {
+      "id": "es_ac205e3c21af",
+      "start": "2026-06-30T11:00:00+03:00",
+      "duration": 40,
+      "tz": "Europe/Moscow",
       "event_id": "pnknv47ho2e1ggt2nkqt8otop8"
     },
     {
-      "id": "es_53b5bad607e3",
-      "start": "2026-07-01T10:00:00+02:00",
+      "id": "es_aca54c01975c",
+      "start": "2026-07-01T10:00:00+03:00",
       "duration": 40,
-      "tz": "Europe/Belgrade",
-      "event_id": "pdc73fr2lffpgjto498v6o4rr0"
+      "tz": "Europe/Moscow",
+      "event_id": "u6ptfporm8ltr8pt2ca99cbps8"
     },
     {
-      "id": "es_c8a1eea15551",
-      "start": "2026-07-01T12:00:00+02:00",
+      "id": "es_347fc4894371",
+      "start": "2026-07-01T12:00:00+03:00",
       "duration": 40,
-      "tz": "Europe/Belgrade",
-      "event_id": "7cps6eq9ougesll2vb1lni2rj8"
+      "tz": "Europe/Moscow",
+      "event_id": "2mml6pei84ukc2ajqt81asrij0"
     },
     {
-      "id": "es_0d61789a2b2e",
-      "start": "2026-07-01T15:00:00+02:00",
+      "id": "es_56f9cb4aefa3",
+      "start": "2026-07-01T15:00:00+03:00",
       "duration": 40,
-      "tz": "Europe/Belgrade",
-      "event_id": "7kt9kdahg2rc9e5iplm3n43ntg"
+      "tz": "Europe/Moscow",
+      "event_id": "0mpie2fl6b2mumi3t0nquhgu7s"
     },
     {
-      "id": "es_711a1d5603fc",
-      "start": "2026-07-02T10:00:00+02:00",
+      "id": "es_8e8325abbf16",
+      "start": "2026-07-02T10:00:00+03:00",
       "duration": 40,
-      "tz": "Europe/Belgrade",
-      "event_id": "k4d0qs3572qeq7tlqr4u6hoadg"
+      "tz": "Europe/Moscow",
+      "event_id": "fj0isgva8jqiljm2aoldk787hs"
     },
     {
-      "id": "es_7f1bf5e527e3",
-      "start": "2026-07-02T12:00:00+02:00",
+      "id": "es_e32ec31dcd70",
+      "start": "2026-07-02T12:00:00+03:00",
       "duration": 40,
-      "tz": "Europe/Belgrade",
-      "event_id": "4obu1bjt3p64om1k7f6th8p9kg"
+      "tz": "Europe/Moscow",
+      "event_id": "4v12pua6u12b5bjhd7b5f746t0"
     },
     {
-      "id": "es_61691b660ac6",
-      "start": "2026-07-02T15:00:00+02:00",
+      "id": "es_5e4e84c4f589",
+      "start": "2026-07-02T15:00:00+03:00",
       "duration": 40,
-      "tz": "Europe/Belgrade",
-      "event_id": "tsm1nbn71mh9lafkf8v60i5ee4"
+      "tz": "Europe/Moscow",
+      "event_id": "099s186m0afsskt9pj3ad0sj3g"
     }
   ],
   "transport_url": "https://script.google.com/macros/s/AKfycbzeulk8nVhROOmrnysLKRLGqM_naMEgVhtPl50ch_GCilibJ7MXv2rWlGlq1hz1SWc/exec"
