@@ -656,7 +656,8 @@ def _booking_disabled(d: dict[str, Any], owner: str = "olgarozet") -> bool:
         return True
     try:
         import json as _json, os as _os
-        slots_path = (Path(_os.path.expanduser("~/Dela")) / ".state" /
+        from config import DELA_HOME as _DH
+        slots_path = (_DH / ".state" /
                       "engage" / owner / "slots.json")
         if not slots_path.is_file():
             return True
