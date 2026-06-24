@@ -1,14 +1,7 @@
 {
-  "generated": "2026-06-24T09:45:21.840606+00:00",
+  "generated": "2026-06-24T10:00:24.458878+00:00",
   "user": "olgarozet",
   "slots": [
-    {
-      "id": "es_9d78f99b5c5a",
-      "start": "2026-06-24T12:00:00+02:00",
-      "duration": 40,
-      "tz": "Europe/Belgrade",
-      "event_id": "pd3jbphdh5csm1ogbsth9k4u74"
-    },
     {
       "id": "es_78327421040a",
       "start": "2026-06-24T14:00:00+02:00",
