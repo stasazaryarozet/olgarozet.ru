@@ -3572,7 +3572,7 @@ def p_telegram(d: dict[str, Any]) -> str:
                 parts.append(stripped)
         parts.append("")
         host = _canonical(d).replace("https://", "").replace("http://", "")
-        parts.append(f"{host}/booking")
+        parts.append(f"{host}{cons.get('link', '/init')}")
     return "\n".join(parts)
 
 
@@ -3702,7 +3702,7 @@ def p_booking(d: dict[str, Any]) -> str:
             title=f"{booking_label} — {bio['title']}",
             description=f"{desc_plain} — {cons['price']}",
             body=body,
-            canonical=f"{_canonical(d)}/booking/",
+            canonical=f"{_canonical(d)}/{cons['link'].strip('/')}/",
             extra_head=booking_style,
             footer=False,
         )
@@ -3842,7 +3842,7 @@ if(d.ok){{submitted=true;
         title=f"{booking_label} — {bio['title']}",
         description=f"{desc_plain} — {cons['price']}",
         body=body,
-        canonical=f"{_canonical(d)}/booking/",
+        canonical=f"{_canonical(d)}/{cons['link'].strip('/')}/",
         extra_head=booking_style,
         footer=False,
     )
@@ -3856,18 +3856,25 @@ if __name__ == "__main__":
     print("site: index.html")
     (ROOT / "art" / "index.html").write_text(p_art(d), encoding="utf-8")
     print("art: art/index.html")
+    # Public booking path is DATA-DRIVEN from consultations.link — ONE source (admin «одна
+    # ссылка — init», 2026-06-24): the page dir, the homepage CTA href (already cons['link'])
+    # AND the canonical all follow it, so the URL is a data.yaml edit with zero code.
+    booking_slug = (d["consultations"].get("link") or "/init").strip("/") or "init"
+    booking_dir = ROOT / booking_slug
     if _booking_disabled(d):
         # admin 2026-05-15: «Никакой ссылки на Бронирование, пока не восстановим».
-        # Remove booking/ artifacts entirely so orphan page can't be linked.
-        # Computed predicate — see _booking_disabled().
-        booking_dir = ROOT / "booking"
+        # Remove the page entirely so an orphan can't be linked. Computed predicate.
         if booking_dir.is_dir():
             import shutil as _sh
             _sh.rmtree(booking_dir)
         print("booking: omitted (booking_disabled)")
     else:
-        (ROOT / "booking" / "index.html").write_text(p_booking(d), encoding="utf-8")
-        print("booking: booking/index.html")
+        # mkdir ⇒ projection TOTAL over enable→disable→enable: the disabled branch rmtree's the
+        # dir, so a re-enable (slots restored) hit FileNotFoundError — the «booking never returns»
+        # root (Σ 2026-06-24, olgarozet.ru/booking 404 with 26 live slots).
+        booking_dir.mkdir(parents=True, exist_ok=True)
+        (booking_dir / "index.html").write_text(p_booking(d), encoding="utf-8")
+        print(f"booking: {booking_slug}/index.html")
     (ROOT / "telegram.txt").write_text(p_telegram(d), encoding="utf-8")
     print("telegram: telegram.txt")
     (ROOT / "bio.txt").write_text(p_bio(d), encoding="utf-8")
