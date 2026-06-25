@@ -1,7 +1,28 @@
 {
-  "generated": "2026-06-25T20:46:43.970526+00:00",
+  "generated": "2026-06-25T20:48:12.460492+00:00",
   "user": "olgarozet",
   "slots": [
+    {
+      "id": "es_b898bb29f3a3",
+      "start": "2026-06-26T10:00:00+03:00",
+      "duration": 40,
+      "tz": "Europe/Moscow",
+      "event_id": "veion01l8v33hrc8biima0c5h0"
+    },
+    {
+      "id": "es_9102df69b2e8",
+      "start": "2026-06-30T10:00:00+03:00",
+      "duration": 40,
+      "tz": "Europe/Moscow",
+      "event_id": "umhs245jv31trng2tc4ic27r2c"
+    },
+    {
+      "id": "es_ac205e3c21af",
+      "start": "2026-06-30T11:00:00+03:00",
+      "duration": 40,
+      "tz": "Europe/Moscow",
+      "event_id": "8ch8gfl8gsbedd4ro9hikps108"
+    },
     {
       "id": "es_aca54c01975c",
       "start": "2026-07-01T10:00:00+03:00",
@@ -43,27 +64,6 @@
       "duration": 40,
       "tz": "Europe/Moscow",
       "event_id": "099s186m0afsskt9pj3ad0sj3g"
-    },
-    {
-      "id": "es_10991398e708",
-      "start": "2026-07-07T10:00:00+03:00",
-      "duration": 40,
-      "tz": "Europe/Moscow",
-      "event_id": "ukeugtllk3kol6210112ikc3q4"
-    },
-    {
-      "id": "es_a48c2b014b74",
-      "start": "2026-07-07T12:00:00+03:00",
-      "duration": 40,
-      "tz": "Europe/Moscow",
-      "event_id": "9qprscjue3e2b1bn3ol2rsdm00"
-    },
-    {
-      "id": "es_7e0408827e58",
-      "start": "2026-07-07T15:00:00+03:00",
-      "duration": 40,
-      "tz": "Europe/Moscow",
-      "event_id": "71irqthct598s1raogfd90m4vg"
     }
   ],
   "transport_url": "https://script.google.com/macros/s/AKfycbzeulk8nVhROOmrnysLKRLGqM_naMEgVhtPl50ch_GCilibJ7MXv2rWlGlq1hz1SWc/exec"
