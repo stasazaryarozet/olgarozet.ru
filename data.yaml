@@ -1219,13 +1219,12 @@ events:
   skoro_state: pending                  # ev-pending class — date not announced
   beats:                                # role-tagged semantic site rendering
   - {role: when, register: proper-case, lines: ["Дату объявим:"]}
-  - {role: type, lines: ["Мультимедийный", "рассказ:"]}
+  - {role: type, lines: ["Рассказ-показ:"]}   # admin rename 2026-07-06 («мы переназвали»; слово admin 01:37 — ёмкое, не англицизм, для мультимедийной формы). NB: первое применение исчезло из worktree до коммита (c45689aa9f без него) — re-applied, content-verified
   - {role: concept, lines: ["Цена и Ценность"]}
   lines:                                # legacy / fallback
   - "Дату объявим"
   - ""
-  - "Мультимедийный"
-  - "рассказ:"
+  - "Рассказ-показ:"
   - ""
   - "«Цена и Ценность»"
   title: Цена и Ценность
