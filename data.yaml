@@ -466,8 +466,8 @@ events:
   broadcast: [site, telegram_channel]   # admin 2026-05-15: Скоро digest mirror across surfaces — TG msg #62 references this event
 
   title: Человек, Дом, Ремесло
-  t_key: "2026-05-W3"      # «после майских» — week 3 of May; sorts AFTER paris-ig-live (W1)
-  date: после майских
+  t_key: "2026-08"         # горизонт «до наступления осени» = лето 2026 (admin 2026-07-06). Прежний «2026-05-W3» — устаревший placeholder В ПРОШЛОМ (событие не проведено, дата не объявлена); честный forward-горизонт: лето, до Парижа (сент). Точная дата → уточнить
+  date: до осени
   audience: []
   organizers: [olgarozet]
   format: [online, meeting]
@@ -1212,8 +1212,8 @@ events:
 - id: course_price_value
   type: publication      # entity-event sub-class — announcement-landing для upcoming course (not yet structured event)
   broadcast: [site, telegram_channel]   # admin 2026-05-15 TG Скоро: event mirrored on site Скоро
-  t_key: "2026-06"                      # ordering placeholder; refined when actual schedule announced
-  skoro_state: pending                  # ev-pending class — date not announced
+  t_key: "2026-08"                      # горизонт «до наступления осени» = лето 2026 (admin 2026-07-06). Прежний «2026-06» — устаревший placeholder В ПРОШЛОМ; честный forward-горизонт: лето, до Парижа (сент). Точная дата → уточнить
+  skoro_state: pending                  # ev-pending class — точная дата не объявлена (но горизонт «до осени» известен → t_key несёт его)
   beats:                                # role-tagged semantic site rendering
   - {role: when, register: proper-case, lines: ["Дату объявим:"]}
   - {role: type, lines: ["Рассказ-показ:"]}   # admin rename 2026-07-06 («мы переназвали»; слово admin 01:37 — ёмкое, не англицизм, для мультимедийной формы). NB: первое применение исчезло из worktree до коммита (c45689aa9f без него) — re-applied, content-verified
