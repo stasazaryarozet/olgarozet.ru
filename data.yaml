@@ -1566,16 +1566,17 @@ publications:
   target_event: paris-2026-09-live-2
   wave_type: commercial
   status: published
-  published_at: "2026-07-06T04:44:01Z"
-  platform_id: DacDzQbitta           # v2 white-balanced — instagram.com/p/DacDzQbitta (media 17985288381034630); ext_908b00f3
+  published_at: "2026-07-06T05:46:50Z"
+  platform_id: DacK_Q3Cn0T           # v3 — instagram.com/p/DacK_Q3Cn0T (media 18056560853512626); admin-выбор A/B «вариант 2» (3-pro фигуры-собеседники), апскейл-мастер 8192²
   title: "IG Анонс-Пост — второй эфир 8 июля"
   utility_synopsis: |
     Текст админа verbatim (второй-и-последний фрейминг + дата-время) + изображение
-    fresh-3 white-balanced (von Kries по стене; мастер 8192², сабмишн 1080).
-    История: v1 Dab-r9NCrVM (03:59Z) нарушал закон строго белого фона (стена
-    238,237,235) — пойман админом, удалён им в приложении (Graph 400 подтверждён);
-    v2 прошёл новый image-egress гейт (Inv-IMG-egress-gated). Корень закрыт:
-    scripts/image_invariants.py.
+    «Диалог» (партия admin-директивы «выраженнее идея диалога и прямого эфира»):
+    две плоскости-собеседника, on-air лампа; gemini-3-pro (polza), мастер 8192²,
+    сабмишн 1080 — оба слоя гейта PASS. История: v1 Dab-r9NCrVM (серая стена,
+    пойман админом) и v2 DacDzQbitta (white-balanced пост-обработкой, «не полностью
+    белый» по оценке админа) — оба удалены админом; v3 = строго-белый от генерации
+    (промпт-корень) + finish_to_white + Inv-IMG-egress-gated.
   materials: []
   campaign_id: paris-2026-09-promo
   schema_version: 1
