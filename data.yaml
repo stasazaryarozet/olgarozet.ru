@@ -350,6 +350,7 @@ plans:
   outputs:
   - {kind: event, id: paris-2026-09}                           # main travel-event
   - {kind: event, id: paris-2026-09-ig-live}                   # publicly-announced online-presentation (IG Live)
+  - {kind: event, id: paris-2026-09-live-2}                    # second-and-last прямой эфир (2026-07-08); announce live 2026-07-06
   - {kind: event, id: paris-2026-09-zoom-preshow}              # internal — Zoom in August, not published yet
   - {kind: campaign, id: paris-2026-09-promo}                  # promotional arc — Campaign below
   resources:
@@ -717,6 +718,18 @@ events:
   lead_capture:
     edition: paris-2026
     variant: paris-2026-09
+    # 152-ФЗ: сбор ПД перенесён с CF Worker (US-juris) на Яндекс-Формы (данные в РФ).
+    # provider+form_url ⇒ site_generator рендерит внешнюю форму (iframe+ссылка);
+    # ответы приходят на azrozet@gmail.com → ingest-нога lead_ingest_yandex.py →
+    # тот же lead_processor → Participation (контур замкнут без Worker). Σ 2026-07-06.
+    provider: yandex-forms
+    form_url: "https://forms.yandex.ru/u/6a4b0bcd902902b4b39cb3aa?iframe=1"
+    form_id: "6a4b0bcd902902b4b39cb3aa"
+    notify_mailbox: "azrozet@gmail.com"
+    # Yandex answer-field id map (для ingest-парсинга письма-уведомления):
+    answer_fields:
+      name: answer_short_text_9008982557873188
+      consent: answer_boolean_9008982557923970
     fields:
       name: {label: "Имя", required: true}
       email: {label: "Эл. Почта", kind: email, required: true}
@@ -959,6 +972,56 @@ events:
   tasks: []
   participation_funnel:                # Inv-LLC-functor: IG-Live viewers → potential paris-2026-09 travel-leads
     stage_in: viewed_ig_live
+    stage_out: lead_paris_2026_09
+
+- id: paris-2026-09-live-2
+  type: presentation
+  parent_id: paris-2026-09            # Inv-EV-parent-resolves
+  parent_relation: promotes           # pre-event promotional artifact — temporal containment WAIVED (entity-event.md Inv-EV-parent-temporal-coherence)
+  plan_id: paris-2026-09-plan         # parent-edge — entity-plan
+  status: OPEN                        # announce ЖИВ 2026-07-06: IG comment + Анонс-Пост published (см. anchors)
+  t_key: "2026-07-08"
+  t_end: "2026-07-08T19:00:00+03:00"  # +60min nominal → auto-CONCLUDED post-event (Inv-EV-stage-time-derived)
+  title: "ВТОРОЙ ПРЯМОЙ ЭФИР ПРО ПАРИЖ В СЕНТЯБРЕ"   # admin framing 2026-07-06: «второй — и последний по теме»
+  last_in_series: true                # admin 2026-07-06: последний эфир по теме Парижа — семантика «second and last»
+  skoro_state: anchor                 # concrete date → anchor
+  beats:                              # role-tagged; текст = admin verbatim (IG Анонс-Пост 2026-07-06), порядок его композиции
+  - {role: type, lines: ["ВТОРОЙ", "—", "и последний", "—", "ПРЯМОЙ ЭФИР"]}
+  - {role: detail, register: caps, lines: ["ПРО ПАРИЖ В СЕНТЯБРЕ:"]}   # НЕ concept: renderer оборачивает concept в «» (цитатный титул) — здесь не цитата
+  - {role: when, register: proper-case, lines: ["8 июля,", "18:00"]}
+  lines:                              # TG-форма: title префиксуется рендерером ⇒ lines дополняют, не дублируют (форма админского комментария)
+  - "— и последний по теме —"
+  - ""
+  - "8 июля,"
+  - "18:00"
+  organizers: [olgarozet]
+  host: olgarozet
+  locations: []                        # online-only
+  provider: youtube                    # план: YouTube-эфир @olgarozet; канал СОЗДАН 2026-07-06 (Tellus: olgarozet_at_youtube claim, «трансляции включаются»). Recording path = YT VOD auto-archive ⇒ pre-announce medium-gate Inv-EV-broadcast-recording-required PASSES (Σ 2026-05-26 IG-Live-без-записи класс не повторяется)
+  url:                                 # stream URL — заполнить когда Tellus/admin создаст трансляцию
+  audience: open
+  when: "2026-07-08T18:00:00+03:00"    # _source: admin 2026-07-06 «8-го числа… пока от меня — 18:00, время уточнить у Ольги» (Inv-EV-source-organizer-verified: admin-attested, time PRELIMINARY)
+  duration_min: 60                     # nominal estimate
+  broadcast: [site, telegram_channel]  # УТВЕРЖДЕНО admin 2026-07-06 07:1x («Утверждаю»; ТГ-анонс — ответом на Основной ТГ-Пост, done msg 82); Скоро site + TG digest mirror
+  # anchors — derived via π_anchor из publications[] (stored field deprecated 2026-05-15); см. publications: paris-2026-09-live-2-*
+  description: |
+    8 июля, 18:00
+
+    ВТОРОЙ
+    —
+    и последний
+    —
+    ПРЯМОЙ ЭФИР
+
+    ПРО ПАРИЖ В СЕНТЯБРЕ
+  suppress_meta: true
+  resource:
+    money: {amount: 0, currency: EUR}
+    time: {duration_min: 60}
+  materials: []                        # recording-Material — populated post-stream (Inv-EV-recording-internal-only)
+  tasks: []
+  participation_funnel:                # эфир-зрители → potential paris-2026-09 travel-leads
+    stage_in: viewed_live_2
     stage_out: lead_paris_2026_09
 
 - id: uzbekistan_2026_fall
@@ -1492,6 +1555,60 @@ publications:
     → parisinseptember.ru. Польза Внимающему: program-essence + Контракт + visa-aid
     в одном TG-кадре. 1 hashtag (#ДизайнПутешествие campaign-evergreen). Draft в
     Agents/lumen/drafts/paris-2026-09-ig-stories-tg-draft.md.
+  materials: []
+  campaign_id: paris-2026-09-promo
+  schema_version: 1
+
+- id: paris-2026-09-live-2-ig-announce
+  channel: instagram
+  entity_id: paris-live2-ig-announce
+  entity_type: instagram_post
+  kind: main_post                    # Главный Пост per (paris-2026-09-live-2, instagram); π_anchor derives event anchor
+  target_event: paris-2026-09-live-2
+  wave_type: commercial
+  status: published
+  published_at: "2026-07-06T04:44:01Z"
+  platform_id: DacDzQbitta           # v2 white-balanced — instagram.com/p/DacDzQbitta (media 17985288381034630); ext_908b00f3
+  title: "IG Анонс-Пост — второй эфир 8 июля"
+  utility_synopsis: |
+    Текст админа verbatim (второй-и-последний фрейминг + дата-время) + изображение
+    fresh-3 white-balanced (von Kries по стене; мастер 8192², сабмишн 1080).
+    История: v1 Dab-r9NCrVM (03:59Z) нарушал закон строго белого фона (стена
+    238,237,235) — пойман админом, удалён им в приложении (Graph 400 подтверждён);
+    v2 прошёл новый image-egress гейт (Inv-IMG-egress-gated). Корень закрыт:
+    scripts/image_invariants.py.
+  materials: []
+  campaign_id: paris-2026-09-promo
+  schema_version: 1
+
+- id: paris-2026-09-live-2-tg-announce
+  channel: telegram_channel
+  entity_id: paris-live2-tg-announce
+  entity_type: telegram_post
+  kind: main_post                    # Главный Пост per (paris-2026-09-live-2, telegram_channel)
+  target_event: paris-2026-09-live-2
+  wave_type: commercial
+  status: published
+  published_at: "2026-07-06T04:21:36Z"
+  platform_id: 82                    # канал ОЛЬГА_РОЗЕТ msg 82, reply_to=78 (Основной ТГ-Пост) — admin form directive 2026-07-06
+  title: "TG анонс-ответ — второй эфир 8 июля"
+  utility_synopsis: "Ответ на Основной ТГ-Пост (msg 78): title + «— и последний по теме —» + дата-время. ext_5680048c."
+  materials: []
+  campaign_id: paris-2026-09-promo
+  schema_version: 1
+
+- id: paris-2026-09-live-2-ig-comment
+  channel: instagram
+  entity_id: paris-live2-ig-comment
+  entity_type: instagram_comment
+  kind: announce                     # ad-hoc анонс в аудитории родительского Основного Поста (НЕ main_post: тот — Dab-r9NCrVM)
+  target_event: paris-2026-09-live-2
+  wave_type: commercial
+  status: published
+  published_at: "2026-07-06T03:53:27Z"
+  platform_id: "18163588390430618/comment"   # комментарий под instagram.com/p/DYRzwNxiAZ6; ext_b3ba25b4
+  title: "IG анонс-комментарий под Основным постом кампании"
+  utility_synopsis: "Текст админа verbatim (комментарий-форма: «Второй — и последний по теме — прямой эфир: 8 июля, 18:00»)."
   materials: []
   campaign_id: paris-2026-09-promo
   schema_version: 1
