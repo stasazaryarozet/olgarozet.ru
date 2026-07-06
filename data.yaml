@@ -446,18 +446,18 @@ campaigns:
     # (text/campaign-instance.md::π_instagram_highlight).
     # Admin created «IX» Highlight from mobile 2026-05-13T22:06Z with
     # paris-2026-09-ig-story-reshare as first Story. 3-part Stories planned там же.
-    - title: "IX"
-      cover_path: "knowledge/people/olgarozet/site/img/campaign/paris-2026-09-highlight-ix-cover-v1.png"
-      cover_source_kind: generated
-      cover_tool: gemini-2.5-flash-image
-      cover_pictogram_class: ig_highlight_cover
-      media_ids:
-        - paris-2026-09-ig-story-reshare         # live
-        - paris-2026-09-ig-story-1               # planned
-        - paris-2026-09-ig-story-2               # planned
-        - paris-2026-09-ig-story-3               # planned
-      created_at: "2026-05-13T22:06:28Z"
-      created_by: admin-mobile
+  - title: "IX"
+    cover_path: "knowledge/people/olgarozet/site/img/campaign/paris-2026-09-highlight-ix-cover-v1.png"
+    cover_source_kind: generated
+    cover_tool: gemini-2.5-flash-image
+    cover_pictogram_class: ig_highlight_cover
+    media_ids:
+    - paris-2026-09-ig-story-reshare             # live
+    - paris-2026-09-ig-story-1                   # planned
+    - paris-2026-09-ig-story-2                   # planned
+    - paris-2026-09-ig-story-3                   # planned
+    created_at: "2026-05-13T22:06:28Z"
+    created_by: admin-mobile
 
 # ── Events — graph-aware: id + entity refs; lines: kept for legacy column render ─
 events:
@@ -1411,7 +1411,7 @@ publications:
   entity_id: olga-tg-skoro
   entity_type: telegram_post
   kind: skoro_digest                 # entity-publication.md::Inv-PUB-kind-typed — Skoro digest per Канал (один per @olga_rozet, не per-Event). admin'ская модель 2026-05-15 «блок Скоро».
-  target_event: null                 # Skoro digest НЕ Event-bound — per-Channel singular publication. cardinality_per_event_channel[skoro_digest] = null.
+  target_event:                      # Skoro digest НЕ Event-bound — per-Channel singular publication. cardinality_per_event_channel[skoro_digest] = null.
   status: published                   # normalized: was 'live' ∉ status_taxonomy → 'published' (E3 broadcast_sync 2026-06-02)
   uploaded_at: "2026-04-15T07:47:43Z"  # original hand-authored timestamp
   external_url: "https://t.me/olga_rozet/62"
@@ -1423,7 +1423,7 @@ publications:
     модель 2026-05-15 — Skoro digest должен auto-генерироваться из sorted_events(d, 'telegram_channel')
     via site_generator.p_telegram(d); auto-edit msg #62 при event-set change через TelegramAdapter.upsert
     (Phase 2.5 — edit_message_text path, deferred за Rule-of-Three). Currently manual.
-  campaign_id: null                  # Skoro digest persona-channel-scope, не campaign-scope
+  campaign_id:                       # Skoro digest persona-channel-scope, не campaign-scope
   schema_version: 1
   # post-2026-05-15 plan: re-render via p_telegram(d) → edit msg #62 to reflect:
   #   - Paris (formed, OPEN) с link к t.me/olga_rozet/{anchors.telegram}
@@ -1456,7 +1456,7 @@ publications:
   campaign_id: paris-2026-09-promo
   collaborators: ["natalya_lo"]      # SPEC-INTENT: IG joint-authorship invite (Inv-PUB-collaborator-typed). NOT APPLIED on live post (DYRzwNxiAZ6) — Spec lift 1140ad495a was 6h after 12:09 UTC dispatch.
   image_user_tags:                   # SPEC-INTENT: tag-on-image. NOT APPLIED on live post.
-    - {username: "natalya_lo", x: 0.5, y: 0.5}
+  - {username: "natalya_lo", x: 0.5, y: 0.5}
   schema_version: 1
 
 - id: paris-2026-09-ig-story-reshare
