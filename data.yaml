@@ -985,8 +985,9 @@ events:
   title: "ВТОРОЙ ПРЯМОЙ ЭФИР ПРО ПАРИЖ В СЕНТЯБРЕ"   # admin framing 2026-07-06: «второй — и последний по теме»
   last_in_series: true                # admin 2026-07-06: последний эфир по теме Парижа — семантика «second and last»
   skoro_state: anchor                 # concrete date → anchor
-  beats:                              # role-tagged; текст = admin verbatim (IG Анонс-Пост 2026-07-06), порядок его композиции
-  - {role: type, lines: ["ВТОРОЙ", "—", "и последний", "—", "ПРЯМОЙ ЭФИР"]}
+  beats:                              # role-tagged. admin 2026-07-06: «— И ПОСЛЕДНИЙ ПО ТЕМЕ —» вынесено ИЗ полужирного заголовка (роль type=h3) в НЕ-полужирный detail-подзаголовок + «по теме»
+  - {role: type, lines: ["ВТОРОЙ", "ПРЯМОЙ ЭФИР"]}
+  - {role: detail, register: caps, lines: ["— и последний по теме —"]}   # НЕ полужирный (p.detail, не h3); был внутри жирного type
   - {role: detail, register: caps, lines: ["ПРО ПАРИЖ В СЕНТЯБРЕ:"]}   # НЕ concept: renderer оборачивает concept в «» (цитатный титул) — здесь не цитата
   - {role: when, register: proper-case, lines: ["8 июля,", "18:00"]}
   lines:                              # TG-форма: title префиксуется рендерером ⇒ lines дополняют, не дублируют (форма админского комментария)
@@ -1006,7 +1007,7 @@ events:
   # anchors — derived via π_anchor из publications[] (stored field deprecated 2026-05-15); см. publications: paris-2026-09-live-2-*
   visible_until: "2026-07-08T19:00:00+03:00"   # client-side точное скрытие landing-секции после эфира (t_end; образец ig-live/zoom subevent)
   description: |
-    Второй — и последний — прямой эфир про Париж в сентябре.
+    Второй — и последний по теме — прямой эфир про Париж в сентябре.
 
     8 июля, 18:00.
 
