@@ -369,9 +369,10 @@ def _no_terminal_period_cfg() -> "tuple[_re.Pattern[str], _re.Pattern[str] | Non
     for parent in here.parents:
         spec = parent / "knowledge" / "system" / "specifications" / "text" / "typography.md"
         if spec.is_file():
-            chunks = spec.read_text(encoding="utf-8").split("---", 2)
-            if len(chunks) >= 3:
-                fm = yaml.safe_load(chunks[1]) or {}
+            from spec_data import split_frontmatter   # canonical line-boundary split
+            parts = split_frontmatter(spec.read_text(encoding="utf-8"))
+            if parts is not None:
+                fm = yaml.safe_load(parts[1]) or {}
                 cfg = (fm.get("enforcement_data") or {}).get("no_terminal_period_block") or {}
             break
     strip_char = str(cfg.get("strip") or ".")
@@ -411,9 +412,10 @@ def _math_symbols_cfg() -> dict[str, Any]:
     for parent in here.parents:
         spec = parent / "knowledge" / "system" / "specifications" / "text" / "typography.md"
         if spec.is_file():
-            chunks = spec.read_text(encoding="utf-8").split("---", 2)
-            if len(chunks) >= 3:
-                fm = yaml.safe_load(chunks[1]) or {}
+            from spec_data import split_frontmatter   # canonical line-boundary split
+            parts = split_frontmatter(spec.read_text(encoding="utf-8"))
+            if parts is not None:
+                fm = yaml.safe_load(parts[1]) or {}
                 cfg = (fm.get("enforcement_data") or {}).get("math_symbols") or {}
             break
     return cfg
@@ -1374,6 +1376,17 @@ def _renderable_for() -> dict[str, frozenset[str]]:
     return {surface: frozenset(stages) for surface, stages in data.items()}
 
 
+def _skoro_undated_states() -> frozenset[str]:
+    """skoro_state values that carry NO concrete temporal position ("Дату объявим").
+    Spec-loaded (entity-event.md::enforcement_data.skoro_undated_states). Such an event's
+    t_key is a manual ordering placeholder, NOT a real date — so it must NOT sort ahead of a
+    concretely-dated event in the chronological digest (Σ 2026-07-06: the 8-July эфир sat below
+    two undated events whose stale past placeholder t_keys leapfrogged it). Empty on read
+    failure ⇒ pure t_key sort (prior behaviour), never a crash."""
+    fm = _spec_fm("entity-event")
+    return frozenset(fm.get("enforcement_data", {}).get("skoro_undated_states", ()))
+
+
 @_functools.lru_cache(maxsize=1)
 def _all_stages_non_terminal() -> frozenset[str]:
     """Universal fallback: lifecycle_status_taxonomy \\ {PRE_DRAFT, CONCLUDED}.
@@ -1402,9 +1415,15 @@ def sorted_events(d: dict[str, Any], surface: str = "site", now_iso: str | None 
     NO-HARDCODE: renderable_for[σ] table loaded from entity-event.md Spec
     (admin'ское «без хардкода в каких-либо проявлениях на каждом уровне и насквозь»).
 
-    Stable sort: missing t_key → last; ties resolved by YAML order.
+    Chronology (Σ 2026-07-06 admin «Скоро не в хронологическом порядке — у эфира конкретная
+    дата, в отличие от того, что ему предшествует»): sort key = (is_undated, t_key). A concretely
+    -dated event (skoro_state ∉ undated) leads by its real date; an undated event ("Дату объявим",
+    skoro_state ∈ undated) trails — its t_key is a manual ordering placeholder, not a real position,
+    so it must never leapfrog a dated event. Within each group: by t_key. Missing t_key → last.
+    Stable sort: ties resolved by YAML order.
     """
     allowed = _renderable_for().get(surface, _all_stages_non_terminal())
+    undated = _skoro_undated_states()
 
     pool = []
     for e in d.get("events", []):
@@ -1413,7 +1432,8 @@ def sorted_events(d: dict[str, Any], surface: str = "site", now_iso: str | None 
         if _effective_stage(e, now_iso) not in allowed:
             continue
         pool.append(e)
-    return sorted(pool, key=lambda e: e.get("t_key", "￿"))
+    return sorted(pool, key=lambda e: (e.get("skoro_state") in undated,
+                                       e.get("t_key", "￿")))
 
 
 # ── Graph resolution: events reference entities by id (no value duplication) ─
@@ -1675,6 +1695,41 @@ def event_signup_form(slug: str, label: str, email_fallback: str,
         )
     import json as _json
     from urllib.parse import quote as _q
+    # ── External-form provider branch (declarative; 152-ФЗ class) ─────────────
+    # lead_capture.provider + lead_capture.form_url в data.yaml ⇒ the signup
+    # block renders the EXTERNAL form (RU-jurisdiction collection point —
+    # Яндекс-Формы для 152-ФЗ) instead of the native POST form. Pure data-edit
+    # migration: no per-provider code, любой внешний form-провайдер = те же два
+    # ключа. Native pipeline (Worker/lead_receiver) остаётся для событий без
+    # provider. iframe + прямая ссылка (no-JS/no-iframe fallback — never lossy).
+    _lc0 = lead_capture if isinstance(lead_capture, dict) else {}
+    _ext_url = str(_lc0.get("form_url") or "").strip()
+    if _ext_url and str(_lc0.get("provider") or "").strip():
+        _u = _t(_ext_url)
+        _head = _t(str(_lc0.get("submit_label") or cta_label))
+        # form_id: explicit ⊔ derived from …/u/<id>… (single source; provider-agnostic).
+        _fid = str(_lc0.get("form_id") or "").strip()
+        if not _fid:
+            _m = _re.search(r"/u/([A-Za-z0-9]+)", _ext_url)
+            _fid = _m.group(1) if _m else ""
+        # Yandex canonical embed: embed.js auto-resizes the iframe matched by
+        # name="ya-form-<id>" (admin-supplied contract). No JS / no-iframe ⇒ the
+        # direct link is the never-lossy fallback (Inv-LDG-FORMS-NO-MAILTO-LOSSY).
+        _provider = str(_lc0.get("provider") or "").strip().lower()
+        _embed = ('<script src="https://forms.yandex.ru/_static/embed.js"></script>'
+                  if _provider == "yandex-forms" else "")
+        _name = f' name="ya-form-{_t(_fid)}"' if (_embed and _fid) else ""
+        return (
+            f'<section class="signup" id="signup">'
+            f'<h2>{_head}</h2>'
+            f'{_embed}'
+            f'<iframe src="{_u}" frameborder="0"{_name} loading="lazy" '
+            f'style="width:100%;min-height:560px;border:0;border-radius:8px" '
+            f'title="{_head}"></iframe>'
+            f'<p class="signup-ext-fallback"><a href="{_u}" target="_blank" '
+            f'rel="noopener">Открыть форму в новой вкладке</a></p>'
+            f'</section>'
+        )
     # URL-encode the bits that flow into the mailto: action attribute
     # (slug becomes subject token, label becomes body fragment, email is
     # the action target). HTML-escape the label echoed in <p>«…».

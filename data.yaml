@@ -1002,18 +1002,15 @@ events:
   audience: open
   when: "2026-07-08T18:00:00+03:00"    # _source: admin 2026-07-06 «8-го числа… пока от меня — 18:00, время уточнить у Ольги» (Inv-EV-source-organizer-verified: admin-attested, time PRELIMINARY)
   duration_min: 60                     # nominal estimate
-  broadcast: [site, telegram_channel]  # УТВЕРЖДЕНО admin 2026-07-06 07:1x («Утверждаю»; ТГ-анонс — ответом на Основной ТГ-Пост, done msg 82); Скоро site + TG digest mirror
+  broadcast: [site, telegram_channel, landing_section]  # site+TG Скоро УТВЕРЖДЕНО admin 2026-07-06 07:1x; landing_section добавлен 2026-07-06 (admin «на Посадочной пусть также будет упоминание об эфире и что ссылка появится там вовремя» — по образцу прошлого эфира paris-2026-09-zoom-preshow «Ссылка появится здесь»)
   # anchors — derived via π_anchor из publications[] (stored field deprecated 2026-05-15); см. publications: paris-2026-09-live-2-*
+  visible_until: "2026-07-08T19:00:00+03:00"   # client-side точное скрытие landing-секции после эфира (t_end; образец ig-live/zoom subevent)
   description: |
-    8 июля, 18:00
+    Второй — и последний — прямой эфир про Париж в сентябре.
 
-    ВТОРОЙ
-    —
-    и последний
-    —
-    ПРЯМОЙ ЭФИР
+    8 июля, 18:00.
 
-    ПРО ПАРИЖ В СЕНТЯБРЕ
+    Ссылка на трансляцию появится здесь и на [Каналах Вещания](https://olgarozet.ru/) Ольги вовремя.
   suppress_meta: true
   resource:
     money: {amount: 0, currency: EUR}
