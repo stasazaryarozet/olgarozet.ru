@@ -466,8 +466,8 @@ events:
   broadcast: [site, telegram_channel]   # admin 2026-05-15: Скоро digest mirror across surfaces — TG msg #62 references this event
 
   title: Человек, Дом, Ремесло
-  t_key: "2026-05-W3"      # «после майских» — week 3 of May; sorts AFTER paris-ig-live (W1)
-  date: после майских
+  t_key: "2026-08"         # горизонт «до наступления осени» = лето 2026 (admin 2026-07-06). Прежний «2026-05-W3» — устаревший placeholder В ПРОШЛОМ (событие не проведено, дата не объявлена); честный forward-горизонт: лето, до Парижа (сент). Точная дата → уточнить
+  date: до осени
   audience: []
   organizers: [olgarozet]
   format: [online, meeting]
@@ -829,7 +829,7 @@ events:
     - Musée Zadkine (100bis rue d'Assas) — недавно открывшийся после реновации (май 2026).
     - 'Осип Цадкин: представитель «Парижской школы»; влияние на «органический минимализм» в интерьере XX века.'
     - Дизайн-прогулки по галереям Saint-Germain — район, где дизайн XX века собран как коллекционное искусство.
-    - Ужин {hand:в культовом ресторане}.
+    - Ужин в культовом ресторане.
     - Итоги.
   schedule:
     slots:
@@ -985,36 +985,33 @@ events:
   title: "ВТОРОЙ ПРЯМОЙ ЭФИР ПРО ПАРИЖ В СЕНТЯБРЕ"   # admin framing 2026-07-06: «второй — и последний по теме»
   last_in_series: true                # admin 2026-07-06: последний эфир по теме Парижа — семантика «second and last»
   skoro_state: anchor                 # concrete date → anchor
-  beats:                              # role-tagged; текст = admin verbatim (IG Анонс-Пост 2026-07-06), порядок его композиции
-  - {role: type, lines: ["ВТОРОЙ", "—", "и последний", "—", "ПРЯМОЙ ЭФИР"]}
-  - {role: detail, register: caps, lines: ["ПРО ПАРИЖ В СЕНТЯБРЕ:"]}   # НЕ concept: renderer оборачивает concept в «» (цитатный титул) — здесь не цитата
-  - {role: when, register: proper-case, lines: ["8 июля,", "18:00"]}
+  beats:                              # КАНОНИЧЕСКАЯ структура записи Скоро (admin 2026-07-06): when→заголовок→подчинённое→ссылка. when-first enforced рендерером; detail muted CSS; type = ЕДИНСТВЕННЫЙ жирный
+  - {role: when, register: proper-case, lines: ["8 июля,", "18:00"]}      # дата-время ПРЕЖДЕ заголовка (единообразно со всеми записями)
+  - {role: type, lines: ["ВТОРОЙ", "ПРЯМОЙ ЭФИР"]}                        # ЕДИНСТВЕННЫЙ заголовок (h3, bold)
+  - {role: detail, register: caps, lines: ["— и последний по теме —"]}   # подчинённый подзаголовок (muted, НЕ мимикрирует под заголовок)
+  - {role: link, url: "parisinseptember.ru", lines: ["ПРО ПАРИЖ В СЕНТЯБРЕ"]}   # фраза-ссылка (admin «ПАРИЖ В СЕНТЯБРЕ — ссылка parisinseptember.ru», каламбур домена)
   lines:                              # TG-форма: title префиксуется рендерером ⇒ lines дополняют, не дублируют (форма админского комментария)
   - "— и последний по теме —"
   - ""
   - "8 июля,"
   - "18:00"
-  organizers: [olgarozet]
+  organizers: [olgarozet, natalia_loginova]   # совместный эфир — admin 2026-07-07/08 «Ольге и Наталье провести совместно»
   host: olgarozet
   locations: []                        # online-only
-  provider: youtube                    # план: YouTube-эфир @olgarozet; канал СОЗДАН 2026-07-06 (Tellus: olgarozet_at_youtube claim, «трансляции включаются»). Recording path = YT VOD auto-archive ⇒ pre-announce medium-gate Inv-EV-broadcast-recording-required PASSES (Σ 2026-05-26 IG-Live-без-записи класс не повторяется)
-  url:                                 # stream URL — заполнить когда Tellus/admin создаст трансляцию
+  provider: instagram                  # admin 2026-07-08 02:5x: «Только через сутки. Поэтому Instagram в этот раз» — YT live-activation ЗАПРОШЕНА 2026-07-08 ~02:45 (Studio: intermediate features ✓, phone ✓; API 403 liveStreamingNotEnabled), готовность ~03:00 09.07 > when. Recording path (Inv-EV-broadcast-recording-required, Σ 2026-05-26 не повторять): host = НАШ аккаунт @olga_rozet ⇒ IG live-архив хоста доступен Ольге (в отличие от мая, когда host=natalya_lo вне контура) + локальный экран-захват контуром на страховку
+  url:                                 # drop «вовремя» (~17:40 08.07): instagram.com/olga_rozet/live валиден ТОЛЬКО во время эфира (до — 404) ⇒ либо профиль instagram.com/olga_rozet/ (live-бейдж приведёт), либо live-URL в 18:00; преждевременный live-URL = мёртвая ссылка (No Stubs)
   audience: open
   when: "2026-07-08T18:00:00+03:00"    # _source: admin 2026-07-06 «8-го числа… пока от меня — 18:00, время уточнить у Ольги» (Inv-EV-source-organizer-verified: admin-attested, time PRELIMINARY)
   duration_min: 60                     # nominal estimate
-  broadcast: []                        # site+TG: admin 2026-07-06 «позицию и текст со мной утвердить» — flip to [site, telegram_channel] ПОСЛЕ утверждения
-  anchors:                             # Inv-EV-anchor-coherence: оформившееся OPEN → Main Post per канал
-    instagram: "instagram.com/p/Dab-r9NCrVM"   # Анонс-Пост 2026-07-06 06:59 MSK (media 18088610732435061); + анонс-комментарий под Основным instagram.com/p/DYRzwNxiAZ6 (03:53:27Z)
+  broadcast: [site, telegram_channel, landing_section]  # site+TG Скоро УТВЕРЖДЕНО admin 2026-07-06 07:1x; landing_section добавлен 2026-07-06 (admin «на Посадочной пусть также будет упоминание об эфире и что ссылка появится там вовремя» — по образцу прошлого эфира paris-2026-09-zoom-preshow «Ссылка появится здесь»)
+  # anchors — derived via π_anchor из publications[] (stored field deprecated 2026-05-15); см. publications: paris-2026-09-live-2-*
+  visible_until: "2026-07-08T19:00:00+03:00"   # client-side точное скрытие landing-секции после эфира (t_end; образец ig-live/zoom subevent)
   description: |
-    8 июля, 18:00
+    Второй — и последний по теме — прямой эфир про Париж в сентябре.
 
-    ВТОРОЙ
-    —
-    и последний
-    —
-    ПРЯМОЙ ЭФИР
+    8 июля, 18:00.
 
-    ПРО ПАРИЖ В СЕНТЯБРЕ
+    Ссылка на трансляцию появится здесь и на [Каналах Вещания](https://olgarozet.ru/) Ольги вовремя.
   suppress_meta: true
   resource:
     money: {amount: 0, currency: EUR}
@@ -1216,17 +1213,16 @@ events:
 - id: course_price_value
   type: publication      # entity-event sub-class — announcement-landing для upcoming course (not yet structured event)
   broadcast: [site, telegram_channel]   # admin 2026-05-15 TG Скоро: event mirrored on site Скоро
-  t_key: "2026-06"                      # ordering placeholder; refined when actual schedule announced
-  skoro_state: pending                  # ev-pending class — date not announced
+  t_key: "2026-08"                      # горизонт «до наступления осени» = лето 2026 (admin 2026-07-06). Прежний «2026-06» — устаревший placeholder В ПРОШЛОМ; честный forward-горизонт: лето, до Парижа (сент). Точная дата → уточнить
+  skoro_state: pending                  # ev-pending class — точная дата не объявлена (но горизонт «до осени» известен → t_key несёт его)
   beats:                                # role-tagged semantic site rendering
   - {role: when, register: proper-case, lines: ["Дату объявим:"]}
-  - {role: type, lines: ["Мультимедийный", "рассказ:"]}
+  - {role: type, lines: ["Рассказ-показ:"]}   # admin rename 2026-07-06 («мы переназвали»; слово admin 01:37 — ёмкое, не англицизм, для мультимедийной формы). NB: первое применение исчезло из worktree до коммита (c45689aa9f без него) — re-applied, content-verified
   - {role: concept, lines: ["Цена и Ценность"]}
   lines:                                # legacy / fallback
   - "Дату объявим"
   - ""
-  - "Мультимедийный"
-  - "рассказ:"
+  - "Рассказ-показ:"
   - ""
   - "«Цена и Ценность»"
   title: Цена и Ценность
@@ -1556,6 +1552,61 @@ publications:
     → parisinseptember.ru. Польза Внимающему: program-essence + Контракт + visa-aid
     в одном TG-кадре. 1 hashtag (#ДизайнПутешествие campaign-evergreen). Draft в
     Agents/lumen/drafts/paris-2026-09-ig-stories-tg-draft.md.
+  materials: []
+  campaign_id: paris-2026-09-promo
+  schema_version: 1
+
+- id: paris-2026-09-live-2-ig-announce
+  channel: instagram
+  entity_id: paris-live2-ig-announce
+  entity_type: instagram_post
+  kind: main_post                    # Главный Пост per (paris-2026-09-live-2, instagram); π_anchor derives event anchor
+  target_event: paris-2026-09-live-2
+  wave_type: commercial
+  status: published
+  published_at: "2026-07-06T05:46:50Z"
+  platform_id: DacK_Q3Cn0T           # v3 — instagram.com/p/DacK_Q3Cn0T (media 18056560853512626); admin-выбор A/B «вариант 2» (3-pro фигуры-собеседники), апскейл-мастер 8192²
+  title: "IG Анонс-Пост — второй эфир 8 июля"
+  utility_synopsis: |
+    Текст админа verbatim (второй-и-последний фрейминг + дата-время) + изображение
+    «Диалог» (партия admin-директивы «выраженнее идея диалога и прямого эфира»):
+    две плоскости-собеседника, on-air лампа; gemini-3-pro (polza), мастер 8192²,
+    сабмишн 1080 — оба слоя гейта PASS. История: v1 Dab-r9NCrVM (серая стена,
+    пойман админом) и v2 DacDzQbitta (white-balanced пост-обработкой, «не полностью
+    белый» по оценке админа) — оба удалены админом; v3 = строго-белый от генерации
+    (промпт-корень) + finish_to_white + Inv-IMG-egress-gated.
+  materials: []
+  campaign_id: paris-2026-09-promo
+  schema_version: 1
+
+- id: paris-2026-09-live-2-tg-announce
+  channel: telegram_channel
+  entity_id: paris-live2-tg-announce
+  entity_type: telegram_post
+  kind: main_post                    # Главный Пост per (paris-2026-09-live-2, telegram_channel)
+  target_event: paris-2026-09-live-2
+  wave_type: commercial
+  status: published
+  published_at: "2026-07-06T04:21:36Z"
+  platform_id: 82                    # канал ОЛЬГА_РОЗЕТ msg 82, reply_to=78 (Основной ТГ-Пост) — admin form directive 2026-07-06
+  title: "TG анонс-ответ — второй эфир 8 июля"
+  utility_synopsis: "Ответ на Основной ТГ-Пост (msg 78): title + «— и последний по теме —» + дата-время. ext_5680048c."
+  materials: []
+  campaign_id: paris-2026-09-promo
+  schema_version: 1
+
+- id: paris-2026-09-live-2-ig-comment
+  channel: instagram
+  entity_id: paris-live2-ig-comment
+  entity_type: instagram_comment
+  kind: announce                     # ad-hoc анонс в аудитории родительского Основного Поста (НЕ main_post: тот — Dab-r9NCrVM)
+  target_event: paris-2026-09-live-2
+  wave_type: commercial
+  status: published
+  published_at: "2026-07-06T03:53:27Z"
+  platform_id: "18163588390430618/comment"   # комментарий под instagram.com/p/DYRzwNxiAZ6; ext_b3ba25b4
+  title: "IG анонс-комментарий под Основным постом кампании"
+  utility_synopsis: "Текст админа verbatim (комментарий-форма: «Второй — и последний по теме — прямой эфир: 8 июля, 18:00»)."
   materials: []
   campaign_id: paris-2026-09-promo
   schema_version: 1
