@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-09T08:30:24.170971+00:00",
+  "generated": "2026-07-09T09:15:22.982926+00:00",
   "user": "olgarozet",
   "slots": [
     {
@@ -129,5 +129,5 @@
       "event_id": "bnljai6ssr2bag2jgasafqr274"
     }
   ],
-  "transport_url": "https://script.google.com/macros/s/AKfycbzeulk8nVhROOmrnysLKRLGqM_naMEgVhtPl50ch_GCilibJ7MXv2rWlGlq1hz1SWc/exec"
+  "transport_url_ref": "booking_webhook_url"
 }

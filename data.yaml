@@ -70,7 +70,7 @@ consultations:
 # Admin блокирует время через Calendar event (natural Google UX) —
 # no manual_yaml override tier needed.
 booking:
-  transport_url: "https://script.google.com/macros/s/AKfycbzeulk8nVhROOmrnysLKRLGqM_naMEgVhtPl50ch_GCilibJ7MXv2rWlGlq1hz1SWc/exec"
+  transport_url_ref: booking_webhook_url
 
 # ── Graph entities — referenced by id; values not duplicated across events ──
 people:
@@ -929,6 +929,23 @@ events:
   t_end: "2026-05-26T20:00:00+03:00"  # +60min duration → auto-transitions CONCLUDED post-event
   title: "ОНЛАЙН-ВСТРЕЧА ПРО ПАРИЖ"   # admin 2026-05-15 TG правка caps form
   skoro_state: anchor                 # concrete date → anchor (was proximal «на днях»)
+  # Inv-EV-broadcast-recording-required — обязательство ПОГАШЕНО свидетельством утраты,
+  # не реализацией. Запись не существует и не может быть добыта Системой (attestation.py L4:
+  # погашение — не удаление; факт остаётся в графе и запрашивается).
+  recording_lost:
+    cause: no_capture_path            # ∈ entity-event::recording_loss_causes
+    evidence: >-
+      Эфир шёл на чужом аккаунте @natalya_lo (эфемерный IG Live), пути захвата под контролем
+      Системы не было. Хост не сохранил запись в ленту: проверено 2026-07-09 через Graph
+      business_discovery по ОБОИМ профилям (@natalya_lo — 60 медиа вглубь, до 2025-08-25;
+      @olga_rozet — вся лента за 2026-05: только 2026-05-13 и 2026-05-03, оба IMAGE/FEED).
+      Несохранённый IG-Live архив не переживает ~30 дней (26.05 + 30д < 09.07) ⇒ на платформе
+      его больше нет. Единственный остаточный маршрут — локальная копия у самой Натальи;
+      это обоснованный человеческий запрос, в отличие от paris-2026-09-live-2, чья запись
+      всё это время лежала публичным REELS и добыта тем же токеном (oid 9dd26afedeb0031f).
+      Ровно этот случай и обязан не допускать впредь pre-announce medium-gate инварианта.
+    attested_by: nascent
+    attested_at: "2026-07-09T06:35:00+00:00"
   beats:                              # role-tagged semantic site rendering
   - {role: when, register: proper-case, lines: ["26 мая,", "19:00 МСК"]}
   - {role: type, lines: ["ОНЛАЙН-ВСТРЕЧА", "ПРО ПАРИЖ"]}

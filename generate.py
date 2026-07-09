@@ -3699,9 +3699,13 @@ def p_booking(d: dict[str, Any]) -> str:
     no_slots = not slots_list
     # transport_url resolution required only когда we actually render the JS-driven
     # booking form (i.e., slots present). Empty-state placeholder doesn't need it.
+    # Resolve through the ONE capability resolver (Inv-CRED-git-plain): data.yaml /
+    # slots carry transport_url_ref (a secrets key name), never the inline capability;
+    # the resolved URL is embedded into the PUBLISHED (public-by-design) booking form.
+    import engage as _engage
     transport_url = (
-        ((d.get("booking") or {}).get("transport_url"))
-        or slots_data.get("transport_url")
+        _engage.resolve_transport_url(d.get("booking"))
+        or _engage.resolve_transport_url(slots_data)
     )
     if not no_slots and not transport_url:
         owner = (d.get("bio") or {}).get("canonical") or (d.get("bio") or {}).get("title") or "<unknown>"
