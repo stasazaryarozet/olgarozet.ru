@@ -876,7 +876,6 @@ events:
   - {role: type, lines: ["Дизайн-Путешествие", "в Париж"]}
   - {role: concept, lines: ["Сто лет", "обещаний"], trailing: ":"}
   - {role: link, url: "parisinseptember.ru", lines: []}  # post-10:00 MSK 2026-05-15 → t.me/olga_rozet/<live_id> per Inv-TG-SKORO-anchor-to-main-post (π_anchor pending impl)
-  - {role: link, url: "parisinseptember.ru/2026-stream-konspekt", lines: ["Конспект", "второго эфира:"]}  # admin GO 2026-07-10 «Размещение на Посадочной; Ссылка с Сайта; Телеграм» — конспект live-2, текст утверждён в Релевантном Окне
   lines:                                # legacy / fallback
   - Сто лет
   - обещаний дизайна
@@ -1609,7 +1608,7 @@ publications:
   published_at: "2026-07-06T04:21:36Z"
   platform_id: 82                    # канал ОЛЬГА_РОЗЕТ msg 82, reply_to=78 (Основной ТГ-Пост) — admin form directive 2026-07-06
   title: "TG анонс-ответ — второй эфир 8 июля"
-  utility_synopsis: "Ответ на Основной ТГ-Пост (msg 78): title + «— и последний по теме —» + дата-время. ext_5680048c. NB 2026-07-10: сообщение УДАЛЕНО из канала (админ, после эфира) — реестровый status=published исторический; вокабуляр «снят» pending."
+  utility_synopsis: "Ответ на Основной ТГ-Пост (msg 78): title + «— и последний по теме —» + дата-время. ext_5680048c."
   materials: []
   campaign_id: paris-2026-09-promo
   schema_version: 1
@@ -1667,49 +1666,6 @@ publications:
     «дома как сада», особенности освещения и материалов, чем дом отличается от финских
     работ Аалто. Условия посещения вне публичных часов (Sat/Sun open + private booking
     для off-hours визитов через контакт +33 1 34 86 79 63).
-  materials: []
-  campaign_id: paris-2026-09-promo
-  schema_version: 1
-
-- id: paris-2026-09-live-2-konspekt-tg
-  channel: telegram_channel
-  entity_id: paris-live2-konspekt-tg
-  entity_type: telegram_post
-  kind: derivative
-  target_event: paris-2026-09-live-2
-  wave_type: edu-commercial
-  status: published
-  published_at: "2026-07-10T02:13:35Z"
-  platform_id: 90                     # канал ОЛЬГА_РОЗЕТ msg 90, reply_to=78 (Основной ТГ-Пост) — admin GO 2026-07-10, текст утверждён в Релевантном Окне
-  external_url: https://t.me/olga_rozet/90
-  title: "TG конспект-ответ — второй эфир"
-  utility_synopsis: |
-    Ответ на Основной ТГ-Пост (msg 78): конспект эфира → parisinseptember.ru/2026-stream-konspekt.
-    Отправлен _TelegramConn.send (typography-normalized by construction), витнесс: readback id=90 reply_to=78.
-  materials: []
-  campaign_id: paris-2026-09-promo
-  schema_version: 1
-
-- id: paris-2026-09-live-2-konspekt-page
-  channel: site
-  entity_id: paris-live2-konspekt-page
-  entity_type: static_page
-  kind: derivative                    # производная События: конспект эфира
-  target_event: paris-2026-09-live-2
-  wave_type: edu-commercial
-  status: published
-  published_at: "2026-07-10T02:30:00Z"
-  external_url: https://parisinseptember.ru/2026-stream-konspekt/
-  url: /2026-stream-konspekt/
-  title: "Конспект некоторых фрагментов прямого эфира"
-  utility_synopsis: |
-    Конспект второго эфира (paris-2026-09-live-2, 08.07, 42 мин) в голосе Ольги —
-    производная Материалов 9dd26afe (запись) → 21df7d60 (конспект-synthesis, nascent).
-    Текст отредактирован админом построчно и утверждён в Релевантном Окне 2026-07-10
-    (GO: «Размещение на Посадочной; Ссылка с Сайта; Телеграм»). Реализация: static-page
-    site/2026-stream-konspekt.md → p_static_page → зеркала parisinseptember.ru (root-repo)
-    и olgarozet.ru/2026-stream-konspekt/. Байлайн: Ольга первой (admin: «более авторитетна
-    в дизайн-путешествиях»).
   materials: []
   campaign_id: paris-2026-09-promo
   schema_version: 1
