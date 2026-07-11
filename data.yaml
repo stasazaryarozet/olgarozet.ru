@@ -1274,6 +1274,16 @@ events:
     link_text: "olgarozet.ru"
     link_url: "https://olgarozet.ru/"
 
+# ── Вещания — ДЕКЛАРАЦИИ (сущность ⊥ Канал; admin 2026-07-11) ──────────
+# Отношение Entity × Surface: сущность живёт channel-free (texts/…);
+# поверхности ПРИСВАИВАЮТСЯ здесь. site/<slug>.md = derived-само-декларация
+# (legacy-класс privacy/oferta). Резолвер: site_generator.broadcast_assignments.
+# Журнал факта публикаций — publications: ниже (Receipt-слой, не декларация).
+broadcasts:
+- entity: texts/2026-stream-konspekt.md
+  slug: 2026-stream-konspekt
+  surfaces: [site, "landing:parisinseptember.ru"]
+
 publications:
   # ── Legacy entries migrated к entity-publication Spec ──────────────────
   # Backfilled 2026-05-13: uploaded_at promoted к tz-aware ISO 8601 (Inv-PUB-
