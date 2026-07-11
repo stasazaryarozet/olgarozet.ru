@@ -1686,10 +1686,10 @@ publications:
   utility_synopsis: |
     Ответ на Основной ТГ-Пост (msg 78): конспект эфира → parisinseptember.ru/2026-stream-konspekt.
     Отправлен _TelegramConn.send (typography-normalized by construction), витнесс: readback id=90 reply_to=78.
-    NB 2026-07-11: msg 90 ОТСУТСТВУЕТ в /s/-превью канала (последний видимый — 78; ?after=78 пуст)
-    — вероятно удалён админом, как msg 82. Валиден только /s/-сигнал: прямая ссылка t.me/<ch>/<id>
-    на этом канале отдаёт карточку и для ЖИВОГО msg 78 — не диагностична (проверено 2026-07-11).
-    MTProto-витнесс удаления не снят с Neznayu (telethon в venv FUSE) — граница заявлена.
+    NB 2026-07-11: msg 90 УДАЛЁН — ФОРМАЛЬНЫЙ MTProto-витнесс с FP: fetch_remote(tg:olga_rozet:90)
+    → unreachable «msg#90 not found in @olga_rozet» (surface_freshness, snapshot в реестре поверхностей);
+    /s/-превью подтверждает (последний видимый — 78). Прямая ссылка t.me/<ch>/<id> НЕ диагностична
+    на этом канале (отдаёт карточку и для живого msg 78). Вероятно удалён админом, как msg 82.
     status=published исторический; вокабуляр «снят» pending (тот же, что для msg 82).
   materials: []
   campaign_id: paris-2026-09-promo
