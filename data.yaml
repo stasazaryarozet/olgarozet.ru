@@ -1686,6 +1686,10 @@ publications:
   utility_synopsis: |
     Ответ на Основной ТГ-Пост (msg 78): конспект эфира → parisinseptember.ru/2026-stream-konspekt.
     Отправлен _TelegramConn.send (typography-normalized by construction), витнесс: readback id=90 reply_to=78.
+    NB 2026-07-11: t.me/olga_rozet/90 публично НЕДОСТУПЕН (прямая ссылка отдаёт карточку канала;
+    /s/-превью канала заканчивается на msg 78) — вероятно удалён админом, как msg 82.
+    MTProto-витнесс удаления не снят (telethon-контур недоступен с Neznayu) — граница проверки заявлена.
+    status=published исторический; вокабуляр «снят» pending (тот же, что для msg 82).
   materials: []
   campaign_id: paris-2026-09-promo
   schema_version: 1
@@ -1710,6 +1714,14 @@ publications:
     site/2026-stream-konspekt.md → p_static_page → зеркала parisinseptember.ru (root-repo)
     и olgarozet.ru/2026-stream-konspekt/. Байлайн: Ольга первой (admin: «более авторитетна
     в дизайн-путешествиях»).
+    NB 2026-07-11 re-publish обеих ног (commit a07ac621; landing hash a2f541dd, site pushed) —
+    снятие вероятных претензий ДО их формулировки (директива админа): inline *em* рендерился
+    сырыми звёздочками; многострочные пункты списка рвались на <ul>+<p> посреди предложения;
+    построчный (утверждённый) текст коллапсировал в сплошные абзацы (теперь Inv-STATIC-line-fidelity,
+    <br> по авторским переносам); canonical/og:url били в корень olgarozet.ru (теперь → PIS-страница,
+    зеркало не само-канонизируется); meta-description обрывался посреди фразы («…зачем ехать, если»);
+    dela:slug отсутствовал → страница была невидима pageview-статистике. Верифицировано live: обе
+    ноги — 0 «*», 16 <em>, 1 <ul>/3 <li>, 66 <br>, canonical PIS, slug-meta ✓.
   materials: []
   campaign_id: paris-2026-09-promo
   schema_version: 1
