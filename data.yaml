@@ -876,7 +876,7 @@ events:
   - {role: type, lines: ["Дизайн-Путешествие", "в Париж"]}
   - {role: concept, lines: ["Сто лет", "обещаний"], trailing: ":"}
   - {role: link, url: "parisinseptember.ru", lines: []}  # post-10:00 MSK 2026-05-15 → t.me/olga_rozet/<live_id> per Inv-TG-SKORO-anchor-to-main-post (π_anchor pending impl)
-  - {role: link, url: "parisinseptember.ru/2026-stream-konspekt", lines: ["Конспект", "второго эфира:"]}  # admin GO 2026-07-10 «Размещение на Посадочной; Ссылка с Сайта; Телеграм» — конспект live-2, текст утверждён в Релевантном Окне
+  - {role: link, url: "parisinseptember.ru/2026-stream-konspekt", lines: ["Конспект", "второго эфира"]}  # admin GO 2026-07-10 «Размещение на Посадочной; Ссылка с Сайта; Телеграм» — конспект live-2, текст утверждён в Релевантном Окне. 2026-07-11: снято висящее двоеточие (label-идиома «X:» подразумевает продолжение под ним; здесь ссылка — сама себе текст)
   lines:                                # legacy / fallback
   - Сто лет
   - обещаний дизайна
@@ -1686,9 +1686,10 @@ publications:
   utility_synopsis: |
     Ответ на Основной ТГ-Пост (msg 78): конспект эфира → parisinseptember.ru/2026-stream-konspekt.
     Отправлен _TelegramConn.send (typography-normalized by construction), витнесс: readback id=90 reply_to=78.
-    NB 2026-07-11: t.me/olga_rozet/90 публично НЕДОСТУПЕН (прямая ссылка отдаёт карточку канала;
-    /s/-превью канала заканчивается на msg 78) — вероятно удалён админом, как msg 82.
-    MTProto-витнесс удаления не снят (telethon-контур недоступен с Neznayu) — граница проверки заявлена.
+    NB 2026-07-11: msg 90 ОТСУТСТВУЕТ в /s/-превью канала (последний видимый — 78; ?after=78 пуст)
+    — вероятно удалён админом, как msg 82. Валиден только /s/-сигнал: прямая ссылка t.me/<ch>/<id>
+    на этом канале отдаёт карточку и для ЖИВОГО msg 78 — не диагностична (проверено 2026-07-11).
+    MTProto-витнесс удаления не снят с Neznayu (telethon в venv FUSE) — граница заявлена.
     status=published исторический; вокабуляр «снят» pending (тот же, что для msg 82).
   materials: []
   campaign_id: paris-2026-09-promo
@@ -1717,7 +1718,7 @@ publications:
     NB 2026-07-11 re-publish обеих ног (commit a07ac621; landing hash a2f541dd, site pushed) —
     снятие вероятных претензий ДО их формулировки (директива админа): inline *em* рендерился
     сырыми звёздочками; многострочные пункты списка рвались на <ul>+<p> посреди предложения;
-    построчный (утверждённый) текст коллапсировал в сплошные абзацы (теперь Inv-STATIC-line-fidelity,
+    построчный (утверждённый) текст коллапсировал в сплошные абзацы (теперь Inv-SITE-line-fidelity,
     <br> по авторским переносам); canonical/og:url били в корень olgarozet.ru (теперь → PIS-страница,
     зеркало не само-канонизируется); meta-description обрывался посреди фразы («…зачем ехать, если»);
     dela:slug отсутствовал → страница была невидима pageview-статистике. Верифицировано live: обе
