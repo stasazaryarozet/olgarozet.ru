@@ -951,7 +951,7 @@ events:
   - {role: type, lines: ["Дизайн-Путешествие", "в Париж"]}
   - {role: concept, lines: ["Сто лет", "обещаний"], trailing: ":"}
   - {role: link, url: "parisinseptember.ru", lines: []}  # post-10:00 MSK 2026-05-15 → t.me/olga_rozet/<live_id> per Inv-TG-SKORO-anchor-to-main-post (π_anchor pending impl)
-  - {role: link, url: "parisinseptember.ru/2026-stream-konspekt", lines: ["Конспект", "второго эфира"]}  # admin GO 2026-07-10 «Размещение на Посадочной; Ссылка с Сайта; Телеграм» — конспект live-2, текст утверждён в Релевантном Окне. 2026-07-11: снято висящее двоеточие (label-идиома «X:» подразумевает продолжение под ним; здесь ссылка — сама себе текст)
+  - {role: link, url: "parisinseptember.ru/2026-stream-conspectus", lines: ["Конспект", "второго эфира"]}  # admin GO 2026-07-10 «Размещение на Посадочной; Ссылка с Сайта; Телеграм» — конспект live-2, текст утверждён в Релевантном Окне. 2026-07-11: снято висящее двоеточие (label-идиома «X:» подразумевает продолжение под ним; здесь ссылка — сама себе текст)
   lines:                                # legacy / fallback
   - Сто лет
   - обещаний дизайна
