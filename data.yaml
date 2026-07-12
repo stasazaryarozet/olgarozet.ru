@@ -166,43 +166,62 @@ places:
     name: "Appartement-atelier Le Corbusier"
     location: paris
     address: "24 rue Nungesser-et-Coli, 75016 Paris"
+    availability: always       # no operating-period restriction (Inv-SCHED-feasibility, window axis)
     hours:
       thu: "13:30-18:00"
       fri: "13:30-18:00"
-      sat: open                # admin: "Thu/Fri 13:30-18:00 + Sat" — Sat hours not enumerated
-    source: "https://www.fondationlecorbusier.fr/"
-    note: "verified by admin 2026-04-30 internal_questions chain"
+      sat: ["10:00-13:00", "13:30-18:00"]
+    source: "https://www.fondationlecorbusier.fr/visite/"
+    note: |
+      verified 2026-07-12 (lumen, fondationlecorbusier.fr): Thu/Fri 13:30-18:00 (July 10:00-13:30),
+      Sat 10:00-13:00 + 13:30-18:00. WEDNESDAY IS NOT A PUBLIC DAY.
+      Group visits 7-20 people by MANDATORY EMAIL RESERVATION — offered on the Foundation's
+      OPENING days; this is not an off-hours private opening. The cohort cap (10) fits the band.
 
   maison_la_roche:
     name: "Maison La Roche / Fondation Le Corbusier"
     location: paris
     address: "10 Square du Docteur Blanche, 75016 Paris"
+    availability: always
     hours:
-      tue: open
-      wed: open
-      thu: open
-      fri: open
-      sat: open
-    source: "https://www.fondationlecorbusier.fr/"
-    note: "admin: 'Tue-Sat OK'; specific hours pending verification"
+      tue: "10:00-18:00"
+      wed: "10:00-18:00"
+      thu: "10:00-18:00"
+      fri: "10:00-18:00"
+      sat: "10:00-18:00"
+    source: "https://www.fondationlecorbusier.fr/visite/maison-la-roche-paris/"
+    note: |
+      verified 2026-07-12 (lumen, fondationlecorbusier.fr): Tue-Sat 10:00-18:00.
+      Self-guided 30 min, 20 visitors at a time; guided tours (FR) daily 11:00 and 15:00.
+      Group visits 7-20 by mandatory email reservation.
 
   maison_louis_carre:
     name: "Maison Louis Carré"
     location: paris            # Yvelines geographically; in-travel scope = paris-region
-    address: "Bazoches-sur-Guyonne (Yvelines)"
+    address: "2 chemin du Saint-Sacrement, 78490 Bazoches-sur-Guyonne (Yvelines)"
     contact: "+33 1 34 86 79 63"
+    availability:              # SEASONAL — the axis `hours` cannot express (Inv-SCHED-feasibility)
+      - from: 2026-03-01
+        to: 2026-11-30
+        label: "saison mars–novembre"
     hours:
-      sat: open
-      sun: open
-    source: "https://maisonlouiscarre.fr/"
+      sat: "14:00-18:00"
+      sun: "14:00-18:00"
+    source: "https://www.maisonlouiscarre.fr/mlc/infos-pratiques/"
     note: |
-      admin internal_q 2026-04: public visits Sat/Sun only.
-      Thu visit REQUIRES private booking off-hours. Contact tel above.
+      verified 2026-07-12 (lumen, maisonlouiscarre.fr): open MARCH–NOVEMBER, Sat & Sun 14:00-18:00,
+      guided tour every hour (last 17:00), ONLINE BOOKING REQUIRED. Adult €20, concession €7,
+      under-12 free.
+      The season is why `availability` exists: on a Saturday in January the weekly axis alone
+      answers OPEN, and the group would stand at a locked gate holding a correct verdict.
+      A WEEKDAY group visit is NOT a published offer — it requires an off-hours private
+      arrangement, which as of 2026-07-12 is UNCONFIRMED (internal_questions, priority: blocker).
 
   villa_savoye:
     name: "Villa Savoye"
     location: paris            # Poissy ~24 km — paris-region day-trip
     address: "82 Rue de Villiers, 78300 Poissy"
+    availability: always
     hours:
       tue: "10:00-17:00"
       wed: "10:00-17:00"
@@ -216,22 +235,78 @@ places:
   musee_arts_decoratifs_paris:
     name: "Musée des Arts Décoratifs"
     location: paris
-    note: "address/hours pending verification"
+    address: "107 rue de Rivoli, 75001 Paris"
+    availability: always
+    hours:
+      tue: "11:00-18:00"
+      wed: "11:00-18:00"
+      thu: "11:00-21:00"       # nocturne — temporary exhibitions only after 18:00
+      fri: "11:00-18:00"
+      sat: "11:00-18:00"
+      sun: "11:00-18:00"
+    source: "https://madparis.fr/Horaires-7"
+    note: |
+      verified 2026-07-12 (lumen, madparis.fr): Tue–Sun 11:00-18:00, CLOSED MONDAY.
+      Thursday nocturne to 21:00 (temporary exhibitions only; permanent collections close 18:00).
+      Ticket office closes 45 min before. Annual closures: 25.12, 01.01, 01.05 — outside the
+      September window (a specific-holiday axis is not modelled: no live instance — Rule of Three).
 
   archives_nationales_paris:
     name: "Archives Nationales (Hôtel de Soubise)"
     location: paris
-    note: "address/hours pending verification"
+    address: "60 rue des Francs-Bourgeois, 75004 Paris"
+    availability:              # annual SUMMER CLOSURE 04.07–29.08 — again the window axis
+      - from: 2026-08-30
+        to: 2027-07-03
+        label: "hors fermeture estivale (04.07–29.08)"
+    hours:
+      mon: "10:00-17:30"
+      wed: "10:00-17:30"       # NO `tue` key — the museum is closed on Tuesdays
+      thu: "10:00-17:30"
+      fri: "10:00-17:30"
+      sat: "14:00-17:30"
+      sun: "14:00-17:30"
+    source: "https://www.archives-nationales.culture.gouv.fr/infos-pratiques/le-musee-des-archives-nationales-lhotel-de-soubise"
+    note: |
+      verified 2026-07-12 (lumen): Mon–Fri 10:00-17:30, Sat/Sun 14:00-17:30, CLOSED TUESDAY,
+      summer closure 04.07–29.08. Permanent collections free.
+      The window is dated, not recurring: it EXPIRES 2027-07-03 and the law then fails CLOSED
+      until the datum is renewed. A fact with an expiry ought to expire.
 
   maison_objet:
     name: "Maison & Objet"
     location: paris
-    note: "convention; primary venue Parc des Expositions Villepinte. Dates per edition."
+    address: "Parc des Expositions Paris Nord Villepinte"
+    availability:              # an EDITION, not a venue: it EXISTS only within these dates
+      - from: 2026-09-10
+        to: 2026-09-14
+        label: "Maison&Objet Paris — September 2026 edition"
+    hours:
+      thu: open
+      fri: open
+      sat: open
+      sun: open
+      mon: open
+    source: "https://www.maison-objet.com/en/paris"
+    note: |
+      verified 2026-07-12 (lumen, maison-objet.com, verbatim): "10-14 SEPT. 2026".
+      Paris Design Week runs 10–19 Sept 2026 ("10-19 Sept. 2026"), theme "Pulse in motion",
+      375 venues.
+      Σ THIS IS THE FACT THE SYSTEM COULD NOT HOLD. A trade fair is an EDITION — it exists
+      between two dates — and the Place entity had only a WEEKLY hours table, so the truth lived
+      in this `note:` («Dates per edition») where no law could reach it. `hours` was therefore
+      absent, `_hours_open_state` returned Unknown, and Inv-SCHED-feasibility SKIPPED the beat
+      and reported «all scheduled beats feasible». paris-2026-09 opens Day 1 (Tue 08.09) with an
+      orientation HERE — two days before the fair opens. The law never saw it.
+      Trade fair = professional badge; participants buy their own tickets (see `Не входит`).
 
   musee_zadkine:
     name: "Musée Zadkine"
     location: paris
     address: "100bis rue d'Assas, 75006 Paris"
+    availability:              # the renovation closure was a DATE, and it lived in prose
+      - from: 2026-05-23
+        label: "réouverture après rénovation (closed until 22.05.2026)"
     hours:
       tue: open
       wed: open
