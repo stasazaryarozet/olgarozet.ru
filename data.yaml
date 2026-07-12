@@ -1862,6 +1862,7 @@ urls:
   instagram: https://instagram.com/olga_rozet
   telegram: https://t.me/olga_rozet
   telegram_handle: "@olgaroset"
+  youtube: "https://www.youtube.com/@olga_rozet"   # канал персоны — git-tracked носитель (accounts.json локален и не реплицируется)
 
 artworks:
 - 04.jpg
