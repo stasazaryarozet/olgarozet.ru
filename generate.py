@@ -1543,8 +1543,17 @@ def p_publications(d: dict[str, Any]) -> str:
         return ""
     from publication_invariants import _canonical_state as _pub_state
     _published = _pub_state("published")
+    # `status=published` is a WRITE-TIME CLAIM, and this section is the public
+    # Сайт↔TG↔IG link graph: the medium can lose a post afterwards (the admin deletes
+    # it from the app — DacK_Q3Cn0T, and its v1/v2 before it) and we would render a
+    # DEAD EDGE into Olga's public graph. Inclusion therefore derives from the WITNESSED
+    # status, through the one derivation (Inv-PRES-consumer-derived), never from the
+    # twin alone. Fail-open: unwitnessed ⊥ ⇒ still 'live' ⇒ renders exactly as today.
+    from plan_status import derive_output_status  # lazy — plan_status imports us back
     pubs = sorted(
-        [p for p in (d.get("publications") or []) if p.get("status") == _published],
+        [p for p in (d.get("publications") or [])
+         if p.get("status") == _published
+         and derive_output_status({"kind": "publication", "id": p.get("id")}, d)[0] == "live"],
         key=lambda p: (p.get("uploaded_at", "") or p.get("date", ""),),
         reverse=True,
     )
