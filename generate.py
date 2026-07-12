@@ -4375,6 +4375,22 @@ if __name__ == "__main__":
         booking_dir.mkdir(parents=True, exist_ok=True)
         (booking_dir / "index.html").write_text(p_booking(d), encoding="utf-8")
         print(f"booking: {booking_slug}/index.html")
+        # ОТСТАВКА АДРЕСА — АТРИБУТ ПЕРЕЕХАВШЕГО, а не новая вещь (тот же закон, что у статей:
+        # `redirect_from` во frontmatter). Переименование booking → init оставило в мире
+        # ОСИРОТЕВШУЮ /booking/, чей канон вёл в /init/, которого не было: у создания адреса
+        # носитель есть (страница), у отставки — только отсутствие, а отсутствие неотличимо от
+        # «никогда не было». Редирект даёт отставке НОСИТЕЛЬ (p_redirect — дериват, он и был
+        # написан ровно для этого, но не имел ни одного вызывающего у страницы записи).
+        for _old in (d["consultations"].get("redirect_from") or []):
+            _old = str(_old).strip("/")
+            if not _old or _old == booking_slug:
+                continue
+            _old_dir = ROOT / _old
+            _old_dir.mkdir(parents=True, exist_ok=True)
+            (_old_dir / "index.html").write_text(
+                p_redirect(d, f"/{booking_slug}/", d["bio"].get("booking_page_label", "")),
+                encoding="utf-8")
+            print(f"booking: {_old}/ → /{booking_slug}/ (отставка адреса)")
     (ROOT / "telegram.txt").write_text(p_telegram(d), encoding="utf-8")
     print("telegram: telegram.txt")
     (ROOT / "bio.txt").write_text(p_bio(d), encoding="utf-8")

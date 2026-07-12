@@ -1,1 +1,49 @@
-<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=/init/"><link rel="canonical" href="https://olgarozet.ru/init/"><title>Записаться — Ольга Розет</title></head><body><a href="/init/">Записаться</a></body></html>
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Записаться</title>
+<link rel="canonical" href="/init/">
+<meta name="robots" content="noindex, follow">
+<meta http-equiv="refresh" content="0; url=/init/">
+<script>
+// Day/night theme — user-override-first, then solar-automatic. FOUC-critical:
+// runs synchronously in <head> before paint. Resolution: read dela.theme.v1
+// from localStorage; if ∈ ['day', 'night'] use it (user override) else solar
+// altitude (lat 55.0° / alt-threshold -0.1 rad). Config: solar calc from
+// spec.enforcement_data.Inv-SITE-solar-theme (+ data.yaml.bio.solar_calibration
+// override); attr/key/values from spec.enforcement_data.Inv-IFACE-day-night-mode.
+// No hardcoded constants in code — both Specs are SoT, code falls back gracefully.
+(function(){
+  var MODE_ATTR="data-theme", MODE_VALUES=["day", "night"], STORAGE_KEY="dela.theme.v1";
+  function solarTheme(){
+    var r=Math.PI/180, now=new Date();
+    var J=now.valueOf()/86400000 + 2440587.5 - 2451545.0;
+    var L=(280.460+0.9856474*J)%360;
+    var g=((357.528+0.9856003*J)%360)*r;
+    var lam=(L+1.915*Math.sin(g)+0.020*Math.sin(2*g))*r;
+    var eps=(23.439-4e-7*J)*r;
+    var dec=Math.asin(Math.sin(eps)*Math.sin(lam));
+    var ra=Math.atan2(Math.cos(eps)*Math.sin(lam), Math.cos(lam));
+    var lon=-now.getTimezoneOffset()/4, lat=55.0;
+    var gmst=(18.697374558+24.06570982441908*J)*15;
+    var H=((gmst+lon)%360)*r - ra;
+    var alt=Math.asin(Math.sin(lat*r)*Math.sin(dec)+Math.cos(lat*r)*Math.cos(dec)*Math.cos(H));
+    return alt > -0.1 ? 'day' : 'night';
+  }
+  // stored override ∈ MODE_VALUES → use it; else (incl. 'auto', absent, bad) → solar.
+  window.__resolveTheme=function(){
+    var s=null; try{ s=localStorage.getItem(STORAGE_KEY); }catch(e){}
+    return (MODE_VALUES.indexOf(s) !== -1) ? s : solarTheme();
+  };
+  window.__applyTheme=function(){
+    document.documentElement.setAttribute(MODE_ATTR, window.__resolveTheme());
+  };
+  window.__applyTheme();
+  setInterval(window.__applyTheme, 300000);
+})();
+</script>
+<script>location.replace("/init/" + location.hash);</script>
+</head>
+<body><p>Страница переехала: <a href="/init/">/init/</a></p></body>
+</html>
