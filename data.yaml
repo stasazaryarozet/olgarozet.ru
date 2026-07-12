@@ -756,6 +756,9 @@ events:
     text: |-
       Следите за [Каналами Вещания](https://olgarozet.ru/) Ольги —
       будет и о связанных с ближайшим парижским Путешествием темах
+
+      Уже вышел [конспект эфира](/2026-stream-conspectus/) — о том,
+      что архитектуру нужно проживать телом.
      # Title-only sentinels — suppress auto-policy blocks (event_policy.design_travel
       # «Перед поездкой» + «Условия и сроки»). Admin's «Бронирование» section выше
       # covers the same ground (booking-flow + payment + onboarding), без duplication.
