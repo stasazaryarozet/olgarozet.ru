@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-16T06:45:22.649724+00:00",
+  "generated": "2026-07-16T22:15:24.378891+00:00",
   "user": "olgarozet",
   "slots": [
     {
@@ -190,6 +190,27 @@
       "duration": 40,
       "tz": "Europe/Belgrade",
       "event_id": "6co1cnlvouqlm50hbq6jnljjcc"
+    },
+    {
+      "id": "es_1977c96bb06f",
+      "start": "2026-07-30T10:00:00+02:00",
+      "duration": 40,
+      "tz": "Europe/Belgrade",
+      "event_id": "7po7bq8cl205n1dnpamqp8bv5c"
+    },
+    {
+      "id": "es_c17516f0d5a0",
+      "start": "2026-07-30T12:00:00+02:00",
+      "duration": 40,
+      "tz": "Europe/Belgrade",
+      "event_id": "8tq0pr3v4hmfj27u3u064j6gtg"
+    },
+    {
+      "id": "es_b4cdbf63cd3b",
+      "start": "2026-07-30T15:00:00+02:00",
+      "duration": 40,
+      "tz": "Europe/Belgrade",
+      "event_id": "46ets4gpqm20jjah4kjcom48r4"
     }
   ],
   "transport_url_ref": "booking_webhook_url"
