@@ -1777,6 +1777,32 @@ publications:
   campaign_id: paris-2026-09-promo
   schema_version: 1
 
+- id: paris-2026-09-live-2-konspekt-tg-v2
+  channel: telegram_channel
+  entity_id: paris-live2-konspekt-tg-v2
+  entity_type: telegram_post
+  kind: derivative
+  target_event: paris-2026-09-live-2
+  wave_type: edu-commercial
+  status: planned                     # ЖДЁТ admin GO (Релевантное Окно) — текст staged, транспорт verified dry-run
+  title: "TG конспект-ответ v2 — msg 93 + его звуковой фрагмент"
+  utility_synopsis: |
+    Новая версия ТЕКУЩЕЙ отсылки (msg 93, 2026-07-13 20:08, reply_to=78 — цитата секции
+    «Ремесленничество» + якорь /2026-stream-conspectus/#remeslennichestvo, БЕЗ аудио) —
+    директива админа 2026-07-16: «в текущей нет соответствующего звукового фрагмента».
+    v2 = ТЕКСТ msg 93 VERBATIM (admin-текст священен; broadcast/konspekt-tg-v2-caption.md,
+    путь --caption-file) + remeslennichestvo.m4a (86.0s, stream-copy из мастера 9dd26afe,
+    несёт РОВНО цитируемый спан; conspectus.fragments: «Третий (remeslennichestvo) ушёл
+    в Телеграм»). TG API не позволяет добавить media в текстовое сообщение редактированием ⇒
+    замена: send v2 (reply_to=78) + удаление msg 93 — паттерн замены как у 82/90, НА GO.
+    Dispatch: FP: tg_send.py --session telegram-olga --to @olga_rozet --reply-to 78,
+    артефакт ~/.local/share/dela/media/dispatch/tg-konspekt-v2/ (тегирован title/artist).
+    DRY-RUN witness 2026-07-16 (оба варианта caption): authorized @olgaroset → 'ОЛЬГА РОЗЕТ',
+    reply-цель msg 78 жива (замер MTProto 2026-07-16), not sent.
+  materials: []
+  campaign_id: paris-2026-09-promo
+  schema_version: 1
+
 - id: paris-2026-09-live-2-konspekt-page
   channel: site
   entity_id: paris-live2-konspekt-page
