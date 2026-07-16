@@ -1784,7 +1784,10 @@ publications:
   kind: derivative
   target_event: paris-2026-09-live-2
   wave_type: edu-commercial
-  status: planned                     # ЖДЁТ admin GO (Релевантное Окно) — текст staged, транспорт verified dry-run
+  status: published
+  published_at: "2026-07-16T18:20:06Z"
+  platform_id: 95                     # канал ОЛЬГА_РОЗЕТ msg 95, reply_to=78; замена msg 93 (удалён 2026-07-16, public-embed witness) — акт по директиве админа 2026-07-16 «Новую версию отсылки… в текущей нет соответствующего звукового фрагмента»
+  external_url: https://t.me/olga_rozet/95
   title: "TG конспект-ответ v2 — msg 93 + его звуковой фрагмент"
   utility_synopsis: |
     Новая версия ТЕКУЩЕЙ отсылки (msg 93, 2026-07-13 20:08, reply_to=78 — цитата секции
