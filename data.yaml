@@ -1641,10 +1641,11 @@ publications:
   kind: main_post                    # entity-publication.md::Inv-PUB-kind-typed — Главный Пост per (paris-2026-09, telegram_channel).
   target_event: paris-2026-09        # Inv-PUB-anchor-uniqueness
   wave_type: commercial
-  status: scheduled                  # 2026-05-15 07:05 MSK: server-side scheduled (Inv-PROV-schedule-server-side) via conn.send(schedule=2026-05-15T07:00:00Z). Telegram dispatches autonomously at scheduled_at — survives /clear, agent reboot, OOM.
+  status: published                  # dispatched by platform at scheduled_at (server-side schedule, Inv-PROV-schedule-server-side); world-measured 2026-07-17 (fetch olga_rozet/78: 2026-05-15 07:04:58Z, 312 views, text=Paris announce; msg 82 reply_to=78 names 78 «Основной ТГ-Пост»). Absorbed 2 months late: scheduled→published is world-authored and had no witness (δ_world by hand — reconciler generalizes)
   planned_date: "2026-05-15"
   scheduled_at: "2026-05-15T10:00:00+03:00"
-  platform_id: 4                     # Telegram scheduled-msg id (channel @olga_rozet); resolve via iter_messages(scheduled=True)
+  published_at: "2026-05-15T07:04:58Z"
+  platform_id: 78                    # канал ОЛЬГА_РОЗЕТ msg 78 («Основной ТГ-Пост»); scheduled-queue id был 4 — диспатчнулся как 78 (phantom 4 снят этим absorb)
   title: "TG-объявление — Paris в сентябре 2026"
   utility_synopsis: |
     TG-channel announce «ОЛЬГА РОЗЕТ» (@olga_rozet, 93 sub): markdown body ~750 chars,
