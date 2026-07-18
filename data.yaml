@@ -1525,6 +1525,13 @@ publications:
     via site_generator.p_telegram(d); auto-edit msg #62 при event-set change через TelegramAdapter.upsert
     (Phase 2.5 — edit_message_text path, deferred за Rule-of-Three). Currently manual.
   campaign_id: null                  # Skoro digest persona-channel-scope, не campaign-scope
+  dispatch_after:                    # admin 2026-07-18: «Сначала Финальный Зазывательный + Сториз, только затем — „Скоро"». Ребро гейтит АКТ диспетча (upsert живого дайджеста msg #62) — Inv-PUB-dispatch-after. declared = frontier-метка рождения ребра: статический walk судит только диспетчи ПОСЛЕ неё (uploaded_at ≥ declared ∧ unmet ⇒ violation), прошлое msg #62 (2026-04-15) легально математически, не исключением. Act-time ремень = preflight joint-compliance probe 4 (refuse на telegram_channel)
+    declared: "2026-07-18"
+    ids:
+    - paris-2026-09-ig-post-final
+    - paris-2026-09-ig-story-1
+    - paris-2026-09-ig-story-2
+    - paris-2026-09-ig-story-3
   schema_version: 1
   # post-2026-05-15 plan: re-render via p_telegram(d) → edit msg #62 to reflect:
   #   - Paris (formed, OPEN) с link к t.me/olga_rozet/{anchors.telegram}
@@ -1632,6 +1639,29 @@ publications:
     решение informed. Draft в Agents/lumen/drafts/paris-2026-09-ig-stories-tg-draft.md.
   materials: []
   campaign_id: paris-2026-09-promo
+  schema_version: 1
+
+- id: paris-2026-09-ig-post-final
+  channel: instagram
+  entity_id: paris-ig-post-final
+  entity_type: ig_post
+  kind: announce                     # финальный зазывальный ≠ main_post (Inv-PUB-anchor-uniqueness: main_post = DYRzwNxiAZ6); закрывающий пост арки, admin task b2e437de 2026-07-18
+  target_event: paris-2026-09
+  wave_type: commercial
+  status: planned
+  planned_date: "2026-07-18"
+  title: "Финальный Зазывальный Пост — Париж 8–11 сентября"
+  utility_synopsis: |
+    Закрывающий пост арки paris-2026-09-promo. Польза Внимающему: точный календарь
+    сентябрьской недели дизайна — Maison & Objet 10–14, Paris Design Week 10–19
+    (верифицировано 2026-07-18, ≥2 источника); поездка 8–11 входит за два дня до
+    открытия; Путеводитель по Maison & Objet — в Материалах поездки. Ориентировка
+    ценна любому, кто будет в Париже в сентябре, — без покупки участия.
+    Draft: Agents/lumen/drafts/paris-2026-09-ig-post-final-call.md (draft_verify 0 ✗);
+    3 Стори-кадра (⅓ тайл + ⅔ изображение): paris-2026-09-final-stories-bundle.md.
+  materials: []
+  campaign_id: paris-2026-09-promo
+  collaborators: ["natalya_lo"]
   schema_version: 1
 
 - id: paris-2026-09-tg-announce
