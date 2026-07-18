@@ -1664,6 +1664,27 @@ publications:
   collaborators: ["natalya_lo"]
   schema_version: 1
 
+- id: paris-2026-09-tg-final-call
+  channel: telegram_channel
+  entity_id: paris-tg-final-call
+  entity_type: telegram_post
+  kind: announce
+  target_event: paris-2026-09
+  wave_type: commercial
+  status: planned
+  planned_date: "2026-07-18"
+  title: "TG-зеркало Финального Зазывального — Париж 8–11 сентября"
+  utility_synopsis: |
+    Финальный сбор в TG-регистре: сентябрьская арифметика (M&O 10–14, PDW 10–19,
+    наши дни 8–11 — два дня форы), Путеводитель в Материалах, контракт (≤ 10,
+    1 600 € / 800 €), виза-клок. Смежное к paris-2026-09-ig-post-final (admin task
+    b2e437de); тело: Agents/lumen/drafts/paris-2026-09-tg-final-call.md.
+    Ранее тело жило в бандле без публикации — сирота графа; регистрация делает
+    derived mu_corpus и dispatch-порядок вычислимыми по рёбрам.
+  materials: []
+  campaign_id: paris-2026-09-promo
+  schema_version: 1
+
 - id: paris-2026-09-tg-announce
   channel: telegram_channel
   entity_id: paris-tg-announce
