@@ -1676,6 +1676,30 @@ publications:
   collaborators: ["natalya_lo"]
   schema_version: 1
 
+- id: paris-2026-09-natalya-share-story
+  channel: instagram_story
+  entity_id: paris-natalya-share-story
+  entity_type: ig_story
+  kind: reshare                      # amplification: кадр размещает НАТАЛЬЯ в @natalya_lo (admin 2026-07-18 «Дополнительная Стори для Натальи — самое важное, лапидарнейше»)
+  target_event: paris-2026-09
+  wave_type: commercial
+  status: planned
+  planned_date: "2026-07-18"
+  title: "Кадр Натальи — одностраничная суть (репост @natalya_lo)"
+  utility_synopsis: |
+    Самодостаточный одностраничный кадр для аудитории Натальи: Париж · 8–11
+    сентября · Дизайн-Путешествие · с Ольгой Розет и Натальей Логиновой ·
+    ≤ 10 · 1 600 € · parisinseptember.ru. Текст живёт В изображении
+    (у Натальи нет наших оверлеев/тайла). Строки (SoT) — роли #### в
+    Agents/lumen/drafts/paris-2026-09-stories-texts.md §Кадр Натальи;
+    геометрия — campaign-paris-2026-09-images.md::…natalya-share-story.layout;
+    рендер — scripts/typeset_card.py (детерминированная вёрстка, белый закон
+    мерится image_invariants.gate_campaign).
+  materials: []
+  campaign_id: paris-2026-09-promo
+  collaborators: ["natalya_lo"]
+  schema_version: 1
+
 - id: paris-2026-09-tg-final-call
   channel: telegram_channel
   entity_id: paris-tg-final-call
