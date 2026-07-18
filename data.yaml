@@ -1421,10 +1421,13 @@ publications:
   entity_type: ig_post
   target_event: paris-2026-09
   wave_type: edu-commercial
-  status: scheduled
+  status: published            # world-measured 2026-07-18 (Graph fetch): live DZwO9q8Cod2; δ_world by hand — reconciler pending (class: stored status went stale vs world, admin flagged)
   planned_date: "2026-06-16"     # admin «этот вторник» — первое из трёх микро-исследований
   image: paris-2026-09-aalto-lamp-illustration-v3-gemini-1024.png   # liked Gemini illustration (share bb43fba85102), full-res через Контур
   title: "Аалто · Maison Louis Carré · светильник столовой (кастомная конструкция)"
+  uploaded_at: "2026-06-19T04:14:59Z"
+  external_url: "https://www.instagram.com/p/DZwO9q8Cod2/"
+  platform_id: "17884474356603891"
   utility_synopsis: |
     Светильник столовой Maison Louis Carré, спроектированный Аалто специально для этой столовой
     (кастомная конструкция Artek, не серийная модель): группа подвесных приборов асимметрична и даёт два потока света —
@@ -1441,9 +1444,12 @@ publications:
   entity_type: ig_post
   target_event: paris-2026-09
   wave_type: edu-commercial
-  status: planned                # proposed cadence (admin fixed only #1=Tue); adjustable
+  status: published            # world-measured 2026-07-18 (Graph fetch): live DaFGJYWMauA; δ_world by hand — reconciler pending (class: stored status went stale vs world, admin flagged)                # proposed cadence (admin fixed only #1=Tue); adjustable
   planned_date: "2026-06-18"
   title: "Аалто · Maison Louis Carré · верхнее остекление + потолок-диффузор"
+  uploaded_at: "2026-06-27T06:42:40Z"
+  external_url: "https://www.instagram.com/p/DaFGJYWMauA/"
+  platform_id: "17884361295432184"
   utility_synopsis: |
     Входная зона Maison Louis Carré: верхнее ленточное остекление в щели между стеной и крышей
     (боковой свет, не зенитный — верифицировано по фото). Снаружи вертикальные деревянные рейки
@@ -1461,12 +1467,15 @@ publications:
   entity_type: ig_post
   target_event: paris-2026-09
   wave_type: edu-commercial
-  status: planned                # proposed cadence (admin fixed only #1=Tue); adjustable
+  status: published            # world-measured 2026-07-18 (Graph fetch): live DacOlwbDaOm; δ_world by hand — reconciler pending (class: stored status went stale vs world, admin flagged)                # proposed cadence (admin fixed only #1=Tue); adjustable
   planned_date: "2026-06-23"
   title: "Аалто · Maison Louis Carré · кровля, подчинённая рельефу"
+  uploaded_at: "2026-07-06T06:18:14Z"
+  external_url: "https://www.instagram.com/p/DacOlwbDaOm/"
+  platform_id: "18104431616162762"
   utility_synopsis: |
     Внешний контур Maison Louis Carré — крыша, подчинённая рельефу: односкатная кровля с
-    меняющимся углом, наклон совпадает с уклоном долины Иль-де-Франс. Покрыта листами меди — на
+    меняющимся углом, наклон совпадает с уклоном долины Иль-де-Франс. Один скат синего нормандского сланца; медь — желоба и детали. На
     воздухе медь покрывается патиной, и слой останавливает разрушение металла. Объёмы крыши
     ступенчато переходят друг к другу, вода стекает каскадом, наружных водосточных труб нет.
     Стены из плотного шартрского известняка работают как аккумулятор тепла: нагреваются днём,
@@ -1481,9 +1490,12 @@ publications:
   entity_type: telegram_post
   target_event: paris-2026-09
   wave_type: commercial
-  status: planned                # admin «эта пятница» 2026-06-19; held planned pending /booking/ liveness (slots=[]; Google OAuth expired)
+  status: published            # world-measured 2026-07-18 (Graph fetch): live DaKU4JPtowv; δ_world by hand — reconciler pending (class: stored status went stale vs world, admin flagged)                # admin «эта пятница» 2026-06-19; held planned pending /booking/ liveness (slots=[]; Google OAuth expired)
   planned_date: "2026-06-19"
   title: "Ольга Розет · «Подключить к вашему делу» (40 минут)"
+  uploaded_at: "2026-06-29T07:26:28Z"
+  external_url: "https://www.instagram.com/p/DaKU4JPtowv/"
+  platform_id: "18222414490320724"
   utility_synopsis: |
     «Подключить к вашему делу» — 40 минут один на один, онлайн или приехать в Сербию,
     15 000 ₽. Не «вести проект», а расшить один узел, который держит всё остальное: свет
