@@ -681,37 +681,9 @@ _LANG_LABELS = {
 }
 
 
-_ASSET_ROOT_KEY = "_asset_root"       # provenance, not content — see _owner_ships
-
-
 def load() -> dict[str, Any]:
     data: dict[str, Any] = yaml.safe_load(DATA.read_text(encoding="utf-8"))
-    data[_ASSET_ROOT_KEY] = str(DATA.parent)     # provenance: whence this record came
     return data
-
-
-def _owner_ships(d: dict[str, Any], filename: str) -> "bool | None":
-    """Does this owner actually ship `filename` alongside their record?  None (⊥) = unknown.
-
-    PROVENANCE, not declaration. The alternative — a `bio.favicon:` field per asset — is a
-    hand-written list that has merely moved from the code into the data: every new asset would
-    still cost a field AND an emit line, and a declared-but-absent file would still 404. What
-    decides a reference is the FILE, so the question is asked of the file.
-
-    The asset root is the directory the record itself came from, which is the OWNER's site dir
-    in the contour and the deploy tmp in production (the deploy copies the owner's site dir into
-    tmp BEFORE running the generator) — one rule, both worlds, no threading through signatures.
-
-    ⊥ when the record carries no provenance (a caller that built `d` by hand): the reference is
-    then emitted UNCHANGED, because «I cannot see the disk» must never be read as «the owner has
-    nothing» — that would silently strip a live site's icons (Inv-EPI-unknown-is-identity)."""
-    root = d.get(_ASSET_ROOT_KEY) if isinstance(d, dict) else None
-    if not root:
-        return None                                  # ⊥ — no provenance, no verdict
-    try:
-        return (Path(root) / filename).is_file()
-    except OSError:
-        return None                                  # ⊥ — could not look
 
 
 def _booking_disabled(d: dict[str, Any], owner: str = "olgarozet") -> bool:
@@ -1007,25 +979,6 @@ def _head(title: str, description: str, *, canonical: str,
         # Defang `</` inside JSON to prevent <script> envelope escape.
         safe = structured.replace("</", "<\\/")
         sd = f'\n<script type="application/ld+json">{safe}</script>'
-    # A reference exists IFF its referent will. The two site-root ICONS are OWNER-shipped, so the
-    # owner's disk decides (_owner_ships): they were absolute literals, so every owner PROMISED
-    # them and an owner without them published a 404 the closure rightly refuses (measured on
-    # azaryarozet). `refs ⊆ delivered`, read backwards.
-    #
-    # The manifest is NOT of that class: the deploy leg WRITES it (broadcast_html — tmp/
-    # manifest.json), so it is a GENERATOR-PRODUCED artifact whose referent is guaranteed by
-    # construction, and gating it on the owner's source dir would drop a link to a file that is
-    # about to exist. The discriminator is PROVENANCE — who produces it — not the file's name.
-    #
-    # ⊥ (no provenance) keeps every reference: «I cannot see the disk» must never read as «the
-    # owner has nothing», which would silently strip a live site's icons.
-    icons = "\n".join([
-        *(line for name, line in (
-            ("favicon.png", '<link rel="icon" type="image/png" href="/favicon.png">'),
-            ("apple-touch-icon.png", '<link rel="apple-touch-icon" href="/apple-touch-icon.png">'),
-        ) if _owner_ships(d or {}, name) is not False),
-        '<link rel="manifest" href="/manifest.json">',
-    ])
     return f"""<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{t}</title>
@@ -1041,7 +994,9 @@ def _head(title: str, description: str, *, canonical: str,
 <meta name="twitter:title" content="{t}">
 <meta name="twitter:description" content="{desc}">
 <meta name="twitter:image" content="{oi}">
-{icons}
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
 <!-- Inv-WEB-font-preconnect (text/site.md): early DNS+TLS handshake к font CDN.
@@ -1342,7 +1297,7 @@ observer.observe(footer);
 def _layout(d: dict[str, Any], *, title: str, description: str, body: str,
             nav: bool = False, canonical: str | None = None,
             extra_head: str = "", footer: bool = True, structured: str | None = None,
-            surface: str = "", cookie_banner_enabled: bool = False, doc_menu: str = "",
+            surface: str = "", cookie_banner_enabled: bool = False,
             slug: str = "") -> str:
     if canonical is None:
         canonical = _canonical(d)
@@ -1382,7 +1337,6 @@ def _layout(d: dict[str, Any], *, title: str, description: str, body: str,
 {skip_link}
 {nav_html}
 {theme_toggle}
-{doc_menu}
 <main id="main" role="main">
 {body}
 </main>
@@ -1559,22 +1513,7 @@ def sorted_events(d: dict[str, Any], surface: str = "site", now_iso: str | None 
 # ── Graph resolution: events reference entities by id (no value duplication) ─
 
 def resolve_refs(d: dict[str, Any], kind: str, ids: Any) -> list[Any]:
-    """Resolve a list of entity ids against d[kind] — ONE element shape out, always.
-
-    An UNRESOLVED reference (the registry `d[kind]` is absent, or holds no such id) is ⊥ about
-    that ENTITY — it is not a different KIND of element. Yielding the bare id string here made
-    the returned list HETEROGENEOUS (record | str) and pushed the burden onto every consumer,
-    where it promptly drifted: of the three call sites in schema_events_jsonld, only `audience`
-    carried an `isinstance` guard, so `organizer` and `location` died with
-    `AttributeError: 'str' object has no attribute 'get'` on any record whose `people` /
-    `locations` registry was undefined (caught by the generated subset witness — the case no
-    reader had thought to enumerate, since the live record always defines both).
-
-    Normalising to `{"id": x, "name": x}` invents no fact: for an unresolved reference the id
-    IS the only name there is (Inv-EPI-unknown-is-identity — ⊥ renders as the identity, never
-    as a forged value, and never as a shape the caller must branch on). Non-string elements are
-    inline records or scalars, not references, and pass through untouched.
-    """
+    """Resolve a list of entity ids against d[kind]; non-id values fall through."""
     pool = d.get(kind, {})
     out = []
     for x in (ids or []):
@@ -1585,7 +1524,7 @@ def resolve_refs(d: dict[str, Any], kind: str, ids: Any) -> list[Any]:
             else:
                 out.append({"id": x, "name": v})
         else:
-            out.append({"id": x, "name": x} if isinstance(x, str) else x)
+            out.append(x)
     return out
 
 
@@ -1685,65 +1624,9 @@ def p_publications(d: dict[str, Any]) -> str:
 
 # ── P_site: D → index.html ──────────────────────────────────────────
 
-def _defined(render: "Callable[[], str]", *, section: str) -> str:
-    """Inv-EPI-unknown-is-identity (epistemic-honesty.md) for owner-data projections.
-
-    An owner record is PARTIAL BY CONSTRUCTION — No-Stubs: a person declares what is true
-    of them, never a copy of another owner's schema. A projection over it is therefore a
-    PARTIAL function presented as total: every bare subscript asserts a totality the data
-    never promised, and the FIRST undefined datum kills the WHOLE page. Measured on
-    azaryarozet: KeyError consultations → declare it → KeyError inspire → … — a stub-chase
-    whose fixpoint is exactly the copied schema No-Stubs forbids.
-
-    LAW: an undefined datum projects to the HTML monoid's IDENTITY (""), never a crash.
-    A section's membership is derived from the FACT of definedness — the dual, one floor
-    up, of the document menu's membership-is-delivery (both: attempt is truth).
-
-    Why not a `requires:` table per section: it would be a SECOND encoding of what the
-    renderer already reads, free to drift from it — the precise class this System keeps
-    paying for (config.py:113 «a declaration no mechanism consumes is not a law»). The
-    renderer's OWN reads are the requirement; there is nothing to keep in sync.
-
-    ATTESTED, never silent (attestation.md): «A LOSSY PROJECTION IS ADMISSIBLE IFF IT CAN
-    FAIL». A section that vanishes without a trace is inadmissible loss — so the omission
-    is announced, and a MISSPELLED key reads as a loud omission rather than a quiet one.
-
-    KeyError alone is the ⊥ signal (an absent key in a partial record). Every other
-    exception is a real defect and propagates untouched.
-    """
-    try:
-        return render()
-    except KeyError as e:
-        return _omitted(section, e)
-
-
-def _omitted(section: str, missing: "Any") -> str:
-    """THE attestation point for an omitted projection — one implementation, every omission.
-
-    The law admits a lossy projection IFF the loss can be observed (attestation.md), so this is
-    the difference between an admissible omission and silent erasure. Returns the HTML monoid's
-    identity so a caller can `return _omitted(...)` directly.
-
-    STDOUT, not stderr: an omission is a FACT ABOUT THE DATA, not a failure of the render. The
-    deploy leg captures a generator's stderr as its failure channel (`generate.py FAILED — …`),
-    so attesting here on stderr made every partial record look like a broken build and WITHHELD
-    the push — the observability requirement turned into a false alarm. The sibling notice one
-    floor down (`projections: docx not delivered — NoConversionPath`) is the settled convention:
-    informational notes ride stdout, and only a real fault takes stderr."""
-    print(f"site: section {section!r} omitted — owner data defines no {missing} "
-          f"(Inv-EPI-unknown-is-identity)")
-    return ""
-
-
-def _join_defined(parts: "Iterable[str]") -> str:
-    """Monoid fold over rendered fragments: the identity ("") is ABSORBED, so an omitted
-    part leaves no blank line and an all-omitted section collapses to "" (its wrapper is
-    then never emitted — an empty <section> is itself a stub)."""
-    return "\n".join(p for p in parts if p)
-
-
 def p_site(d: dict[str, Any]) -> str:
     bio = d["bio"]
+    cons = d["consultations"]
     events = sorted_events(d)
     urls = d.get("urls", {})
     publications_html = p_publications(d)
@@ -1755,22 +1638,14 @@ def p_site(d: dict[str, Any]) -> str:
     for i, s in enumerate(bio.get("skills", [])):
         sep = ";" if i < len(bio["skills"]) - 1 else "."
         role_lines.append(f"    <p>{s}{sep}</p>")
+    inspire = "<br>".join(bio["inspire"].strip().splitlines())
 
-    # Each fragment carries its OWN definedness (Inv-EPI-unknown-is-identity): a bio that
-    # declares only a title yields an empty about-section, not a dead page. Total records
-    # render every fragment, so their join is byte-identical to the pre-law form.
-    about_parts = _join_defined([
-        _defined(lambda: f"""    <p><span class="artist-highlight"><a href="{bio['artist']['link']}">{bio['artist']['text']}</a></span><br>•</p>""",
-                 section="about.artist"),
-        chr(10).join(role_lines),
-        _defined(lambda: f"""    <p class="inspire">{"<br>".join(bio["inspire"].strip().splitlines())}<br>•</p>""",
-                 section="about.inspire"),
-        _defined(lambda: f"""    <p><a href="mailto:{bio['email']}">{bio['email']}</a></p>""",
-                 section="about.email"),
-    ])
     bio_html = f"""      <section id="about" aria-label="О себе">
-{about_parts}
-      </section>""" if about_parts else ""
+    <p><span class="artist-highlight"><a href="{bio['artist']['link']}">{bio['artist']['text']}</a></span><br>•</p>
+{chr(10).join(role_lines)}
+    <p class="inspire">{inspire}<br>•</p>
+    <p><a href="mailto:{bio['email']}">{bio['email']}</a></p>
+      </section>"""
 
     # Consultations
     # admin 2026-05-15: «Никакой ссылки на Бронирование, пока не восстановим. Текст
@@ -1786,23 +1661,17 @@ def p_site(d: dict[str, Any]) -> str:
     # Restoration of any substrate tier (oauth re-grant OR SA OR manual_slots)
     # populates slots.json. Admin removes booking_disabled flag → auto-derive
     # kicks in. Single-action restore.
-    def _cons_section() -> str:
-        # The subscript IS the requirement: an owner who holds no consultations practice
-        # declares no `consultations` key, and the section is omitted entirely — NOT
-        # rendered as «пока времён нет», which would advertise a service that does not
-        # exist. Absent-key and empty-availability are DIFFERENT facts; only the second
-        # is the booking-disabled card.
-        cons = d["consultations"]
-        if _booking_disabled(d):
-            return """    <section id="consultations" aria-labelledby="consultations-heading">
+    if _booking_disabled(d):
+        cons_html = """    <section id="consultations" aria-labelledby="consultations-heading">
       <h2 id="consultations-heading">Консультации:</h2>
       <aside class="booking-empty" role="status" aria-live="polite">
         <p class="empty-eyebrow">пока времён нет<span class="rule" aria-hidden="true"></span></p>
       </aside>
     </section>"""
+    else:
         desc = "<br>".join(cons["description"].strip().splitlines())
         avail = "<br>".join(cons["availability"].strip().splitlines())
-        return f"""    <section id="consultations" aria-labelledby="consultations-heading">
+        cons_html = f"""    <section id="consultations" aria-labelledby="consultations-heading">
       <h2 id="consultations-heading">Консультации:</h2>
       <p>{desc}</p>
       <p class="price">{cons['price']}</p>
@@ -1810,21 +1679,12 @@ def p_site(d: dict[str, Any]) -> str:
       <p class="availability">{avail}</p>
     </section>"""
 
-    cons_html = _defined(_cons_section, section="consultations")
-
     # Events Skoro digest — delegates к skoro.render (monoidal functor, Genius Simplification C).
     # Per Inv-CMP-STYLE-CTA-anchor-uniform: hub-event-card CTA points к canonical FQDN landing
     # (event.web_addresses[0]). SkoroSpec encapsulates entry formatting per Surface; site
     # variant reads same Spec table.
     from skoro import render as render_skoro_digest_dispatch
     events_html = render_skoro_digest_dispatch(d, "site")
-    # The heading is a PROMISE about content; with nothing to announce, «СКОРО:» over empty
-    # space is a stub in markup rather than in data. Wrapper follows its content (the same
-    # identity-absorption as the about-section), so a total record renders byte-identically.
-    events_section = f"""      <section id="events" aria-labelledby="events-heading">
-        <h2 id="events-heading">СКОРО:</h2>
-{events_html}
-      </section>""" if events_html.strip() else ""
 
     canonical = _canonical(d)
     portrait = _portrait(d)
@@ -1836,11 +1696,7 @@ def p_site(d: dict[str, Any]) -> str:
         "name": bio["title"],
         "url": canonical,
         "image": image_url,
-        # Undefined ⇒ the KEY IS ABSENT, never present-and-empty: a schema.org consumer reads
-        # `"email": ""` as an assertion that the person HAS no address — a fabricated fact
-        # (Inv-EPI-unknown-is-identity: ⊥ must not be forged into a value). Spliced IN PLACE
-        # so a total record's key ORDER — hence its rendered bytes — is unchanged.
-        **({"email": bio["email"]} if bio.get("email") else {}),
+        "email": bio["email"],
         # sameAs — КАНОНИЧЕСКАЯ машинная декларация «это те же самые каналы этого лица»
         # (schema.org). Держала тот же ручной список из двух: YouTube был объявлен и невидим
         # не только человеку в футере, но и машине. Одна деривация — оба потребителя.
@@ -1867,7 +1723,10 @@ def p_site(d: dict[str, Any]) -> str:
 
 {cons_html}
 
-{events_section}
+      <section id="events" aria-labelledby="events-heading">
+        <h2 id="events-heading">СКОРО:</h2>
+{events_html}
+      </section>
 
 {publications_html}
     </main>
@@ -4119,50 +3978,7 @@ def parse_static_md(text: str) -> tuple[dict[str, Any], str]:
     return _br.parse_front_matter(text)
 
 
-# Declared ORDER of the document projections — the sequence a reader is offered them in,
-# most-editable first. «Наилучший открытый редактируемый формат» is answered by ORDER, not
-# by choosing for the reader. MEMBERSHIP is NOT declared here: an item appears iff its
-# artifact actually materialised. Availability derived, never narrated (image_op_local_cpu
-# §AVAILABILITY), and the FALSE-CLAIM lesson of image_op_registry:535 — a table that says a
-# provider CAN do a thing does not confer it: soffice declares docx/rtf and produces neither
-# without Java, measured 2026-07-19.
-_DOC_PROJECTIONS = (
-    ("odt",  "ODT",      "Открытый редактируемый формат — OpenDocument, ISO/IEC 26300"),
-    ("docx", "DOCX",     "Редактируемый формат Word"),
-    ("rtf",  "RTF",      "Редактируемый текст"),
-    ("md",   "Markdown", "Исходник документа"),
-    ("txt",  "TXT",      "Простой текст"),
-    ("pdf",  "PDF",      "Постоянная вёрстка"),
-)
-
-
-def p_document_menu(delivered: "Any" = (), *, printable: bool = True) -> str:
-    """Project the DELIVERED projection-set → the document's format menu. Pure.
-
-    `delivered` is {fmt: href} (or any iterable of fmt, when the href is the sibling
-    `<fmt>` file). An item is emitted ONLY for a format actually present, so the menu can
-    never offer a dead link — and a dead link is `broken`, which stops publication outright
-    (site_closure.materialize). Add a provider to library.convert and the artifact
-    materialises and the item grows here with ZERO code: the menu is a CONSEQUENCE of the
-    available projections, not a fixed list (the law styles.css §.doc-menu already states).
-
-    `printable` is orthogonal to the family: printing is not a projection but a CLIENT
-    action over the page already rendered, so it needs no artifact and is always available.
-    """
-    hrefs = (delivered if isinstance(delivered, dict)
-             else {f: f for f in (delivered or ())})
-    items = [f'<a class="doc-menu__item" href="{_t(href)}" download title="{_t(hint)}">'
-             f'{_t(label)}</a>'
-             for fmt, label, hint in _DOC_PROJECTIONS if (href := hrefs.get(fmt))]
-    if printable:
-        items.append('<button class="doc-menu__item" type="button" '
-                     f'onclick="window.print()">{_t("Распечатать")}</button>')
-    return (f'<nav class="doc-menu" aria-label="Форматы документа">{"".join(items)}</nav>'
-            if items else "")
-
-
-def p_static_page(d: dict[str, Any], md_text: str, slug: str = "",
-                  formats: "Any" = None) -> str:
+def p_static_page(d: dict[str, Any], md_text: str, slug: str = "") -> str:
     """Project (D, static.md) → standalone HTML page.
 
     Pure projection. Front-matter `title` drives <title>/<h1>; `description`
@@ -4216,12 +4032,6 @@ def p_static_page(d: dict[str, Any], md_text: str, slug: str = "",
         surface="editorial",
         slug=slug,
         extra_head=author_meta,
-        # `formats is None` ⇒ the CONVERSION SOURCE rendering: no chrome at all, because
-        # this HTML becomes the ODT/PDF and a «Распечатать» button baked into a downloaded
-        # document is nonsense. A dict (even empty) ⇒ the READER page, which always earns
-        # the client print action. Two renderings, distinguished explicitly — not one
-        # rendering with a flag, since they differ in KIND, not in degree.
-        doc_menu=p_document_menu(formats) if formats is not None else "",
     )
 
 
@@ -4458,21 +4268,10 @@ def p_telegram(d: dict[str, Any]) -> str:
 
 def p_bio(d: dict[str, Any]) -> str:
     bio = d["bio"]
-    # «Нет объявления — нет строки» — the SAME law the telegram account below already obeys,
-    # here extended to the rest of the block: it held for one line and not the others, so a bio
-    # that declares only a title died on `artist` (Inv-EPI-unknown-is-identity). Every line is
-    # its own definedness; a total bio renders all of them, byte-identically.
-    lines = []
-    artist = bio.get("artist")
-    if isinstance(artist, dict) and artist.get("text"):
-        lines.append(artist["text"])
+    lines = [bio["artist"]["text"]]
     lines.extend(f"{r};" for r in bio.get("roles", []))
     lines.extend(f"{s}." for s in bio.get("skills", []))
-    # `.splitlines()[0]` on a declared-but-EMPTY inspire is an IndexError — a present key is not
-    # a present value, so the first line is taken only if there IS one.
-    inspire_lines = str(bio.get("inspire") or "").strip().splitlines()
-    if inspire_lines:
-        lines.append(inspire_lines[0])
+    lines.append(bio["inspire"].strip().splitlines()[0])
     # ⊥ НЕ ЕСТЬ ЗНАЧЕНИЕ. Прежний срез нёс ХАРДКОД `"@olgaroset"` дефолтом: путь ОТКАЗА (поля нет)
     # отдавал значение пути УСПЕХА — то есть ВЫКОВЫВАЛ личный аккаунт Ольги из литерала, и никакой
     # читатель не отличил бы объявленный контакт от подделанного (epi_bottom_forged).
@@ -4498,11 +4297,6 @@ def p_booking(d: dict[str, Any]) -> str:
     """
     import json as _json
     bio = d["bio"]
-    if "consultations" not in d:
-        # A booking page for an owner who declares NO consultations practice is a page about a
-        # service that does not exist. The projection's identity is NO PAGE — not an empty
-        # booking form, which would solicit requests nobody can fulfil.
-        return _omitted("booking", repr("consultations"))
     cons = d["consultations"]
     # Slots-bundle file (engage_transport writes engage.json; legacy: booking.json).
     slots_data: dict[str, Any] = {"slots": [], "user": ""}
