@@ -1307,6 +1307,18 @@ def _social_link(kind: str, url: str) -> str:
 
 
 def _footer(urls: dict[str, Any], bio_title: str, portrait: str = "", portrait_night: str = "") -> str:
+    # ОТСУТСТВИЕ НЕ ЕСТЬ ПУСТОЙ АДРЕС (Σ 2026-07-19, найдено на живом stasazaryarozet.ru).
+    # Дневной портрет эмитился БЕЗУСЛОВНО, поэтому у владельца без портрета выходило
+    # `<img src="/">` — а пустой `src` резолвится В САМУ СТРАНИЦУ: браузер грузил HTML как
+    # изображение. Отсутствующее значение стало ПРАВДОПОДОБНЫМ УКАЗАТЕЛЕМ НА НЕВЕРНОЕ —
+    # худший вид ⊥, потому что он не падает и не молчит, а лжёт связно (и стоит лишней
+    # загрузки страницы на каждом визите).
+    # Асимметрия жила ВНУТРИ ОДНОЙ функции: ночной портрет ту же пустоту обрабатывал честно
+    # (строка ниже), дневной — нет. Одно отсутствие, два обращения; теперь одно.
+    day_img = (
+        f'<img src="/{portrait}" alt="{bio_title}" class="footer-portrait day">'
+        if portrait else ''
+    )
     night_img = (
         f'<img src="/{portrait_night}" alt="" class="footer-portrait night" aria-hidden="true">'
         if portrait_night else ''
@@ -1322,7 +1334,7 @@ def _footer(urls: dict[str, Any], bio_title: str, portrait: str = "", portrait_n
     return f"""<footer>
   <div class="footer-content">
     {left}
-    <img src="/{portrait}" alt="{bio_title}" class="footer-portrait day">
+    {day_img}
     {night_img}
     {right}
   </div>
@@ -1857,20 +1869,25 @@ def p_site(d: dict[str, Any]) -> str:
         if events_jsonld else ""
     )
 
+    # СТРАНИЦА РЕНДЕРИТ ОБЪЯВЛЕННОЕ И НИЧЕГО СВЕРХ (admin 2026-07-19: «на stasazaryarozet.ru
+    # в индексе ничего не должно быть»). Два дефекта одного корня — шапка и ориентир
+    # эмитились БЕЗУСЛОВНО, независимо от того, есть ли что показывать:
+    #
+    #  · `<main>` ВНУТРИ `<main id="main">` из _layout. Ориентир `main` в документе ОДИН и
+    #    не вкладывается (HTML §4.4.14) — два носителя одной роли, и скринридер получал
+    #    вложенный ландмарк вместо содержания. Внешний — семантический, внутренний был
+    #    ДУБЛЁМ, поэтому снимается он, а не переименовывается.
+    #  · `<h1>` при пустых секциях давал страницу, чьё единственное содержание — её же
+    #    заголовок. Пустой документ нечего озаглавливать: `<title>` (вкладка, выдача) от
+    #    этого не зависит и остаётся — он МЕТАДАННОЕ, а не содержание.
+    #
+    # Условие ВЫВЕДЕНО из самих секций, а не объявлено флагом: владелец, у которого появится
+    # хоть одна, получит шапку обратно без чьей-либо правки.
+    sections = "\n\n".join(p for p in (bio_html, cons_html, events_section, publications_html)
+                           if (p or "").strip())
+    header = f"    <header>\n      <h1>{bio['title']}</h1>\n    </header>\n\n" if sections else ""
     body = f"""  <div class="content-wrapper">
-    <header>
-      <h1>{bio['title']}</h1>
-    </header>
-
-    <main>
-{bio_html}
-
-{cons_html}
-
-{events_section}
-
-{publications_html}
-    </main>
+{header}{sections}
   </div>"""
 
     title = bio["title"]
@@ -3621,13 +3638,31 @@ def anchor(heading: str, seen: "set[str] | None" = None) -> str:
     return s
 
 
+#: Конечная ТОЧКА заголовка — и только она. Допускает закрывающую разметку/пробел после
+#: (`…</em>`), чтобы правило не зависело от того, обёрнут ли хвост эмфазой.
+#: НЕ трогает `…` (отрицательный просмотр назад) — многоточие есть ЗНАЧАЩИЙ знак, а не
+#: терминатор: оно объявляет обрыв мысли, тогда как точка объявляет её завершённость.
+_H_STOP_RE = _re.compile(r"(?<!\.)\.(?=(?:\s*</[^>]+>)*\s*$)")
+
+
 def _h_punct(heading_html: str) -> str:
-    """Заголовочный типограф static-страниц. Двухчастный, чистый, идемпотентный:
+    """Заголовочный типограф static-страниц. Трёхчастный, чистый, идемпотентный:
+
+    (0) КОНЕЧНАЯ ТОЧКА СНИМАЕТСЯ (admin 2026-07-19: «по умолчанию не должно быть точек в
+        конце заголовков»). Заголовок есть ЯРЛЫК, а не предложение: точка утверждает
+        предложенность там, где её нет, — категориальная ошибка, а не вкус. Поэтому
+        снимается ИМЕННО точка; `?`, `!`, `…`, `:` ОСТАЮТСЯ и обрабатываются шагом (1),
+        ибо они не терминаторы, а СМЫСЛ (вопрос, восклицание, обрыв, предвещание списка).
+        Правило живёт ЗДЕСЬ, в единственном типографе заголовков, поэтому действует на h1…h6
+        всех документов сразу — а не в каждом документе руками (иначе умолчание пришлось бы
+        ПОМНИТЬ, что и есть человеческое усилие, которого мы избегаем).
+        Идемпотентно: снятая точка не возвращается, повторный проход — тождество.
     (1) конечный знак → span.h-punct — caps-трекинг раздвигает зазор и перед
         знаком («Т Е З И С .»); CSS компенсирует тем же токеном (-tracking-caps);
     (2) дефис → неразрывный U+2011 — балансировка caps-заголовка не рвёт
         дефисное слово («ПОЧЕМУ ВСЁ- / ТАКИ ПАРИЖ», Σ 2026-07-11)."""
     heading_html = heading_html.replace("-", "\u2011")
+    heading_html = _H_STOP_RE.sub("", heading_html)
     return _H_PUNCT_RE.sub(r'<span class="h-punct">\1</span>', heading_html)
 
 
@@ -3760,7 +3795,8 @@ def _inline_svg(src: str) -> str:
 
 
 def _md_static_to_html(md_body: str, line_mode: str = "verse",
-                       fragments: "Iterable[str] | None" = None) -> str:
+                       fragments: "Iterable[str] | None" = None,
+                       structural: "Iterable[str] | None" = None) -> str:
     """Render a constrained markdown subset → HTML body fragment.
 
     fragments — якоря секций, чей ПЕРВОИСТОЧНИК (фрагмент эфира) конспект несёт при себе.
@@ -3802,7 +3838,9 @@ def _md_static_to_html(md_body: str, line_mode: str = "verse",
     quote_buf: list[str] = []       # накопитель blockquote-строк (> …)
     list_kind = "ul"                # тип открытого списка: МАРКЕР решает тег (- →ul, N.→ol) — один механизм
     seen_ids: set[str] = set()      # адреса подтекстов ЭТОГО документа — уникальны в его пределах
-    _frag = frozenset(fragments or ())   # ⊥ = пусто: не объявили — плееров нет (не «все»)
+    _frag = frozenset(fragments or ())
+    _seen_structural = 0
+    _structural = frozenset(structural or ())   # ⊥ = пусто: не объявили — все h2 суть содержание   # ⊥ = пусто: не объявили — плееров нет (не «все»)
     seen_h1 = False
     seen_section = False   # первый h2/h3 закрывает «шапку статьи»
 
@@ -3924,6 +3962,25 @@ def _md_static_to_html(md_body: str, line_mode: str = "verse",
             _flush_all()
             seen_section = True
             _raw = line[3:].strip()
+            # СТРУКТУРА — НЕ СОДЕРЖАНИЕ (admin 2026-07-19: «пусть SUMMARY и BODY будут отделены
+            # графически, не этими заголовками»). Заголовки вроде SUMMARY / ТЕЛО не НАЗЫВАЮТ
+            # раздел — они РАЗМЕЧАЮТ границу частей документа, и слово «ТЕЛО» читателю не
+            # сообщает ничего, кроме того, что уже видно глазом. Такой маркер проецируется в
+            # ГРАНИЦУ, а текст его исчезает: разделение — работа типографики, не лексики.
+            #
+            # ЧТО ИМЕННО структурно — объявляет ДОКУМЕНТ (frontmatter `structural_headings:`),
+            # тем же законом, что `line_mode` и `fragments`: рендерер не гадает и не держит
+            # словаря «служебных слов» (такой словарь был бы хардкодом, обязанным разойтись с
+            # каждым новым жанром и языком). Не объявили — обычный h2, поведение прежнее.
+            if _raw in _structural:
+                # ГРАНИЦА РИСУЕТСЯ МЕЖДУ ЧАСТЯМИ, А НЕ ПЕРЕД ПЕРВОЙ. Первый маркер лишь
+                # ОТКРЫВАЕТ начальную часть — над ней уже стоит заголовок документа, и правило
+                # там отделяло бы текст от поля страницы, а не часть от части. N маркеров ⇒
+                # N−1 границ: ровно арифметика разбиения, а не «по маркеру на каждый».
+                if _seen_structural:
+                    out.append('<hr class="doc-part-rule" aria-hidden="true">')
+                _seen_structural += 1
+                continue
             _id = anchor(_raw, seen_ids)
             out.append(f'<h2 id="{_id}">'
                        f"{_h_punct(_md_inline(_amp_normal(_typo(_raw))))}</h2>")
@@ -4130,7 +4187,14 @@ _DOC_PROJECTIONS = (
     ("odt",  "ODT",      "Открытый редактируемый формат — OpenDocument, ISO/IEC 26300"),
     ("docx", "DOCX",     "Редактируемый формат Word"),
     ("rtf",  "RTF",      "Редактируемый текст"),
-    ("md",   "Markdown", "Исходник документа"),
+    # `md` is DELIBERATELY ABSENT (admin 2026-07-19: «Markdown не нужно наружу»).
+    # It is not a projection of the document — it IS the document's SOURCE, and handing a
+    # reader the source is a different act from handing them the work: it exposes the
+    # authoring substrate (frontmatter, fragment anchors, spec/task ids, review scaffolding)
+    # which is Dela-internal by construction. broadcast_html keeps materializing it as the
+    # guaranteed floor — that floor is what every OTHER projection is derived FROM, an
+    # INTERNAL invariant; being derivable-from is not being offer-able. The menu is the
+    # PUBLIC face, so the two sets part here and nowhere else.
     ("txt",  "TXT",      "Простой текст"),
     ("pdf",  "PDF",      "Постоянная вёрстка"),
 )
@@ -4184,7 +4248,8 @@ def p_static_page(d: dict[str, Any], md_text: str, slug: str = "",
     slug = fm.get("slug") or slug
     body_html = _md_static_to_html(
         body_md, line_mode=str(fm.get("line_mode") or "verse"),
-        fragments=fm.get("fragments") or ())
+        fragments=fm.get("fragments") or (),
+        structural=fm.get("structural_headings") or ())
     # footer.legal block — Inv-SITE-trust-base. Same projection used by
     # p_event_landing (line ~2055) so the legal colophon is byte-equivalent
     # across every surface (event landing, owner site, static page).
