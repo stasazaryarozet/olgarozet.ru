@@ -1007,17 +1007,25 @@ def _head(title: str, description: str, *, canonical: str,
         # Defang `</` inside JSON to prevent <script> envelope escape.
         safe = structured.replace("</", "<\\/")
         sd = f'\n<script type="application/ld+json">{safe}</script>'
-    # Site-root hints: emitted IFF the owner actually ships the file (_owner_ships). These three
-    # were absolute literals, so EVERY owner promised them and an owner without them published a
-    # 404 that the closure — rightly — refuses to publish (measured on azaryarozet: favicon.png +
-    # apple-touch-icon.png). `refs ⊆ delivered` read backwards: a reference exists iff its
-    # referent does. ⊥ (no provenance) keeps the reference — never strip a live site on a guess.
-    icons = "\n".join(
-        line for name, line in (
+    # A reference exists IFF its referent will. The two site-root ICONS are OWNER-shipped, so the
+    # owner's disk decides (_owner_ships): they were absolute literals, so every owner PROMISED
+    # them and an owner without them published a 404 the closure rightly refuses (measured on
+    # azaryarozet). `refs ⊆ delivered`, read backwards.
+    #
+    # The manifest is NOT of that class: the deploy leg WRITES it (broadcast_html — tmp/
+    # manifest.json), so it is a GENERATOR-PRODUCED artifact whose referent is guaranteed by
+    # construction, and gating it on the owner's source dir would drop a link to a file that is
+    # about to exist. The discriminator is PROVENANCE — who produces it — not the file's name.
+    #
+    # ⊥ (no provenance) keeps every reference: «I cannot see the disk» must never read as «the
+    # owner has nothing», which would silently strip a live site's icons.
+    icons = "\n".join([
+        *(line for name, line in (
             ("favicon.png", '<link rel="icon" type="image/png" href="/favicon.png">'),
             ("apple-touch-icon.png", '<link rel="apple-touch-icon" href="/apple-touch-icon.png">'),
-            ("manifest.json", '<link rel="manifest" href="/manifest.json">'),
-        ) if _owner_ships(d or {}, name) is not False)
+        ) if _owner_ships(d or {}, name) is not False),
+        '<link rel="manifest" href="/manifest.json">',
+    ])
     return f"""<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{t}</title>
