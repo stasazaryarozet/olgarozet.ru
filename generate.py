@@ -1355,7 +1355,7 @@ def _layout(d: dict[str, Any], *, title: str, description: str, body: str,
     head = _head(title, description, canonical=canonical, og_image=og_image,
                  extra=(_slug_meta + extra_head), structured=structured, d=d)
     nav_html = '<nav class="nav-fade"><a href="/" aria-label="На главную">←</a></nav>' if nav else ''
-    ftr = _footer(d.get("urls", {}), d["bio"]["title"], portrait, portrait_night) if footer else ''
+    ftr = _footer(d.get("urls", {}), (d.get("bio") or {}).get("title", ""), portrait, portrait_night) if footer else ''
     # WCAG 2.4.1 «Bypass Blocks» — single skip-link before nav, jumps to <main>.
     # Visually hidden until keyboard focus; one definition serves every surface.
     skip_link = (f'<a class="skip-link" href="#main">{_typo("Перейти к содержанию")}</a>')
@@ -1743,7 +1743,7 @@ def _join_defined(parts: "Iterable[str]") -> str:
 
 
 def p_site(d: dict[str, Any]) -> str:
-    bio = d["bio"]
+    bio = d.get("bio") or {}
     events = sorted_events(d)
     urls = d.get("urls", {})
     publications_html = p_publications(d)
@@ -4245,7 +4245,7 @@ def discover_static_pages(site_dir: "str | Path") -> "list[tuple[str, Path]]":
 
 def p_art(d: dict[str, Any]) -> str:
     """Gallery projection. Artworks from data.artworks (single source)."""
-    bio = d["bio"]
+    bio = d.get("bio") or {}
     alt = f"{bio['title']} — Произведение"
     items = "\n".join(
         f'    <div class="artwork"><img src="img/{a}" loading="lazy" alt="{alt}"></div>'
@@ -4457,7 +4457,7 @@ def p_telegram(d: dict[str, Any]) -> str:
 # ── P_bio: D → short bio ─────────────────────────────────────────────
 
 def p_bio(d: dict[str, Any]) -> str:
-    bio = d["bio"]
+    bio = d.get("bio") or {}
     # «Нет объявления — нет строки» — the SAME law the telegram account below already obeys,
     # here extended to the rest of the block: it held for one line and not the others, so a bio
     # that declares only a title died on `artist` (Inv-EPI-unknown-is-identity). Every line is
@@ -4497,7 +4497,7 @@ def p_booking(d: dict[str, Any]) -> str:
     Slots source: same files (booking.json or engage.json), `slots` key. Empty list OK.
     """
     import json as _json
-    bio = d["bio"]
+    bio = d.get("bio") or {}
     if "consultations" not in d:
         # A booking page for an owner who declares NO consultations practice is a page about a
         # service that does not exist. The projection's identity is NO PAGE — not an empty
@@ -4768,16 +4768,11 @@ if(d.ok){{submitted=true;
 from utils.atomic import atomic_write_text as _write   # noqa: E402
 
 
-if __name__ == "__main__":
-    d = load()
-    _write(ROOT / "index.html", p_site(d))
-    print("site: index.html")
-    _write(ROOT / "art" / "index.html", p_art(d))
-    print("art: art/index.html")
+def _emit_booking(d, cons) -> None:
     # Public booking path is DATA-DRIVEN from consultations.link — ONE source (admin «одна
     # ссылка — init», 2026-06-24): the page dir, the homepage CTA href (already cons['link'])
     # AND the canonical all follow it, so the URL is a data.yaml edit with zero code.
-    booking_slug = (d["consultations"].get("link") or "/init").strip("/") or "init"
+    booking_slug = (cons.get("link") or "/init").strip("/") or "init"
     booking_dir = ROOT / booking_slug
     if _booking_disabled(d):
         # admin 2026-05-15: «Никакой ссылки на Бронирование, пока не восстановим».
@@ -4798,14 +4793,37 @@ if __name__ == "__main__":
         # носитель есть (страница), у отставки — только отсутствие, а отсутствие неотличимо от
         # «никогда не было». Редирект даёт отставке НОСИТЕЛЬ (p_redirect — дериват, он и был
         # написан ровно для этого, но не имел ни одного вызывающего у страницы записи).
-        for _old in (d["consultations"].get("redirect_from") or []):
+        for _old in (cons.get("redirect_from") or []):
             _old = str(_old).strip("/")
             if not _old or _old == booking_slug:
                 continue
             _old_dir = ROOT / _old
             _write(_old_dir / "index.html",
-                   p_redirect(d, f"/{booking_slug}/", d["bio"].get("booking_page_label", "")))
+                   p_redirect(d, f"/{booking_slug}/", (d.get("bio") or {}).get("booking_page_label", "")))
             print(f"booking: {_old}/ → /{booking_slug}/ (отставка адреса)")
+
+
+if __name__ == "__main__":
+    d = load()
+    _write(ROOT / "index.html", p_site(d))
+    print("site: index.html")
+    _write(ROOT / "art" / "index.html", p_art(d))
+    print("art: art/index.html")
+    # Inv-SITE-owner-projection-total, шестой этаж (пять — Σ 2026-07-19: p_site, _head,
+    # read-set, ссылки, ассеты). ПРОЕКЦИЯ ЕСТЬ ⟺ ЕЁ ДАННЫЕ ОПРЕДЕЛЕНЫ. Генератор писан под
+    # ПОЛНУЮ запись одного владельца (olgarozet: 16 разделов) и разыменовывал
+    # d["consultations"] безусловно — у владельца с четырьмя разделами сборка умирала на этой
+    # строке, а всё после неё не выполнялось.
+    #
+    # ОТСУТСТВИЕ ≠ ОТКЛЮЧЕНО — два РАЗНЫХ факта, и путать их разрушительно: `_booking_disabled`
+    # сносит каталог (rmtree), чтобы на осиротевшую страницу нельзя было сослаться, тогда как
+    # НЕОБЪЯВЛЕННОСТЬ значит «у этого владельца такой проекции нет вовсе» — не входит в его
+    # набор, значит и удалять нечего (член, не определённый у владельца, не вход).
+    cons = d.get("consultations")
+    if cons is None:
+        print("booking: not a projection of this owner (consultations не объявлены)")
+    else:
+        _emit_booking(d, cons)
     _write(ROOT / "telegram.txt", p_telegram(d))
     print("telegram: telegram.txt")
     _write(ROOT / "bio.txt", p_bio(d))
