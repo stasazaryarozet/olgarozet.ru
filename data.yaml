@@ -544,9 +544,14 @@ events:
   type: meeting      # entity-event sub-class (online series — «Встреча с Ольгой»)
   broadcast: [site, telegram_channel]   # admin 2026-05-15: Скоро digest mirror across surfaces — TG msg #62 references this event
 
-  title: Человек, Дом, Ремесло
+  title: Человек и Ремесло
   t_key: "2026-08"         # горизонт «до наступления осени» = лето 2026 (admin 2026-07-06). Прежний «2026-05-W3» — устаревший placeholder В ПРОШЛОМ (событие не проведено, дата не объявлена); честный forward-горизонт: лето, до Парижа (сент). Точная дата → уточнить
   date: до осени
+  skoro_state: pending
+  beats:
+  - {role: when, register: proper-case, lines: ["Дату объявим:"]}
+  - {role: type, lines: ["Онлайн-встреча:"]}
+  - {role: concept, lines: ["Человек и Ремесло"]}
   audience: []
   organizers: [olgarozet]
   format: [online, meeting]
@@ -1007,7 +1012,7 @@ events:
   parent_id: paris-2026-09            # Inv-EV-parent-resolves
   parent_relation: promotes           # pre-event promotional artifact — temporal containment WAIVED per entity-event.md Inv-EV-parent-temporal-coherence
   plan_id: paris-2026-09-plan         # parent-edge — entity-plan
-  status: OPEN                        # admin 2026-05-25 verbal: «было сказано, не записано. Завтра в 19:00» — date concrete → renderable_for[main_post] passes
+  status: CLOSED                      # эфир проведён
   t_key: "2026-05-26"                 # admin 2026-05-25 «завтра 19:00» (today = 2026-05-25 Mon → tomorrow = 2026-05-26 Tue)
   t_end: "2026-05-26T20:00:00+03:00"  # +60min duration → auto-transitions CONCLUDED post-event
   title: "ОНЛАЙН-ВСТРЕЧА ПРО ПАРИЖ"   # admin 2026-05-15 TG правка caps form
@@ -1079,7 +1084,7 @@ events:
   parent_id: paris-2026-09            # Inv-EV-parent-resolves
   parent_relation: promotes           # pre-event promotional artifact — temporal containment WAIVED (entity-event.md Inv-EV-parent-temporal-coherence)
   plan_id: paris-2026-09-plan         # parent-edge — entity-plan
-  status: OPEN                        # announce ЖИВ 2026-07-06: IG comment + Анонс-Пост published (см. anchors)
+  status: CLOSED                      # эфир проведён
   t_key: "2026-07-08"
   t_end: "2026-07-08T19:00:00+03:00"  # +60min nominal → auto-CONCLUDED post-event (Inv-EV-stage-time-derived)
   title: "ВТОРОЙ ПРЯМОЙ ЭФИР ПРО ПАРИЖ В СЕНТЯБРЕ"   # admin framing 2026-07-06: «второй — и последний по теме»
@@ -1317,17 +1322,17 @@ events:
   t_key: "2026-08"                      # горизонт «до наступления осени» = лето 2026 (admin 2026-07-06). Прежний «2026-06» — устаревший placeholder В ПРОШЛОМ; честный forward-горизонт: лето, до Парижа (сент). Точная дата → уточнить
   skoro_state: pending                  # ev-pending class — точная дата не объявлена (но горизонт «до осени» известен → t_key несёт его)
   beats:                                # role-tagged semantic site rendering
-  - {role: when, register: proper-case, lines: ["Дату объявим:"]}
+  - {role: when, register: proper-case, lines: ["Летом:"]}
   - {role: type, lines: ["Рассказ-показ:"]}   # admin rename 2026-07-06 («мы переназвали»; слово admin 01:37 — ёмкое, не англицизм, для мультимедийной формы). NB: первое применение исчезло из worktree до коммита (c45689aa9f без него) — re-applied, content-verified
   - {role: concept, lines: ["Цена и Ценность"]}
   lines:                                # legacy / fallback
-  - "Дату объявим"
+  - "Летом"
   - ""
   - "Рассказ-показ:"
   - ""
   - "«Цена и Ценность»"
   title: Цена и Ценность
-  date: анонс
+  date: лето 2026
   audience: []
   organizers: [olgarozet]
   format: [online, course]
@@ -1355,6 +1360,32 @@ events:
     text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров."
     link_text: "olgarozet.ru"
     link_url: "https://olgarozet.ru/"
+
+- id: excursion_melnikov_nov_2026
+  type: event
+  broadcast: [site, telegram_channel]
+  t_key: "2026-11"
+  skoro_state: period
+  title: Экскурсия по Мельникову
+  date: конец ноября
+  audience: []
+  organizers: [olgarozet]
+  format: [excursion]
+  pricing:
+  cohort:
+  duration:
+  registration:
+  status: PLANNING
+  beats:
+  - {role: when, register: proper-case, lines: ["В конце ноября"]}
+  - {role: type, register: caps, lines: ["Экскурсия"]}
+  - {role: detail, lines: ["по круглому дому Мельникова"]}
+  lines:
+  - "В конце ноября"
+  - ""
+  - "Экскурсия"
+  - ""
+  - "по круглому дому Мельникова"
 
 publications:
   # ── Legacy entries migrated к entity-publication Spec ──────────────────
