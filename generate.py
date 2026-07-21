@@ -681,9 +681,37 @@ _LANG_LABELS = {
 }
 
 
+_ASSET_ROOT_KEY = "_asset_root"       # provenance, not content — see _owner_ships
+
+
 def load() -> dict[str, Any]:
     data: dict[str, Any] = yaml.safe_load(DATA.read_text(encoding="utf-8"))
+    data[_ASSET_ROOT_KEY] = str(DATA.parent)     # provenance: whence this record came
     return data
+
+
+def _owner_ships(d: dict[str, Any], filename: str) -> "bool | None":
+    """Does this owner actually ship `filename` alongside their record?  None (⊥) = unknown.
+
+    PROVENANCE, not declaration. The alternative — a `bio.favicon:` field per asset — is a
+    hand-written list that has merely moved from the code into the data: every new asset would
+    still cost a field AND an emit line, and a declared-but-absent file would still 404. What
+    decides a reference is the FILE, so the question is asked of the file.
+
+    The asset root is the directory the record itself came from, which is the OWNER's site dir
+    in the contour and the deploy tmp in production (the deploy copies the owner's site dir into
+    tmp BEFORE running the generator) — one rule, both worlds, no threading through signatures.
+
+    ⊥ when the record carries no provenance (a caller that built `d` by hand): the reference is
+    then emitted UNCHANGED, because «I cannot see the disk» must never be read as «the owner has
+    nothing» — that would silently strip a live site's icons (Inv-EPI-unknown-is-identity)."""
+    root = d.get(_ASSET_ROOT_KEY) if isinstance(d, dict) else None
+    if not root:
+        return None                                  # ⊥ — no provenance, no verdict
+    try:
+        return (Path(root) / filename).is_file()
+    except OSError:
+        return None                                  # ⊥ — could not look
 
 
 def _booking_disabled(d: dict[str, Any], owner: str = "olgarozet") -> bool:
@@ -979,6 +1007,25 @@ def _head(title: str, description: str, *, canonical: str,
         # Defang `</` inside JSON to prevent <script> envelope escape.
         safe = structured.replace("</", "<\\/")
         sd = f'\n<script type="application/ld+json">{safe}</script>'
+    # A reference exists IFF its referent will. The two site-root ICONS are OWNER-shipped, so the
+    # owner's disk decides (_owner_ships): they were absolute literals, so every owner PROMISED
+    # them and an owner without them published a 404 the closure rightly refuses (measured on
+    # azaryarozet). `refs ⊆ delivered`, read backwards.
+    #
+    # The manifest is NOT of that class: the deploy leg WRITES it (broadcast_html — tmp/
+    # manifest.json), so it is a GENERATOR-PRODUCED artifact whose referent is guaranteed by
+    # construction, and gating it on the owner's source dir would drop a link to a file that is
+    # about to exist. The discriminator is PROVENANCE — who produces it — not the file's name.
+    #
+    # ⊥ (no provenance) keeps every reference: «I cannot see the disk» must never read as «the
+    # owner has nothing», which would silently strip a live site's icons.
+    icons = "\n".join([
+        *(line for name, line in (
+            ("favicon.png", '<link rel="icon" type="image/png" href="/favicon.png">'),
+            ("apple-touch-icon.png", '<link rel="apple-touch-icon" href="/apple-touch-icon.png">'),
+        ) if _owner_ships(d or {}, name) is not False),
+        '<link rel="manifest" href="/manifest.json">',
+    ])
     return f"""<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{t}</title>
@@ -994,9 +1041,7 @@ def _head(title: str, description: str, *, canonical: str,
 <meta name="twitter:title" content="{t}">
 <meta name="twitter:description" content="{desc}">
 <meta name="twitter:image" content="{oi}">
-<link rel="icon" type="image/png" href="/favicon.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="manifest" href="/manifest.json">
+{icons}
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
 <!-- Inv-WEB-font-preconnect (text/site.md): early DNS+TLS handshake к font CDN.
@@ -1262,6 +1307,18 @@ def _social_link(kind: str, url: str) -> str:
 
 
 def _footer(urls: dict[str, Any], bio_title: str, portrait: str = "", portrait_night: str = "") -> str:
+    # ОТСУТСТВИЕ НЕ ЕСТЬ ПУСТОЙ АДРЕС (Σ 2026-07-19, найдено на живом stasazaryarozet.ru).
+    # Дневной портрет эмитился БЕЗУСЛОВНО, поэтому у владельца без портрета выходило
+    # `<img src="/">` — а пустой `src` резолвится В САМУ СТРАНИЦУ: браузер грузил HTML как
+    # изображение. Отсутствующее значение стало ПРАВДОПОДОБНЫМ УКАЗАТЕЛЕМ НА НЕВЕРНОЕ —
+    # худший вид ⊥, потому что он не падает и не молчит, а лжёт связно (и стоит лишней
+    # загрузки страницы на каждом визите).
+    # Асимметрия жила ВНУТРИ ОДНОЙ функции: ночной портрет ту же пустоту обрабатывал честно
+    # (строка ниже), дневной — нет. Одно отсутствие, два обращения; теперь одно.
+    day_img = (
+        f'<img src="/{portrait}" alt="{bio_title}" class="footer-portrait day">'
+        if portrait else ''
+    )
     night_img = (
         f'<img src="/{portrait_night}" alt="" class="footer-portrait night" aria-hidden="true">'
         if portrait_night else ''
@@ -1277,7 +1334,7 @@ def _footer(urls: dict[str, Any], bio_title: str, portrait: str = "", portrait_n
     return f"""<footer>
   <div class="footer-content">
     {left}
-    <img src="/{portrait}" alt="{bio_title}" class="footer-portrait day">
+    {day_img}
     {night_img}
     {right}
   </div>
@@ -1297,7 +1354,7 @@ observer.observe(footer);
 def _layout(d: dict[str, Any], *, title: str, description: str, body: str,
             nav: bool = False, canonical: str | None = None,
             extra_head: str = "", footer: bool = True, structured: str | None = None,
-            surface: str = "", cookie_banner_enabled: bool = False,
+            surface: str = "", cookie_banner_enabled: bool = False, doc_menu: str = "",
             slug: str = "") -> str:
     if canonical is None:
         canonical = _canonical(d)
@@ -1310,7 +1367,7 @@ def _layout(d: dict[str, Any], *, title: str, description: str, body: str,
     head = _head(title, description, canonical=canonical, og_image=og_image,
                  extra=(_slug_meta + extra_head), structured=structured, d=d)
     nav_html = '<nav class="nav-fade"><a href="/" aria-label="На главную">←</a></nav>' if nav else ''
-    ftr = _footer(d.get("urls", {}), d["bio"]["title"], portrait, portrait_night) if footer else ''
+    ftr = _footer(d.get("urls", {}), (d.get("bio") or {}).get("title", ""), portrait, portrait_night) if footer else ''
     # WCAG 2.4.1 «Bypass Blocks» — single skip-link before nav, jumps to <main>.
     # Visually hidden until keyboard focus; one definition serves every surface.
     skip_link = (f'<a class="skip-link" href="#main">{_typo("Перейти к содержанию")}</a>')
@@ -1337,6 +1394,7 @@ def _layout(d: dict[str, Any], *, title: str, description: str, body: str,
 {skip_link}
 {nav_html}
 {theme_toggle}
+{doc_menu}
 <main id="main" role="main">
 {body}
 </main>
@@ -1513,7 +1571,22 @@ def sorted_events(d: dict[str, Any], surface: str = "site", now_iso: str | None 
 # ── Graph resolution: events reference entities by id (no value duplication) ─
 
 def resolve_refs(d: dict[str, Any], kind: str, ids: Any) -> list[Any]:
-    """Resolve a list of entity ids against d[kind]; non-id values fall through."""
+    """Resolve a list of entity ids against d[kind] — ONE element shape out, always.
+
+    An UNRESOLVED reference (the registry `d[kind]` is absent, or holds no such id) is ⊥ about
+    that ENTITY — it is not a different KIND of element. Yielding the bare id string here made
+    the returned list HETEROGENEOUS (record | str) and pushed the burden onto every consumer,
+    where it promptly drifted: of the three call sites in schema_events_jsonld, only `audience`
+    carried an `isinstance` guard, so `organizer` and `location` died with
+    `AttributeError: 'str' object has no attribute 'get'` on any record whose `people` /
+    `locations` registry was undefined (caught by the generated subset witness — the case no
+    reader had thought to enumerate, since the live record always defines both).
+
+    Normalising to `{"id": x, "name": x}` invents no fact: for an unresolved reference the id
+    IS the only name there is (Inv-EPI-unknown-is-identity — ⊥ renders as the identity, never
+    as a forged value, and never as a shape the caller must branch on). Non-string elements are
+    inline records or scalars, not references, and pass through untouched.
+    """
     pool = d.get(kind, {})
     out = []
     for x in (ids or []):
@@ -1524,7 +1597,7 @@ def resolve_refs(d: dict[str, Any], kind: str, ids: Any) -> list[Any]:
             else:
                 out.append({"id": x, "name": v})
         else:
-            out.append(x)
+            out.append({"id": x, "name": x} if isinstance(x, str) else x)
     return out
 
 
@@ -1624,9 +1697,65 @@ def p_publications(d: dict[str, Any]) -> str:
 
 # ── P_site: D → index.html ──────────────────────────────────────────
 
+def _defined(render: "Callable[[], str]", *, section: str) -> str:
+    """Inv-EPI-unknown-is-identity (epistemic-honesty.md) for owner-data projections.
+
+    An owner record is PARTIAL BY CONSTRUCTION — No-Stubs: a person declares what is true
+    of them, never a copy of another owner's schema. A projection over it is therefore a
+    PARTIAL function presented as total: every bare subscript asserts a totality the data
+    never promised, and the FIRST undefined datum kills the WHOLE page. Measured on
+    azaryarozet: KeyError consultations → declare it → KeyError inspire → … — a stub-chase
+    whose fixpoint is exactly the copied schema No-Stubs forbids.
+
+    LAW: an undefined datum projects to the HTML monoid's IDENTITY (""), never a crash.
+    A section's membership is derived from the FACT of definedness — the dual, one floor
+    up, of the document menu's membership-is-delivery (both: attempt is truth).
+
+    Why not a `requires:` table per section: it would be a SECOND encoding of what the
+    renderer already reads, free to drift from it — the precise class this System keeps
+    paying for (config.py:113 «a declaration no mechanism consumes is not a law»). The
+    renderer's OWN reads are the requirement; there is nothing to keep in sync.
+
+    ATTESTED, never silent (attestation.md): «A LOSSY PROJECTION IS ADMISSIBLE IFF IT CAN
+    FAIL». A section that vanishes without a trace is inadmissible loss — so the omission
+    is announced, and a MISSPELLED key reads as a loud omission rather than a quiet one.
+
+    KeyError alone is the ⊥ signal (an absent key in a partial record). Every other
+    exception is a real defect and propagates untouched.
+    """
+    try:
+        return render()
+    except KeyError as e:
+        return _omitted(section, e)
+
+
+def _omitted(section: str, missing: "Any") -> str:
+    """THE attestation point for an omitted projection — one implementation, every omission.
+
+    The law admits a lossy projection IFF the loss can be observed (attestation.md), so this is
+    the difference between an admissible omission and silent erasure. Returns the HTML monoid's
+    identity so a caller can `return _omitted(...)` directly.
+
+    STDOUT, not stderr: an omission is a FACT ABOUT THE DATA, not a failure of the render. The
+    deploy leg captures a generator's stderr as its failure channel (`generate.py FAILED — …`),
+    so attesting here on stderr made every partial record look like a broken build and WITHHELD
+    the push — the observability requirement turned into a false alarm. The sibling notice one
+    floor down (`projections: docx not delivered — NoConversionPath`) is the settled convention:
+    informational notes ride stdout, and only a real fault takes stderr."""
+    print(f"site: section {section!r} omitted — owner data defines no {missing} "
+          f"(Inv-EPI-unknown-is-identity)")
+    return ""
+
+
+def _join_defined(parts: "Iterable[str]") -> str:
+    """Monoid fold over rendered fragments: the identity ("") is ABSORBED, so an omitted
+    part leaves no blank line and an all-omitted section collapses to "" (its wrapper is
+    then never emitted — an empty <section> is itself a stub)."""
+    return "\n".join(p for p in parts if p)
+
+
 def p_site(d: dict[str, Any]) -> str:
-    bio = d["bio"]
-    cons = d["consultations"]
+    bio = d.get("bio") or {}
     events = sorted_events(d)
     urls = d.get("urls", {})
     publications_html = p_publications(d)
@@ -1638,14 +1767,22 @@ def p_site(d: dict[str, Any]) -> str:
     for i, s in enumerate(bio.get("skills", [])):
         sep = ";" if i < len(bio["skills"]) - 1 else "."
         role_lines.append(f"    <p>{s}{sep}</p>")
-    inspire = "<br>".join(bio["inspire"].strip().splitlines())
 
+    # Each fragment carries its OWN definedness (Inv-EPI-unknown-is-identity): a bio that
+    # declares only a title yields an empty about-section, not a dead page. Total records
+    # render every fragment, so their join is byte-identical to the pre-law form.
+    about_parts = _join_defined([
+        _defined(lambda: f"""    <p><span class="artist-highlight"><a href="{bio['artist']['link']}">{bio['artist']['text']}</a></span><br>•</p>""",
+                 section="about.artist"),
+        chr(10).join(role_lines),
+        _defined(lambda: f"""    <p class="inspire">{"<br>".join(bio["inspire"].strip().splitlines())}<br>•</p>""",
+                 section="about.inspire"),
+        _defined(lambda: f"""    <p><a href="mailto:{bio['email']}">{bio['email']}</a></p>""",
+                 section="about.email"),
+    ])
     bio_html = f"""      <section id="about" aria-label="О себе">
-    <p><span class="artist-highlight"><a href="{bio['artist']['link']}">{bio['artist']['text']}</a></span><br>•</p>
-{chr(10).join(role_lines)}
-    <p class="inspire">{inspire}<br>•</p>
-    <p><a href="mailto:{bio['email']}">{bio['email']}</a></p>
-      </section>"""
+{about_parts}
+      </section>""" if about_parts else ""
 
     # Consultations
     # admin 2026-05-15: «Никакой ссылки на Бронирование, пока не восстановим. Текст
@@ -1661,17 +1798,23 @@ def p_site(d: dict[str, Any]) -> str:
     # Restoration of any substrate tier (oauth re-grant OR SA OR manual_slots)
     # populates slots.json. Admin removes booking_disabled flag → auto-derive
     # kicks in. Single-action restore.
-    if _booking_disabled(d):
-        cons_html = """    <section id="consultations" aria-labelledby="consultations-heading">
+    def _cons_section() -> str:
+        # The subscript IS the requirement: an owner who holds no consultations practice
+        # declares no `consultations` key, and the section is omitted entirely — NOT
+        # rendered as «пока времён нет», which would advertise a service that does not
+        # exist. Absent-key and empty-availability are DIFFERENT facts; only the second
+        # is the booking-disabled card.
+        cons = d["consultations"]
+        if _booking_disabled(d):
+            return """    <section id="consultations" aria-labelledby="consultations-heading">
       <h2 id="consultations-heading">Консультации:</h2>
       <aside class="booking-empty" role="status" aria-live="polite">
         <p class="empty-eyebrow">пока времён нет<span class="rule" aria-hidden="true"></span></p>
       </aside>
     </section>"""
-    else:
         desc = "<br>".join(cons["description"].strip().splitlines())
         avail = "<br>".join(cons["availability"].strip().splitlines())
-        cons_html = f"""    <section id="consultations" aria-labelledby="consultations-heading">
+        return f"""    <section id="consultations" aria-labelledby="consultations-heading">
       <h2 id="consultations-heading">Консультации:</h2>
       <p>{desc}</p>
       <p class="price">{cons['price']}</p>
@@ -1679,12 +1822,21 @@ def p_site(d: dict[str, Any]) -> str:
       <p class="availability">{avail}</p>
     </section>"""
 
+    cons_html = _defined(_cons_section, section="consultations")
+
     # Events Skoro digest — delegates к skoro.render (monoidal functor, Genius Simplification C).
     # Per Inv-CMP-STYLE-CTA-anchor-uniform: hub-event-card CTA points к canonical FQDN landing
     # (event.web_addresses[0]). SkoroSpec encapsulates entry formatting per Surface; site
     # variant reads same Spec table.
     from skoro import render as render_skoro_digest_dispatch
     events_html = render_skoro_digest_dispatch(d, "site")
+    # The heading is a PROMISE about content; with nothing to announce, «СКОРО:» over empty
+    # space is a stub in markup rather than in data. Wrapper follows its content (the same
+    # identity-absorption as the about-section), so a total record renders byte-identically.
+    events_section = f"""      <section id="events" aria-labelledby="events-heading">
+        <h2 id="events-heading">СКОРО:</h2>
+{events_html}
+      </section>""" if events_html.strip() else ""
 
     canonical = _canonical(d)
     portrait = _portrait(d)
@@ -1696,7 +1848,11 @@ def p_site(d: dict[str, Any]) -> str:
         "name": bio["title"],
         "url": canonical,
         "image": image_url,
-        "email": bio["email"],
+        # Undefined ⇒ the KEY IS ABSENT, never present-and-empty: a schema.org consumer reads
+        # `"email": ""` as an assertion that the person HAS no address — a fabricated fact
+        # (Inv-EPI-unknown-is-identity: ⊥ must not be forged into a value). Spliced IN PLACE
+        # so a total record's key ORDER — hence its rendered bytes — is unchanged.
+        **({"email": bio["email"]} if bio.get("email") else {}),
         # sameAs — КАНОНИЧЕСКАЯ машинная декларация «это те же самые каналы этого лица»
         # (schema.org). Держала тот же ручной список из двух: YouTube был объявлен и невидим
         # не только человеку в футере, но и машине. Одна деривация — оба потребителя.
@@ -1713,23 +1869,25 @@ def p_site(d: dict[str, Any]) -> str:
         if events_jsonld else ""
     )
 
+    # СТРАНИЦА РЕНДЕРИТ ОБЪЯВЛЕННОЕ И НИЧЕГО СВЕРХ (admin 2026-07-19: «на stasazaryarozet.ru
+    # в индексе ничего не должно быть»). Два дефекта одного корня — шапка и ориентир
+    # эмитились БЕЗУСЛОВНО, независимо от того, есть ли что показывать:
+    #
+    #  · `<main>` ВНУТРИ `<main id="main">` из _layout. Ориентир `main` в документе ОДИН и
+    #    не вкладывается (HTML §4.4.14) — два носителя одной роли, и скринридер получал
+    #    вложенный ландмарк вместо содержания. Внешний — семантический, внутренний был
+    #    ДУБЛЁМ, поэтому снимается он, а не переименовывается.
+    #  · `<h1>` при пустых секциях давал страницу, чьё единственное содержание — её же
+    #    заголовок. Пустой документ нечего озаглавливать: `<title>` (вкладка, выдача) от
+    #    этого не зависит и остаётся — он МЕТАДАННОЕ, а не содержание.
+    #
+    # Условие ВЫВЕДЕНО из самих секций, а не объявлено флагом: владелец, у которого появится
+    # хоть одна, получит шапку обратно без чьей-либо правки.
+    sections = "\n\n".join(p for p in (bio_html, cons_html, events_section, publications_html)
+                           if (p or "").strip())
+    header = f"    <header>\n      <h1>{bio['title']}</h1>\n    </header>\n\n" if sections else ""
     body = f"""  <div class="content-wrapper">
-    <header>
-      <h1>{bio['title']}</h1>
-    </header>
-
-    <main>
-{bio_html}
-
-{cons_html}
-
-      <section id="events" aria-labelledby="events-heading">
-        <h2 id="events-heading">СКОРО:</h2>
-{events_html}
-      </section>
-
-{publications_html}
-    </main>
+{header}{sections}
   </div>"""
 
     title = bio["title"]
@@ -3480,13 +3638,31 @@ def anchor(heading: str, seen: "set[str] | None" = None) -> str:
     return s
 
 
+#: Конечная ТОЧКА заголовка — и только она. Допускает закрывающую разметку/пробел после
+#: (`…</em>`), чтобы правило не зависело от того, обёрнут ли хвост эмфазой.
+#: НЕ трогает `…` (отрицательный просмотр назад) — многоточие есть ЗНАЧАЩИЙ знак, а не
+#: терминатор: оно объявляет обрыв мысли, тогда как точка объявляет её завершённость.
+_H_STOP_RE = _re.compile(r"(?<!\.)\.(?=(?:\s*</[^>]+>)*\s*$)")
+
+
 def _h_punct(heading_html: str) -> str:
-    """Заголовочный типограф static-страниц. Двухчастный, чистый, идемпотентный:
+    """Заголовочный типограф static-страниц. Трёхчастный, чистый, идемпотентный:
+
+    (0) КОНЕЧНАЯ ТОЧКА СНИМАЕТСЯ (admin 2026-07-19: «по умолчанию не должно быть точек в
+        конце заголовков»). Заголовок есть ЯРЛЫК, а не предложение: точка утверждает
+        предложенность там, где её нет, — категориальная ошибка, а не вкус. Поэтому
+        снимается ИМЕННО точка; `?`, `!`, `…`, `:` ОСТАЮТСЯ и обрабатываются шагом (1),
+        ибо они не терминаторы, а СМЫСЛ (вопрос, восклицание, обрыв, предвещание списка).
+        Правило живёт ЗДЕСЬ, в единственном типографе заголовков, поэтому действует на h1…h6
+        всех документов сразу — а не в каждом документе руками (иначе умолчание пришлось бы
+        ПОМНИТЬ, что и есть человеческое усилие, которого мы избегаем).
+        Идемпотентно: снятая точка не возвращается, повторный проход — тождество.
     (1) конечный знак → span.h-punct — caps-трекинг раздвигает зазор и перед
         знаком («Т Е З И С .»); CSS компенсирует тем же токеном (-tracking-caps);
     (2) дефис → неразрывный U+2011 — балансировка caps-заголовка не рвёт
         дефисное слово («ПОЧЕМУ ВСЁ- / ТАКИ ПАРИЖ», Σ 2026-07-11)."""
     heading_html = heading_html.replace("-", "\u2011")
+    heading_html = _H_STOP_RE.sub("", heading_html)
     return _H_PUNCT_RE.sub(r'<span class="h-punct">\1</span>', heading_html)
 
 
@@ -3619,7 +3795,8 @@ def _inline_svg(src: str) -> str:
 
 
 def _md_static_to_html(md_body: str, line_mode: str = "verse",
-                       fragments: "Iterable[str] | None" = None) -> str:
+                       fragments: "Iterable[str] | None" = None,
+                       structural: "Iterable[str] | None" = None) -> str:
     """Render a constrained markdown subset → HTML body fragment.
 
     fragments — якоря секций, чей ПЕРВОИСТОЧНИК (фрагмент эфира) конспект несёт при себе.
@@ -3661,7 +3838,9 @@ def _md_static_to_html(md_body: str, line_mode: str = "verse",
     quote_buf: list[str] = []       # накопитель blockquote-строк (> …)
     list_kind = "ul"                # тип открытого списка: МАРКЕР решает тег (- →ul, N.→ol) — один механизм
     seen_ids: set[str] = set()      # адреса подтекстов ЭТОГО документа — уникальны в его пределах
-    _frag = frozenset(fragments or ())   # ⊥ = пусто: не объявили — плееров нет (не «все»)
+    _frag = frozenset(fragments or ())
+    _seen_structural = 0
+    _structural = frozenset(structural or ())   # ⊥ = пусто: не объявили — все h2 суть содержание   # ⊥ = пусто: не объявили — плееров нет (не «все»)
     seen_h1 = False
     seen_section = False   # первый h2/h3 закрывает «шапку статьи»
 
@@ -3783,6 +3962,25 @@ def _md_static_to_html(md_body: str, line_mode: str = "verse",
             _flush_all()
             seen_section = True
             _raw = line[3:].strip()
+            # СТРУКТУРА — НЕ СОДЕРЖАНИЕ (admin 2026-07-19: «пусть SUMMARY и BODY будут отделены
+            # графически, не этими заголовками»). Заголовки вроде SUMMARY / ТЕЛО не НАЗЫВАЮТ
+            # раздел — они РАЗМЕЧАЮТ границу частей документа, и слово «ТЕЛО» читателю не
+            # сообщает ничего, кроме того, что уже видно глазом. Такой маркер проецируется в
+            # ГРАНИЦУ, а текст его исчезает: разделение — работа типографики, не лексики.
+            #
+            # ЧТО ИМЕННО структурно — объявляет ДОКУМЕНТ (frontmatter `structural_headings:`),
+            # тем же законом, что `line_mode` и `fragments`: рендерер не гадает и не держит
+            # словаря «служебных слов» (такой словарь был бы хардкодом, обязанным разойтись с
+            # каждым новым жанром и языком). Не объявили — обычный h2, поведение прежнее.
+            if _raw in _structural:
+                # ГРАНИЦА РИСУЕТСЯ МЕЖДУ ЧАСТЯМИ, А НЕ ПЕРЕД ПЕРВОЙ. Первый маркер лишь
+                # ОТКРЫВАЕТ начальную часть — над ней уже стоит заголовок документа, и правило
+                # там отделяло бы текст от поля страницы, а не часть от части. N маркеров ⇒
+                # N−1 границ: ровно арифметика разбиения, а не «по маркеру на каждый».
+                if _seen_structural:
+                    out.append('<hr class="doc-part-rule" aria-hidden="true">')
+                _seen_structural += 1
+                continue
             _id = anchor(_raw, seen_ids)
             out.append(f'<h2 id="{_id}">'
                        f"{_h_punct(_md_inline(_amp_normal(_typo(_raw))))}</h2>")
@@ -3978,7 +4176,57 @@ def parse_static_md(text: str) -> tuple[dict[str, Any], str]:
     return _br.parse_front_matter(text)
 
 
-def p_static_page(d: dict[str, Any], md_text: str, slug: str = "") -> str:
+# Declared ORDER of the document projections — the sequence a reader is offered them in,
+# most-editable first. «Наилучший открытый редактируемый формат» is answered by ORDER, not
+# by choosing for the reader. MEMBERSHIP is NOT declared here: an item appears iff its
+# artifact actually materialised. Availability derived, never narrated (image_op_local_cpu
+# §AVAILABILITY), and the FALSE-CLAIM lesson of image_op_registry:535 — a table that says a
+# provider CAN do a thing does not confer it: soffice declares docx/rtf and produces neither
+# without Java, measured 2026-07-19.
+_DOC_PROJECTIONS = (
+    ("odt",  "ODT",      "Открытый редактируемый формат — OpenDocument, ISO/IEC 26300"),
+    ("docx", "DOCX",     "Редактируемый формат Word"),
+    ("rtf",  "RTF",      "Редактируемый текст"),
+    # `md` is DELIBERATELY ABSENT (admin 2026-07-19: «Markdown не нужно наружу»).
+    # It is not a projection of the document — it IS the document's SOURCE, and handing a
+    # reader the source is a different act from handing them the work: it exposes the
+    # authoring substrate (frontmatter, fragment anchors, spec/task ids, review scaffolding)
+    # which is Dela-internal by construction. broadcast_html keeps materializing it as the
+    # guaranteed floor — that floor is what every OTHER projection is derived FROM, an
+    # INTERNAL invariant; being derivable-from is not being offer-able. The menu is the
+    # PUBLIC face, so the two sets part here and nowhere else.
+    ("txt",  "TXT",      "Простой текст"),
+    ("pdf",  "PDF",      "Постоянная вёрстка"),
+)
+
+
+def p_document_menu(delivered: "Any" = (), *, printable: bool = True) -> str:
+    """Project the DELIVERED projection-set → the document's format menu. Pure.
+
+    `delivered` is {fmt: href} (or any iterable of fmt, when the href is the sibling
+    `<fmt>` file). An item is emitted ONLY for a format actually present, so the menu can
+    never offer a dead link — and a dead link is `broken`, which stops publication outright
+    (site_closure.materialize). Add a provider to library.convert and the artifact
+    materialises and the item grows here with ZERO code: the menu is a CONSEQUENCE of the
+    available projections, not a fixed list (the law styles.css §.doc-menu already states).
+
+    `printable` is orthogonal to the family: printing is not a projection but a CLIENT
+    action over the page already rendered, so it needs no artifact and is always available.
+    """
+    hrefs = (delivered if isinstance(delivered, dict)
+             else {f: f for f in (delivered or ())})
+    items = [f'<a class="doc-menu__item" href="{_t(href)}" download title="{_t(hint)}">'
+             f'{_t(label)}</a>'
+             for fmt, label, hint in _DOC_PROJECTIONS if (href := hrefs.get(fmt))]
+    if printable:
+        items.append('<button class="doc-menu__item" type="button" '
+                     f'onclick="window.print()">{_t("Распечатать")}</button>')
+    return (f'<nav class="doc-menu" aria-label="Форматы документа">{"".join(items)}</nav>'
+            if items else "")
+
+
+def p_static_page(d: dict[str, Any], md_text: str, slug: str = "",
+                  formats: "Any" = None) -> str:
     """Project (D, static.md) → standalone HTML page.
 
     Pure projection. Front-matter `title` drives <title>/<h1>; `description`
@@ -4000,7 +4248,8 @@ def p_static_page(d: dict[str, Any], md_text: str, slug: str = "") -> str:
     slug = fm.get("slug") or slug
     body_html = _md_static_to_html(
         body_md, line_mode=str(fm.get("line_mode") or "verse"),
-        fragments=fm.get("fragments") or ())
+        fragments=fm.get("fragments") or (),
+        structural=fm.get("structural_headings") or ())
     # footer.legal block — Inv-SITE-trust-base. Same projection used by
     # p_event_landing (line ~2055) so the legal colophon is byte-equivalent
     # across every surface (event landing, owner site, static page).
@@ -4032,6 +4281,12 @@ def p_static_page(d: dict[str, Any], md_text: str, slug: str = "") -> str:
         surface="editorial",
         slug=slug,
         extra_head=author_meta,
+        # `formats is None` ⇒ the CONVERSION SOURCE rendering: no chrome at all, because
+        # this HTML becomes the ODT/PDF and a «Распечатать» button baked into a downloaded
+        # document is nonsense. A dict (even empty) ⇒ the READER page, which always earns
+        # the client print action. Two renderings, distinguished explicitly — not one
+        # rendering with a flag, since they differ in KIND, not in degree.
+        doc_menu=p_document_menu(formats) if formats is not None else "",
     )
 
 
@@ -4055,7 +4310,7 @@ def discover_static_pages(site_dir: "str | Path") -> "list[tuple[str, Path]]":
 
 def p_art(d: dict[str, Any]) -> str:
     """Gallery projection. Artworks from data.artworks (single source)."""
-    bio = d["bio"]
+    bio = d.get("bio") or {}
     alt = f"{bio['title']} — Произведение"
     items = "\n".join(
         f'    <div class="artwork"><img src="img/{a}" loading="lazy" alt="{alt}"></div>'
@@ -4267,11 +4522,22 @@ def p_telegram(d: dict[str, Any]) -> str:
 # ── P_bio: D → short bio ─────────────────────────────────────────────
 
 def p_bio(d: dict[str, Any]) -> str:
-    bio = d["bio"]
-    lines = [bio["artist"]["text"]]
+    bio = d.get("bio") or {}
+    # «Нет объявления — нет строки» — the SAME law the telegram account below already obeys,
+    # here extended to the rest of the block: it held for one line and not the others, so a bio
+    # that declares only a title died on `artist` (Inv-EPI-unknown-is-identity). Every line is
+    # its own definedness; a total bio renders all of them, byte-identically.
+    lines = []
+    artist = bio.get("artist")
+    if isinstance(artist, dict) and artist.get("text"):
+        lines.append(artist["text"])
     lines.extend(f"{r};" for r in bio.get("roles", []))
     lines.extend(f"{s}." for s in bio.get("skills", []))
-    lines.append(bio["inspire"].strip().splitlines()[0])
+    # `.splitlines()[0]` on a declared-but-EMPTY inspire is an IndexError — a present key is not
+    # a present value, so the first line is taken only if there IS one.
+    inspire_lines = str(bio.get("inspire") or "").strip().splitlines()
+    if inspire_lines:
+        lines.append(inspire_lines[0])
     # ⊥ НЕ ЕСТЬ ЗНАЧЕНИЕ. Прежний срез нёс ХАРДКОД `"@olgaroset"` дефолтом: путь ОТКАЗА (поля нет)
     # отдавал значение пути УСПЕХА — то есть ВЫКОВЫВАЛ личный аккаунт Ольги из литерала, и никакой
     # читатель не отличил бы объявленный контакт от подделанного (epi_bottom_forged).
@@ -4296,7 +4562,12 @@ def p_booking(d: dict[str, Any]) -> str:
     Slots source: same files (booking.json or engage.json), `slots` key. Empty list OK.
     """
     import json as _json
-    bio = d["bio"]
+    bio = d.get("bio") or {}
+    if "consultations" not in d:
+        # A booking page for an owner who declares NO consultations practice is a page about a
+        # service that does not exist. The projection's identity is NO PAGE — not an empty
+        # booking form, which would solicit requests nobody can fulfil.
+        return _omitted("booking", repr("consultations"))
     cons = d["consultations"]
     # Slots-bundle file (engage_transport writes engage.json; legacy: booking.json).
     slots_data: dict[str, Any] = {"slots": [], "user": ""}
@@ -4550,16 +4821,23 @@ if(d.ok){{submitted=true;
 
 # ── Main: regenerate all projections ─────────────────────────────────
 
-if __name__ == "__main__":
-    d = load()
-    (ROOT / "index.html").write_text(p_site(d), encoding="utf-8")
-    print("site: index.html")
-    (ROOT / "art" / "index.html").write_text(p_art(d), encoding="utf-8")
-    print("art: art/index.html")
+# Every projection lands through the ONE total write verb. Raw `Path.write_text` is partial —
+# it needs an existing parent — so each site re-established that precondition by hand, and the
+# law held only where someone remembered it. `art/index.html` was written with no mkdir at all
+# and killed the whole build at its line (everything after it never ran, and the partial tree
+# pushed as healthy ⇒ the 404). Its twin was diagnosed IN THIS FILE five weeks earlier — the
+# «booking never returns» root, Σ 2026-06-24 — and resolved AT ITS OWN SITE, which is exactly
+# why the next site reproduced it. atomic_write_text is already total (ensure_dir inside), so
+# this is a deletion: two hand-rolled mkdirs go, and crash-safety plus writer-isolation that
+# no raw call ever had come for free.
+from utils.atomic import atomic_write_text as _write   # noqa: E402
+
+
+def _emit_booking(d, cons) -> None:
     # Public booking path is DATA-DRIVEN from consultations.link — ONE source (admin «одна
     # ссылка — init», 2026-06-24): the page dir, the homepage CTA href (already cons['link'])
     # AND the canonical all follow it, so the URL is a data.yaml edit with zero code.
-    booking_slug = (d["consultations"].get("link") or "/init").strip("/") or "init"
+    booking_slug = (cons.get("link") or "/init").strip("/") or "init"
     booking_dir = ROOT / booking_slug
     if _booking_disabled(d):
         # admin 2026-05-15: «Никакой ссылки на Бронирование, пока не восстановим».
@@ -4572,8 +4850,7 @@ if __name__ == "__main__":
         # mkdir ⇒ projection TOTAL over enable→disable→enable: the disabled branch rmtree's the
         # dir, so a re-enable (slots restored) hit FileNotFoundError — the «booking never returns»
         # root (Σ 2026-06-24, olgarozet.ru/booking 404 with 26 live slots).
-        booking_dir.mkdir(parents=True, exist_ok=True)
-        (booking_dir / "index.html").write_text(p_booking(d), encoding="utf-8")
+        _write(booking_dir / "index.html", p_booking(d))
         print(f"booking: {booking_slug}/index.html")
         # ОТСТАВКА АДРЕСА — АТРИБУТ ПЕРЕЕХАВШЕГО, а не новая вещь (тот же закон, что у статей:
         # `redirect_from` во frontmatter). Переименование booking → init оставило в мире
@@ -4581,17 +4858,38 @@ if __name__ == "__main__":
         # носитель есть (страница), у отставки — только отсутствие, а отсутствие неотличимо от
         # «никогда не было». Редирект даёт отставке НОСИТЕЛЬ (p_redirect — дериват, он и был
         # написан ровно для этого, но не имел ни одного вызывающего у страницы записи).
-        for _old in (d["consultations"].get("redirect_from") or []):
+        for _old in (cons.get("redirect_from") or []):
             _old = str(_old).strip("/")
             if not _old or _old == booking_slug:
                 continue
             _old_dir = ROOT / _old
-            _old_dir.mkdir(parents=True, exist_ok=True)
-            (_old_dir / "index.html").write_text(
-                p_redirect(d, f"/{booking_slug}/", d["bio"].get("booking_page_label", "")),
-                encoding="utf-8")
+            _write(_old_dir / "index.html",
+                   p_redirect(d, f"/{booking_slug}/", (d.get("bio") or {}).get("booking_page_label", "")))
             print(f"booking: {_old}/ → /{booking_slug}/ (отставка адреса)")
-    (ROOT / "telegram.txt").write_text(p_telegram(d), encoding="utf-8")
+
+
+if __name__ == "__main__":
+    d = load()
+    _write(ROOT / "index.html", p_site(d))
+    print("site: index.html")
+    _write(ROOT / "art" / "index.html", p_art(d))
+    print("art: art/index.html")
+    # Inv-SITE-owner-projection-total, шестой этаж (пять — Σ 2026-07-19: p_site, _head,
+    # read-set, ссылки, ассеты). ПРОЕКЦИЯ ЕСТЬ ⟺ ЕЁ ДАННЫЕ ОПРЕДЕЛЕНЫ. Генератор писан под
+    # ПОЛНУЮ запись одного владельца (olgarozet: 16 разделов) и разыменовывал
+    # d["consultations"] безусловно — у владельца с четырьмя разделами сборка умирала на этой
+    # строке, а всё после неё не выполнялось.
+    #
+    # ОТСУТСТВИЕ ≠ ОТКЛЮЧЕНО — два РАЗНЫХ факта, и путать их разрушительно: `_booking_disabled`
+    # сносит каталог (rmtree), чтобы на осиротевшую страницу нельзя было сослаться, тогда как
+    # НЕОБЪЯВЛЕННОСТЬ значит «у этого владельца такой проекции нет вовсе» — не входит в его
+    # набор, значит и удалять нечего (член, не определённый у владельца, не вход).
+    cons = d.get("consultations")
+    if cons is None:
+        print("booking: not a projection of this owner (consultations не объявлены)")
+    else:
+        _emit_booking(d, cons)
+    _write(ROOT / "telegram.txt", p_telegram(d))
     print("telegram: telegram.txt")
-    (ROOT / "bio.txt").write_text(p_bio(d), encoding="utf-8")
+    _write(ROOT / "bio.txt", p_bio(d))
     print("bio: bio.txt")
