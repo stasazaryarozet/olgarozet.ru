@@ -963,7 +963,7 @@ events:
   - {role: type, lines: ["Дизайн-Путешествие", "в Париж"]}
   - {role: concept, lines: ["Сто лет", "обещаний"], trailing: ":"}
   - {role: link, url: "parisinseptember.ru", lines: []}  # post-10:00 MSK 2026-05-15 → t.me/olga_rozet/<live_id> per Inv-TG-SKORO-anchor-to-main-post (π_anchor pending impl)
-  - {role: link, url: "parisinseptember.ru/2026-stream-conspectus", lines: ["Конспект", "второго эфира"]}  # admin GO 2026-07-10 «Размещение на Посадочной; Ссылка с Сайта; Телеграм» — конспект live-2, текст утверждён в Релевантном Окне. 2026-07-11: снято висящее двоеточие (label-идиома «X:» подразумевает продолжение под ним; здесь ссылка — сама себе текст)
+  - {role: link, ref: "paris-2026-09-live-2-konspekt-page", lines: ["Конспект", "второго эфира"]}  # адрес НЕ хранится литералом — ПРОЕЦИРУЕТСЯ из объекта-конспекта (site_generator.entity_address = π_addr) при рендере: Inv-LINK-address-derived / Inv-RECON-no-shadow. Было url «…/2026-stream-conspectus» — дрейф написания vs исходник 2026-stream-konspekt.md → ссылка вела в осиротевшую копию (Σ lumen 2026-07-24). admin GO 2026-07-10 «Размещение на Посадочной; Ссылка с Сайта; Телеграм» — конспект live-2, текст утверждён в Релевантном Окне. 2026-07-11: снято висящее двоеточие
   lines:                                # legacy / fallback
   - Сто лет
   - обещаний дизайна
