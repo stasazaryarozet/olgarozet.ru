@@ -2427,6 +2427,61 @@ def _person_display(d: dict[str, Any], person_id: str) -> tuple[str, str]:
     return (nm, link)
 
 
+# ── π_addr : Entity → Maybe world-URL — the canonical address projection ──────────────
+#
+# The missing CENTRE of the address family (spec verdict 2026-07-24: `publication.url` /
+# `event.web_addresses` / `persona_url` were three per-kind fields with no unifying arrow). A
+# surface link REFERENCES an entity; its world-address is DERIVED HERE, at consumption — never a
+# stored literal copy on the surface. That copy is the shadow `subsystem-reconciled-property`'s
+# Inv-RECON-no-shadow forbids and Inv-RECON-derive-at-consumption calls a DEFECT: it was the drift
+# that sent the Скоро «Конспект» beat to an orphaned /2026-stream-conspectus/ while the live page
+# is /2026-stream-konspekt/. This realizes entity-link.md::Inv-LINK-address-derived at the
+# DOCUMENT/entity level, exactly as event.anchors was eliminated for the π_anchor functor (Genius
+# Simplification 2026-05-15 — a stored address replaced by its derivation).
+#
+# Dispatch is a {collection → arm} REGISTRY keyed by the collection `entity_registry.locate`
+# returns (FK resolve over V) — never an `if kind==` chain, and keyed by collection so the
+# people/person irregular plural needs no special case.
+
+def _addr_publication(d: dict[str, Any], p: dict[str, Any], absolute: bool) -> "str | None":
+    # Same-origin (relative `url`) is the site-internal form — mirror-agnostic across the
+    # publication's OWN mirrors (measured: the konspekt is mirrored to olgarozet.ru ∧
+    # parisinseptember.ru, so a relative href resolves correctly on either). `absolute`
+    # (a cross-surface reference — TG/IG post → site) prefers the absolute external_url.
+    import channel
+    if absolute:
+        return p.get("external_url") or channel.publication_url(p, d.get("urls"))
+    return channel.publication_url(p, d.get("urls"))
+
+
+def _addr_event(d: dict[str, Any], e: dict[str, Any], absolute: bool) -> "str | None":
+    return _event_canonical(d, e)          # web_addresses[0] ?? canonical+/id/ — already absolute
+
+
+def _addr_person(d: dict[str, Any], p: dict[str, Any], absolute: bool) -> "str | None":
+    return p.get("link") or p.get("url") or None      # the person's declared account address
+
+
+_ADDRESS_ARMS = {
+    "publications": _addr_publication,
+    "events":       _addr_event,
+    "people":       _addr_person,
+}
+
+
+def entity_address(d: dict[str, Any], ref: str, *, absolute: bool = False) -> "str | None":
+    """π_addr(ref) — the canonical world-URL of the referenced entity, DERIVED at consumption.
+    ⊥ (None) when the ref resolves to no addressable entity (or its kind declares no address arm)
+    — never a fabricated URL (Inv-EPI-unknown-is-identity: a guessed address is a phantom's exact
+    shape, and a liveness probe against it would read a 404 as «the target is gone»)."""
+    import entity_registry
+    collection, ent = entity_registry.locate(ref, d)
+    if ent is None:
+        return None
+    arm = _ADDRESS_ARMS.get(collection)
+    return (arm(d, ent, absolute) or None) if arm else None
+
+
 def _person_link_html(d: dict[str, Any], person_id: str, escape: Callable[[Any], str]) -> str:
     """Anchor-wrapped person name. escape ∈ {_t, _inline}; single SoT для 3 sites."""
     nm, lk = _person_display(d, person_id)
