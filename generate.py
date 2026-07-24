@@ -1383,14 +1383,53 @@ def _layout(d: dict[str, Any], *, title: str, description: str, body: str,
     _slug_meta = f'<meta name="dela:slug" content="{_t(slug)}">\n' if slug else ""
     head = _head(title, description, canonical=canonical, og_image=og_image,
                  extra=(_slug_meta + extra_head), structured=structured, d=d)
-    nav_html = '<nav class="nav-fade"><a href="/" aria-label="На главную">←</a></nav>' if nav else ''
+    # СТРЕЛКА «НА ГЛАВНУЮ» ЖИВЁТ РОВНО ТОГДА, КОГДА ГЛАВНОЙ ЕСТЬ ЧТО ПОКАЗАТЬ.
+    # `nav` был ФЛАГОМ, объявляемым вызывающим, — и на владельце, чей индекс пуст по
+    # директиве («на stasazaryarozet.ru в индексе ничего не должно быть»), давал ребро,
+    # ведущее в пустоту: читатель жмёт ← и получает страницу без содержания. Это тот же
+    # закон, что `refs ⊆ delivered` у site_closure, только про содержание, а не про
+    # существование файла: ссылка обязана иметь КОНЕЦ.
+    #
+    # Условие ВЫВЕДЕНО из той же величины, которой p_site решает свою шапку (строка ниже
+    # по файлу: «Условие ВЫВЕДЕНО из самих секций, а не объявлено флагом»), и спрошено У
+    # НЕЁ САМОЙ — второго кодирования пустоты не заводится. Появится у владельца хоть
+    # одна секция — стрелка вернётся сама, ничьей правкой. p_site зовёт `_layout` без
+    # `nav`, поэтому рекурсии здесь нет и быть не может.
+    # ⊥ СОХРАНЯЕТ ССЫЛКУ: запись, по которой индекс не строится, есть «не смог посмотреть»,
+    # а не «на главной ничего нет» (Inv-EPI-unknown-is-identity — та же полярность, что у
+    # `_owner_ships`). Иначе вызывающий с урезанным `d` молча лишил бы живой сайт навигации.
+    def _index_carries() -> "bool | None":
+        """Несёт ли индекс содержание? None (⊥) = посмотреть не удалось.
+
+        ⊥ есть КОНСТРУКТОР, а не значение: вернув `True` при отказе, путь неудачи стал бы
+        неотличим от пути успеха, и вызывающий уже не смог бы отличить «не смог посмотреть»
+        от «посмотрел, всё цело» (Inv-EPI-unknown-is-identity). Полярность решается У
+        ВЫЗЫВАЮЩЕГО и ровно тем же идиомом, что `_owner_ships` строкой выше: `is not False`
+        — ⊥ СОХРАНЯЕТ ссылку, потому что «не вижу диска» никогда не должно читаться как «у
+        владельца ничего нет»."""
+        try:
+            return "<header>" in p_site(d)
+        except Exception as e:                    # ПРИЧИНА СОХРАНЯЕТСЯ: мутный ⊥ неотличим от
+            _LOG.warning(                         # пожатия плеч (obs.Bottom.why) — Inv-CS-fail-loud
+                "_index_carries ⊥ (%s: %s) — навигация СОХРАНЯЕТСЯ, а не снимается",
+                type(e).__name__, e)
+            return None
+    nav_html = ('<nav class="nav-fade"><a href="/" aria-label="На главную">←</a></nav>'
+                if nav and _index_carries() is not False else '')
     ftr = _footer(d.get("urls", {}), (d.get("bio") or {}).get("title", ""), portrait, portrait_night) if footer else ''
-    # WCAG 2.4.1 «Bypass Blocks» — single skip-link before nav, jumps to <main>.
-    # Visually hidden until keyboard focus; one definition serves every surface.
-    skip_link = (f'<a class="skip-link" href="#main">{_typo("Перейти к содержанию")}</a>')
-    # Day/night toggle — chrome, present on EVERY page regardless of `nav`
-    # (FQDN landings suppress .nav-fade but keep the theme toggle). Inv-IFACE-day-night-mode.
-    theme_toggle = _theme_toggle(d)
+    # ХРОМ, ДЕЙСТВУЮЩИЙ НАД СОДЕРЖАНИЕМ, ТРЕБУЕТ СОДЕРЖАНИЯ — тот же закон, что снял
+    # стрелку ← выше: аффорданс, чей референт пуст, лжёт о нём. «Перейти к содержанию»
+    # ведёт в пустой <main>, а тумблер темы перекрашивает страницу, на которой нечего
+    # читать (замерено на живом индексе: 22 видимых знака, и оба — это они).
+    # Условие ВЫВЕДЕНО из самого тела, а не объявлено флагом: страница, у которой
+    # появится содержание, получит и хром — ничьей правкой. WCAG 2.4.1 не нарушается:
+    # обязанность обойти блоки возникает вместе с блоками, которые надо обходить.
+    _has_body = bool(_re.sub(r"(?s)<[^>]+>", "", body or "").strip())
+    skip_link = (f'<a class="skip-link" href="#main">{_typo("Перейти к содержанию")}</a>'
+                 if _has_body else '')
+    # Day/night toggle — chrome on every page that HAS content, regardless of `nav`
+    # (FQDN landings suppress .nav-fade but keep the toggle). Inv-IFACE-day-night-mode.
+    theme_toggle = _theme_toggle(d) if _has_body else ''
     cookie_banner = _cookie_banner(d) if cookie_banner_enabled else ""
     # Inv-SEM-html-lang: document language от data.yaml.languages.host —
     # single SoT за document-level lang. Fallback "ru" preserved for legacy
@@ -3716,6 +3755,47 @@ def anchor(heading: str, seen: "set[str] | None" = None) -> str:
 #: терминатор: оно объявляет обрыв мысли, тогда как точка объявляет её завершённость.
 _H_STOP_RE = _re.compile(r"(?<!\.)\.(?=(?:\s*</[^>]+>)*\s*$)")
 
+#: Тематический разрыв (CommonMark §4.1): ≥3 знака ОДНОГО вида из `-_*`, пробелы между
+#: ними допустимы, ничего иного в строке нет. Записан как ОДНА обратная ссылка, поэтому
+#: смешанное `-*-` разрывом не является — по спецификации, а не по вкусу.
+_MD_RULE_RE = _re.compile(r"([-_*])[ \t]*(?:\1[ \t]*){2,}")
+
+
+# Аббревиатура в наборе строки — максимальный пробег из ≥2 прописных подряд. СЛОВАРЯ НЕТ
+# и быть не может: список аббревиатур был бы вторым кодированием грамматики языка, обязанным
+# разойтись с каждым новым текстом (тот же класс, что словарь «служебных слов» у структурных
+# заголовков). Свойство МОРФОЛОГИЧЕСКОЕ и читается с данных: «ИИ‑агент» даёт пробег «ИИ»,
+# «GigaChat» не даёт ни одного (между прописными стоят строчные), «1С» не даёт (пробег в одну
+# литеру). Кириллица и латиница — одним классом, потому что правило про РЕГИСТР, не про алфавит.
+_ABBR_RE = _re.compile(r"[A-ZА-ЯЁ]{2,}")
+# Разметку не трогаем: содержимое тегов и код — не набор строки. `<code>` исключён отдельно,
+# ибо идентификатор в капители перестаёт быть идентификатором.
+_TAG_OR_CODE_RE = _re.compile(r"(<code[^>]*>.*?</code>|<[^>]+>)", _re.S)
+
+
+def _abbr_smallcaps(html: str) -> str:
+    """Аббревиатуры в наборе строки — капителью (Bringhurst §3.2.1 «spaced small caps for
+    abbreviations and acronyms in the text»).
+
+    Довод оптический, не вкусовой: прописные выше очка строчных и кладут в полосу тёмные
+    пятна, рвущие её цвет, — аббревиатура КРИЧИТ там, где должна лишь называться. Капитель
+    имеет высоту строчных и метит аббревиатуру, не разрушая ритма.
+
+    Размечается РОЛЬ (`<abbr>`), а начертание приходит из контура (--doc-abbr-caps): тот же
+    закон, что у регистра заголовков — форма объявляется, не вписывается. Содержание при этом
+    не меняется НИ ОДНОЙ ЛИТЕРОЙ: капитель есть подстановка глифов, поэтому закон верности
+    проекции продолжает видеть ту же единицу, а носитель без капители (TXT) теряет ровно
+    начертание и ничего сверх."""
+    parts = _TAG_OR_CODE_RE.split(html)
+    for i in range(0, len(parts), 2):                 # чётные — текст, нечётные — теги/код
+        parts[i] = _ABBR_RE.sub(lambda m: f"<abbr>{m.group(0)}</abbr>", parts[i])
+    return "".join(parts)
+
+
+# Абзац, выделенный ЦЕЛИКОМ, есть заголовок (см. _flush_paragraph). Захват не должен
+# содержать `**`: иначе `**A** и **B**` схлопнулось бы в одно мнимое выделение.
+_FULL_EMPH_RE = _re.compile(r"^\*\*((?:(?!\*\*).)+)\*\*$")
+
 
 def _h_punct(heading_html: str) -> str:
     """Заголовочный типограф static-страниц. Трёхчастный, чистый, идемпотентный:
@@ -3923,15 +4003,42 @@ def _md_static_to_html(md_body: str, line_mode: str = "verse",
         # висячий отступ её переносов; <br> давал +45 рваных обрывков на
         # mobile_375); flow: строки — одно течение (пробел).
         joined = _md_inline("\n".join(_amp_normal(_typo(l)) for l in lines))
+        joined = _abbr_smallcaps(joined)
         return _wrap_lines(joined) if line_mode == "verse" else joined.replace("\n", " ")
 
     def _flush_paragraph() -> None:
+        if not paragraph:
+            return
+        # АБЗАЦ, ЦЕЛИКОМ НАБРАННЫЙ ВЫДЕЛЕНИЕМ, — НЕ АБЗАЦ, А ЗАГОЛОВОК.
+        #
+        # Роль читается С ДАННЫХ, а не объявляется: строка, у которой выделено ВСЁ, ничего
+        # не выделяет — выделение относительно, и выделять целое не от чего. Автор,
+        # написавший `**Данные не утекают.**`, назвал раздел, а не усилил фразу.
+        #
+        # Замерено 2026-07-19 на живом артефакте, после того как админ сказал «не вижу, что
+        # сделано»: четыре таких строки открывают SUMMARY — первый экран документа — и НИ
+        # ОДНО заголовочное правило до них не доходило. Точки в конце оставались, прописные
+        # не наступали, шкала кегля не применялась: `_h_punct` и `--doc-fs-h*` правят h1…h6,
+        # а роль была выражена НАЧЕРТАНИЕМ. Структура, записанная в представлении, законом
+        # не читается — тот же корень, что у шкалы, жившей в `rationale`.
+        #
+        # `**A** и **B**` НЕ заголовок: захват не должен содержать `**`, иначе жадность
+        # склеила бы два выделения в одно. `**Три варианта** (можно совмещать):` — тоже нет:
+        # строка не кончается выделением. Оба случая есть в этом документе и оба остаются
+        # абзацами. Уровень — h3, тот же, что у нумерованных разделов: и те и другие суть
+        # прямые дети части документа (глубина ВЫВЕДЕНА из структуры, не выбрана).
+        if len(paragraph) == 1 and (_m := _FULL_EMPH_RE.match(paragraph[0].strip())):
+            _raw = _m.group(1).strip()
+            _id = anchor(_raw, seen_ids)
+            out.append(f'<h3 id="{_id}">'
+                       f"{_h_punct(_md_inline(_amp_normal(_typo(_raw))))}</h3>")
+            paragraph.clear()
+            return
         # «Шапка статьи» — структурное правило (не контентное): абзацы ПОСЛЕ
         # h1 ДО первого h2/h3 несут meta-регистр (дата, байлайн — CSS muted).
-        if paragraph:
-            cls = ' class="article-meta"' if (seen_h1 and not seen_section) else ""
-            out.append(f"<p{cls}>{_block(paragraph)}</p>")
-            paragraph.clear()
+        cls = ' class="article-meta"' if (seen_h1 and not seen_section) else ""
+        out.append(f"<p{cls}>{_block(paragraph)}</p>")
+        paragraph.clear()
 
     def _flush_list() -> None:
         if list_buf:
@@ -4000,6 +4107,17 @@ def _md_static_to_html(md_body: str, line_mode: str = "verse",
 
     for raw_line in body.split("\n"):
         line = raw_line.rstrip()
+        # ТЕМАТИЧЕСКИЙ РАЗРЫВ (CommonMark §4.1): строка из трёх и более `-`, `_` или `*`
+        # одного вида. Грамматика его НЕ ЗНАЛА, и потому `---` доезжал до мира АБЗАЦЕМ —
+        # тремя дефисами на странице и в каждой её проекции (замер 2026-07-19, PDF ТКП,
+        # стр. 1). Молчаливая деградация стандартной конструкции: документ написан верно,
+        # рендерер прочёл его как прозу. Граница частей уже рисуется `.doc-part-rule`, и
+        # разрыв — та же граница, объявленная разметкой вместо frontmatter, поэтому и
+        # носитель у них один.
+        if _MD_RULE_RE.fullmatch(line.strip()):
+            _flush_all()
+            out.append('<hr class="doc-part-rule" aria-hidden="true">')
+            continue
         m_img = _MD_IMG_RE.fullmatch(line.strip())      # СТРОКА-КАРТИНКА = БЛОК (figure+caption)
         if m_img:
             _flush_all()
@@ -4050,6 +4168,17 @@ def _md_static_to_html(md_body: str, line_mode: str = "verse",
                 # там отделяло бы текст от поля страницы, а не часть от части. N маркеров ⇒
                 # N−1 границ: ровно арифметика разбиения, а не «по маркеру на каждый».
                 if _seen_structural:
+                    # ГРАНИЦА ЧАСТЕЙ — ОДИН ФАКТ, И У НЕГО ОДНО КОДИРОВАНИЕ.
+                    # Автор, писавший до появления `structural_headings:`, отбивал части
+                    # ЛИНЕЙКОЙ (`---`), а маркер теперь ВЫВОДИТ ту же границу сам. Оба
+                    # доезжали, и граница рисовалась дважды: в HTML две линейки подряд, в
+                    # TXT — два `* * *` через пустую строку (замерено на живом артефакте
+                    # 2026-07-19, админ увидел это как «дубляж в TXT»). Побеждает ВЫВЕДЕННАЯ:
+                    # авторская линейка непосредственно перед маркером есть второе кодирование
+                    # уже объявленного, и снимается — сам маркер при этом остаётся источником
+                    # истины, поэтому документ без `structural_headings:` ничего не теряет.
+                    while out and out[-1].strip() in ("<hr>", '<hr class="doc-part-rule" aria-hidden="true">'):
+                        out.pop()
                     out.append('<hr class="doc-part-rule" aria-hidden="true">')
                 _seen_structural += 1
                 continue
@@ -4297,6 +4426,52 @@ def p_document_menu(delivered: "Any" = (), *, printable: bool = True) -> str:
             if items else "")
 
 
+def _document_body(md_text: str) -> "tuple[dict[str, Any], str]":
+    """(front-matter, rendered body) — the ONE call that turns a document's source into
+    its body, shared by every projection of it.
+
+    Written because the document projection had just copied it: two call sites naming
+    the same three front-matter keys, and the fourth key to join the grammar would have
+    reached one of them.  A projection family whose members re-derive the body
+    separately is the drift this whole module is about, one floor down."""
+    fm, body_md = parse_static_md(md_text)
+    return fm, _md_static_to_html(
+        body_md, line_mode=str(fm.get("line_mode") or "verse"),
+        fragments=fm.get("fragments") or (),
+        structural=fm.get("structural_headings") or ())
+
+
+def p_document(d: dict[str, Any], md_text: str, slug: str = "", css: str = "") -> str:
+    """Project (D, static.md) → a SELF-CONTAINED document.  The transport source.
+
+    A SEPARATE projection, not `p_static_page` with a flag: a PAGE is a document plus
+    the chrome that lets a visitor navigate a site, and a DOCUMENT is what a reader
+    downloads.  They differ in KIND, and the previous shape — one renderer whose
+    `formats is None` suppressed the menu ALONE — leaked the rest of the chrome into
+    every artifact.  Measured 2026-07-19: line 1 of the published .txt was «Перейти к
+    содержанию ← ◐» — the skip-link and the theme toggle, inside a document a client
+    opens.
+
+    CARRIES ITS OWN FORM.  `<link href="/styles.css">` is ROOT-ABSOLUTE and the
+    converter runs over a temp dir holding one file, so it resolved to
+    `file:///styles.css` — absent.  Every artifact was therefore set in WeasyPrint's
+    fallback serif at WeasyPrint's default margin, while `@page` declared 18mm and the
+    stylesheet's own comment promised «Печать и „сохранить в PDF“ — ОДНА проекция…
+    иначе PDF и печать разойдутся молча».  A document that travels must carry its form
+    WITH it — a reference into a site is a reference the document loses the moment it
+    leaves.  So the caller resolves the Form once and passes it in; nothing here knows
+    a font name (Inv-FORM-derived: the Form is resolved from the contour, never
+    written twice)."""
+    fm, body_html = _document_body(md_text)
+    lang = (d.get("languages") or {}).get("host") or "ru"
+    style = f"<style>\n{css}\n</style>\n" if css else ""
+    return (f'<!DOCTYPE html>\n<html lang="{_t(lang)}">\n<head>\n'
+            f'<meta charset="utf-8">\n'
+            f'<title>{_t(fm.get("title") or slug)}</title>\n{style}</head>\n'
+            f'<body>\n<article class="article-wrapper">{body_html}</article>\n'
+            f'</body>\n</html>\n')
+
+
 def p_static_page(d: dict[str, Any], md_text: str, slug: str = "",
                   formats: "Any" = None) -> str:
     """Project (D, static.md) → standalone HTML page.
@@ -4314,14 +4489,10 @@ def p_static_page(d: dict[str, Any], md_text: str, slug: str = "",
     Web-Broadcasting host (konspekt: canonical → parisinseptember.ru while
     mirrored on olgarozet.ru — mirror must not self-canonicalize).
     """
-    fm, body_md = parse_static_md(md_text)
+    fm, body_html = _document_body(md_text)
     title = fm.get("title") or ""
     description = fm.get("description") or title
     slug = fm.get("slug") or slug
-    body_html = _md_static_to_html(
-        body_md, line_mode=str(fm.get("line_mode") or "verse"),
-        fragments=fm.get("fragments") or (),
-        structural=fm.get("structural_headings") or ())
     # footer.legal block — Inv-SITE-trust-base. Same projection used by
     # p_event_landing (line ~2055) so the legal colophon is byte-equivalent
     # across every surface (event landing, owner site, static page).
