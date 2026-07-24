@@ -326,6 +326,23 @@ def _md_links(s: str) -> str:
     return _MD_LINK_RE.sub(_repl, s)
 
 
+def _prose_entity_links(s: str, d: dict[str, Any]) -> str:
+    """Prose vehicle of Inv-LINK-address-derived: a wikilink `[[entity-id#sub|caption]]` in authored
+    prose renders as <a href=DERIVED>caption</a> — the href PROJECTED from the referenced entity by
+    `entity_address` (π_addr, the one address derivation), never a stored literal copy of an address.
+    Grammar is `link.WIKILINK` (the System's ONE wikilink derivation — target g1, #subtext g2, caption
+    g3), so prose and the note-graph read the same `[[…]]`, never a second parser. A literal
+    `[text](url)` markdown link stays the escape hatch for a non-entity target (`_md_links`). ⊥ ref ⇒
+    the caption as plain text — never a guessed or empty href (Inv-EPI-unknown-is-identity)."""
+    import link
+    def _repl(m: "_re.Match[str]") -> str:
+        doc, frag = m.group(1).strip(), (m.group(2) or "").strip()
+        caption = (m.group(3) or doc).strip()
+        href = entity_address(d, doc)
+        return f'<a href="{_u(href + frag)}">{caption}</a>' if href else caption
+    return link.WIKILINK.sub(_repl, s)
+
+
 def _inline(s: Any) -> str:
     """Render text → BODY-safe HTML: html-escape + typographic normalisation (_typo) +
     math-rel wrap (Inv-TYPO-math-rel-aligned).
@@ -2851,7 +2868,7 @@ def _render_sections_and_programme(ctx: "_LandingCtx") -> "list[str]":
         if not items and not pairs:
             _prose = _drop_block_close_period(_prose)
         for p in _prose:
-            parts.append(f"<p>{_md_links(_breath(p))}</p>")
+            parts.append(f"<p>{_prose_entity_links(_md_links(_breath(p)), ctx.d)}</p>")
         if pairs:
             parts.append('<dl class="pairs">')
             for pair in pairs:
