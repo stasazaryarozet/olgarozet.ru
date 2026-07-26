@@ -1588,6 +1588,12 @@ def _all_stages_non_terminal() -> frozenset[str]:
                           "MOVEDONLINE", "CANCELLED", "ONGOING", "PLANNED"})
 
 
+# The ONE owner of the stage-time law, exported for non-site surfaces (venture
+# tree-Table, …): they must NEVER re-derive CONCLUDED themselves (Inv-EV-stage-
+# time-derived has a single realization; a second spelling = drift).
+effective_stage = _effective_stage
+
+
 def sorted_events(d: dict[str, Any], surface: str = "site", now_iso: str | None = None) -> list[Any]:
     """Events filtered by render-surface marker AND effective stage, ASC by t_key.
 
