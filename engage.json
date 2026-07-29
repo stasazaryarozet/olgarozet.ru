@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-29T16:15:02.468595+00:00",
+  "generated": "2026-07-29T16:30:04.007651+00:00",
   "user": "olgarozet",
   "slots": [
     {
@@ -7,7 +7,7 @@
       "start": "2026-07-31T10:00:00+02:00",
       "duration": 40,
       "tz": "Europe/Belgrade",
-      "event_id": "23r7s8uai2gn79bi21h2bpd3n0"
+      "event_id": "i85hh5nria6a2kk19pns0tdv6o"
     },
     {
       "id": "es_2b795b7f8a87",
@@ -21,7 +21,7 @@
       "start": "2026-07-31T15:00:00+02:00",
       "duration": 40,
       "tz": "Europe/Belgrade",
-      "event_id": "41orpjrrbd9d0a43hk2o8h2324"
+      "event_id": "h0nr1l7909nt3osv2f7kstpae4"
     },
     {
       "id": "es_273934f21928",
@@ -42,7 +42,7 @@
       "start": "2026-08-03T15:00:00+02:00",
       "duration": 40,
       "tz": "Europe/Belgrade",
-      "event_id": "4ackalbin96nm39pe3ufbcfh2o"
+      "event_id": "nfg1e1hqivfqb60pprlbpkn0j0"
     },
     {
       "id": "es_1e853cdd1215",
@@ -77,56 +77,56 @@
       "start": "2026-08-05T12:00:00+02:00",
       "duration": 40,
       "tz": "Europe/Belgrade",
-      "event_id": "f1eilumokn5osc2vabd95mgdgg"
+      "event_id": "mbgg71dam94r9qnrb47a455g20"
     },
     {
       "id": "es_4463420b4dfa",
       "start": "2026-08-05T15:00:00+02:00",
       "duration": 40,
       "tz": "Europe/Belgrade",
-      "event_id": "prpotbt65kas2l2m2npvqa2d80"
+      "event_id": "tf73vhfn2uusl7q69ru1er7pgc"
     },
     {
       "id": "es_9e6ab282ca98",
       "start": "2026-08-06T10:00:00+02:00",
       "duration": 40,
       "tz": "Europe/Belgrade",
-      "event_id": "9rqljbur3tp3l4s29gi5lj4nmg"
+      "event_id": "jcla75njobo0r3khibb7bnda48"
     },
     {
       "id": "es_ee52998b456f",
       "start": "2026-08-06T12:00:00+02:00",
       "duration": 40,
       "tz": "Europe/Belgrade",
-      "event_id": "4uud5haifnv5cnknbinmtu2ipo"
+      "event_id": "b3lfgileirg4huflg5osdcaibg"
     },
     {
       "id": "es_c564fc83f921",
       "start": "2026-08-06T15:00:00+02:00",
       "duration": 40,
       "tz": "Europe/Belgrade",
-      "event_id": "jluqa0at93s6v001e7g7ild1q8"
+      "event_id": "teeki84d13sp7o23d6akrejgn4"
     },
     {
       "id": "es_dac05cf89e2f",
       "start": "2026-08-07T10:00:00+02:00",
       "duration": 40,
       "tz": "Europe/Belgrade",
-      "event_id": "5q47r07b91ahjsgi7o9q7vbe64"
+      "event_id": "m2ddqhhms381uruolujrfo611k"
     },
     {
       "id": "es_16af67717866",
       "start": "2026-08-07T12:00:00+02:00",
       "duration": 40,
       "tz": "Europe/Belgrade",
-      "event_id": "9crbmsidr6cag4nel0oc4i4l78"
+      "event_id": "k5n5nghk89btcg1bcvguhv0638"
     },
     {
       "id": "es_4fc7af9b5b7d",
       "start": "2026-08-07T15:00:00+02:00",
       "duration": 40,
       "tz": "Europe/Belgrade",
-      "event_id": "54v247s0dsjsqgigej6vkkrios"
+      "event_id": "6q58rdd8solpg5g94q9g6qesig"
     },
     {
       "id": "es_5974a3cda4eb",
