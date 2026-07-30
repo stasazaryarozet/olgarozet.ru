@@ -558,7 +558,7 @@ events:
   date: до осени
   skoro_state: pending
   beats:
-  - {role: when, register: proper-case, lines: ["Дату объявим:"]}
+  - {role: when, lines: ["Дату объявим:"]}
   - {role: type, lines: ["Онлайн-встреча:"]}
   - {role: concept, lines: ["Человек и Ремесло"]}
   audience: []
@@ -602,7 +602,7 @@ events:
     link_url: "https://olgarozet.ru/"
   skoro_state: pending                  # ev-{state} class for site article — proximal | pending | concrete | period
   beats:                                # admin 2026-05-15 TG правка → site role-tagged semantic structure
-  - {role: when, register: proper-case, lines: ["Дату-время объявим:"]}
+  - {role: when, lines: ["Дату-время объявим:"]}
   - {role: type, lines: ["Онлайн-Встреча"]}
   - {role: detail, lines: ["на манер наших оффлайновых:"]}
   - role: multi-component
@@ -630,7 +630,37 @@ events:
 # admin 2026-07-28: «перед Ценой и Ценностью Ольга хочет две онлайн-лекции,
 # которые можно под одной, а можно диптихом».
 # Source PDFs: ~/Downloads/Стили тренды.pdf (Ч.1, 40 стр.), ~/Downloads/стили 22.pdf (Ч.2, 28 стр.)
+
+- id: lecture_styles_trends_diptych
+  type: lecture
+  broadcast: [site, telegram_channel]
+  t_key: "2026-08"                      # горизонт «лето»
+  skoro_state: pending
+  title: "Стили & Тренды (Диптих)"
+  date: лето 2026
+  audience: []
+  organizers: [olgarozet]
+  format: [online, lecture]
+  event_series: styles_and_trends
+  status: PLANNING
+  beats:
+  - {role: when, lines: ["Летом:"]}
+  - {role: type, lines: ["Диптих", "электронных лекций:"]}
+  - {role: concept, lines: ["Стили & Тренды"], trailing: ":"}
+  - {role: concept, lines: ["Прошлое •от|рас•крывает будущее"], trailing: "."}
+  lines:
+  - "Летом:"
+  - "Диптих электронных лекций:"
+  - '"Прошлое •от|рас•крывает будущее".'
+  lead: "Диптих электронных лекций Ольги Розет. Часть 1: От Античности до Контекстуального Модернизма. Часть 2: От Модернизма к Трендам 2026."
+  sections:
+  - title: Темы
+    items:
+    - "Часть 1: Античность, Романский стиль, Готика, Ренессанс, Барокко, Классицизм"
+    - "Часть 2: Модернизм, Минимализм, Ар Деко, Тренды 2026 (Эскапизм, Ugly-дизайн, Трансформизм)"
+
 - id: lecture_styles_trends_part1
+  parent_id: lecture_styles_trends_diptych
   type: lecture
   broadcast: [site, telegram_channel]
   t_key: "2026-08"                      # горизонт «лето» — перед Парижем (сент); одинаковый t_key с Ч.2 → YAML-порядок = stable sort
@@ -643,7 +673,7 @@ events:
   event_series: styles_and_trends
   status: PLANNING
   beats:
-  - {role: when, register: proper-case, lines: ["Летом:"]}
+  - {role: when, lines: ["Летом:"]}
   - {role: type, lines: ["Онлайн-лекция:"]}
   - {role: concept, lines: ["Стили & Тренды"], trailing: ":"}
   - {role: detail, lines: ["Прошлое открывает будущее"]}
@@ -669,6 +699,7 @@ events:
     - "Контекстуальный Модернизм"
 
 - id: lecture_styles_trends_part2
+  parent_id: lecture_styles_trends_diptych
   type: lecture
   broadcast: [site, telegram_channel]
   t_key: "2026-08"                      # тот же горизонт «лето»; YAML-порядок после Ч.1 → stable sort
@@ -681,7 +712,7 @@ events:
   event_series: styles_and_trends
   status: PLANNING
   beats:
-  - {role: when, register: proper-case, lines: ["Летом:"]}
+  - {role: when, lines: ["Летом:"]}
   - {role: type, lines: ["Онлайн-лекция:"]}
   - {role: concept, lines: ["Стили & Тренды"], trailing: ":"}
   - {role: detail, lines: ["Прошлое раскрывает будущее"]}
@@ -1047,12 +1078,12 @@ events:
   registration:
   skoro_state: concrete                 # ev-concrete class — date known
   beats:                                # role-tagged semantic site rendering (proposal)
-  - {role: when, register: caps, lines: ["8–11", "сентября"]}
+  - {role: when, lines: ["8–11", "сентября"]}
   - {role: organizer, lines: ["Совместно", "с Натальей Логиновой"]}
   - {role: type, lines: ["Дизайн-Путешествие", "в Париж"]}
   - {role: concept, lines: ["Сто лет", "обещаний"], trailing: ":"}
   - {role: link, url: "parisinseptember.ru", lines: []}  # post-10:00 MSK 2026-05-15 → t.me/olga_rozet/<live_id> per Inv-TG-SKORO-anchor-to-main-post (π_anchor pending impl)
-  - {role: link, url: "parisinseptember.ru/2026-stream-conspectus", lines: ["Конспект", "второго эфира"]}  # admin GO 2026-07-10 «Размещение на Посадочной; Ссылка с Сайта; Телеграм» — конспект live-2, текст утверждён в Релевантном Окне. 2026-07-11: снято висящее двоеточие (label-идиома «X:» подразумевает продолжение под ним; здесь ссылка — сама себе текст)
+  - {role: link, url: "parisinseptember.ru/2026-stream-conspectus", lines: ["Конспект второго эфира:"], wrap: "(\n{text}\n{link}\n)"}  # admin GO 2026-07-10 «Размещение на Посадочной; Ссылка с Сайта; Телеграм» — конспект live-2, текст утверждён в Релевантном Окне. 2026-07-11: снято висящее двоеточие (label-идиома «X:» подразумевает продолжение под ним; здесь ссылка — сама себе текст)
   lines:                                # legacy / fallback
   - Сто лет
   - обещаний дизайна
@@ -1124,7 +1155,7 @@ events:
     attested_by: nascent
     attested_at: "2026-07-09T06:35:00+00:00"
   beats:                              # role-tagged semantic site rendering
-  - {role: when, register: proper-case, lines: ["26 мая,", "19:00 МСК"]}
+  - {role: when, lines: ["26 мая,", "19:00 МСК"]}
   - {role: type, lines: ["ОНЛАЙН-ВСТРЕЧА", "ПРО ПАРИЖ"]}
   - {role: organizer, lines: ["со мной и Натальей Логиновой"]}
   - {role: link, url: "instagram.com/natalya_lo", lines: ["у Натальи", "в Инстаграм-аккаунте"]}
@@ -1180,7 +1211,7 @@ events:
   last_in_series: true                # admin 2026-07-06: последний эфир по теме Парижа — семантика «second and last»
   skoro_state: anchor                 # concrete date → anchor
   beats:                              # КАНОНИЧЕСКАЯ структура записи Скоро (admin 2026-07-06): when→заголовок→подчинённое→ссылка. when-first enforced рендерером; detail muted CSS; type = ЕДИНСТВЕННЫЙ жирный
-  - {role: when, register: proper-case, lines: ["8 июля,", "18:00"]}      # дата-время ПРЕЖДЕ заголовка (единообразно со всеми записями)
+  - {role: when, lines: ["8 июля,", "18:00"]}      # дата-время ПРЕЖДЕ заголовка (единообразно со всеми записями)
   - {role: type, lines: ["ВТОРОЙ", "ПРЯМОЙ ЭФИР"]}                        # ЕДИНСТВЕННЫЙ заголовок (h3, bold)
   - {role: detail, register: caps, lines: ["— и последний по теме —"]}   # подчинённый подзаголовок (muted, НЕ мимикрирует под заголовок)
   - {role: link, url: "instagram.com/natalya_lo", lines: ["у Натальи", "в Инстаграм-аккаунте"]}   # url-drop 2026-07-08 (admin go, время/схема подтверждены): Скоро-эфир → профиль Натальи (майский образец ig-live); каламбур parisinseptember снят на окно эфира
@@ -1216,6 +1247,25 @@ events:
   participation_funnel:                # эфир-зрители → potential paris-2026-09 travel-leads
     stage_in: viewed_live_2
     stage_out: lead_paris_2026_09
+
+- id: lecture_protofunctionalism_shakers
+  type: lecture
+  broadcast: [site, telegram_channel]
+  t_key: "2026-10"                      # горизонт «осень»
+  skoro_state: pending                  # точная дата не объявлена
+  title: "Протофункционализм и будущее: Быт и мебель шейкеров"
+  date: осень 2026
+  audience: []
+  organizers: [olgarozet]
+  format: [online, lecture]
+  event_series: protofunctionalism
+  status: PLANNING
+  beats:
+  - {role: when, lines: ["Осенью:"]}
+  - {role: type, lines: ["Электронная лекция:"]}
+  - {role: concept, lines: ["Протофункционализм и будущее"], trailing: ":"}
+  - {role: detail, lines: ["Быт и мебель шейкеров"]}
+
 
 - id: uzbekistan_2026_fall
   type: travel      # entity-event sub-class
@@ -1309,7 +1359,7 @@ events:
     link_url: "https://olgarozet.ru/"
   skoro_state: period                   # ev-period class — season anchor
   beats:                                # role-tagged semantic site rendering
-  - {role: when, register: caps, lines: ["осенью"]}
+  - {role: when, lines: ["осенью"]}
   - {role: type, lines: ["Самарканд–Бухара"]}
   - {role: detail, lines: ["Учебная;", "Деловая;", "Развлекательная —"]}   # Inv-STA-semicolon-vertical-list: перечисление вертикалью с `;`, финальное `—` ведёт к продолжению («Стажировка…») — форма самого админ-текста sections.intro «— три измерения одной поездки»
   - {role: type, lines: ["Стажировка"]}
@@ -1393,7 +1443,7 @@ events:
     link_url: "https://olgarozet.ru/"
   skoro_state: period                   # ev-period class — year anchor
   beats:                                # role-tagged semantic site rendering
-  - {role: when, register: caps, lines: ["2027"]}
+  - {role: when, lines: ["2027"]}
   - {role: type, lines: ["Сербия"]}
   - {role: audience, lines: ["для архитекторов,", "дизайнеров,", "декораторов", "и художников"]}
   lines:
@@ -1411,7 +1461,7 @@ events:
   t_key: "2026-08"                      # горизонт «до наступления осени» = лето 2026 (admin 2026-07-06). Прежний «2026-06» — устаревший placeholder В ПРОШЛОМ; честный forward-горизонт: лето, до Парижа (сент). Точная дата → уточнить
   skoro_state: pending                  # ev-pending class — точная дата не объявлена (но горизонт «до осени» известен → t_key несёт его)
   beats:                                # role-tagged semantic site rendering
-  - {role: when, register: proper-case, lines: ["Летом:"]}
+  - {role: when, lines: ["Летом:"]}
   - {role: type, lines: ["Рассказ-показ:"]}   # admin rename 2026-07-06 («мы переназвали»; слово admin 01:37 — ёмкое, не англицизм, для мультимедийной формы). NB: первое применение исчезло из worktree до коммита (c45689aa9f без него) — re-applied, content-verified
   - {role: concept, lines: ["Цена и Ценность"]}
   lines:                                # legacy / fallback
@@ -1466,8 +1516,8 @@ events:
   registration:
   status: PLANNING
   beats:
-  - {role: when, register: proper-case, lines: ["В конце ноября"]}
-  - {role: type, register: caps, lines: ["Экскурсия"]}
+  - {role: when, lines: ["В конце ноября"]}
+  - {role: type, lines: ["Экскурсия"]}
   - {role: detail, lines: ["по круглому дому Мельникова"]}
   lines:
   - "В конце ноября"

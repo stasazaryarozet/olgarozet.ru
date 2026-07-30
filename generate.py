@@ -146,6 +146,18 @@ def _compile_typo_regexes(rules: dict[str, Any]) -> tuple[Any, ...]:
     # Пары нормализации набора (данные): напр. «т.ч.»→«т. ч.» (NBSP внутри) —
     # орфография НАБОРА, не голоса (тот же класс, что typographic-quotes).
     replacements = [(str(a), str(b)) for a, b in (rules.get("typo_replacements") or [])]
+    
+    # Quotes (Inv-TYPO-typographic-quotes)
+    quotes = rules.get("quotes") or {}
+    outer_quotes = quotes.get("outer")
+    quote_re = None
+    if outer_quotes and len(outer_quotes) == 2:
+        # Match straight quotes. 
+        # Opening: start of string, space, or opening bracket/dash
+        # Closing: captured group 2 matches anything except quotes
+        # This replaces "something" with «something»
+        quote_re = (_re.compile(r'(^|[\s(\[—\-<])"([^"]+?)"(?=[.,;:!?\s)\]>]|$)'), outer_quotes[0], outer_quotes[1])
+        
     glue_before = rules.get("nbsp_before") or []
     glue_around = rules.get("nbsp_around") or []
     before_re = None
@@ -156,7 +168,7 @@ def _compile_typo_regexes(rules: dict[str, Any]) -> tuple[Any, ...]:
     if glue_around:
         alt2 = "|".join(_re.escape(c) for c in glue_around)
         around_re = _re.compile(rf"((?:{alt2})) ")
-    return unit_re, prep_re, before_re, around_re, tuple(replacements)
+    return unit_re, prep_re, before_re, around_re, tuple(replacements), quote_re
 
 
 @_lru_cache(maxsize=16)
@@ -213,8 +225,10 @@ def _typo(s: str, lang: str = "ru") -> str:
     """
     if not s:
         return s
-    unit_re, prep_re, before_re, around_re, replacements = _typo_compiled(lang)
+    unit_re, prep_re, before_re, around_re, replacements, quote_re = _typo_compiled(lang)
     out = s
+    if quote_re is not None:
+        out = quote_re[0].sub(r"\1" + quote_re[1] + r"\2" + quote_re[2], out)
     for _a, _b in replacements:
         out = out.replace(_a, _b)
     if unit_re is not None:
@@ -1555,7 +1569,7 @@ def _effective_stage(event: dict[str, Any], now_iso: str | None = None) -> str:
     else:
         now = parse_iso_ts(now_iso, naive_utc=True)
         if now is None:
-            return stored               # unknown 'now' — nothing to derive from
+            return stored
     end = anchor_dt(event.get("t_end"), end=True)
     if end and now >= end:
         return "CONCLUDED"
@@ -1627,6 +1641,31 @@ def sorted_events(d: dict[str, Any], surface: str = "site", now_iso: str | None 
         if _effective_stage(e, now_iso) not in allowed:
             continue
         pool.append(e)
+    # Series folding via graph (Inv-EV-parent-resolves):
+    # A parent event serves as an aggregator for its children UNTIL the first child is published.
+    import collections
+    children = collections.defaultdict(list)
+    for e in d.get("events", []):
+        if "parent_id" in e:
+            children[e["parent_id"]].append(e)
+
+    parts_to_hide = set()
+    parents_to_hide = set()
+    for parent_id, sub_events in children.items():
+        # Only fold if the parent is also in the pool
+        if not any(e.get("id") == parent_id for e in pool):
+            continue
+        # Find the first child (by list order in data.yaml)
+        first_child = sub_events[0]
+        if first_child.get("skoro_state", "pending") == "pending":
+            # first child not published -> hide all children, show parent
+            parts_to_hide.update(c.get("id") for c in sub_events)
+        else:
+            # first child published -> show children, hide parent
+            parents_to_hide.add(parent_id)
+
+    pool = [e for e in pool if e.get("id") not in parts_to_hide and e.get("id") not in parents_to_hide]
+
     return sorted(pool, key=lambda e: e.get("t_key", "￿"))
 
 
