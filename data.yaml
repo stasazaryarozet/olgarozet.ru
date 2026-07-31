@@ -556,11 +556,6 @@ events:
   title: Человек и Ремесло
   t_key: "2026-08"         # горизонт «до наступления осени» = лето 2026 (admin 2026-07-06). Прежний «2026-05-W3» — устаревший placeholder В ПРОШЛОМ (событие не проведено, дата не объявлена); честный forward-горизонт: лето, до Парижа (сент). Точная дата → уточнить
   date: до осени
-  skoro_state: pending
-  beats:
-  - {role: when, lines: ["Дату объявим:"]}
-  - {role: type, lines: ["Онлайн-встреча:"]}
-  - {role: concept, lines: ["Человек и Ремесло"]}
   audience: []
   organizers: [olgarozet]
   format: [online, meeting]
@@ -644,7 +639,7 @@ events:
   event_series: styles_and_trends
   status: PLANNING
   beats:
-  - {role: when, lines: ["Летом:"]}
+  - {role: when, from: horizon}   # coarse phrase DERIVED from t_key (В августе) — no hardcode, no drift
   - {role: type, lines: ["Диптих", "электронных лекций:"]}
   - {role: concept, lines: ["Прошлое •от|рас•крывает будущее"], trailing: "."}
   lines:
@@ -672,7 +667,7 @@ events:
   event_series: styles_and_trends
   status: PLANNING
   beats:
-  - {role: when, lines: ["Летом:"]}
+  - {role: when, from: horizon}   # coarse phrase DERIVED from t_key (В августе) — no hardcode, no drift
   - {role: type, lines: ["Онлайн-лекция:"]}
   - {role: concept, lines: ["Стили & Тренды"], trailing: ":"}
   - {role: detail, lines: ["Прошлое открывает будущее"]}
@@ -711,7 +706,7 @@ events:
   event_series: styles_and_trends
   status: PLANNING
   beats:
-  - {role: when, lines: ["Летом:"]}
+  - {role: when, from: horizon}   # coarse phrase DERIVED from t_key (В августе) — no hardcode, no drift
   - {role: type, lines: ["Онлайн-лекция:"]}
   - {role: concept, lines: ["Стили & Тренды"], trailing: ":"}
   - {role: detail, lines: ["Прошлое раскрывает будущее"]}
@@ -1260,7 +1255,7 @@ events:
   event_series: protofunctionalism
   status: PLANNING
   beats:
-  - {role: when, lines: ["Осенью:"]}
+  - {role: when, from: horizon}   # DERIVED from t_key (В октябре)
   - {role: type, lines: ["Электронная лекция:"]}
   - {role: concept, lines: ["Протофункционализм и будущее"], trailing: ":"}
   - {role: detail, lines: ["Быт и мебель шейкеров"]}
@@ -1358,7 +1353,7 @@ events:
     link_url: "https://olgarozet.ru/"
   skoro_state: period                   # ev-period class — season anchor
   beats:                                # role-tagged semantic site rendering
-  - {role: when, lines: ["осенью"]}
+  - {role: when, from: horizon}   # DERIVED from t_key (В октябре)
   - {role: type, lines: ["Самарканд–Бухара"]}
   - {role: detail, lines: ["Учебная;", "Деловая;", "Развлекательная —"]}   # Inv-STA-semicolon-vertical-list: перечисление вертикалью с `;`, финальное `—` ведёт к продолжению («Стажировка…») — форма самого админ-текста sections.intro «— три измерения одной поездки»
   - {role: type, lines: ["Стажировка"]}
@@ -1460,7 +1455,7 @@ events:
   t_key: "2026-08"                      # горизонт «до наступления осени» = лето 2026 (admin 2026-07-06). Прежний «2026-06» — устаревший placeholder В ПРОШЛОМ; честный forward-горизонт: лето, до Парижа (сент). Точная дата → уточнить
   skoro_state: pending                  # ev-pending class — точная дата не объявлена (но горизонт «до осени» известен → t_key несёт его)
   beats:                                # role-tagged semantic site rendering
-  - {role: when, lines: ["Летом:"]}
+  - {role: when, from: horizon}   # coarse phrase DERIVED from t_key (В августе) — no hardcode, no drift
   - {role: type, lines: ["Рассказ-показ:"]}   # admin rename 2026-07-06 («мы переназвали»; слово admin 01:37 — ёмкое, не англицизм, для мультимедийной формы). NB: первое применение исчезло из worktree до коммита (c45689aa9f без него) — re-applied, content-verified
   - {role: concept, lines: ["Цена и Ценность"]}
   lines:                                # legacy / fallback
@@ -2146,7 +2141,11 @@ publications:
     и practice-of-design-travel. Третья сторона = расширение reach без своего аккаунта; независимая
     verification ценности проекта. Каждая публикация — research-quality artifact, читается
     как standalone.
-  materials: []
+    Адресат №1 (2026-07-31): INTERIOR+DESIGN / interior.ru — контактное лицо Ольги
+    в редакции: Алексей Дорожкин (редакционный директор). Предлагаемый текст:
+    texts/interior-plus-design-material.md (v1-proposal). Сущность издания:
+    knowledge/people/interior-plus-design/.
+  materials: ["texts/interior-plus-design-material.md"]
   campaign_id: paris-2026-09-promo
   schema_version: 1
 
