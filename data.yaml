@@ -554,7 +554,7 @@ events:
   broadcast: [site, telegram_channel]   # admin 2026-05-15: Скоро digest mirror across surfaces — TG msg #62 references this event
 
   title: Человек и Ремесло
-  t_key: "2026-08"         # горизонт «до наступления осени» = лето 2026 (admin 2026-07-06). Прежний «2026-05-W3» — устаревший placeholder В ПРОШЛОМ (событие не проведено, дата не объявлена); честный forward-горизонт: лето, до Парижа (сент). Точная дата → уточнить
+  t_key: "2026-08-31"      # горизонт «КОНЕЦ лета» (admin 2026-07-30: «перенеси онлайн-встречу на конец лета») — граница сезона; строковый ASC ставит Встречу ПОСЛЕ месячных «2026-08» и ДО «2026-09»: порядок = следствие данных, не перестановки YAML. Дата не объявлена — when-беат остаётся админским «Дату-время объявим:»
   date: до осени
   audience: []
   organizers: [olgarozet]
@@ -668,14 +668,14 @@ events:
   status: PLANNING
   beats:
   - {role: when, from: horizon}   # coarse phrase DERIVED from t_key (В августе) — no hardcode, no drift
-  - {role: type, lines: ["Онлайн-лекция:"]}
+  - {role: type, lines: ["Электронная лекция:"]}
   - {role: concept, lines: ["Стили & Тренды"], trailing: ":"}
   - {role: detail, lines: ["Прошлое открывает будущее"]}
   - {role: detail, lines: ["Часть 1"]}
   lines:
   - "Летом"
   - ""
-  - "Онлайн-лекция:"
+  - "Электронная лекция:"
   - ""
   - "«Стили & Тренды»:"
   - "Прошлое открывает будущее"
@@ -707,14 +707,14 @@ events:
   status: PLANNING
   beats:
   - {role: when, from: horizon}   # coarse phrase DERIVED from t_key (В августе) — no hardcode, no drift
-  - {role: type, lines: ["Онлайн-лекция:"]}
+  - {role: type, lines: ["Электронная лекция:"]}
   - {role: concept, lines: ["Стили & Тренды"], trailing: ":"}
   - {role: detail, lines: ["Прошлое раскрывает будущее"]}
   - {role: detail, lines: ["Часть 2"]}
   lines:
   - "Летом"
   - ""
-  - "Онлайн-лекция:"
+  - "Электронная лекция:"
   - ""
   - "«Стили & Тренды»:"
   - "Прошлое раскрывает будущее"
@@ -1493,6 +1493,34 @@ events:
     text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров."
     link_text: "olgarozet.ru"
     link_url: "https://olgarozet.ru/"
+
+# ── «Карт|ины на карт|оне» ────────────────────────────────────────────────
+# admin 2026-07-30 (диалог agy 11:26): «В случае, если действительно однокоренные,
+# также в объект: Летом-Осенью: (не знаю, прописными ли принято писать само событие;
+# в любом случае это не должно быть hardcoded) Карт|ины на карт|оне»; 11:30 «Иначе:
+# "Летом и дальше"». Однокоренность ПРОВЕРЕНА: карти́на ← ка́рта; карто́н ← итал.
+# cartone ← carta; общий корень карт- (лат. charta ← греч. χάρτης) — Фасмер.
+# Wordplay легитимен ⇒ авторская ветка «Летом-Осенью» + «Карт|ины на карт|оне»
+# (нотация та же, что «•от|рас•крывает»). Регистр НЕ прописной — решается законом
+# (skoro._beat_register: caps iff точная дата ∨ meeting), не рукой.
+# YAML-позиция ПОСЛЕ «Цены и Ценности» (равный t_key «2026-08», stable-sort tie →
+# YAML): август-группа целиком, затем span к осени, затем граница лета (Встреча
+# 2026-08-31) — when-фразы монотонны, без скачка «август → летом-осенью → август».
+
+- id: paintings_on_cardboard
+  type: event
+  broadcast: [site, telegram_channel]   # Skoro digest entry only (неоформившееся — нет Main Post; anchors[] absent ⇒ TG entry без link)
+  t_key: "2026-08"                      # начало span'а «Летом-Осенью» — сортирует с августом; span не деривируем из месячного t_key ⇒ when-беат несёт авторскую фразу (прецедент «В конце ноября»)
+  skoro_state: period
+  title: Картины на картоне
+  date: лето–осень 2026
+  audience: []
+  organizers: [olgarozet]
+  format: []
+  status: PLANNING
+  beats:
+  - {role: when, lines: ["Летом-Осенью:"]}
+  - {role: type, lines: ["Карт|ины на карт|оне"]}
 
 - id: excursion_melnikov_nov_2026
   type: event
