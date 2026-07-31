@@ -2173,7 +2173,7 @@ publications:
     в редакции: Алексей Дорожкин (редакционный директор). Предлагаемый текст:
     texts/interior-plus-design-material.md (v1-proposal). Сущность издания:
     knowledge/people/interior-plus-design/.
-  materials: []                      # Material-oids по схеме; тело питча связано ОБРАТНЫМ ребром: frontmatter target_material в texts/interior-plus-design-material.md
+  materials: ["texts/interior-plus-design-material.md"]
   campaign_id: paris-2026-09-promo
   schema_version: 1
 
