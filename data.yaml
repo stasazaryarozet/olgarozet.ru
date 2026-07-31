@@ -1077,7 +1077,7 @@ events:
   - {role: type, lines: ["Дизайн-Путешествие", "в Париж"]}
   - {role: concept, lines: ["Сто лет", "обещаний"]}
   - {role: link, url: "parisinseptember.ru", lines: []}  # post-10:00 MSK 2026-05-15 → t.me/olga_rozet/<live_id> per Inv-TG-SKORO-anchor-to-main-post (π_anchor pending impl)
-  - {role: link, url: "parisinseptember.ru/2026-stream-conspectus", lines: ["Конспект второго эфира:"], wrap: "(\n{text}\n{link}\n)"}  # admin GO 2026-07-10 «Размещение на Посадочной; Ссылка с Сайта; Телеграм» — конспект live-2, текст утверждён в Релевантном Окне. 2026-07-11: снято висящее двоеточие (label-идиома «X:» подразумевает продолжение под ним; здесь ссылка — сама себе текст)
+  - {role: link, entity: paris-2026-09-live-2-konspekt-page, lines: ["Конспект второго эфира:"], wrap: "(\n{text}\n{link}\n)"}  # admin GO 2026-07-10 «Размещение на Посадочной; Ссылка с Сайта; Телеграм» — конспект live-2, текст утверждён в Релевантном Окне. 2026-07-31: хранёный URL → РЕБРО (адрес выводится π_addr при потреблении, Inv-LINK-address-derived — хранёная копия и была дрейфом, spec verdict 2026-07-24); структурный носитель ребра в беате = `entity:`, прозаический = [[wikilink]] — одно отношение, один резолвер
   lines:                                # legacy / fallback
   - Сто лет
   - обещаний дизайна
@@ -2095,17 +2095,23 @@ publications:
   wave_type: edu-commercial
   status: published
   published_at: "2026-07-10T02:30:00Z"
-  external_url: https://parisinseptember.ru/2026-stream-konspekt/
-  url: /2026-stream-konspekt/
+  external_url: https://parisinseptember.ru/2026-stream-conspectus/
+  url: /2026-stream-conspectus/
   title: "Конспект некоторых фрагментов прямого эфира"
   utility_synopsis: |
     Конспект второго эфира (paris-2026-09-live-2, 08.07, 42 мин) в голосе Ольги —
     производная Материалов 9dd26afe (запись) → 21df7d60 (конспект-synthesis, nascent).
     Текст отредактирован админом построчно и утверждён в Релевантном Окне 2026-07-10
-    (GO: «Размещение на Посадочной; Ссылка с Сайта; Телеграм»). Реализация: static-page
-    site/2026-stream-konspekt.md → p_static_page → зеркала parisinseptember.ru (root-repo)
-    и olgarozet.ru/2026-stream-konspekt/. Байлайн: Ольга первой (admin: «более авторитетна
-    в дизайн-путешествиях»).
+    (GO: «Размещение на Посадочной; Ссылка с Сайта; Телеграм»). Реализация: сущность
+    texts/2026-stream-conspectus.md (share: [site, landing:parisinseptember.ru],
+    redirect_from: [2026-stream-konspekt]) → p_static_page → обе ноги. Байлайн:
+    Ольга первой (admin: «более авторитетна в дизайн-путешествиях»).
+    NB 2026-07-31 свод носителя: три недели под ДВУМЯ slug'ами жили ДВЕ ревизии
+    (переименование konspekt→conspectus 2026-07-12 без D-половины и без редиректа;
+    резолвер молча уступал redirect_from живому дублю). Дубли удалены (названы в
+    коммите), redirect_from рождает 301-страницы, мир-суд world_orphans держит
+    complete-set. Индекс-url здесь = ТЕКУЩИЙ канонический адрес (Receipt-история
+    отправок не переписывалась).
     NB 2026-07-11 re-publish обеих ног (commit a07ac621; landing hash a2f541dd, site pushed) —
     снятие вероятных претензий ДО их формулировки (директива админа): inline *em* рендерился
     сырыми звёздочками; многострочные пункты списка рвались на <ul>+<p> посреди предложения;
