@@ -6,26 +6,24 @@ suppress_publications: true     # admin 2026-05-15: hide «Публикации�
 # _booking_disabled predicate now auto-derives от slots.json availability
 # (≥1 slot ⇒ not disabled, 0 slots ⇒ disabled). Booking page renders.
 
+# САМООПИСАНИЕ НЕ ЖИВЁТ ЗДЕСЬ. tagline · description · job_title · artist.text ·
+# people.<slug>.bio ВЫВОДЯТСЯ из knowledge/people/<slug>/identity.yaml (одна упорядоченная
+# декларация фасетов; голова — «прежде всего») при загрузке записи —
+# owner_data.load_record → identity_primacy.complete. Spec: identity-primacy.md.
+# Вписать любое из них сюда рукой значит завести второе объявление одного факта: гейт
+# π_identity_primacy отвергает и называет identity.yaml. Здесь остаётся только то, что
+# принадлежит САЙТУ, а не Персоне (маршрут art/, портреты, ярлыки страниц, gloss).
 bio:
   title: Ольга Розет
-  tagline: художник, дизайнер
-  description: "Ольга Розет — художник, искусствовед, дизайнер интерьеров. Консультации, путешествия, искусство."
+  gloss: "Консультации, путешествия, искусство."   # хвост описания сайта — не самоописание Персоны
   alternate_name: "Olga Rozet"
   canonical: "https://olgarozet.ru"
   portrait: olga_footer.png
   portrait_night: olga_footer_night.png
-  job_title: [Художник, Дизайнер, Искусствовед]
   art_page_label: Искусство
   booking_page_label: Записаться
   artist:
-    text: ХУДОЖНИК
     link: art/
-  roles:
-  - Ученик
-  - Учитель
-  skills:
-  - Проектировщик
-  - Дизайнер
   inspire: |
     Вдохновляю —
     за деньги
@@ -78,7 +76,10 @@ booking:
 
 # ── Graph entities — referenced by id; values not duplicated across events ──
 people:
-  olgarozet: {name: "Ольга Розет", name_instrumental: "Ольгой Розет", role: lead, bio: "художник, искусствовед, дизайнер интерьеров"}
+  # bio: ВЫВОДИТСЯ из knowledge/people/olgarozet/identity.yaml (identity-primacy.md).
+  # У Персон без identity.yaml (Наталья) био остаётся объявленным здесь — механизм включается
+  # декларацией, а не миграцией, и молчит там, где декларации нет (честный ⊥).
+  olgarozet: {name: "Ольга Розет", name_instrumental: "Ольгой Розет", role: lead}
   azaryarozet: {name: "Азарья Розет", name_instrumental: "Азарьей Розет", role: co-organizer}
   natalia_loginova: {name: "Наталья Логинова", name_instrumental: "Натальей Логиновой", role: co-organizer, location: paris, instagram: "natalya_lo", email: "loginovanp@gmail.com", bio: "соорганизатор парижского контура Design Travels; приглашённый преподаватель Высшей Британской Школы Дизайна"}
   matluba: {name: "Матлюба", name_instrumental: "Матлюбой", role: co-organizer, location: uzbekistan}
@@ -592,7 +593,9 @@ events:
     title: "Записаться на встречу"
     note: "Оставьте email — пришлю ссылку и точное время за день до встречи."
   about_organizer:
-    text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров. Автор серии «Встречи»."
+    # Био организатора СИНТЕЗИРУЕТСЯ из графа (people.<pid>.bio ⟵ identity.yaml); здесь —
+    # только хвост, принадлежащий событию (identity-primacy.md §D).
+    gloss: "Автор серии «Встречи»."
     link_text: "olgarozet.ru"
     link_url: "https://olgarozet.ru/"
   skoro_state: pending                  # ev-{state} class for site article — proximal | pending | concrete | period
@@ -956,8 +959,14 @@ events:
       # request via Naталья's DM #4293 → admin (8) «Принято-сделано») —
       # «приглашённый преподаватель» добавлен. Inv-OLGA-voice-authoritative —
       # Olga + Naталья authoritative источник про Naтальину роль в БВШД.
+    # `{bio}` — ССЫЛКА на выведенную форму самоописания (identity-primacy.md), не копия:
+    # правится в knowledge/people/olgarozet/identity.yaml и следует сюда сама.
+    # Директива админа 2026-07-31: «везде, где био Ольги в той или иной форме — прежде всего
+    # художник» — здесь она выполняется по построению, а не аккуратностью правщика.
     text: |-
       Ольга Розет —
+
+      {bio}.
 
       Куратор и преподаватель
       в Высшей Британской Школе Дизайна.
@@ -1348,7 +1357,7 @@ events:
     title: "Записаться в лист ожидания"
     note: "Оставьте email — пришлю программу и стоимость первой при готовности. Без обязательств."
   about_organizer:
-    text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров. Design Travels: экспертные дизайн-путешествия (Париж, Узбекистан, Сербия)."
+    gloss: "Design Travels: экспертные дизайн-путешествия (Париж, Узбекистан, Сербия)."
     link_text: "olgarozet.ru"
     link_url: "https://olgarozet.ru/"
   skoro_state: period                   # ev-period class — season anchor
@@ -1432,7 +1441,7 @@ events:
     title: "Записаться в лист ожидания"
     note: "Оставьте email — пришлю программу первой при готовности. Без обязательств."
   about_organizer:
-    text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров. Design Travels: экспертные дизайн-путешествия (Париж, Узбекистан, Сербия)."
+    gloss: "Design Travels: экспертные дизайн-путешествия (Париж, Узбекистан, Сербия)."
     link_text: "olgarozet.ru"
     link_url: "https://olgarozet.ru/"
   skoro_state: period                   # ev-period class — year anchor
@@ -1490,7 +1499,7 @@ events:
     title: "Записаться в лист ожидания"
     note: "Оставьте email — пришлю программу и стоимость первой при готовности."
   about_organizer:
-    text: "Ольга Розет — художник, искусствовед, дизайнер интерьеров."
+    # `text` снят: био синтезируется из графа, хвоста у этого события нет.
     link_text: "olgarozet.ru"
     link_url: "https://olgarozet.ru/"
 
