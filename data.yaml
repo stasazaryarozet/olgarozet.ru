@@ -1510,7 +1510,7 @@ events:
 - id: paintings_on_cardboard
   type: event
   broadcast: [site, telegram_channel]   # Skoro digest entry only (неоформившееся — нет Main Post; anchors[] absent ⇒ TG entry без link)
-  t_key: "2026-08"                      # начало span'а «Летом-Осенью» — сортирует с августом; span не деривируем из месячного t_key ⇒ when-беат несёт авторскую фразу (прецедент «В конце ноября»)
+  t_key: "2026-08"                      # начало span'а «Летом-Осенью» — сортирует с августом; span не деривируем из месячного t_key ⇒ when-беат несёт авторскую фразу (прецедент «В конце» — экскурсия Мельникова, ноябрь-группа)
   skoro_state: period
   title: Картины на картоне
   date: лето–осень 2026
@@ -1538,11 +1538,11 @@ events:
   registration:
   status: PLANNING
   beats:
-  - {role: when, lines: ["В конце ноября"]}
+  - {role: when, lines: ["В конце"]}    # «ноября» дан группой-заголовком «НОЯБРЬ» под partition: month (Inv-EV-skoro-anchor-once) — не повторяется
   - {role: type, lines: ["Экскурсия"]}
   - {role: detail, lines: ["по круглому дому Мельникова"]}
   lines:
-  - "В конце ноября"
+  - "В конце"
   - ""
   - "Экскурсия"
   - ""
