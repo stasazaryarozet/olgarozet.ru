@@ -1,27 +1,27 @@
 {
-  "generated": "2026-08-03T07:45:18.308135+00:00",
+  "generated": "2026-08-03T08:00:28.356493+00:00",
   "user": "olgarozet",
   "slots": [
     {
-      "id": "es_273934f21928",
-      "start": "2026-08-03T10:00:00+02:00",
+      "id": "es_34ec724a33bf",
+      "start": "2026-08-03T11:00:00+02:00",
       "duration": 40,
       "tz": "Europe/Belgrade",
-      "event_id": "f7m7aishvkbak3hnc33o2d550c"
+      "event_id": "6fgvu15l32k7r2c8tjfelfk3a4"
     },
     {
-      "id": "es_fcbeccc1f18b",
-      "start": "2026-08-03T12:00:00+02:00",
+      "id": "es_77fd00d25e03",
+      "start": "2026-08-03T14:00:00+02:00",
       "duration": 40,
       "tz": "Europe/Belgrade",
-      "event_id": "ufespdce0pm0pu7qjs5p27ial4"
+      "event_id": "s08gak2lu9cj3tsa9ok8sgpi20"
     },
     {
-      "id": "es_12694826ec18",
-      "start": "2026-08-03T15:00:00+02:00",
+      "id": "es_84683b0bc85d",
+      "start": "2026-08-03T16:00:00+02:00",
       "duration": 40,
       "tz": "Europe/Belgrade",
-      "event_id": "nfg1e1hqivfqb60pprlbpkn0j0"
+      "event_id": "0v2vk5cboueficbihlfuste9fg"
     },
     {
       "id": "es_1e853cdd1215",
