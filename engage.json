@@ -1,14 +1,7 @@
 {
-  "generated": "2026-08-06T14:30:21.118320+00:00",
+  "generated": "2026-08-06T15:30:21.626622+00:00",
   "user": "olgarozet",
   "slots": [
-    {
-      "id": "es_40d63b5bafaa",
-      "start": "2026-08-06T17:00:00+02:00",
-      "duration": 40,
-      "tz": "Europe/Belgrade",
-      "event_id": "osif741cpvqijit0ulal47v5cs"
-    },
     {
       "id": "es_dac05cf89e2f",
       "start": "2026-08-07T10:00:00+02:00",
