@@ -550,85 +550,6 @@ campaigns:
 
 # ── Events — graph-aware: id + entity refs; lines: kept for legacy column render ─
 events:
-- id: meeting_2026_05
-  type: meeting      # entity-event sub-class (online series — «Встреча с Ольгой»)
-  broadcast: [site, telegram_channel]   # admin 2026-05-15: Скоро digest mirror across surfaces — TG msg #62 references this event
-
-  title: Человек и Ремесло
-  t_key: "2026-08-31"      # горизонт «КОНЕЦ лета» (admin 2026-07-30: «перенеси онлайн-встречу на конец лета») — граница сезона; строковый ASC ставит Встречу ПОСЛЕ месячных «2026-08» и ДО «2026-09»: порядок = следствие данных, не перестановки YAML. Дата не объявлена — when-беат остаётся админским «Дату-время объявим:»
-  date: до осени
-  audience: []
-  organizers: [olgarozet]
-  format: [online, meeting]
-  series: meeting_chelovek_remeslo
-  first_online_in_series: true
-  pricing:
-    regular: {amount: 5000, currency: RUB}
-    early_bird: {amount: 2500, currency: RUB, until: "2026-05-01"}
-  cohort:
-  duration:
-  registration:
-  status: PLANNING
-  history:
-  - {season: "2025-12", venue: cdl, format: offline, occurrences: 2, theme: "Человек и Ремесло", price_rub: 5000}
-  lead: "Первая онлайн-встреча серии «Встречи с Ольгой» — продолжение офлайн-встреч в ЦДЛ (декабрь 2025) в новом формате: доклад, диалог, нетворкинг."
-  sections:
-  - title: Формат
-    intro: Три части одной встречи.
-    items:
-    - "<strong>Доклад Ольги</strong> — наблюдения и материалы из дизайн-путешествий и собственных вылазок"
-    - "<strong>Профессиональный диалог</strong> с Ольгой"
-    - "<strong>Нетворкинг участников</strong> друг с другом"
-  - title: Стоимость
-    items:
-    - "<strong>5 000 ₽</strong> — обычная стоимость"
-    - "<strong>2 500 ₽</strong> — early-bird до 1 мая 2026"
-    - "Возможна скидка или бесплатное место по запросу — write o.g.rozet@gmail.com"
-  - title: Подготовка
-    intro: Рекомендуется заранее.
-    items:
-    - "Выделить место и время"
-    - "Приготовить себе еду"
-  signup:
-    title: "Записаться на встречу"
-    note: "Оставьте email — пришлю ссылку и точное время за день до встречи."
-  about_organizer:
-    # Био организатора СИНТЕЗИРУЕТСЯ из графа (people.<pid>.bio ⟵ identity.yaml); здесь —
-    # только хвост, принадлежащий событию (identity-primacy.md §D).
-    gloss: "Автор серии «Встречи»."
-    link_text: "olgarozet.ru"
-    link_url: "https://olgarozet.ru/"
-  skoro_state: pending                  # ev-{state} class for site article — proximal | pending | concrete | period
-  beats:                                # admin 2026-05-15 TG правка → site role-tagged semantic structure
-  - {role: when, lines: ["Дату-время объявим:"]}
-  - {role: type, lines: ["Онлайн-Встреча"]}
-  - {role: detail, lines: ["на манер наших оффлайновых:"]}
-  - role: multi-component
-    items:
-    - ["Доклад"]
-    - ["🔥"]
-    - ["деловое и личное общение", "со мной и друг-другом"]
-    - ["еда у экрана"]
-  lines:                                # fallback when beats consumer не доступен (legacy renderers)
-  - "Дату-время объявим"
-  - ""
-  - "Онлайн-Встреча"
-  - "на манер наших оффлайновых:"
-  - ""
-  - "Доклад"
-  - "+"
-  - "🔥"
-  - "+"
-  - "деловое и личное общение"
-  - "со мной и друг-другом"
-  - "+"
-  - "еда у экрана"
-
-# ── Лекции «Стили & Тренды» (диптих, перед «Ценой и Ценностью») ────────────
-# admin 2026-07-28: «перед Ценой и Ценностью Ольга хочет две онлайн-лекции,
-# которые можно под одной, а можно диптихом».
-# Source PDFs: ~/Downloads/Стили тренды.pdf (Ч.1, 40 стр.), ~/Downloads/стили 22.pdf (Ч.2, 28 стр.)
-
 - id: lecture_styles_trends_diptych
   type: lecture
   broadcast: [site, telegram_channel]
@@ -1519,7 +1440,8 @@ events:
 - id: paintings_on_cardboard
   type: event
   broadcast: [site, telegram_channel]   # Skoro digest entry only (неоформившееся — нет Main Post; anchors[] absent ⇒ TG entry без link)
-  t_key: "2026-08"                      # начало span'а «Летом-Осенью» — сортирует с августом; span не деривируем из месячного t_key ⇒ when-беат несёт авторскую фразу (прецедент «В конце» — экскурсия Мельникова, ноябрь-группа)
+  t_key: "2026-06"                      # НАЧАЛО ЛУЧА (лето). Конец объявлен открытым ниже ⇒ κ = ⌊max(начало, сейчас)⌋ ставит событие в ТЕКУЩИЙ месяц САМА (принципал 2026-08-12: «Текущий»), а «и далее» печатает горизонт. Прежде стояло «2026-08» с пометкой «span не деривируем из месячного t_key» — с 2026-08-12 деривируем (entity-event §G: горизонт есть интервал)
+  t_end: open                           # ЛУЧ: конец СУЩЕСТВУЕТ, но не наступит в горизонте «Скоро» (end_open_token). Без этого токена отсутствие t_end значило разом «точка» и «луч»
   skoro_state: period
   title: Картины на картоне
   date: лето–осень 2026
@@ -1528,8 +1450,87 @@ events:
   format: []
   status: PLANNING
   beats:
-  - {role: when, lines: ["Летом-Осенью:"]}
+  - {role: when, from: horizon}         # «Летом-Осенью:» было ЕДИНСТВЕННОЙ выразимой формой — у выведенного плеча такта не было области значений, кроме горизонта-точки. Ныне фраза есть ОБРАЗ интервала: грубую часть снимет ярлык месяца, откроетость конца скажет «и далее»
   - {role: type, lines: ["Карт|ины на карт|оне"]}
+
+- id: meeting_2026_05
+  type: meeting      # entity-event sub-class (online series — «Встреча с Ольгой»)
+  broadcast: [site, telegram_channel]   # admin 2026-05-15: Скоро digest mirror across surfaces — TG msg #62 references this event
+
+  title: Человек и Ремесло
+  t_key: "2026-08"         # горизонт «КОНЕЦ лета» (admin 2026-07-30) месячной зернистостью = весь август; точный день не объявлен, и это говорит сам when-беат «Дату-время объявим:». Прежде здесь стоял ДЕНЬ «2026-08-31» — выдуманный, и выдуман он был РАДИ ПОРЯДКА (прежний комментарий: «строковый ASC ставит Встречу ПОСЛЕ месячных 2026-08»). С 2026-08-12 порядок внутри блока есть ПОРЯДОК СТРОК (принципал: «в человекочитаемой проекции это порядок строк»), поэтому намерение выражено переносом блока в конец августа, а дата перестала его подменять
+  date: до осени
+  audience: []
+  organizers: [olgarozet]
+  format: [online, meeting]
+  series: meeting_chelovek_remeslo
+  first_online_in_series: true
+  pricing:
+    regular: {amount: 5000, currency: RUB}
+    early_bird: {amount: 2500, currency: RUB, until: "2026-05-01"}
+  cohort:
+  duration:
+  registration:
+  status: PLANNING
+  history:
+  - {season: "2025-12", venue: cdl, format: offline, occurrences: 2, theme: "Человек и Ремесло", price_rub: 5000}
+  lead: "Первая онлайн-встреча серии «Встречи с Ольгой» — продолжение офлайн-встреч в ЦДЛ (декабрь 2025) в новом формате: доклад, диалог, нетворкинг."
+  sections:
+  - title: Формат
+    intro: Три части одной встречи.
+    items:
+    - "<strong>Доклад Ольги</strong> — наблюдения и материалы из дизайн-путешествий и собственных вылазок"
+    - "<strong>Профессиональный диалог</strong> с Ольгой"
+    - "<strong>Нетворкинг участников</strong> друг с другом"
+  - title: Стоимость
+    items:
+    - "<strong>5 000 ₽</strong> — обычная стоимость"
+    - "<strong>2 500 ₽</strong> — early-bird до 1 мая 2026"
+    - "Возможна скидка или бесплатное место по запросу — write o.g.rozet@gmail.com"
+  - title: Подготовка
+    intro: Рекомендуется заранее.
+    items:
+    - "Выделить место и время"
+    - "Приготовить себе еду"
+  signup:
+    title: "Записаться на встречу"
+    note: "Оставьте email — пришлю ссылку и точное время за день до встречи."
+  about_organizer:
+    # Био организатора СИНТЕЗИРУЕТСЯ из графа (people.<pid>.bio ⟵ identity.yaml); здесь —
+    # только хвост, принадлежащий событию (identity-primacy.md §D).
+    gloss: "Автор серии «Встречи»."
+    link_text: "olgarozet.ru"
+    link_url: "https://olgarozet.ru/"
+  skoro_state: pending                  # ev-{state} class for site article — proximal | pending | concrete | period
+  beats:                                # admin 2026-05-15 TG правка → site role-tagged semantic structure
+  - {role: when, lines: ["Дату-время объявим:"]}
+  - {role: type, lines: ["Онлайн-Встреча"]}
+  - {role: detail, lines: ["на манер наших оффлайновых:"]}
+  - role: multi-component
+    items:
+    - ["Доклад"]
+    - ["🔥"]
+    - ["деловое и личное общение", "со мной и друг-другом"]
+    - ["еда у экрана"]
+  lines:                                # fallback when beats consumer не доступен (legacy renderers)
+  - "Дату-время объявим"
+  - ""
+  - "Онлайн-Встреча"
+  - "на манер наших оффлайновых:"
+  - ""
+  - "Доклад"
+  - "+"
+  - "🔥"
+  - "+"
+  - "деловое и личное общение"
+  - "со мной и друг-другом"
+  - "+"
+  - "еда у экрана"
+
+# ── Лекции «Стили & Тренды» (диптих, перед «Ценой и Ценностью») ────────────
+# admin 2026-07-28: «перед Ценой и Ценностью Ольга хочет две онлайн-лекции,
+# которые можно под одной, а можно диптихом».
+# Source PDFs: ~/Downloads/Стили тренды.pdf (Ч.1, 40 стр.), ~/Downloads/стили 22.pdf (Ч.2, 28 стр.)
 
 - id: excursion_melnikov_nov_2026
   type: event
