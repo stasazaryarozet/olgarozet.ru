@@ -16,7 +16,7 @@
         currentSlideIndex: 0,
         currentMode: 'editorial', // 'editorial' | 'broadcast'
         hudVisible: true,
-        activeAxis: 'morphology'
+        activeAxis: 'temporal'
       };
       this.el = {};
     }
@@ -36,7 +36,7 @@
       this.renderBroadcastThumbnails();
       this.initTheme();
       this.bindEvents();
-      this.selectMatrixAxis(Object.keys(this.data.axes)[0] || 'morphology');
+      this.selectMatrixAxis(Object.keys(this.data.axes)[0] || 'temporal');
       this.updateSlideDisplay(0);
 
       // System API for Video Remounting & External Automation
@@ -437,15 +437,19 @@
        LAYER 3: INTERACTIVE CONTROLLER
        ========================================================================= */
     initTheme() {
-      const savedTheme = localStorage.getItem('olga_rozet_theme') || 'day';
-      document.documentElement.setAttribute('data-theme', savedTheme);
+      if (typeof window.__applyTheme === 'function') {
+        window.__applyTheme();
+      } else {
+        const savedTheme = localStorage.getItem('dela.theme.v1') || 'day';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }
     }
 
     toggleTheme() {
       const current = document.documentElement.getAttribute('data-theme') || 'day';
       const next = current === 'day' ? 'night' : 'day';
       document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('olga_rozet_theme', next);
+      try { localStorage.setItem('dela.theme.v1', next); } catch(e) {}
     }
 
     setMode(mode) {
