@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="day" data-surface="editorial">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ольга Розет — Стили vs Тренды: Maison&Objet 2026</title>
+  <meta name="description" content="Интерактивный визуальный конспект и 16:9 презентация лекции Ольги Розет «Тренды Maison&Objet. Какие прижились, а какие забыты?» с авторской 7-осевой матрицей анализа.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../_tokens.generated.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="mode-editorial">
+
+  <!-- Top Control Bar (Generic Projection Mount) -->
+  <header class="top-nav" id="topNav">
+    <div class="nav-brand" id="navBrand">
+      <!-- Populated dynamically by PresentationEngine -->
+    </div>
+
+    <div class="nav-controls">
+      <div class="mode-switch-group" role="tablist" aria-label="Режим отображения">
+        <button id="btnModeEditorial" class="btn-mode active" role="tab" aria-selected="true" title="Интерактивный конспект и чтение">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>Конспект</span>
+        </button>
+        <button id="btnModeBroadcast" class="btn-mode" role="tab" aria-selected="false" title="Полноэкранная 16:9 презентация для монтажа и показа">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x2="12" y2="17" y1="21"/></svg>
+          <span>Эфир 16:9</span>
+        </button>
+      </div>
+
+      <button id="btnThemeToggle" class="btn-icon" aria-label="Переключить тему" title="День / Ночь">
+        <span class="theme-icon-sun">☼</span>
+        <span class="theme-icon-moon">☽</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- HYPOSTASIS 1: EDITORIAL ESSAY MOUNT POINT                                -->
+  <!-- ========================================================================= -->
+  <main class="editorial-container" id="editorialView">
+    <!-- Populated dynamically from presentation_data.json -->
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- HYPOSTASIS 2: BROADCAST 16:9 STAGE MOUNT POINT                           -->
+  <!-- ========================================================================= -->
+  <div class="broadcast-container hidden" id="broadcastView">
+    <div class="stage-wrapper">
+      <div class="stage-aspect-16-9" id="stageCanvas">
+        <div class="stage-slide-display" id="stageSlideDisplay">
+          <img src="img/slide-01.png" id="stageImg" alt="Презентация Слайд" class="stage-img">
+        </div>
+
+        <div class="stage-hud" id="stageHud">
+          <div class="hud-top">
+            <div class="hud-pill">
+              <span class="hud-indicator">● LIVE 16:9</span>
+              <span class="hud-author" id="hudAuthor">Ольга Розет</span>
+            </div>
+            <div class="hud-meta">
+              <span id="hudTimecode" class="hud-time">⏱ 00:00</span>
+              <span id="hudSlideCounter" class="hud-counter">01 / 30</span>
+            </div>
+          </div>
+
+          <div class="hud-bottom">
+            <div class="hud-caption-card">
+              <div class="hud-tag" id="hudTag">Введение · Теория</div>
+              <div class="hud-title" id="hudTitle">Стили vs Тренды: Maison&amp;Objet 2026</div>
+              <div class="hud-cite" id="hudCite">«Дизайн всегда находится в мировом политическом и экономическом контексте»</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="broadcast-controls" id="broadcastControls">
+      <button id="btnPrevSlide" class="btn-ctrl" title="Предыдущий слайд (←)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      
+      <div class="thumbs-track" id="thumbsTrack"></div>
+
+      <button id="btnNextSlide" class="btn-ctrl" title="Следующий слайд (→ / Space)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+
+      <div class="ctrl-actions">
+        <button id="btnToggleHud" class="btn-pill" title="Скрыть/Показать плашки (H)">HUD</button>
+        <button id="btnFullscreen" class="btn-pill" title="Полноэкранный режим (F)">16:9 Fullscreen</button>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
