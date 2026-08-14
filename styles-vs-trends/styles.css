@@ -444,7 +444,7 @@ audio {
 .slide-img-box {
   position: relative;
   aspect-ratio: 16 / 9;
-  background-color: var(--surface-sunken);
+  background-color: #000;
 }
 
 .slide-img-box img {
@@ -458,7 +458,7 @@ audio {
   bottom: 0.5rem;
   right: 0.5rem;
   background: rgba(0, 0, 0, 0.75);
-  color: var(--surface-solid, #ffffff);
+  color: #fff;
   border: none;
   border-radius: 4px;
   padding: 0.25rem 0.5rem;
@@ -806,29 +806,15 @@ audio {
 /* ==========================================================================
    HYPOSTASIS 2: 16:9 Broadcast & Remounting Mode
    ========================================================================== */
-:root {
-  --cinema-bg: #000000;
-  --cinema-surface: #0e0e0e;
-  --cinema-surface-raised: #1c1c1c;
-  --cinema-surface-hover: #2a2a2a;
-  --cinema-border: #222222;
-  --cinema-border-strong: #333333;
-  --cinema-border-focus: #555555;
-  --cinema-text: #ffffff;
-  --cinema-text-soft: #f5f5f5;
-  --cinema-text-muted: #bbbbbb;
-  --cinema-text-dim: #dddddd;
-}
-
 body.mode-broadcast {
   overflow: hidden;
-  background-color: var(--cinema-bg);
-  color: var(--cinema-text-soft);
+  background-color: #000;
+  color: #f5f5f5;
 }
 
 body.mode-broadcast .top-nav {
   background-color: rgba(14, 14, 14, 0.95);
-  border-color: var(--cinema-border);
+  border-color: #222;
 }
 
 .broadcast-container {
@@ -839,7 +825,7 @@ body.mode-broadcast .top-nav {
   right: 0;
   display: flex;
   flex-direction: column;
-  background-color: var(--cinema-bg);
+  background-color: #000;
 }
 
 .hidden { display: none !important; }
@@ -859,7 +845,7 @@ body.mode-broadcast .top-nav {
   width: 100%;
   max-width: calc((100vh - 170px) * (16 / 9));
   aspect-ratio: 16 / 9;
-  background-color: var(--cinema-bg);
+  background-color: #000;
   border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
@@ -920,7 +906,7 @@ body.mode-broadcast .top-nav {
 }
 
 .hud-author {
-  color: var(--cinema-text);
+  color: #fff;
   font-weight: 500;
 }
 
@@ -937,7 +923,7 @@ body.mode-broadcast .top-nav {
   padding: 0.35rem 0.75rem;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  color: var(--cinema-text-dim);
+  color: #ddd;
 }
 
 .hud-bottom { max-width: 650px; }
@@ -961,7 +947,7 @@ body.mode-broadcast .top-nav {
 
 .hud-title {
   font-size: var(--fs-m, 1.250rem);
-  color: var(--cinema-text);
+  color: #fff;
   line-height: var(--lh-tight, 1.2);
   margin-bottom: 0.25rem;
 }
@@ -969,14 +955,14 @@ body.mode-broadcast .top-nav {
 .hud-cite {
   font-style: italic;
   font-size: var(--fs-xs, 0.8125rem);
-  color: var(--cinema-text-muted);
+  color: #bbb;
 }
 
 /* Broadcast Controls Bar */
 .broadcast-controls {
   height: 80px;
-  background-color: var(--cinema-surface);
-  border-top: 1px solid var(--cinema-border);
+  background-color: #0e0e0e;
+  border-top: 1px solid #222;
   display: flex;
   align-items: center;
   padding: 0 1.5rem;
@@ -990,17 +976,17 @@ body.mode-broadcast .top-nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--cinema-surface-raised);
-  border: 1px solid var(--cinema-border-strong);
+  background: #1c1c1c;
+  border: 1px solid #333;
   border-radius: 50%;
-  color: var(--cinema-text);
+  color: #fff;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .btn-ctrl:hover {
-  background: var(--cinema-surface-hover);
-  border-color: var(--cinema-border-focus);
+  background: #2a2a2a;
+  border-color: #555;
 }
 
 .thumbs-track {
@@ -1023,7 +1009,7 @@ body.mode-broadcast .top-nav {
   cursor: pointer;
   opacity: 0.5;
   transition: all 0.15s ease;
-  background: var(--cinema-bg);
+  background: #000;
 }
 
 .thumb-item img {
@@ -1047,10 +1033,10 @@ body.mode-broadcast .top-nav {
 
 .btn-pill {
   padding: 0.4rem 0.85rem;
-  background: var(--cinema-surface-raised);
-  border: 1px solid var(--cinema-border-strong);
+  background: #1c1c1c;
+  border: 1px solid #333;
   border-radius: 999px;
-  color: var(--cinema-text-dim);
+  color: #eee;
   font-size: var(--fs-2xs, 0.719rem);
   font-weight: 500;
   cursor: pointer;
@@ -1058,6 +1044,6 @@ body.mode-broadcast .top-nav {
 }
 
 .btn-pill:hover {
-  background: var(--cinema-surface-hover);
-  color: var(--cinema-text);
+  background: #2a2a2a;
+  color: #fff;
 }
