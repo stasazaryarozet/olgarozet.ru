@@ -42,6 +42,9 @@
   --rail: 7.5em;  /* length · knowledge/system/specifications/text/typography.md */
   --rule: #ddd;  /* color · knowledge/people/olgarozet/site/_design.yaml */
   --rule-soft: #ddd;  /* color · knowledge/people/olgarozet/site/_design.yaml */
+  --sans: 'Inter', 'Inter Fallback', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', system-ui, sans-serif;  /* font-stack · knowledge/system/specifications/text/typography.md */
+  --sans-display: 'Inter Tight', 'Inter', 'Inter Fallback', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', system-ui, sans-serif;  /* font-stack · knowledge/system/specifications/text/typography.md */
+  --script: 'Bad Script', 'Marck Script', cursive;  /* font-stack · knowledge/system/specifications/text/typography.md */
   --sp-1: 0.50rem;  /* length · knowledge/system/specifications/text/site.md */
   --sp-2: 0.75rem;  /* length · knowledge/system/specifications/text/site.md */
   --sp-3: 1.13rem;  /* length · knowledge/system/specifications/text/site.md */
@@ -82,6 +85,12 @@
   --muted: #6E6E6E;  /* color · :root[data-surface="editorial"] · knowledge/people/olgarozet/site/_design.yaml */
   --overlay: rgba(244, 241, 235, 0.95);  /* color · :root[data-surface="editorial"] · knowledge/people/olgarozet/site/_design.yaml */
   --overlay-solid: rgba(244, 241, 235, 0.98);  /* color · :root[data-surface="editorial"] · knowledge/people/olgarozet/site/_design.yaml */
+  --paris-day-1-accent: #6B6356;  /* color · :root[data-surface="editorial"] · knowledge/system/specifications/text/event-paris-2026-09.md */
+  --paris-day-2-accent: #1E407C;  /* color · :root[data-surface="editorial"] · knowledge/system/specifications/text/event-paris-2026-09.md */
+  --paris-day-3-accent: #8B6F47;  /* color · :root[data-surface="editorial"] · knowledge/system/specifications/text/event-paris-2026-09.md */
+  --paris-day-4-accent: #E6DDC9;  /* color · :root[data-surface="editorial"] · knowledge/system/specifications/text/event-paris-2026-09.md */
+  --paris-modulor-ratio: 1.618;  /* ratio · :root[data-surface="editorial"] · knowledge/system/specifications/text/event-paris-2026-09.md */
+  --paris-rule-weight: 3px;  /* length · :root[data-surface="editorial"] · knowledge/system/specifications/text/event-paris-2026-09.md */
   --rule: #BFBCB5;  /* color · :root[data-surface="editorial"] · knowledge/people/olgarozet/site/_design.yaml */
   --rule-soft: #D9D6CF;  /* color · :root[data-surface="editorial"] · knowledge/people/olgarozet/site/_design.yaml */
   --surface: #F4F1EB;  /* color · :root[data-surface="editorial"] · knowledge/people/olgarozet/site/_design.yaml */
