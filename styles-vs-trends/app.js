@@ -16,9 +16,11 @@
         currentSlideIndex: 0,
         currentMode: 'editorial', // 'editorial' | 'broadcast'
         hudVisible: true,
-        activeAxis: 'morphology'
+        activeAxis: 'temporal',
+        lastScrollY: 0
       };
       this.el = {};
+      this.hudIdleTimer = null;
     }
 
     async init(dataPath = 'presentation_data.json') {
@@ -36,7 +38,7 @@
       this.renderBroadcastThumbnails();
       this.initTheme();
       this.bindEvents();
-      this.selectMatrixAxis(Object.keys(this.data.axes)[0] || 'morphology');
+      this.selectMatrixAxis(Object.keys(this.data.axes)[0] || 'temporal');
       this.updateSlideDisplay(0);
 
       // System API for Video Remounting & External Automation
@@ -128,17 +130,17 @@
           <h2 class="section-title">7-осевая матрица анализа интерьера</h2>
           <p class="section-desc">Нажмите на любую ось, чтобы увидеть, как категория материализуется в объектах, цветах и фактурах 2026 года.</p>
 
-          <div class="matrix-grid" id="matrixButtonsGrid">
+          <div class="matrix-grid" id="matrixButtonsGrid" role="tablist" aria-label="Оси матрицы анализа">
             ${Object.entries(axes).map(([key, a], idx) => `
-              <button class="matrix-axis-btn ${idx === 0 ? 'active' : ''}" data-axis="${key}">
-                <span class="axis-num">${String(idx + 1).padStart(2, '0')}</span>
-                <span class="axis-name">${a.title.split(' ')[0]}</span>
+              <button class="matrix-axis-btn ${idx === 0 ? 'active' : ''}" data-axis="${key}" role="tab" aria-selected="${idx === 0 ? 'true' : 'false'}">
+                <span class="axis-num">${String(a.order || idx + 1).padStart(2, '0')}</span>
+                <span class="axis-name">${a.shortTitle || a.title}</span>
                 <span class="axis-hint">${a.hint || ''}</span>
               </button>
             `).join('')}
           </div>
 
-          <div class="matrix-detail-card" id="matrixDetailCard">
+          <div class="matrix-detail-card" id="matrixDetailCard" aria-live="polite">
             <div class="detail-header">
               <span class="detail-tag" id="detailTag"></span>
               <h3 class="detail-title" id="detailTitle"></h3>
@@ -152,7 +154,7 @@
 
       // 4. Chapter Navigation Strip
       html += `
-        <nav class="chapter-nav">
+        <nav class="chapter-nav" aria-label="Навигация по главам">
           ${chapters.map(c => `<a href="#${c.id}" class="chap-link">${c.navLabel}</a>`).join('')}
         </nav>
       `;
@@ -183,7 +185,7 @@
               html += `
                 <div class="slide-card" id="slide-${slide.id}">
                   <div class="slide-img-box">
-                    <img src="img/${slide.file}" alt="Слайд ${slide.id}: ${slide.title}" loading="lazy">
+                    <img src="img/${slide.file}" alt="Слайд ${slide.id}: ${slide.title}" loading="lazy" decoding="async">
                     <button class="btn-zoom-slide" data-slide="${slide.id}" title="Открыть в 16:9">Слайд ${String(slide.id).padStart(2, '0')}</button>
                   </div>
                   <div class="slide-caption">
@@ -202,7 +204,7 @@
           html += `
             <div class="feature-slide-row">
               <div class="feature-slide-media">
-                <img src="img/${slide ? slide.file : ''}" alt="${slide ? slide.title : ''}" loading="lazy">
+                <img src="img/${slide ? slide.file : ''}" alt="${slide ? slide.title : ''}" loading="lazy" decoding="async">
               </div>
               <div class="feature-slide-text">
                 <h3>${slide ? slide.title : ''}</h3>
@@ -212,7 +214,7 @@
                     ${c.staccato.map(s => `<div>${s}</div>`).join('')}
                   </div>
                 ` : ''}
-                <div class="timecode-pill">${c.timecode || ''}</div>
+                <div class="timecode-pill" data-slide-id="${c.slideId}" title="Перейти к слайду в 16:9">${c.timecode || ''}</div>
               </div>
             </div>
           `;
@@ -226,7 +228,7 @@
             html += `
               <div class="designer-card">
                 <div class="designer-media">
-                  <img src="img/${slide ? slide.file : ''}" alt="${d.name}" loading="lazy">
+                  <img src="img/${slide ? slide.file : ''}" alt="${d.name}" loading="lazy" decoding="async">
                 </div>
                 <div class="designer-info">
                   <span class="designer-tag">${d.tag}</span>
@@ -247,7 +249,7 @@
             html += `
               <div class="curator-box">
                 <div class="curator-img">
-                  <img src="img/${slide ? slide.file : ''}" alt="${cur.title}" loading="lazy">
+                  <img src="img/${slide ? slide.file : ''}" alt="${cur.title}" loading="lazy" decoding="async">
                 </div>
                 <div class="curator-meta">
                   <h4>${cur.title}</h4>
@@ -266,7 +268,7 @@
             <div class="magazine-grid">
               ${(c.items || []).map(item => `
                 <div class="mag-item">
-                  <img src="${item.img}" alt="${item.title}" loading="lazy">
+                  <img src="${item.img}" alt="${item.title}" loading="lazy" decoding="async">
                   <div class="mag-info">
                     <strong>${item.title}</strong>
                     <span>${item.caption}</span>
@@ -279,13 +281,21 @@
 
         // Case F: Closing Split
         else if (c.type === 'closing_split') {
+          const formulaItems = c.matrixCard.formulaItems || (c.matrixCard.formula || '').split(' × ');
           html += `
             <div class="closing-split">
               <div class="closing-card">
                 <div class="closing-card-inner">
                   <span class="card-badge">${c.matrixCard.badge}</span>
                   <h3>${c.matrixCard.title}</h3>
-                  <div class="formula-box">$$\\text{${c.matrixCard.formula}}$$</div>
+                  
+                  <div class="formula-box-semantic" aria-label="Формула матрицы: ${c.matrixCard.formula}">
+                    <div class="formula-label">Формула анализа интерьера:</div>
+                    <div class="formula-track">
+                      ${formulaItems.map(item => `<span class="formula-chip">${item}</span>`).join('<span class="formula-op">×</span>')}
+                    </div>
+                  </div>
+
                   <p>${c.matrixCard.desc}</p>
                   <a href="#matrixSection" class="btn-ghost">Открыть интерактивную матрицу ↑</a>
                 </div>
@@ -347,7 +357,7 @@
         thumb.className = `thumb-item ${idx === 0 ? 'active' : ''}`;
         thumb.setAttribute('data-index', idx);
         thumb.setAttribute('title', `Слайд ${slide.id}: ${slide.title} (${slide.timecode})`);
-        thumb.innerHTML = `<img src="img/${slide.file}" alt="Слайд ${slide.id}" loading="lazy">`;
+        thumb.innerHTML = `<img src="img/${slide.file}" alt="Слайд ${slide.id}" loading="lazy" decoding="async">`;
         thumb.addEventListener('click', () => this.goToSlide(idx));
         this.el.thumbsTrack.appendChild(thumb);
       });
@@ -364,7 +374,7 @@
           this.el.stageImg.src = `img/${slide.file}`;
           this.el.stageImg.alt = `Слайд ${slide.id}: ${slide.title}`;
           this.el.stageImg.style.opacity = '1';
-        }, 80);
+        }, 60);
       }
 
       if (this.el.hudTimecode) this.el.hudTimecode.textContent = `⏱ ${slide.timecode}`;
@@ -381,6 +391,16 @@
             t.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
           }
         });
+      }
+
+      // Preload next and previous slide images for 0ms lag
+      if (index + 1 < this.data.slides.length) {
+        const imgNext = new Image();
+        imgNext.src = `img/${this.data.slides[index + 1].file}`;
+      }
+      if (index - 1 >= 0) {
+        const imgPrev = new Image();
+        imgPrev.src = `img/${this.data.slides[index - 1].file}`;
       }
     }
 
@@ -437,20 +457,25 @@
        LAYER 3: INTERACTIVE CONTROLLER
        ========================================================================= */
     initTheme() {
-      const savedTheme = localStorage.getItem('olga_rozet_theme') || 'day';
-      document.documentElement.setAttribute('data-theme', savedTheme);
+      if (typeof window.__applyTheme === 'function') {
+        window.__applyTheme();
+      } else {
+        const savedTheme = localStorage.getItem('dela.theme.v1') || 'day';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }
     }
 
     toggleTheme() {
       const current = document.documentElement.getAttribute('data-theme') || 'day';
       const next = current === 'day' ? 'night' : 'day';
       document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('olga_rozet_theme', next);
+      try { localStorage.setItem('dela.theme.v1', next); } catch(e) {}
     }
 
     setMode(mode) {
       this.state.currentMode = mode;
       if (mode === 'broadcast') {
+        this.state.lastScrollY = window.scrollY;
         this.el.body.className = 'mode-broadcast';
         this.el.editorialView.classList.add('hidden');
         this.el.broadcastView.classList.remove('hidden');
@@ -467,6 +492,10 @@
         this.el.btnModeEditorial.setAttribute('aria-selected', 'true');
         this.el.btnModeBroadcast.classList.remove('active');
         this.el.btnModeBroadcast.setAttribute('aria-selected', 'false');
+        
+        window.requestAnimationFrame(() => {
+          window.scrollTo({ top: this.state.lastScrollY || 0, behavior: 'smooth' });
+        });
       }
     }
 
@@ -478,7 +507,9 @@
 
       if (this.el.matrixBtns) {
         this.el.matrixBtns.forEach(btn => {
-          btn.classList.toggle('active', btn.getAttribute('data-axis') === axisKey);
+          const isCurrent = btn.getAttribute('data-axis') === axisKey;
+          btn.classList.toggle('active', isCurrent);
+          btn.setAttribute('aria-selected', isCurrent ? 'true' : 'false');
         });
       }
 
@@ -525,6 +556,16 @@
             this.setMode('broadcast');
             this.goToSlide(slideNum - 1);
           }
+          return;
+        }
+
+        const pill = e.target.closest('.timecode-pill');
+        if (pill) {
+          const slideId = parseInt(pill.getAttribute('data-slide-id'), 10);
+          if (!isNaN(slideId)) {
+            this.setMode('broadcast');
+            this.goToSlide(slideId - 1);
+          }
         }
       });
 
@@ -540,12 +581,29 @@
         });
       }
 
+      // Keyboard accelerators
       window.addEventListener('keydown', (e) => {
+        const isInput = ['INPUT', 'TEXTAREA'].includes(e.target.tagName);
+        if (isInput) return;
+
+        // Theme toggle (T / Е)
+        if (e.key === 't' || e.key === 'T' || e.key === 'е' || e.key === 'Е') {
+          this.toggleTheme();
+          return;
+        }
+
+        // Mode switch (M / Ь)
+        if (e.key === 'm' || e.key === 'M' || e.key === 'ь' || e.key === 'Ь') {
+          this.setMode(this.state.currentMode === 'editorial' ? 'broadcast' : 'editorial');
+          return;
+        }
+
+        // Broadcast-specific controls
         if (this.state.currentMode === 'broadcast') {
-          if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+          if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown' || e.key === 'j' || e.key === 'J' || e.key === 'о' || e.key === 'О') {
             e.preventDefault();
             this.nextSlide();
-          } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'k' || e.key === 'K' || e.key === 'л' || e.key === 'Л') {
             e.preventDefault();
             this.prevSlide();
           } else if (e.key === 'h' || e.key === 'H' || e.key === 'р' || e.key === 'Р') {
@@ -559,6 +617,21 @@
           }
         }
       });
+
+      // Broadcast HUD idle fader (dim controls after 3.5s of inactivity)
+      const resetHudIdle = () => {
+        if (this.state.currentMode !== 'broadcast' || !this.el.broadcastView) return;
+        this.el.broadcastView.classList.remove('hud-idle');
+        clearTimeout(this.hudIdleTimer);
+        this.hudIdleTimer = setTimeout(() => {
+          if (this.state.currentMode === 'broadcast' && this.el.broadcastView) {
+            this.el.broadcastView.classList.add('hud-idle');
+          }
+        }, 3500);
+      };
+
+      window.addEventListener('mousemove', resetHudIdle, { passive: true });
+      window.addEventListener('touchstart', resetHudIdle, { passive: true });
     }
   }
 
