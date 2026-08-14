@@ -9,6 +9,7 @@ bio:
   art_page_label: Искусство
   booking_page_label: Записаться
   artist:
+    text: Художник
     link: art/
   inspire: 'Вдохновляю —
 
@@ -21,6 +22,12 @@ bio:
   solar_calibration:
     latitude_deg: 55
     alt_threshold_rad: -0.1
+  roles:
+  - Ученик
+  - Учитель
+  skills:
+  - Проектировщик
+  - Дизайнер
 consultations:
   description: 'Подключить
 
