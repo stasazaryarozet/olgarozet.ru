@@ -622,6 +622,7 @@ events:
   broadcast: [site, telegram_channel]
   t_key: "2026-08"                      # тот же горизонт «лето»; YAML-порядок после Ч.1 → stable sort
   skoro_state: pending
+  link: /stili-vs-trendy/
   title: "Стили & Тренды: Прошлое раскрывает будущее"
   date: лето 2026
   audience: []
@@ -1577,6 +1578,22 @@ publications:
     Встреч, Образовательных циклов. Receiver gets full upcoming-calendar overview
     плюс reference-anchor для cross-channel посылок (IG/TG используют /program-2027/
     как landing-of-record). Польза Внимающему: planning-horizon visibility без обязательств.
+  schema_version: 1
+
+- id: stili-vs-trendy-site
+  channel: site
+  entity_id: stili-vs-trendy
+  entity_type: static_page
+  status: published
+  url: /stili-vs-trendy/
+  uploaded_at: "2026-08-14T15:00:00+00:00"
+  title: "Рассказ-показ: «Стили vs Тренды» (Maison&Objet 2026)"
+  utility_synopsis: |
+    Рассказ-показ Ольги Розет — интерактивный визуальный конспект и 16:9 презентация
+    по материалам лекции «Тренды Maison&Objet 2026. Какие прижились, а какие забыты?».
+    Включает 7-осевую авторскую матрицу анализа интерьера, 30 слайдов высокого разрешения
+    с таймкодами и синхронизированные аудио-фрагменты лекции. Двухипостасный режим:
+    конспект для углубленного чтения и полноэкранный 16:9 эфир.
   schema_version: 1
 
 - id: vrsac-tg-73
