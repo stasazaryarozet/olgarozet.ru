@@ -16,7 +16,7 @@
         currentSlideIndex: 0,
         currentMode: 'editorial', // 'editorial' | 'broadcast'
         hudVisible: true,
-        activeAxis: 'temporal',
+        activeAxis: 'morphology',
         lastScrollY: 0
       };
       this.el = {};
@@ -38,7 +38,7 @@
       this.renderBroadcastThumbnails();
       this.initTheme();
       this.bindEvents();
-      this.selectMatrixAxis(Object.keys(this.data.axes)[0] || 'temporal');
+      this.selectMatrixAxis(Object.keys(this.data.axes)[0] || 'morphology');
       this.updateSlideDisplay(0);
 
       // System API for Video Remounting & External Automation
@@ -516,11 +516,17 @@
       if (this.el.detailTag) this.el.detailTag.textContent = data.tag;
       if (this.el.detailTitle) this.el.detailTitle.textContent = data.title;
       if (this.el.detailText) this.el.detailText.textContent = data.text;
-      if (this.el.detailQuote) this.el.detailQuote.textContent = data.quote;
+      if (this.el.detailQuote) this.el.detailQuote.textContent = data.quote || '';
+
+      // Compute matching slides from atomic axis tags (SOT: slides[].axis)
+      // No manual axes[key].slides — the tags on each slide ARE the truth.
+      const matchingSlideIds = (this.data.slides || [])
+        .filter(s => (s.axis || []).includes(axisKey))
+        .map(s => s.id);
 
       if (this.el.detailSlidesRef) {
         this.el.detailSlidesRef.innerHTML = '<span>Связанные слайды:</span> ';
-        (data.slides || []).forEach(sNum => {
+        matchingSlideIds.forEach(sNum => {
           const link = document.createElement('a');
           link.className = 'slide-link';
           link.href = `#slide-${sNum}`;
