@@ -628,6 +628,25 @@ campaigns:
     created_at: '2026-05-13T22:06:28Z'
     created_by: admin-mobile
 events:
+# Курс объявлен самой Ольгой на слайде 30 её лекции 13.08.2026 (дек _raw/, прочтение
+# 776e5e07…): «Декорирование интерьера в Британке · Старт 22 октября 2026 · 8 месяцев ·
+# очно». Заведён как ОБЪЕКТ, чтобы лекция вела к нему; broadcast НЕ объявлен — вещание
+# отдельное решение принципала. Внесено lumen 2026-08-15.
+- id: decorating-interiors-bhsad-2026
+  type: course
+  t_key: 2026-10-22
+  title: Декорирование интерьера в Британке
+  date: старт 22 октября
+  duration: 8 месяцев
+  audience: []
+  organizers:
+  - olgarozet
+  format:
+  - in-person
+  - course
+  status: PLANNING
+  concept: Авторская программа Ольги Розет в Британской высшей школе дизайна
+  url: https://britishdesign.ru
 - id: lecture_styles_trends_diptych
   type: lecture
   broadcast:
