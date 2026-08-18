@@ -19,7 +19,13 @@
   function said(v) {
     if (v === null || v === undefined) return '';
     if (typeof v !== 'object') return String(v);
-    const kind = ACTS[v.act] || null;
+    // ЛЁГКАЯ ФОРМА НОСИТЕЛЯ — одна дверь адреса картинки.
+// `light` выводит materialise (narrative_showcase.LIGHT) тем же `_webp`, каким документ
+// строит <picture>; здесь — ЧТЕНИЕ выведенного, не второе вычисление. Оригинал остаётся
+// фолбэком: нет light — едет file (страница без пере-деривации не ломается).
+const imgSrc = (s) => `img/${(s && (s.light || s.file)) || ''}`;
+
+const kind = ACTS[v.act] || null;
     const text = v.text === undefined ? '' : String(v.text);
     return (kind && kind.quoted) ? MARKS[0] + text + MARKS[1] : text;
   }
@@ -203,7 +209,7 @@
               html += `
                 <div class="slide-card" id="slide-${slide.id}">
                   <div class="slide-img-box">
-                    <img src="img/${slide.file}" alt="Слайд ${slide.id}: ${slide.title}" loading="lazy" decoding="async">
+                    <img src="${imgSrc(slide)}" alt="Слайд ${slide.id}: ${slide.title}" loading="lazy" decoding="async">
                     <button class="btn-zoom-slide" data-slide="${slide.id}" title="Открыть в 16:9">Слайд ${String(slide.id).padStart(2, '0')}</button>
                   </div>
                   <div class="slide-caption">
@@ -222,7 +228,7 @@
           html += `
             <div class="feature-slide-row">
               <div class="feature-slide-media">
-                <img src="img/${slide ? slide.file : ''}" alt="${slide ? slide.title : ''}" loading="lazy" decoding="async">
+                <img src="${imgSrc(slide)}" alt="${slide ? slide.title : ''}" loading="lazy" decoding="async">
               </div>
               <div class="feature-slide-text">
                 <h3>${slide ? slide.title : ''}</h3>
@@ -246,7 +252,7 @@
             html += `
               <div class="designer-card">
                 <div class="designer-media">
-                  <img src="img/${slide ? slide.file : ''}" alt="${d.name}" loading="lazy" decoding="async">
+                  <img src="${imgSrc(slide)}" alt="${d.name}" loading="lazy" decoding="async">
                 </div>
                 <div class="designer-info">
                   <span class="designer-tag">${d.tag}</span>
@@ -267,7 +273,7 @@
             html += `
               <div class="curator-box">
                 <div class="curator-img">
-                  <img src="img/${slide ? slide.file : ''}" alt="${cur.title}" loading="lazy" decoding="async">
+                  <img src="${imgSrc(slide)}" alt="${cur.title}" loading="lazy" decoding="async">
                 </div>
                 <div class="curator-meta">
                   <h4>${cur.title}</h4>
@@ -375,7 +381,7 @@
         thumb.className = `thumb-item ${idx === 0 ? 'active' : ''}`;
         thumb.setAttribute('data-index', idx);
         thumb.setAttribute('title', `Слайд ${slide.id}: ${slide.title} (${slide.timecode})`);
-        thumb.innerHTML = `<img src="img/${slide.file}" alt="Слайд ${slide.id}" loading="lazy" decoding="async">`;
+        thumb.innerHTML = `<img src="${imgSrc(slide)}" alt="Слайд ${slide.id}" loading="lazy" decoding="async">`;
         thumb.addEventListener('click', () => this.goToSlide(idx));
         this.el.thumbsTrack.appendChild(thumb);
       });
@@ -389,7 +395,7 @@
       if (this.el.stageImg) {
         this.el.stageImg.style.opacity = '0';
         setTimeout(() => {
-          this.el.stageImg.src = `img/${slide.file}`;
+          this.el.stageImg.src = imgSrc(slide);
           this.el.stageImg.alt = `Слайд ${slide.id}: ${slide.title}`;
           this.el.stageImg.style.opacity = '1';
         }, 60);
@@ -414,11 +420,11 @@
       // Preload next and previous slide images for 0ms lag
       if (index + 1 < this.data.slides.length) {
         const imgNext = new Image();
-        imgNext.src = `img/${this.data.slides[index + 1].file}`;
+        imgNext.src = imgSrc(this.data.slides[index + 1]);
       }
       if (index - 1 >= 0) {
         const imgPrev = new Image();
-        imgPrev.src = `img/${this.data.slides[index - 1].file}`;
+        imgPrev.src = imgSrc(this.data.slides[index - 1]);
       }
     }
 

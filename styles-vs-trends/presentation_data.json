@@ -323,7 +323,8 @@
       "axis": [
         "philosophy"
       ],
-      "timecode": "00:00"
+      "timecode": "00:00",
+      "light": "slide-01.webp"
     },
     {
       "id": 2,
@@ -338,7 +339,8 @@
       "axis": [
         "philosophy"
       ],
-      "timecode": "05:47"
+      "timecode": "05:47",
+      "light": "slide-02.webp"
     },
     {
       "id": 3,
@@ -354,7 +356,8 @@
         "philosophy",
         "morphology"
       ],
-      "timecode": "06:34"
+      "timecode": "06:34",
+      "light": "slide-03.webp"
     },
     {
       "id": 4,
@@ -369,7 +372,8 @@
       "axis": [
         "philosophy"
       ],
-      "timecode": "10:13"
+      "timecode": "10:13",
+      "light": "slide-04.webp"
     },
     {
       "id": 5,
@@ -386,7 +390,8 @@
         "textures",
         "materials"
       ],
-      "timecode": "13:17"
+      "timecode": "13:17",
+      "light": "slide-05.webp"
     },
     {
       "id": 6,
@@ -403,7 +408,8 @@
         "morphology",
         "technologies"
       ],
-      "timecode": "16:47"
+      "timecode": "16:47",
+      "light": "slide-06.webp"
     },
     {
       "id": 7,
@@ -420,7 +426,8 @@
         "materials",
         "ornaments"
       ],
-      "timecode": "31:17"
+      "timecode": "31:17",
+      "light": "slide-07.webp"
     },
     {
       "id": 8,
@@ -436,7 +443,8 @@
         "materials",
         "technologies"
       ],
-      "timecode": "32:03"
+      "timecode": "32:03",
+      "light": "slide-08.webp"
     },
     {
       "id": 9,
@@ -452,7 +460,8 @@
         "materials",
         "textures"
       ],
-      "timecode": "36:47"
+      "timecode": "36:47",
+      "light": "slide-09.webp"
     },
     {
       "id": 10,
@@ -468,7 +477,8 @@
         "textures",
         "morphology"
       ],
-      "timecode": "42:32"
+      "timecode": "42:32",
+      "light": "slide-10.webp"
     },
     {
       "id": 11,
@@ -484,7 +494,8 @@
         "ornaments",
         "philosophy"
       ],
-      "timecode": "44:06"
+      "timecode": "44:06",
+      "light": "slide-11.webp"
     },
     {
       "id": 12,
@@ -501,7 +512,8 @@
         "technologies",
         "philosophy"
       ],
-      "timecode": "46:11"
+      "timecode": "46:11",
+      "light": "slide-12.webp"
     },
     {
       "id": 13,
@@ -518,7 +530,8 @@
         "morphology",
         "technologies"
       ],
-      "timecode": "47:14"
+      "timecode": "47:14",
+      "light": "slide-13.webp"
     },
     {
       "id": 14,
@@ -535,7 +548,8 @@
         "colors",
         "philosophy"
       ],
-      "timecode": "48:36"
+      "timecode": "48:36",
+      "light": "slide-14.webp"
     },
     {
       "id": 15,
@@ -551,7 +565,8 @@
         "morphology",
         "philosophy"
       ],
-      "timecode": "50:58"
+      "timecode": "50:58",
+      "light": "slide-15.webp"
     },
     {
       "id": 16,
@@ -567,7 +582,8 @@
         "morphology",
         "textures"
       ],
-      "timecode": "54:41"
+      "timecode": "54:41",
+      "light": "slide-16.webp"
     },
     {
       "id": 17,
@@ -583,7 +599,8 @@
         "textures",
         "materials"
       ],
-      "timecode": "58:41"
+      "timecode": "58:41",
+      "light": "slide-17.webp"
     },
     {
       "id": 18,
@@ -600,7 +617,8 @@
         "materials",
         "ornaments"
       ],
-      "timecode": "59:45"
+      "timecode": "59:45",
+      "light": "slide-18.webp"
     },
     {
       "id": 19,
@@ -616,7 +634,8 @@
         "morphology",
         "ornaments"
       ],
-      "timecode": "1:02:40"
+      "timecode": "1:02:40",
+      "light": "slide-19.webp"
     },
     {
       "id": 20,
@@ -632,7 +651,8 @@
         "materials",
         "textures"
       ],
-      "timecode": "1:04:21"
+      "timecode": "1:04:21",
+      "light": "slide-20.webp"
     },
     {
       "id": 21,
@@ -648,7 +668,8 @@
         "philosophy",
         "materials"
       ],
-      "timecode": "1:08:29"
+      "timecode": "1:08:29",
+      "light": "slide-21.webp"
     },
     {
       "id": 22,
@@ -664,7 +685,8 @@
         "morphology",
         "colors"
       ],
-      "timecode": "1:08:41"
+      "timecode": "1:08:41",
+      "light": "slide-22.webp"
     },
     {
       "id": 23,
@@ -680,7 +702,8 @@
         "textures",
         "materials"
       ],
-      "timecode": "1:09:53"
+      "timecode": "1:09:53",
+      "light": "slide-23.webp"
     },
     {
       "id": 24,
@@ -692,7 +715,8 @@
         "materials",
         "morphology"
       ],
-      "timecode": "1:10:46"
+      "timecode": "1:10:46",
+      "light": "slide-24.webp"
     },
     {
       "id": 25,
@@ -704,7 +728,8 @@
         "colors",
         "ornaments"
       ],
-      "timecode": "1:11:23"
+      "timecode": "1:11:23",
+      "light": "slide-25.webp"
     },
     {
       "id": 26,
@@ -716,7 +741,8 @@
         "materials",
         "textures"
       ],
-      "timecode": "1:12:08"
+      "timecode": "1:12:08",
+      "light": "slide-26.webp"
     },
     {
       "id": 27,
@@ -728,7 +754,8 @@
         "textures",
         "materials"
       ],
-      "timecode": "1:12:58"
+      "timecode": "1:12:58",
+      "light": "slide-27.webp"
     },
     {
       "id": 28,
@@ -744,7 +771,8 @@
         "philosophy",
         "textures"
       ],
-      "timecode": "1:13:40"
+      "timecode": "1:13:40",
+      "light": "slide-28.webp"
     },
     {
       "id": 29,
@@ -765,7 +793,8 @@
         "technologies",
         "philosophy"
       ],
-      "timecode": "1:14:11"
+      "timecode": "1:14:11",
+      "light": "slide-29.webp"
     },
     {
       "id": 30,
@@ -781,7 +810,8 @@
         "philosophy",
         "morphology"
       ],
-      "timecode": "1:18:53"
+      "timecode": "1:18:53",
+      "light": "slide-30.webp"
     }
   ],
   "speech": {
