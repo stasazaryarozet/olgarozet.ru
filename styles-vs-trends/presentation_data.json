@@ -17,12 +17,16 @@
       "chapters": "Глава {n:02d} · {a} – {b}"
     },
     "sections": {
-      "axes": "Оси анализа"
+      "axes": {
+        "note": "Инструмент Ольги Розет",
+        "title": "Оси анализа",
+        "lead": "Семь осей — рабочая оптика: по ним разбирается любой интерьер, и по ним же собраны главы этого рассказа."
+      }
     },
     "badges": [
       "Рассказ-показ",
       "81 минута лекции",
-      "30 слайдов 16:9",
+      "36 фрагментов рассказа",
       "7 осей авторской матрицы",
       "Развороты Elle Decoration · Livingetc"
     ],
@@ -69,56 +73,42 @@
   },
   "axes": {
     "morphology": {
-      "order": 1,
-      "tag": "Ось 01 / Формообразование",
       "shortTitle": "Формообразование",
-      "title": "Формообразование (морфология)",
+      "title": "Морфология",
       "hint": "Скульптура, мутация, ландшафт",
       "text": "Язык формы: от историчных силуэтов и барочной театральности до мутирующих ландшафтных форм и скульптурной мебели. Как рождается форма — из истории, из природы или из чистой геометрии."
     },
     "colors": {
-      "order": 2,
-      "tag": "Ось 02 / Цвета",
       "shortTitle": "Цвета",
-      "title": "Цвета: интенсивность, температура, характер",
+      "title": "Интенсивность, температура, характер",
       "hint": "Яркие vs приглушённые, тёплые vs холодные",
       "text": "Не перечень конкретных цветов, а генеральные позиции: интенсивность (яркие, приглушённые), температура (тёплые, холодные), место цвета в орнаменте. Минеральная палитра 2026: терракота, охра, известняк."
     },
     "ornaments": {
-      "order": 3,
-      "tag": "Ось 03 / Орнаменты",
       "shortTitle": "Орнаменты",
-      "title": "Орнаменты: геометрия и растительность",
+      "title": "Геометрия и растительность",
       "hint": "Геометричные, растительные, гибридные",
       "text": "Геометрические или растительные? Или присутствуют оба — и можно выбирать. Переосмысление орнаментики из Ар-деко, фольклорных мотивов и традиционных ремесленных паттернов."
     },
     "textures": {
-      "order": 4,
-      "tag": "Ось 04 / Текстуры",
       "shortTitle": "Текстуры",
-      "title": "Текстуры: тактильность и столкновение фактур",
+      "title": "Тактильность и столкновение фактур",
       "hint": "Тач-тач-тач, множество фактур",
       "text": "Тренд на огромное количество текстур в одном месте. Столкновение разных по тактильности материалов — фольклорный текстиль рядом с камнем, вафельный лен рядом с кожей. Задержаться в телесном опыте."
     },
     "materials": {
-      "order": 5,
-      "tag": "Ось 05 / Материалы",
       "shortTitle": "Материалы",
-      "title": "Материалы: честность сырья без имитаций",
+      "title": "Честность сырья без имитаций",
       "hint": "Камень, дерево, металл, стекло, лён",
       "text": "Природное сырье без имитаций: необработанный травертин, массив палисандра, вафельный лен, кованый металл, застывшее стекло. Марцин Русак (Flower Infused Glass), Facultative Works (металл как органическая складка)."
     },
     "technologies": {
-      "order": 6,
-      "tag": "Ось 06 / Технологии",
       "shortTitle": "Технологии",
-      "title": "Технологии: craft, 3D-печать и ручные техники",
+      "title": "Craft, 3D-печать и ручные техники",
       "hint": "Craft, 3D, ремесло + высокие технологии",
       "text": "Соединение ремесленного craft и высоких технологий: 3D-печать, биомимикрия, переосмысление традиционных технологий. Артизаны как мост между хай-теком и ручным трудом."
     },
     "philosophy": {
-      "order": 7,
-      "tag": "Ось 07 / Философия времени",
       "shortTitle": "Философия времени",
       "title": "Идеология и философия времени и места",
       "hint": "Деглобализация, экология, мета-модерн",
@@ -128,35 +118,26 @@
   "chapters": [
     {
       "id": "sec-theory",
-      "navLabel": "01. Теория: Стиль vs Тренд",
+      "layout": "grid",
+      "title": "Большие стили vs Тренды",
       "seconds": [
         0,
         1007
-      ],
-      "title": "Большие стили vs Тренды",
-      "type": "slides_grid",
-      "slideIds": [
-        1,
-        2,
-        4,
-        5
       ],
       "num": "Глава 01 · 00:00 – 16:47"
     },
     {
       "id": "sec-transformism",
-      "navLabel": "02. Нуриев: Transformism",
+      "layout": "feature",
+      "title": "Гарри Нуриев — Transformism",
       "seconds": [
         1007,
         1877
       ],
-      "title": "Гарри Нуриев — Transformism",
       "cite": {
         "act": "quote",
         "text": "Пришло время не создавать больше, а видеть яснее"
       },
-      "type": "feature_slide",
-      "slideId": 6,
       "text": "Гарри Нуриев (дизайнер года Maison&Objet) постулирует отказ от бесконечного перепроизводства новых форм. Ценностью становится не вещь сама по себе, а изменение угла зрения.",
       "staccato": [
         "Отказ от избытка.",
@@ -171,155 +152,83 @@
     },
     {
       "id": "sec-retail",
-      "navLabel": "03. Retail: Делькло",
+      "layout": "portraits",
+      "title": "What's New? In Retail: Франсуа Делькло",
       "seconds": [
         1877,
         3058
       ],
-      "title": "What's New? In Retail: Франсуа Делькло",
-      "type": "designers_showcase",
       "audio": {
         "label": "Фрагмент лекции (Франсуа Делькло):",
         "src": "audio/delclaux-matter-eye.m4a"
       },
-      "designers": [
-        {
-          "slideId": 7,
-          "tag": "glifart.com",
-          "name": "Злата Корнилова",
-          "desc": "Тактильный текстиль, живой гобелен и арт-объекты. Соединение архаичного ремесла и современного пространственного жеста."
-        },
-        {
-          "slideId": 12,
-          "tag": "Bio-infused Craft",
-          "name": "Марцин Русак",
-          "desc": "Застывшие в смоле и стекле живые цветы. Биомимикрия, остановка увядания и заземление в природной хрупкости."
-        },
-        {
-          "slideId": 13,
-          "tag": "Eremchuk & Pyatitskaya",
-          "name": "Facultative Works",
-          "desc": "Эдуард Еремчук и Катя Пятицкая. Металл как органическая складка, ресайкл и новая тактильность промышленного материала."
-        },
-        {
-          "slideId": 14,
-          "tag": "Biomorphic Art",
-          "name": "Yoomoota (Тарас Желтышев)",
-          "desc": "Биоморфная скульптура, сказочная морфология и эмоциональная анатомия предметов в жилом интерьере."
-        }
-      ],
       "num": "Глава 03 · 31:17 – 50:58"
     },
     {
       "id": "sec-hospitality",
-      "navLabel": "04. Hospitality & Decor",
+      "layout": "portraits",
+      "title": "Hospitality & Decor: Генар и Лериш",
       "seconds": [
         3058,
         3861
       ],
-      "title": "Hospitality & Decor: Генар и Лериш",
       "cite": {
         "act": "gloss",
         "text": "Освобождение гостиничного номера от псевдоискусства. Драматизм через пустоту"
       },
-      "type": "curators_duo",
-      "curators": [
-        {
-          "slideId": 15,
-          "title": "Руди Генар · Hospitality",
-          "desc": "Переосмысленное барокко. Устранение нагромождения мебели. Номер как храм тишины и чистой фактуры камня и льна."
-        },
-        {
-          "slideId": 18,
-          "title": "Элизабет Лериш · Decor",
-          "desc": "«Археология будущего» (An Archaeology of the Future). Неофольклор, раскопки культурных слоев и гибридизация эпох."
-        }
-      ],
       "num": "Глава 04 · 50:58 – 1:04:21"
     },
     {
       "id": "sec-magazines",
-      "navLabel": "05. Журналы 2026",
+      "layout": "gallery",
+      "title": "Полистаем интерьерные журналы 2026",
       "seconds": [
         4109,
         4451
       ],
-      "title": "Полистаем интерьерные журналы 2026",
-      "type": "magazine_gallery",
       "lead": "106 оригинальных 12-мегапиксельных снимков из Google Drive Ольги: Elle Decoration (Июль–Август 2026) и Livingetc (Май 2026) — здесь избранные развороты. Живой типографский глянец, фактура бумаги и макро-детали интерьеров. Фотографии разворотов: © Elle Decoration · © Livingetc; фрагменты приводятся в обзорных целях с указанием источника.",
-      "items": [
-        {
-          "img": "img/elle_decor_IMG_7477.jpg",
-          "title": "Elle Decoration · Июль–Август 2026",
-          "caption": "Трансформация гаража в 70-м люкс: вафельный лен, черная кожа, патина латуни."
-        },
-        {
-          "img": "img/livingetc_IMG_7576.jpg",
-          "title": "Livingetc · Май 2026",
-          "caption": "Датский модернизм 1960-х: палисандр, реечные ставни и теплая древесина."
-        },
-        {
-          "img": "img/elle_decor_IMG_7480.jpg",
-          "title": "Elle Decoration · Highlights",
-          "caption": "Минеральная гамма: терракота, известняк и матовая глубина цвета."
-        },
-        {
-          "img": "img/livingetc_IMG_7578.jpg",
-          "title": "Livingetc · Spreads",
-          "caption": "Тактильное зонирование: тяжелые шторы и естественный свет."
-        }
+      "members": [
+        "elle-decoration-iyul-avgust-2026",
+        "livingetc-may-2026",
+        "elle-decoration-highlights",
+        "livingetc-spreads"
       ],
       "num": "Глава 05 · 1:08:29 – 1:14:11"
     },
     {
       "id": "sec-bhsad",
-      "navLabel": "06. Британка & Практика",
+      "layout": "closing",
+      "title": "Матрица и Британка: Практика взгляда",
       "seconds": [
         4451,
         4851
       ],
-      "title": "Матрица и Британка: Практика взгляда",
       "cite": {
         "act": "gloss",
         "text": "Всё связано с нашим тач-тач-тач, задержаться на этой земле, задержаться в телесном опыте"
       },
-      "type": "closing_split",
       "audio": {
         "label": "Фрагмент лекции (Ольга Розет · 77:50):",
         "src": "audio/rozet-touch-body.m4a"
       },
-      "matrixCard": {
-        "badge": "Слайд 29",
-        "desc": "Универсальный объективный инструмент для декораторов и архитекторов. Обоснование концепций и смет перед заказчиками."
-      },
-      "courseCard": {
-        "badge": "Слайд 30 · Старт 22 октября 2026",
-        "title": "Декорирование интерьера в Британке",
-        "desc": "8 месяцев глубокого погружения. Авторская программа Ольги Розет в Британской высшей школе дизайна (Universal University).",
-        "specs": [
-          "Очный формат · Москва",
-          "Практика и дипломные проекты",
-          "Калибровка оптики"
-        ],
-        "cta": {
-          "label": "Подробнее о программе на сайте БВШД →",
-          "url": "https://britishdesign.ru"
-        }
-      },
+      "members": [
+        "matritsa-semi-osey",
+        "dekorirovanie-interera-v-britanke"
+      ],
       "num": "Глава 06 · 1:14:11 – 1:20:51"
     }
   ],
-  "slides": [
+  "segments": [
     {
-      "id": 1,
+      "id": "stili-vs-trendy",
       "file": "slide-01.png",
-      "seconds": 0,
-      "tag": "Введение · Титул",
       "title": "Стили vs Тренды",
+      "tag": "Введение · Титул",
       "cite": {
         "act": "caption",
         "text": "Ольга Розет — художник, искусствовед, куратор программы „Декорирование интерьера“ в БВШД"
       },
+      "seconds": 0,
       "axis": [
         "philosophy"
       ],
@@ -327,15 +236,15 @@
       "light": "slide-01.webp"
     },
     {
-      "id": 2,
+      "id": "politiko-ekonomicheskiy-kontekst",
       "file": "slide-02.png",
-      "seconds": 347,
-      "tag": "Контекст · Геополитика",
       "title": "Политико-экономический контекст",
+      "tag": "Контекст · Геополитика",
       "cite": {
         "act": "quote",
         "text": "Дизайн всегда находится в мировом политическом и экономическом контексте"
       },
+      "seconds": 347,
       "axis": [
         "philosophy"
       ],
@@ -343,15 +252,15 @@
       "light": "slide-02.webp"
     },
     {
-      "id": 3,
+      "id": "bolshie-stili-epohi",
       "file": "slide-03.png",
-      "seconds": 394,
-      "tag": "Теория · Макростили",
       "title": "Большие стили эпохи",
+      "tag": "Теория · Макростили",
       "cite": {
         "act": "caption",
         "text": "Стиль — это фундаментальный каркас эпохи, а тренд — ее быстрая реакция"
       },
+      "seconds": 394,
       "axis": [
         "philosophy",
         "morphology"
@@ -360,15 +269,15 @@
       "light": "slide-03.webp"
     },
     {
-      "id": 4,
+      "id": "opredelenie-trenda",
       "file": "slide-04.png",
-      "seconds": 613,
-      "tag": "Понятийный аппарат",
       "title": "Определение тренда",
+      "tag": "Понятийный аппарат",
       "cite": {
         "act": "caption",
         "text": "Trend — основная тенденция, направление изменения настроений и потребностей общества"
       },
+      "seconds": 613,
       "axis": [
         "philosophy"
       ],
@@ -376,15 +285,15 @@
       "light": "slide-04.webp"
     },
     {
-      "id": 5,
+      "id": "vozvraschenie-k-kornyam-4-klyuchevyh-trenda",
       "file": "slide-05.png",
-      "seconds": 797,
-      "tag": "Maison&Objet 2026",
       "title": "Возвращение к корням · 4 ключевых тренда",
+      "tag": "Maison&Objet 2026",
       "cite": {
         "act": "caption",
         "text": "Метаморфоза · Мутация · Переосмысленное барокко · Неофольклор"
       },
+      "seconds": 797,
       "axis": [
         "morphology",
         "textures",
@@ -394,15 +303,15 @@
       "light": "slide-05.webp"
     },
     {
-      "id": 6,
+      "id": "transformism-by-harry-nuriev",
       "file": "slide-06.png",
-      "seconds": 1007,
-      "tag": "Дизайнер года · Манифест",
       "title": "Transformism by Harry Nuriev",
+      "tag": "Дизайнер года · Манифест",
       "cite": {
         "act": "quote",
         "text": "Если XVIII век говорил цветом, XIX — формой, а XX — философией, то сегодняшний голос — это голос восприятия... Пришло время не создавать больше, а видеть яснее"
       },
+      "seconds": 1007,
       "axis": [
         "philosophy",
         "morphology",
@@ -412,15 +321,16 @@
       "light": "slide-06.webp"
     },
     {
-      "id": 7,
+      "id": "zlata-kornilova-glifart",
       "file": "slide-07.png",
-      "seconds": 1877,
-      "tag": "Retail · glifart.com",
       "title": "Злата Корнилова · Glifart",
+      "tag": "Retail · glifart.com",
       "cite": {
         "act": "caption",
         "text": "Тактильный текстиль, живой гобелен и авторский арт-объект"
       },
+      "desc": "Соединение архаичного ремесла и современного пространственного жеста.",
+      "seconds": 1877,
       "axis": [
         "textures",
         "materials",
@@ -430,15 +340,15 @@
       "light": "slide-07.webp"
     },
     {
-      "id": 8,
+      "id": "arhaika-i-sovremennyy-zhest",
       "file": "slide-08.png",
-      "seconds": 1923,
-      "tag": "Retail · Glifart",
       "title": "Архаика и современный жест",
+      "tag": "Retail · Glifart",
       "cite": {
         "act": "caption",
         "text": "Сохранение ручного ткачества в диалоге с современной архитектурой"
       },
+      "seconds": 1923,
       "axis": [
         "materials",
         "technologies"
@@ -447,15 +357,15 @@
       "light": "slide-08.webp"
     },
     {
-      "id": 9,
+      "id": "kurator-fransua-delklo-fran-ois-delclaux",
       "file": "slide-09.png",
-      "seconds": 2207,
-      "tag": "What's New? In Retail",
       "title": "Куратор: Франсуа Делькло (François Delclaux)",
+      "tag": "What's New? In Retail",
       "cite": {
         "act": "quote",
         "text": "Материя сохраняет то, что забывает глаз"
       },
+      "seconds": 2207,
       "axis": [
         "materials",
         "textures"
@@ -464,15 +374,15 @@
       "light": "slide-09.webp"
     },
     {
-      "id": 10,
+      "id": "organicheskie-poverhnosti-i-relef",
       "file": "slide-10.png",
-      "seconds": 2552,
-      "tag": "Retail · Мутация",
       "title": "Органические поверхности и рельеф",
+      "tag": "Retail · Мутация",
       "cite": {
         "act": "caption",
         "text": "Материалы обретают природную шероховатость и текучесть"
       },
+      "seconds": 2552,
       "axis": [
         "textures",
         "morphology"
@@ -481,15 +391,15 @@
       "light": "slide-10.webp"
     },
     {
-      "id": 11,
+      "id": "kulturnaya-pamyat-predmetov",
       "file": "slide-11.png",
-      "seconds": 2646,
-      "tag": "Retail · Неофольклор",
       "title": "Культурная память предметов",
+      "tag": "Retail · Неофольклор",
       "cite": {
         "act": "caption",
         "text": "Переосмысление локальных ремесел без ухода в этнографический китч"
       },
+      "seconds": 2646,
       "axis": [
         "ornaments",
         "philosophy"
@@ -498,15 +408,17 @@
       "light": "slide-11.webp"
     },
     {
-      "id": 12,
+      "id": "martsin-rusak-marcin-rusak",
       "file": "slide-12.png",
-      "seconds": 2771,
-      "tag": "Retail · Дизайнер",
       "title": "Марцин Русак (Marcin Rusak)",
+      "tag": "Retail · Дизайнер",
+      "badge": "Bio-infused Craft",
       "cite": {
         "act": "caption",
         "text": "Flower Infused Glass — застывшие во времени живые цветы, биомимикрия и хрупкость"
       },
+      "desc": "Смола и стекло останавливают увядание; заземление — в природной хрупкости.",
+      "seconds": 2771,
       "axis": [
         "materials",
         "technologies",
@@ -516,15 +428,17 @@
       "light": "slide-12.webp"
     },
     {
-      "id": 13,
+      "id": "facultative-works-eduard-eremchuk-i-katya-pyatitskaya",
       "file": "slide-13.png",
-      "seconds": 2834,
-      "tag": "Retail · Дизайнеры",
       "title": "Facultative Works (Эдуард Еремчук и Катя Пятицкая)",
+      "tag": "Retail · Дизайнеры",
+      "badge": "Eremchuk & Pyatitskaya",
       "cite": {
         "act": "caption",
         "text": "Металл как органическая ткань. Индустриальный ресайкл с человеческим теплом"
       },
+      "desc": "Металл как органическая складка: ресайкл и новая тактильность промышленного материала.",
+      "seconds": 2834,
       "axis": [
         "materials",
         "morphology",
@@ -534,15 +448,16 @@
       "light": "slide-13.webp"
     },
     {
-      "id": 14,
+      "id": "yoomoota-taras-zheltyshev",
       "file": "slide-14.png",
-      "seconds": 2916,
-      "tag": "Retail · Дизайнер",
       "title": "Yoomoota (Тарас Желтышев)",
+      "tag": "Retail · Дизайнер",
+      "badge": "Biomorphic Art",
       "cite": {
         "act": "caption",
         "text": "Биоморфная пластика и сказочная анатомия предметов в жилом интерьере"
       },
+      "seconds": 2916,
       "axis": [
         "morphology",
         "colors",
@@ -552,15 +467,16 @@
       "light": "slide-14.webp"
     },
     {
-      "id": 15,
+      "id": "kurator-rudi-genar-rudy-gu-naire",
       "file": "slide-15.png",
-      "seconds": 3058,
-      "tag": "What's New? In Hospitality",
       "title": "Куратор: Руди Генар (Rudy Guénaire)",
+      "tag": "What's New? In Hospitality",
       "cite": {
         "act": "caption",
         "text": "Метаморфоза гостиничного пространства через освобождение от псевдоискусства"
       },
+      "desc": "Переосмысленное барокко. Устранение нагромождения мебели. Номер как храм тишины и чистой фактуры камня и льна.",
+      "seconds": 3058,
       "axis": [
         "morphology",
         "philosophy"
@@ -569,15 +485,15 @@
       "light": "slide-15.webp"
     },
     {
-      "id": 16,
+      "id": "pereosmyslennoe-barokko-cherez-pustotu",
       "file": "slide-16.png",
-      "seconds": 3281,
-      "tag": "Hospitality · Пространство",
       "title": "Переосмысленное барокко через пустоту",
+      "tag": "Hospitality · Пространство",
       "cite": {
         "act": "caption",
         "text": "Драматизм достигается не нагромождением вещей, а качеством тишины и света"
       },
+      "seconds": 3281,
       "axis": [
         "morphology",
         "textures"
@@ -586,15 +502,15 @@
       "light": "slide-16.webp"
     },
     {
-      "id": 17,
+      "id": "monolitnyy-kamen-i-naturalnyy-tekstil",
       "file": "slide-17.png",
-      "seconds": 3521,
-      "tag": "Hospitality · Фактуры",
       "title": "Монолитный камень и натуральный текстиль",
+      "tag": "Hospitality · Фактуры",
       "cite": {
         "act": "caption",
         "text": "Пространство, где тело отдыхает от визуального шума"
       },
+      "seconds": 3521,
       "axis": [
         "textures",
         "materials"
@@ -603,15 +519,16 @@
       "light": "slide-17.webp"
     },
     {
-      "id": 18,
+      "id": "kurator-elizabet-lerish-elizabeth-leriche",
       "file": "slide-18.png",
-      "seconds": 3585,
-      "tag": "What's New? In Decor",
       "title": "Куратор: Элизабет Лериш (Elizabeth Leriche)",
+      "tag": "What's New? In Decor",
       "cite": {
         "act": "caption",
         "text": "Проект „Археология будущего“ (An Archaeology of the Future)"
       },
+      "desc": "Неофольклор, раскопки культурных слоёв и гибридизация эпох.",
+      "seconds": 3585,
       "axis": [
         "philosophy",
         "materials",
@@ -621,15 +538,15 @@
       "light": "slide-18.webp"
     },
     {
-      "id": 19,
+      "id": "sloi-vremeni-v-sovremennom-interere",
       "file": "slide-19.png",
-      "seconds": 3760,
-      "tag": "Decor · Гибридизация",
       "title": "Слои времени в современном интерьере",
+      "tag": "Decor · Гибридизация",
       "cite": {
         "act": "caption",
         "text": "Соединение античных силуэтов и цифровой параметрики"
       },
+      "seconds": 3760,
       "axis": [
         "morphology",
         "ornaments"
@@ -638,15 +555,15 @@
       "light": "slide-19.webp"
     },
     {
-      "id": 20,
+      "id": "traditsionnye-metody-v-sovremennom-tsikle",
       "file": "slide-20.png",
-      "seconds": 3861,
-      "tag": "Decor · Неофольклор",
       "title": "Традиционные методы в современном цикле",
+      "tag": "Decor · Неофольклор",
       "cite": {
         "act": "caption",
         "text": "Глина, терракота, шерсть ручного прядения как основа уюта"
       },
+      "seconds": 3861,
       "axis": [
         "materials",
         "textures"
@@ -655,15 +572,15 @@
       "light": "slide-20.webp"
     },
     {
-      "id": 21,
+      "id": "polistaem-interernye-zhurnaly-2026-goda",
       "file": "slide-21.png",
-      "seconds": 4109,
-      "tag": "Журналы 2026 · Разбор",
       "title": "Полистаем интерьерные журналы 2026 года",
+      "tag": "Журналы 2026 · Разбор",
       "cite": {
         "act": "caption",
         "text": "Как подиумная концепция выставки материализуется в реальном жилом доме"
       },
+      "seconds": 4109,
       "axis": [
         "philosophy",
         "materials"
@@ -672,15 +589,15 @@
       "light": "slide-21.webp"
     },
     {
-      "id": 22,
+      "id": "elle-decoration-syurrealizm-i-forma",
       "file": "slide-22.png",
-      "seconds": 4121,
-      "tag": "Журнал · Разворот 1",
       "title": "Elle Decoration: Сюрреализм и форма",
+      "tag": "Журнал · Разворот 1",
       "cite": {
         "act": "caption",
         "text": "100 лет сюрреализма (1924–2024–2026): игра масштабов и странность обыденного"
       },
+      "seconds": 4121,
       "axis": [
         "morphology",
         "colors"
@@ -689,15 +606,15 @@
       "light": "slide-22.webp"
     },
     {
-      "id": 23,
+      "id": "elle-decoration-faktura-lna-i-kozhi",
       "file": "slide-23.png",
-      "seconds": 4193,
-      "tag": "Журнал · Разворот 2",
       "title": "Elle Decoration: Фактура льна и кожи",
+      "tag": "Журнал · Разворот 2",
       "cite": {
         "act": "caption",
         "text": "Вафельный лен и состаренная кожа в интерьере загородного люкса"
       },
+      "seconds": 4193,
       "axis": [
         "textures",
         "materials"
@@ -706,11 +623,11 @@
       "light": "slide-23.webp"
     },
     {
-      "id": 24,
+      "id": "palisandr-reechnye-stavni-i-teplaya-skandinavskaya-geometriya",
       "file": "slide-24.png",
-      "seconds": 4246,
-      "tag": "Livingetc: Датский модернизм 1960-х",
       "title": "Палисандр, реечные ставни и теплая скандинавская геометрия",
+      "tag": "Livingetc: Датский модернизм 1960-х",
+      "seconds": 4246,
       "axis": [
         "materials",
         "morphology"
@@ -719,11 +636,11 @@
       "light": "slide-24.webp"
     },
     {
-      "id": 25,
+      "id": "priglushennaya-ohra-i-napravlennyy-svet-na-stol",
       "file": "slide-25.png",
-      "seconds": 4283,
-      "tag": "Livingetc: Цвет и свет в столовой",
       "title": "Приглушенная охра и направленный свет на стол",
+      "tag": "Livingetc: Цвет и свет в столовой",
+      "seconds": 4283,
       "axis": [
         "colors",
         "ornaments"
@@ -732,11 +649,11 @@
       "light": "slide-25.webp"
     },
     {
-      "id": 26,
+      "id": "priroda-vnutri-doma-zhivye-rasteniya-otkrytyy-kamen-i-derevo",
       "file": "slide-26.png",
-      "seconds": 4328,
-      "tag": "Биофилия и натуральность",
       "title": "Природа внутри дома: живые растения, открытый камень и дерево",
+      "tag": "Биофилия и натуральность",
+      "seconds": 4328,
       "axis": [
         "materials",
         "textures"
@@ -745,11 +662,11 @@
       "light": "slide-26.webp"
     },
     {
-      "id": 27,
+      "id": "sherstyanye-pledy-grubyy-hlopok-i-otsutstvie-sinteticheskogo-bleska",
       "file": "slide-27.png",
-      "seconds": 4378,
-      "tag": "Тактильный текстиль",
       "title": "Шерстяные пледы, грубый хлопок и отсутствие синтетического блеска",
+      "tag": "Тактильный текстиль",
+      "seconds": 4378,
       "axis": [
         "textures",
         "materials"
@@ -758,15 +675,15 @@
       "light": "slide-27.webp"
     },
     {
-      "id": 28,
+      "id": "sintez-zhurnalnogo-analiza-2026",
       "file": "slide-28.png",
-      "seconds": 4420,
-      "tag": "Журнал · Итоги разбора",
       "title": "Синтез журнального анализа 2026",
+      "tag": "Журнал · Итоги разбора",
       "cite": {
         "act": "caption",
         "text": "Интерьер больше не про показуху — он про качество осязания жизни"
       },
+      "seconds": 4420,
       "axis": [
         "philosophy",
         "textures"
@@ -775,15 +692,15 @@
       "light": "slide-28.webp"
     },
     {
-      "id": 29,
+      "id": "samostoyatelnaya-analitika-trendov",
       "file": "slide-29.png",
-      "seconds": 4451,
-      "tag": "Инструмент · Аналитика",
       "title": "Самостоятельная аналитика трендов",
+      "tag": "Инструмент · Аналитика",
       "cite": {
         "act": "quote",
         "text": "Формообразование (морфология), цвета, орнаменты, текстуры, материалы, технологии, идеология/философия времени"
       },
+      "seconds": 4451,
       "axis": [
         "morphology",
         "colors",
@@ -797,21 +714,89 @@
       "light": "slide-29.webp"
     },
     {
-      "id": 30,
+      "id": "programma-dekorirovanie-interera-v-britanke",
       "file": "slide-30.png",
-      "seconds": 4733,
-      "tag": "БВШД · Флагманский курс",
       "title": "Программа «Декорирование интерьера» в Британке",
+      "tag": "БВШД · Флагманский курс",
       "cite": {
         "act": "caption",
         "text": "Старт 22 октября 2026 · 8 месяцев глубокой практики и калибровки оптики"
       },
+      "seconds": 4733,
       "axis": [
         "philosophy",
         "morphology"
       ],
       "timecode": "1:18:53",
       "light": "slide-30.webp"
+    },
+    {
+      "id": "elle-decoration-iyul-avgust-2026",
+      "file": "elle_decor_IMG_7477.jpg",
+      "title": "Elle Decoration · Июль–Август 2026",
+      "cite": {
+        "act": "caption",
+        "text": "Трансформация гаража в 70-м люкс: вафельный лен, черная кожа, патина латуни."
+      },
+      "light": "elle_decor_IMG_7477.webp"
+    },
+    {
+      "id": "livingetc-may-2026",
+      "file": "livingetc_IMG_7576.jpg",
+      "title": "Livingetc · Май 2026",
+      "cite": {
+        "act": "caption",
+        "text": "Датский модернизм 1960-х: палисандр, реечные ставни и теплая древесина."
+      },
+      "light": "livingetc_IMG_7576.webp"
+    },
+    {
+      "id": "elle-decoration-highlights",
+      "file": "elle_decor_IMG_7480.jpg",
+      "title": "Elle Decoration · Highlights",
+      "cite": {
+        "act": "caption",
+        "text": "Минеральная гамма: терракота, известняк и матовая глубина цвета."
+      },
+      "light": "elle_decor_IMG_7480.webp"
+    },
+    {
+      "id": "livingetc-spreads",
+      "file": "livingetc_IMG_7578.jpg",
+      "title": "Livingetc · Spreads",
+      "cite": {
+        "act": "caption",
+        "text": "Тактильное зонирование: тяжелые шторы и естественный свет."
+      },
+      "light": "livingetc_IMG_7578.webp"
+    },
+    {
+      "id": "matritsa-semi-osey",
+      "title": "Матрица семи осей",
+      "desc": "Универсальный объективный инструмент для декораторов и архитекторов. Обоснование концепций и смет перед заказчиками.",
+      "links": [
+        {
+          "label": "Открыть оси анализа",
+          "url": "#doc-axes"
+        }
+      ]
+    },
+    {
+      "id": "dekorirovanie-interera-v-britanke",
+      "tag": "Старт 22 октября 2026",
+      "title": "Декорирование интерьера в Британке",
+      "desc": "8 месяцев глубокого погружения. Авторская программа Ольги Розет в Британской высшей школе дизайна (Universal University).",
+      "specs": [
+        "Очный формат · Москва",
+        "Практика и дипломные проекты",
+        "Калибровка оптики"
+      ],
+      "links": [
+        {
+          "label": "Подробнее о программе на сайте БВШД →",
+          "url": "https://britishdesign.ru"
+        }
+      ]
     }
   ],
   "speech": {

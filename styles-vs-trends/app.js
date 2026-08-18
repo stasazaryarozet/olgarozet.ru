@@ -1,46 +1,52 @@
 /**
- * Dela Universal Presentation Projection Engine
- * Архитектура: Модель (JSON Schema) ──► Рендерер (Editorial / Broadcast) ──► Контроллер (State / Hotkeys / API)
- * 
- * Inv-REUSABLE: Полное отсутствие хардкода. Все элементы интерфейса выводятся
- * из декларативной спецификации presentation_data.json.
+ * Dela Presentation Engine — ПОВЕДЕНИЕ НАД ДОКУМЕНТОМ, а не второй рендерер.
+ *
+ * КОРЕНЬ (замер 2026-08-18): этот файл СОДЕРЖАЛ второй рендерер той же модели —
+ * 259 строк из 670, шесть случаев по роду главы, собственный словарь классов и
+ * собственную прозу («7-осевая матрица…», «Нажмите на любую ось…», «Формула
+ * анализа интерьера:», «undefined» вместо имени карточки). Он ЗАМЕЩАЛ документ
+ * при init: у читателя со скриптом не было ни одного <article>, и 67 из 227
+ * единиц прозы модели до него не доезжали, хотя сервер их отдал.
+ *
+ * Теперь документ приходит СОБРАННЫМ (narrative_showcase.body из той же модели),
+ * а этот файл лишь вешает на него поведение, цепляясь за те же координаты, что
+ * рендерер уже проставил (`data-kind`, `data-role`, `data-field`). Вторая
+ * ипостась — ЭФИР 16:9 — остаётся динамической: проектор строит кадр из модели,
+ * и это не документ, а показ.
  */
 
 (function () {
   'use strict';
 
   /* ── ЕДИНИЦА РЕЧИ ────────────────────────────────────────────────────────────────
-   * Значение может быть строкой (старая форма) или ЕДИНИЦЕЙ {act, text}. Род акта
-   * объявлен Спекой surface-provenance, и КАВЫЧКИ РИСУЕТ РЕНДЕРЕР по роду — в данных
-   * их нет (Inv-PROV-marks-follow-act). Словарь родов и пара знаков приезжают В МОДЕЛИ
-   * (`speech`, положен publish_prepare из Спеки), поэтому здесь нет ни одного знака,
-   * ни одного имени рода — тот же Inv-REUSABLE, что и у всего файла. */
+   * Значение может быть строкой или ЕДИНИЦЕЙ {act, text}. Род акта объявлен Спекой
+   * surface-provenance, и КАВЫЧКИ РИСУЕТ ПОКАЗ по роду — в данных их нет
+   * (Inv-PROV-marks-follow-act). Словарь родов приезжает В МОДЕЛИ (`speech`). */
   let ACTS = {}, MARKS = ['', ''];
   function said(v) {
     if (v === null || v === undefined) return '';
     if (typeof v !== 'object') return String(v);
-    // ЛЁГКАЯ ФОРМА НОСИТЕЛЯ — одна дверь адреса картинки.
-// `light` выводит materialise (narrative_showcase.LIGHT) тем же `_webp`, каким документ
-// строит <picture>; здесь — ЧТЕНИЕ выведенного, не второе вычисление. Оригинал остаётся
-// фолбэком: нет light — едет file (страница без пере-деривации не ломается).
-const imgSrc = (s) => `img/${(s && (s.light || s.file)) || ''}`;
-
-const kind = ACTS[v.act] || null;
+    const kind = ACTS[v.act] || null;
     const text = v.text === undefined ? '' : String(v.text);
     return (kind && kind.quoted) ? MARKS[0] + text + MARKS[1] : text;
   }
 
+  /* ЛЁГКАЯ ФОРМА НОСИТЕЛЯ — одна дверь адреса картинки: `light` выводит materialise
+   * тем же _webp, каким документ строит <picture>. Область видимости — МОДУЛЬ. */
+  const imgSrc = (s) => `img/${(s && (s.light || s.file)) || ''}`;
+
+  /* ЧТО ПОКАЗЫВАЕТ ПРОЕКТОР: единица с носителем И со своей секундой. Кадр есть
+   * момент записи; единица без времени (карточка, разворот) в эфир не идёт —
+   * отбор ВЫВЕДЕН из данных, а не перечислен списком. */
+  const projectable = (segments) => (segments || [])
+    .filter(s => s && s.file && typeof s.seconds === 'number')
+    .sort((a, b) => a.seconds - b.seconds);
+
   class PresentationEngine {
     constructor() {
       this.data = null;
-      this.state = {
-        currentSlideIndex: 0,
-        currentMode: 'editorial', // 'editorial' | 'broadcast'
-        hudVisible: true,
-        activeAxis: 'morphology',
-        lastScrollY: 0
-      };
-      this.el = {};
+      this.frames = [];
+      this.state = { currentSlideIndex: 0, currentMode: 'editorial', hudVisible: true, lastScrollY: 0 };
       this.hudIdleTimer = null;
     }
 
@@ -57,12 +63,12 @@ const kind = ACTS[v.act] || null;
         return;
       }
 
+      this.frames = projectable(this.data.segments);
       this.cacheElements();
-      this.renderEditorialView();
+      this.nameSurface();
       this.renderBroadcastThumbnails();
       this.initTheme();
       this.bindEvents();
-      this.selectMatrixAxis(Object.keys(this.data.axes)[0] || 'morphology');
       this.updateSlideDisplay(0);
 
       // System API for Video Remounting & External Automation
@@ -70,24 +76,19 @@ const kind = ACTS[v.act] || null;
         goToSlide: (idx) => this.goToSlide(idx),
         setLectureTime: (sec) => this.setLectureTime(sec),
         setMode: (m) => this.setMode(m),
-        toggleTheme: () => this.toggleTheme(),
-        getSlidesCount: () => (this.data.slides ? this.data.slides.length : 0),
-        getCurrentSlide: () => this.data.slides[this.state.currentSlideIndex],
-        getSchema: () => this.data
+        frames: () => this.frames.length
       };
     }
 
     cacheElements() {
       this.el = {
         body: document.body,
+        editorialView: document.getElementById('editorialView'),
+        broadcastView: document.getElementById('broadcastView'),
         navBrand: document.getElementById('navBrand'),
         btnModeEditorial: document.getElementById('btnModeEditorial'),
         btnModeBroadcast: document.getElementById('btnModeBroadcast'),
         btnThemeToggle: document.getElementById('btnThemeToggle'),
-        editorialView: document.getElementById('editorialView'),
-        broadcastView: document.getElementById('broadcastView'),
-        
-        // Broadcast stage elements
         stageImg: document.getElementById('stageImg'),
         stageHud: document.getElementById('stageHud'),
         hudAuthor: document.getElementById('hudAuthor'),
@@ -96,8 +97,6 @@ const kind = ACTS[v.act] || null;
         hudTag: document.getElementById('hudTag'),
         hudTitle: document.getElementById('hudTitle'),
         hudCite: document.getElementById('hudCite'),
-        
-        // Broadcast controls
         btnPrevSlide: document.getElementById('btnPrevSlide'),
         btnNextSlide: document.getElementById('btnNextSlide'),
         btnToggleHud: document.getElementById('btnToggleHud'),
@@ -106,549 +105,191 @@ const kind = ACTS[v.act] || null;
       };
     }
 
-    /* =========================================================================
-       LAYER 1: EDITORIAL VIEW DYNAMIC RENDERER
-       ========================================================================= */
-    renderEditorialView() {
-      const meta = this.data.meta || {};
-      const axes = this.data.axes || {};
-      const chapters = this.data.chapters || [];
-      const slidesMap = new Map((this.data.slides || []).map(s => [s.id, s]));
-
-      // 1. Top Nav Brand
-      if (this.el.navBrand) {
-        this.el.navBrand.innerHTML = `
-          <span class="brand-author">${meta.author || ''}</span>
-          <span class="brand-sep">/</span>
-          <span class="brand-title">${meta.title || ''} · ${meta.subtitle || ''}</span>
-        `;
+    /* ИМЯ ПОВЕРХНОСТИ ЧИТАЕТСЯ С ДОКУМЕНТА, а не составляется здесь: прежде хром
+     * склеивал `${author} / ${title} · ${subtitle}` в коде — третье написание тех
+     * же слов (и русская грамматика в нём ломалась: «Инструмент Ольга Розет»). */
+    nameSurface() {
+      const doc = this.el.editorialView;
+      if (!doc) return;
+      const text = (sel) => (doc.querySelector(sel) || {}).textContent || '';
+      const title = text('h1');
+      const subtitle = text('[data-field="subtitle"]');
+      const author = text('[data-field="author"]');
+      if (this.el.navBrand && title) {
+        this.el.navBrand.textContent = [author, [title, subtitle].filter(Boolean).join(' · ')]
+          .filter(Boolean).join(' / ');
       }
-
-      if (this.el.hudAuthor) {
-        this.el.hudAuthor.textContent = meta.author || 'Ольга Розет';
-      }
-
-      let html = '';
-
-      // 2. Hero Section
-      html += `
-        <section class="hero-section">
-          <div class="hero-pretitle">${meta.pretitle || ''}</div>
-          <h1 class="hero-h1">${meta.title || ''}</h1>
-          <p class="hero-subtitle">${meta.subtitle || ''}</p>
-          
-          <div class="hero-meta-staccato">
-            ${(meta.staccato || []).map(line => `<div class="staccato-line">${said(line)}</div>`).join('')}
-          </div>
-
-          <div class="hero-badges">
-            ${(meta.badges || []).map(b => `<span class="badge">${b}</span>`).join('')}
-          </div>
-        </section>
-      `;
-
-      // 3. 7-Axis Interactive Matrix Section
-      html += `
-        <section class="matrix-interactive-section" id="matrixSection">
-          <div class="section-badge">Инструмент ${meta.author || ''}</div>
-          <h2 class="section-title">7-осевая матрица анализа интерьера</h2>
-          <p class="section-desc">Нажмите на любую ось, чтобы увидеть, как категория материализуется в объектах, цветах и фактурах 2026 года.</p>
-
-          <div class="matrix-grid" id="matrixButtonsGrid" role="tablist" aria-label="Оси матрицы анализа">
-            ${Object.entries(axes).map(([key, a], idx) => `
-              <button class="matrix-axis-btn ${idx === 0 ? 'active' : ''}" data-axis="${key}" role="tab" aria-selected="${idx === 0 ? 'true' : 'false'}">
-                <span class="axis-num">${String(a.order || idx + 1).padStart(2, '0')}</span>
-                <span class="axis-name">${a.shortTitle || a.title}</span>
-                <span class="axis-hint">${a.hint || ''}</span>
-              </button>
-            `).join('')}
-          </div>
-
-          <div class="matrix-detail-card" id="matrixDetailCard" aria-live="polite">
-            <div class="detail-header">
-              <span class="detail-tag" id="detailTag"></span>
-              <h3 class="detail-title" id="detailTitle"></h3>
-            </div>
-            <p class="detail-text" id="detailText"></p>
-            <div class="detail-quote" id="detailQuote"></div>
-            <div class="detail-slides-ref" id="detailSlidesRef"></div>
-          </div>
-        </section>
-      `;
-
-      // 4. Chapter Navigation Strip
-      html += `
-        <nav class="chapter-nav" aria-label="Навигация по главам">
-          ${chapters.map(c => `<a href="#${c.id}" class="chap-link">${c.navLabel}</a>`).join('')}
-        </nav>
-      `;
-
-      // 5. Chapters Content
-      chapters.forEach(c => {
-        html += `<section class="content-chapter" id="${c.id}">`;
-        html += `
-          <div class="chapter-header">
-            <span class="chapter-num">${c.num}</span>
-            <h2 class="chapter-title">${c.title}</h2>
-            <div class="chapter-cite">${said(c.cite)}</div>
-            ${c.audio ? `
-              <div class="audio-player-box-inline">
-                <div class="audio-label">${c.audio.label}</div>
-                <audio controls preload="none" src="${c.audio.src}"></audio>
-              </div>
-            ` : ''}
-          </div>
-        `;
-
-        // Case A: Slides Grid
-        if (c.type === 'slides_grid') {
-          html += '<div class="slides-flow-grid">';
-          (c.slideIds || []).forEach(sId => {
-            const slide = slidesMap.get(sId);
-            if (slide) {
-              html += `
-                <div class="slide-card" id="slide-${slide.id}">
-                  <div class="slide-img-box">
-                    <img src="${imgSrc(slide)}" alt="Слайд ${slide.id}: ${slide.title}" loading="lazy" decoding="async">
-                    <button class="btn-zoom-slide" data-slide="${slide.id}" title="Открыть в 16:9">Слайд ${String(slide.id).padStart(2, '0')}</button>
-                  </div>
-                  <div class="slide-caption">
-                    <strong>${slide.tag}:</strong> ${slide.title}
-                  </div>
-                </div>
-              `;
-            }
-          });
-          html += '</div>';
-        }
-
-        // Case B: Feature Slide
-        else if (c.type === 'feature_slide') {
-          const slide = slidesMap.get(c.slideId);
-          html += `
-            <div class="feature-slide-row">
-              <div class="feature-slide-media">
-                <img src="${imgSrc(slide)}" alt="${slide ? slide.title : ''}" loading="lazy" decoding="async">
-              </div>
-              <div class="feature-slide-text">
-                <h3>${slide ? slide.title : ''}</h3>
-                <p>${c.text || ''}</p>
-                ${c.staccato ? `
-                  <div class="staccato-box">
-                    ${c.staccato.map(s => `<div>${said(s)}</div>`).join('')}
-                  </div>
-                ` : ''}
-                <div class="timecode-pill" data-slide-id="${c.slideId}" title="Перейти к слайду в 16:9">${c.timecode || ''}</div>
-              </div>
-            </div>
-          `;
-        }
-
-        // Case C: Designers Showcase
-        else if (c.type === 'designers_showcase') {
-          html += '<div class="designers-showcase">';
-          (c.designers || []).forEach(d => {
-            const slide = slidesMap.get(d.slideId);
-            html += `
-              <div class="designer-card">
-                <div class="designer-media">
-                  <img src="${imgSrc(slide)}" alt="${d.name}" loading="lazy" decoding="async">
-                </div>
-                <div class="designer-info">
-                  <span class="designer-tag">${d.tag}</span>
-                  <h4>${d.name}</h4>
-                  <p>${d.desc}</p>
-                </div>
-              </div>
-            `;
-          });
-          html += '</div>';
-        }
-
-        // Case D: Curators Duo
-        else if (c.type === 'curators_duo') {
-          html += '<div class="curators-duo">';
-          (c.curators || []).forEach(cur => {
-            const slide = slidesMap.get(cur.slideId);
-            html += `
-              <div class="curator-box">
-                <div class="curator-img">
-                  <img src="${imgSrc(slide)}" alt="${cur.title}" loading="lazy" decoding="async">
-                </div>
-                <div class="curator-meta">
-                  <h4>${cur.title}</h4>
-                  <p>${cur.desc}</p>
-                </div>
-              </div>
-            `;
-          });
-          html += '</div>';
-        }
-
-        // Case E: Magazine Gallery
-        else if (c.type === 'magazine_gallery') {
-          html += `
-            <div class="magazine-gallery-lead"><p>${c.lead || ''}</p></div>
-            <div class="magazine-grid">
-              ${(c.items || []).map(item => `
-                <div class="mag-item">
-                  <img src="${item.img}" alt="${item.title}" loading="lazy" decoding="async">
-                  <div class="mag-info">
-                    <strong>${item.title}</strong>
-                    <span>${item.caption}</span>
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-          `;
-        }
-
-        // Case F: Closing Split
-        else if (c.type === 'closing_split') {
-          const formulaItems = c.matrixCard.formulaItems || (c.matrixCard.formula || '').split(' × ');
-          html += `
-            <div class="closing-split">
-              <div class="closing-card">
-                <div class="closing-card-inner">
-                  <span class="card-badge">${c.matrixCard.badge}</span>
-                  <h3>${c.matrixCard.title}</h3>
-                  
-                  <div class="formula-box-semantic" aria-label="Формула матрицы: ${c.matrixCard.formula}">
-                    <div class="formula-label">Формула анализа интерьера:</div>
-                    <div class="formula-track">
-                      ${formulaItems.map(item => `<span class="formula-chip">${item}</span>`).join('<span class="formula-op">×</span>')}
-                    </div>
-                  </div>
-
-                  <p>${c.matrixCard.desc}</p>
-                  <a href="#matrixSection" class="btn-ghost">Открыть интерактивную матрицу ↑</a>
-                </div>
-              </div>
-
-              <div class="closing-card primary">
-                <div class="closing-card-inner">
-                  <span class="card-badge">${c.courseCard.badge}</span>
-                  <h3>${c.courseCard.title}</h3>
-                  <p>${c.courseCard.desc}</p>
-                  <div class="course-specs">
-                    ${(c.courseCard.specs || []).map(s => `<div>${s}</div>`).join('')}
-                  </div>
-                  <a href="${c.courseCard.cta.url}" target="_blank" rel="noopener" class="btn-cta">${c.courseCard.cta.label}</a>
-                </div>
-              </div>
-            </div>
-          `;
-        }
-
-        html += '</section>';
-      });
-
-      // 6. Editorial Footer
-      const footer = meta.footer || {};
-      html += `
-        <footer class="editorial-footer">
-          <div class="footer-top">
-            <div class="footer-quote">${said(footer.quote)}</div>
-            <div class="footer-links">
-              ${(footer.links || []).map(l => `<a href="${l.url}">${l.label}</a>`).join('')}
-            </div>
-          </div>
-          <div class="footer-bottom">
-            <span>${footer.copyright || ''}</span>
-          </div>
-        </footer>
-      `;
-
-      this.el.editorialView.innerHTML = html;
-
-      // Cache dynamic elements after rendering
-      this.el.detailTag = document.getElementById('detailTag');
-      this.el.detailTitle = document.getElementById('detailTitle');
-      this.el.detailText = document.getElementById('detailText');
-      this.el.detailQuote = document.getElementById('detailQuote');
-      this.el.detailSlidesRef = document.getElementById('detailSlidesRef');
-      this.el.matrixBtns = document.querySelectorAll('.matrix-axis-btn');
+      if (this.el.hudAuthor && author) this.el.hudAuthor.textContent = author;
     }
 
     /* =========================================================================
-       LAYER 2: BROADCAST 16:9 RENDERER
+       ЭФИР 16:9 — ПРОЕКТОР (не документ: кадр строится из модели)
        ========================================================================= */
     renderBroadcastThumbnails() {
-      if (!this.el.thumbsTrack || !this.data.slides) return;
+      if (!this.el.thumbsTrack || !this.frames.length) return;
       this.el.thumbsTrack.innerHTML = '';
-      this.data.slides.forEach((slide, idx) => {
+      this.frames.forEach((frame, idx) => {
         const thumb = document.createElement('div');
         thumb.className = `thumb-item ${idx === 0 ? 'active' : ''}`;
         thumb.setAttribute('data-index', idx);
-        thumb.setAttribute('title', `Слайд ${slide.id}: ${slide.title} (${slide.timecode})`);
-        thumb.innerHTML = `<img src="${imgSrc(slide)}" alt="Слайд ${slide.id}" loading="lazy" decoding="async">`;
+        thumb.setAttribute('title', `${frame.title} · ${frame.timecode || ''}`.trim());
+        const img = document.createElement('img');
+        img.src = imgSrc(frame);
+        img.alt = frame.title || '';
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        thumb.appendChild(img);
         thumb.addEventListener('click', () => this.goToSlide(idx));
         this.el.thumbsTrack.appendChild(thumb);
       });
     }
 
     updateSlideDisplay(index) {
-      if (!this.data.slides || index < 0 || index >= this.data.slides.length) return;
+      if (!this.frames.length || index < 0 || index >= this.frames.length) return;
       this.state.currentSlideIndex = index;
-      const slide = this.data.slides[index];
+      const frame = this.frames[index];
 
       if (this.el.stageImg) {
         this.el.stageImg.style.opacity = '0';
         setTimeout(() => {
-          this.el.stageImg.src = imgSrc(slide);
-          this.el.stageImg.alt = `Слайд ${slide.id}: ${slide.title}`;
+          this.el.stageImg.src = imgSrc(frame);
+          this.el.stageImg.alt = frame.title || '';
           this.el.stageImg.style.opacity = '1';
         }, 60);
       }
 
-      if (this.el.hudTimecode) this.el.hudTimecode.textContent = `⏱ ${slide.timecode}`;
-      if (this.el.hudSlideCounter) this.el.hudSlideCounter.textContent = `${String(slide.id).padStart(2, '0')} / ${this.data.slides.length}`;
-      if (this.el.hudTag) this.el.hudTag.textContent = slide.tag;
-      if (this.el.hudTitle) this.el.hudTitle.textContent = slide.title;
-      if (this.el.hudCite) this.el.hudCite.textContent = said(slide.cite);
+      if (this.el.hudTimecode) this.el.hudTimecode.textContent = `⏱ ${frame.timecode || ''}`;
+      // СЧЁТЧИК ЕСТЬ ПОЛОЖЕНИЕ В РЯДУ, а не имя единицы: имя у неё своё и не порядковое.
+      if (this.el.hudSlideCounter) {
+        this.el.hudSlideCounter.textContent =
+          `${String(index + 1).padStart(2, '0')} / ${this.frames.length}`;
+      }
+      if (this.el.hudTag) this.el.hudTag.textContent = frame.tag || '';
+      if (this.el.hudTitle) this.el.hudTitle.textContent = frame.title || '';
+      if (this.el.hudCite) this.el.hudCite.textContent = said(frame.cite);
 
       if (this.el.thumbsTrack) {
-        const thumbs = this.el.thumbsTrack.querySelectorAll('.thumb-item');
-        thumbs.forEach((t, i) => {
+        this.el.thumbsTrack.querySelectorAll('.thumb-item').forEach((t, i) => {
           t.classList.toggle('active', i === index);
-          if (i === index) {
-            t.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-          }
+          if (i === index) t.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         });
       }
 
-      // Preload next and previous slide images for 0ms lag
-      if (index + 1 < this.data.slides.length) {
-        const imgNext = new Image();
-        imgNext.src = imgSrc(this.data.slides[index + 1]);
-      }
-      if (index - 1 >= 0) {
-        const imgPrev = new Image();
-        imgPrev.src = imgSrc(this.data.slides[index - 1]);
-      }
+      [index + 1, index - 1].forEach(i => {
+        if (i >= 0 && i < this.frames.length) { const im = new Image(); im.src = imgSrc(this.frames[i]); }
+      });
     }
 
-    goToSlide(index) {
-      this.updateSlideDisplay(index);
-    }
-
-    nextSlide() {
-      if (this.state.currentSlideIndex < this.data.slides.length - 1) {
-        this.goToSlide(this.state.currentSlideIndex + 1);
-      }
-    }
-
-    prevSlide() {
-      if (this.state.currentSlideIndex > 0) {
-        this.goToSlide(this.state.currentSlideIndex - 1);
-      }
-    }
+    goToSlide(index) { this.updateSlideDisplay(index); }
+    nextSlide() { if (this.state.currentSlideIndex < this.frames.length - 1) this.goToSlide(this.state.currentSlideIndex + 1); }
+    prevSlide() { if (this.state.currentSlideIndex > 0) this.goToSlide(this.state.currentSlideIndex - 1); }
 
     setLectureTime(seconds) {
       let matchIdx = 0;
-      for (let i = 0; i < this.data.slides.length; i++) {
-        if (seconds >= this.data.slides[i].seconds) {
-          matchIdx = i;
-        } else {
-          break;
-        }
+      for (let i = 0; i < this.frames.length; i++) {
+        if (seconds >= this.frames[i].seconds) matchIdx = i; else break;
       }
-      if (matchIdx !== this.state.currentSlideIndex) {
-        this.goToSlide(matchIdx);
-      }
+      if (matchIdx !== this.state.currentSlideIndex) this.goToSlide(matchIdx);
     }
 
     toggleHud() {
       this.state.hudVisible = !this.state.hudVisible;
-      if (this.el.stageHud) {
-        this.el.stageHud.classList.toggle('hud-hidden', !this.state.hudVisible);
-      }
+      if (this.el.stageHud) this.el.stageHud.classList.toggle('hud-hidden', !this.state.hudVisible);
     }
 
     toggleFullscreen() {
       if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-          console.warn('Fullscreen error:', err);
-        });
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        }
+        document.documentElement.requestFullscreen().catch(err => console.warn('Fullscreen error:', err));
+      } else if (document.exitFullscreen) {
+        document.exitFullscreen();
       }
     }
 
     /* =========================================================================
-       LAYER 3: INTERACTIVE CONTROLLER
+       КОНТРОЛЛЕР
        ========================================================================= */
     initTheme() {
       if (typeof window.__applyTheme === 'function') {
         window.__applyTheme();
       } else {
-        const savedTheme = localStorage.getItem('dela.theme.v1') || 'day';
-        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('dela.theme.v1') || 'day');
       }
     }
 
     toggleTheme() {
-      const current = document.documentElement.getAttribute('data-theme') || 'day';
-      const next = current === 'day' ? 'night' : 'day';
+      const next = (document.documentElement.getAttribute('data-theme') || 'day') === 'day' ? 'night' : 'day';
       document.documentElement.setAttribute('data-theme', next);
-      try { localStorage.setItem('dela.theme.v1', next); } catch(e) {}
+      try { localStorage.setItem('dela.theme.v1', next); } catch (e) { /* приватный режим */ }
     }
 
     setMode(mode) {
       this.state.currentMode = mode;
-      if (mode === 'broadcast') {
-        this.state.lastScrollY = window.scrollY;
-        this.el.body.className = 'mode-broadcast';
-        this.el.editorialView.classList.add('hidden');
-        this.el.broadcastView.classList.remove('hidden');
-        this.el.btnModeBroadcast.classList.add('active');
-        this.el.btnModeBroadcast.setAttribute('aria-selected', 'true');
-        this.el.btnModeEditorial.classList.remove('active');
-        this.el.btnModeEditorial.setAttribute('aria-selected', 'false');
+      const broadcast = mode === 'broadcast';
+      if (broadcast) this.state.lastScrollY = window.scrollY;
+      this.el.body.className = broadcast ? 'mode-broadcast' : 'mode-editorial';
+      if (this.el.editorialView) this.el.editorialView.classList.toggle('hidden', broadcast);
+      if (this.el.broadcastView) this.el.broadcastView.classList.toggle('hidden', !broadcast);
+      [[this.el.btnModeBroadcast, broadcast], [this.el.btnModeEditorial, !broadcast]].forEach(([btn, on]) => {
+        if (!btn) return;
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      if (broadcast) {
         this.updateSlideDisplay(this.state.currentSlideIndex);
       } else {
-        this.el.body.className = 'mode-editorial';
-        this.el.editorialView.classList.remove('hidden');
-        this.el.broadcastView.classList.add('hidden');
-        this.el.btnModeEditorial.classList.add('active');
-        this.el.btnModeEditorial.setAttribute('aria-selected', 'true');
-        this.el.btnModeBroadcast.classList.remove('active');
-        this.el.btnModeBroadcast.setAttribute('aria-selected', 'false');
-        
-        window.requestAnimationFrame(() => {
-          window.scrollTo({ top: this.state.lastScrollY || 0, behavior: 'smooth' });
-        });
+        window.requestAnimationFrame(() => window.scrollTo({ top: this.state.lastScrollY || 0, behavior: 'smooth' }));
       }
     }
 
-    selectMatrixAxis(axisKey) {
-      if (!this.data.axes) return;
-      const data = this.data.axes[axisKey];
-      if (!data) return;
-      this.state.activeAxis = axisKey;
-
-      if (this.el.matrixBtns) {
-        this.el.matrixBtns.forEach(btn => {
-          const isCurrent = btn.getAttribute('data-axis') === axisKey;
-          btn.classList.toggle('active', isCurrent);
-          btn.setAttribute('aria-selected', isCurrent ? 'true' : 'false');
-        });
-      }
-
-      if (this.el.detailTag) this.el.detailTag.textContent = data.tag;
-      if (this.el.detailTitle) this.el.detailTitle.textContent = data.title;
-      if (this.el.detailText) this.el.detailText.textContent = data.text;
-      if (this.el.detailQuote) this.el.detailQuote.textContent = data.quote || '';
-
-      // Compute matching slides from atomic axis tags (SOT: slides[].axis)
-      // No manual axes[key].slides — the tags on each slide ARE the truth.
-      const matchingSlideIds = (this.data.slides || [])
-        .filter(s => (s.axis || []).includes(axisKey))
-        .map(s => s.id);
-
-      if (this.el.detailSlidesRef) {
-        this.el.detailSlidesRef.innerHTML = '<span>Связанные слайды:</span> ';
-        matchingSlideIds.forEach(sNum => {
-          const link = document.createElement('a');
-          link.className = 'slide-link';
-          link.href = `#slide-${sNum}`;
-          link.textContent = `Слайд ${sNum}`;
-          link.addEventListener('click', (e) => {
-            if (this.state.currentMode === 'broadcast') {
-              e.preventDefault();
-              this.goToSlide(sNum - 1);
-            }
-          });
-          this.el.detailSlidesRef.appendChild(link);
-          this.el.detailSlidesRef.appendChild(document.createTextNode(' '));
-        });
-      }
+    /* ШТАМП ЕДИНИЦЫ — ДВЕРЬ В ЭФИР. Подпись двери берётся с ХРОМА (кнопка режима),
+     * а имя цели — с самой единицы: новой прозы в коде не рождается. */
+    bindDocumentJumps() {
+      const doc = this.el.editorialView;
+      if (!doc) return;
+      const home = new Map(this.frames.map((f, i) => [`doc-segments-${f.id}`, i]));
+      const modeWord = (this.el.btnModeBroadcast && this.el.btnModeBroadcast.textContent || '').trim();
+      doc.querySelectorAll('[data-kind="segment"] [data-role="stamp"]').forEach(stamp => {
+        const holder = stamp.closest('[data-kind="segment"]');
+        const idx = holder && home.get(holder.id);
+        if (idx === undefined || idx === null) return;
+        const name = (holder.querySelector('[data-role="title"]') || {}).textContent || '';
+        stamp.setAttribute('role', 'button');
+        stamp.setAttribute('tabindex', '0');
+        stamp.setAttribute('aria-label', [modeWord, name].filter(Boolean).join(' — '));
+        const go = (e) => { e.preventDefault(); this.setMode('broadcast'); this.goToSlide(idx); };
+        stamp.addEventListener('click', go);
+        stamp.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') go(e); });
+      });
     }
 
     bindEvents() {
       if (this.el.btnModeEditorial) this.el.btnModeEditorial.addEventListener('click', () => this.setMode('editorial'));
       if (this.el.btnModeBroadcast) this.el.btnModeBroadcast.addEventListener('click', () => this.setMode('broadcast'));
       if (this.el.btnThemeToggle) this.el.btnThemeToggle.addEventListener('click', () => this.toggleTheme());
-
-      if (this.el.btnNextSlide) this.el.btnNextSlide.addEventListener('click', () => this.nextSlide());
       if (this.el.btnPrevSlide) this.el.btnPrevSlide.addEventListener('click', () => this.prevSlide());
+      if (this.el.btnNextSlide) this.el.btnNextSlide.addEventListener('click', () => this.nextSlide());
       if (this.el.btnToggleHud) this.el.btnToggleHud.addEventListener('click', () => this.toggleHud());
       if (this.el.btnFullscreen) this.el.btnFullscreen.addEventListener('click', () => this.toggleFullscreen());
+      this.bindDocumentJumps();
 
-      // Delegate zoom clicks
-      this.el.editorialView.addEventListener('click', (e) => {
-        const btn = e.target.closest('.btn-zoom-slide');
-        if (btn) {
-          const slideNum = parseInt(btn.getAttribute('data-slide'), 10);
-          if (!isNaN(slideNum)) {
-            this.setMode('broadcast');
-            this.goToSlide(slideNum - 1);
-          }
-          return;
-        }
-
-        const pill = e.target.closest('.timecode-pill');
-        if (pill) {
-          const slideId = parseInt(pill.getAttribute('data-slide-id'), 10);
-          if (!isNaN(slideId)) {
-            this.setMode('broadcast');
-            this.goToSlide(slideId - 1);
-          }
-        }
-      });
-
-      // Delegate matrix axis buttons
-      const matrixGrid = document.getElementById('matrixButtonsGrid');
-      if (matrixGrid) {
-        matrixGrid.addEventListener('click', (e) => {
-          const btn = e.target.closest('.matrix-axis-btn');
-          if (btn) {
-            const axis = btn.getAttribute('data-axis');
-            this.selectMatrixAxis(axis);
-          }
-        });
-      }
-
-      // Keyboard accelerators
       window.addEventListener('keydown', (e) => {
-        const isInput = ['INPUT', 'TEXTAREA'].includes(e.target.tagName);
-        if (isInput) return;
-
-        // Theme toggle (T / Е)
-        if (e.key === 't' || e.key === 'T' || e.key === 'е' || e.key === 'Е') {
-          this.toggleTheme();
-          return;
-        }
-
-        // Mode switch (M / Ь)
-        if (e.key === 'm' || e.key === 'M' || e.key === 'ь' || e.key === 'Ь') {
-          this.setMode(this.state.currentMode === 'editorial' ? 'broadcast' : 'editorial');
-          return;
-        }
-
-        // Broadcast-specific controls
-        if (this.state.currentMode === 'broadcast') {
-          if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown' || e.key === 'j' || e.key === 'J' || e.key === 'о' || e.key === 'О') {
-            e.preventDefault();
-            this.nextSlide();
-          } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'k' || e.key === 'K' || e.key === 'л' || e.key === 'Л') {
-            e.preventDefault();
-            this.prevSlide();
-          } else if (e.key === 'h' || e.key === 'H' || e.key === 'р' || e.key === 'Р') {
-            e.preventDefault();
-            this.toggleHud();
-          } else if (e.key === 'f' || e.key === 'F' || e.key === 'а' || e.key === 'А') {
-            e.preventDefault();
-            this.toggleFullscreen();
-          } else if (e.key === 'Escape') {
-            this.setMode('editorial');
-          }
+        if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+        if ('tTеЕ'.includes(e.key)) { this.toggleTheme(); return; }
+        if ('mMьЬ'.includes(e.key)) { this.setMode(this.state.currentMode === 'editorial' ? 'broadcast' : 'editorial'); return; }
+        if (this.state.currentMode !== 'broadcast') return;
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown' || 'jJоО'.includes(e.key)) {
+          e.preventDefault(); this.nextSlide();
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || 'kKлЛ'.includes(e.key)) {
+          e.preventDefault(); this.prevSlide();
+        } else if ('hHрР'.includes(e.key)) {
+          e.preventDefault(); this.toggleHud();
+        } else if ('fFаА'.includes(e.key)) {
+          e.preventDefault(); this.toggleFullscreen();
+        } else if (e.key === 'Escape') {
+          this.setMode('editorial');
         }
       });
 
-      // Broadcast HUD idle fader (dim controls after 3.5s of inactivity)
       const resetHudIdle = () => {
         if (this.state.currentMode !== 'broadcast' || !this.el.broadcastView) return;
         this.el.broadcastView.classList.remove('hud-idle');
@@ -659,18 +300,15 @@ const kind = ACTS[v.act] || null;
           }
         }, 3500);
       };
-
       window.addEventListener('mousemove', resetHudIdle, { passive: true });
       window.addEventListener('touchstart', resetHudIdle, { passive: true });
     }
   }
 
-  // Self-bootstrapping Engine Mount
   const engine = new PresentationEngine();
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => engine.init('presentation_data.json'));
   } else {
     engine.init('presentation_data.json');
   }
-
 })();
