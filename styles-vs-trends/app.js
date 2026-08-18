@@ -9,6 +9,21 @@
 (function () {
   'use strict';
 
+  /* ── ЕДИНИЦА РЕЧИ ────────────────────────────────────────────────────────────────
+   * Значение может быть строкой (старая форма) или ЕДИНИЦЕЙ {act, text}. Род акта
+   * объявлен Спекой surface-provenance, и КАВЫЧКИ РИСУЕТ РЕНДЕРЕР по роду — в данных
+   * их нет (Inv-PROV-marks-follow-act). Словарь родов и пара знаков приезжают В МОДЕЛИ
+   * (`speech`, положен publish_prepare из Спеки), поэтому здесь нет ни одного знака,
+   * ни одного имени рода — тот же Inv-REUSABLE, что и у всего файла. */
+  let ACTS = {}, MARKS = ['', ''];
+  function said(v) {
+    if (v === null || v === undefined) return '';
+    if (typeof v !== 'object') return String(v);
+    const kind = ACTS[v.act] || null;
+    const text = v.text === undefined ? '' : String(v.text);
+    return (kind && kind.quoted) ? MARKS[0] + text + MARKS[1] : text;
+  }
+
   class PresentationEngine {
     constructor() {
       this.data = null;
@@ -28,6 +43,9 @@
         const res = await fetch(dataPath);
         if (!res.ok) throw new Error(`HTTP error ${res.status}`);
         this.data = await res.json();
+        const speech = this.data.speech || {};
+        ACTS = speech.acts || {};
+        MARKS = speech.draw_marks || ['', ''];
       } catch (err) {
         console.error('Failed to load presentation schema:', err);
         return;
@@ -114,7 +132,7 @@
           <p class="hero-subtitle">${meta.subtitle || ''}</p>
           
           <div class="hero-meta-staccato">
-            ${(meta.staccato || []).map(line => `<div class="staccato-line">${line}</div>`).join('')}
+            ${(meta.staccato || []).map(line => `<div class="staccato-line">${said(line)}</div>`).join('')}
           </div>
 
           <div class="hero-badges">
@@ -166,7 +184,7 @@
           <div class="chapter-header">
             <span class="chapter-num">${c.num}</span>
             <h2 class="chapter-title">${c.title}</h2>
-            <div class="chapter-cite">${c.cite}</div>
+            <div class="chapter-cite">${said(c.cite)}</div>
             ${c.audio ? `
               <div class="audio-player-box-inline">
                 <div class="audio-label">${c.audio.label}</div>
@@ -211,7 +229,7 @@
                 <p>${c.text || ''}</p>
                 ${c.staccato ? `
                   <div class="staccato-box">
-                    ${c.staccato.map(s => `<div>${s}</div>`).join('')}
+                    ${c.staccato.map(s => `<div>${said(s)}</div>`).join('')}
                   </div>
                 ` : ''}
                 <div class="timecode-pill" data-slide-id="${c.slideId}" title="Перейти к слайду в 16:9">${c.timecode || ''}</div>
@@ -324,7 +342,7 @@
       html += `
         <footer class="editorial-footer">
           <div class="footer-top">
-            <div class="footer-quote">${footer.quote || ''}</div>
+            <div class="footer-quote">${said(footer.quote)}</div>
             <div class="footer-links">
               ${(footer.links || []).map(l => `<a href="${l.url}">${l.label}</a>`).join('')}
             </div>
@@ -381,7 +399,7 @@
       if (this.el.hudSlideCounter) this.el.hudSlideCounter.textContent = `${String(slide.id).padStart(2, '0')} / ${this.data.slides.length}`;
       if (this.el.hudTag) this.el.hudTag.textContent = slide.tag;
       if (this.el.hudTitle) this.el.hudTitle.textContent = slide.title;
-      if (this.el.hudCite) this.el.hudCite.textContent = slide.cite;
+      if (this.el.hudCite) this.el.hudCite.textContent = said(slide.cite);
 
       if (this.el.thumbsTrack) {
         const thumbs = this.el.thumbsTrack.querySelectorAll('.thumb-item');
