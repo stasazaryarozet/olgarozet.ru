@@ -33,9 +33,9 @@
         "recording": "1309258abdb4ebab0e935bbd0ed1b996631c41db698acc9951a77391510a3754",
         "deck": "776e5e07f9210759f161ff8de7c14d9f3dc2f823f0f0778bdabf120e19623dfc",
         "transcript_timed": "ef7e0eaab8359fd6d4c01c760d13762817bc563860be53b446a25cba722952c7",
-        "derivation": "da9bc178e3270c627f234e1f6ccc1611a49cb4129711ee4b30d16349dd60b143"
+        "derivation": "7b477457902c42cb4a8561177ff7c6fca0c3aebc364e87c6550abb397ab2619d"
       },
-      "inputs_sha": "ea89599d5f59e016995f2c4881eed8b967d5850edcba9d9c8eb2e5dfa855bf37"
+      "inputs_sha": "40c8ab0af099ba5a7752b91d9ebbcbcce262a2fd6412c04d12f1835cbd1eb148"
     }
   },
   "axes": {
@@ -100,7 +100,7 @@
     {
       "id": "sec-theory",
       "navLabel": "01. Теория: Стиль vs Тренд",
-      "num": "Глава 01 · 01:47 – 16:47",
+      "num": "Глава 01 · 00:00 – 16:47",
       "title": "Большие стили vs Тренды",
       "cite": "«Дизайн всегда находится в мировом политическом и экономическом контексте»",
       "type": "slides_grid",
@@ -265,8 +265,8 @@
     {
       "id": 1,
       "file": "slide-01.png",
-      "timecode": "01:47",
-      "seconds": 107,
+      "timecode": "00:00",
+      "seconds": 0,
       "tag": "Введение · Титул",
       "title": "Стили vs Тренды",
       "cite": "Ольга Розет — художник, искусствовед, куратор программы „Декорирование интерьера“ в БВШД",
