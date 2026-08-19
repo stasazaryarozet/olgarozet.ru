@@ -147,6 +147,10 @@ body {
 }
 
 #doc :is(h1, h2, h3, h4) { font-weight: 400; letter-spacing: var(--tracking-display, -0.02em); }
+/* Домовый росчерк хаба (`h1::after { content: ' —' }`) — знак ИНДЕКСА, а не статьи;
+   страницы-статьи снимают его тем же способом (`.article-wrapper h1::after`). Пока
+   у страницы была своя таблица, вопрос не стоял: она просто не подключала домовую. */
+#doc h1::after { content: none; }
 #doc a { color: inherit; }
 #doc img { max-width: 100%; height: auto; display: block; }
 #doc ul { list-style: none; }
@@ -238,12 +242,23 @@ body {
   color: var(--ink);
   margin-bottom: 0.75rem;
 }
+/* КООРДИНАТА И ИМЯ — ДВЕ РАЗНЫЕ ВЕЩИ, И НОВОСТРОЧИЕ ЭТО ГОВОРИТ. Одной строкой
+   «Глава 1 · 00:00 – 16:47 — Каркас и реакция» читается как одно длинное имя:
+   штамп есть АДРЕС главы на записи, заголовок — её тезис, и семантику различия
+   несёт вертикаль, а не тире (принципал 2026-08-19). */
+/* Части заголовка разделены ФОРМОЙ: штамп — своей строкой над именем, а внутри одной
+   строки (карточка определения) — обычным пробелом. Разделитель-литерал в рендерере
+   был бы третьим написанием того же решения. */
+#doc :is(h2, h3, dt) [data-role] + [data-role] { margin-left: 0.4em; }
+/* Штамп главы — БЛОК, поэтому имя за ним начинает строку и отступа не берёт. */
+#doc section > h2 [data-role="stamp"] + [data-role] { margin-left: 0; }
 #doc section > h2 [data-role="stamp"] {
+  display: block;
   font-family: var(--mono, ui-monospace, monospace);
-  font-size: 0.42em;
+  font-size: var(--fs-2xs, 0.719rem);
   letter-spacing: var(--tracking-caps, 0.16em);
   color: var(--accent);
-  vertical-align: 0.35em;
+  margin-bottom: 0.35rem;
 }
 #doc section > [data-role="prose"],
 #doc section > [data-role="speech"],
@@ -296,7 +311,8 @@ body {
   padding: 1rem;
 }
 #doc dl dt::before {
-  content: counter(axis, decimal-leading-zero);
+  /* Лапидарность: ведущий ноль не несёт ничего (принципал 2026-08-19). */
+  content: counter(axis, decimal);
   display: block;
   font-family: var(--mono, ui-monospace, monospace);
   font-size: var(--fs-2xs, 0.719rem);
@@ -320,19 +336,19 @@ body {
   color: var(--ink-soft);
   margin-top: 0.5rem;
 }
-/* РЁБРА ОСИ — ОДНОЙ ЛЕНТОЙ. Ось пересекает 3–14 единиц; развёрнутый список делает
-   карточку выше самой главы, и матрица, ради которой читатель сюда пришёл,
-   перестаёт читаться целиком. Лента прокручивается, но НИЧЕГО не прячет: все
-   ссылки в разметке, извлечение и reader-режимы получают их полностью. */
+/* РЁБРА ОСИ ПЕРЕНОСЯТСЯ. Прежде здесь стояла ЛЕНТА с горизонтальной прокруткой —
+   ради того, чтобы карточка не выросла выше главы. Цена оказалась выше выигрыша:
+   горизонтальная прокрутка внутри вертикального чтения неэргономична (принципал
+   2026-08-19) — её не видно, она конфликтует с жестом страницы и прячет ровно то,
+   ради чего ось и раскрыта. Карточка растёт по содержанию; высоту держит сама
+   сетка (`auto-fill` по ширине, ряд по самой высокой). */
 #doc dl dd [data-role="links"] {
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.4rem;
   padding-bottom: 0.25rem;
-  scrollbar-width: thin;
 }
-#doc dl dd [data-role="links"] li { flex: 0 0 auto; scroll-snap-align: start; }
-#doc dl dd [data-role="links"] a { max-width: 14rem; }
+#doc dl dd [data-role="links"] li { flex: 0 1 auto; min-width: 0; }
+#doc dl dd [data-role="links"] a { max-width: 100%; }
 
 /* ── ССЫЛКИ-РЁБРА: ось ↔ единица (69 рёбер, прежде невидимых) ─────────── */
 #doc [data-role="links"] {
@@ -400,7 +416,13 @@ body {
 /* ── УВЕЛИЧЕНИЕ ────────────────────────────────────────────────────────
    Надстройка над ЯКОРЕМ документа: без скрипта ссылка открывает носитель,
    со скриптом он показывается на месте. Второго поведения не заводится. */
+/* ПО ЦЕНТРУ, А НЕ В УГЛУ. Модальный <dialog> центрируется автополями браузера
+   (`inset: 0; margin: auto`), а сброс в начале файла (`*{margin:0}`) их снимал —
+   и увеличенное изображение появлялось в левом верхнем углу (принципал
+   2026-08-19). Свойство несёт свою причину: сброс написан до того, как на
+   странице появился <dialog>, и молча отнял у него механизм положения. */
 dialog[data-role="zoom"] {
+  inset: 0; margin: auto;
   max-width: 100vw; max-height: 100vh; width: max-content; height: max-content;
   padding: 0; border: 0; background: transparent;
 }
@@ -487,29 +509,45 @@ dialog[data-role="zoom"] img {
   --cinema-text-dim: #dddddd;
 }
 
-body.mode-broadcast {
+/* ПОДАЧА — КООРДИНАТА НА ТЕЛЕ ДОКУМЕНТА, а не имя режима в классе: ключ подачи
+   объявлен моделью (`views`), и оформление читает ЕГО, а не второе слово о том же.
+   Прежние `.mode-broadcast`/`.mode-editorial` были третьим написанием (модель ·
+   шелл · обогатитель) и потому расходились молча. */
+body[data-view="stage"] {
   overflow: hidden;
   background-color: var(--cinema-bg);
   color: var(--cinema-text-soft);
 }
 
-body.mode-broadcast .top-nav {
+body[data-view="stage"] .top-nav {
   background-color: rgba(14, 14, 14, 0.95);
   border-color: var(--cinema-border);
 }
 
+/* ПОКАЗ ЗАКРЫВАЕТ СТРАНИЦУ ЦЕЛИКОМ. Подача — не слой поверх документа, а ВИД вместо
+   него: пока страница несла собственный шелл, за сценой ничего не было и вопрос не
+   стоял; войдя в общий макет сайта, она получила соседей — подвал реквизитов и
+   портретную полосу. Сцена `position: fixed` без слоя рисуется В ПОРЯДКЕ ДОКУМЕНТА,
+   а подвал стоит ПОСЛЕ неё — и проступал сквозь. Слой объявлен явно; ничего не
+   прячется, потому что прятать соседей значило бы знать их имена. */
 .broadcast-container {
   position: fixed;
   top: 53px;
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 40;
   display: flex;
   flex-direction: column;
   background-color: var(--cinema-bg);
 }
 
 .hidden { display: none !important; }
+
+/* ДВЕ ДВЕРИ СО СЛАЙДА — РАЗДЕЛЬНО. Ссылки «в рассказе» и «в видеозаписи» суть два
+   разных перехода, и между ними обязан быть зазор: слитые, они читаются одной. */
+.hud-jump { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; margin-top: 0.6rem; }
+.hud-jump a { color: inherit; }
 
 .stage-wrapper {
   flex: 1;
@@ -756,3 +794,12 @@ body.mode-broadcast .top-nav {
   }
 }
 
+
+/* ВЫДЕЛЕННЫЙ ТОКЕН типографики (Inv-TYPO-emphasis-token): латинская связка
+   противопоставления внутри русской фразы. Курсив + лёгкий разряд — знак отношения
+   держится отдельно от имён, которые он сравнивает (принципал 2026-08-19). */
+.t-emph {
+  font-style: italic;
+  letter-spacing: 0.02em;
+  font-feature-settings: "kern" 1, "liga" 1;
+}

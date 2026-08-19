@@ -1,18 +1,25 @@
 /**
  * Dela Presentation Engine — ПОВЕДЕНИЕ НАД ДОКУМЕНТОМ, а не второй рендерер.
  *
- * КОРЕНЬ (замер 2026-08-18): этот файл СОДЕРЖАЛ второй рендерер той же модели —
+ * КОРЕНЬ №1 (замер 2026-08-18): этот файл СОДЕРЖАЛ второй рендерер той же модели —
  * 259 строк из 670, шесть случаев по роду главы, собственный словарь классов и
- * собственную прозу («7-осевая матрица…», «Нажмите на любую ось…», «Формула
- * анализа интерьера:», «undefined» вместо имени карточки). Он ЗАМЕЩАЛ документ
- * при init: у читателя со скриптом не было ни одного <article>, и 67 из 227
- * единиц прозы модели до него не доезжали, хотя сервер их отдал.
+ * собственную прозу. Он ЗАМЕЩАЛ документ при init: у читателя со скриптом не было
+ * ни одного <article>. Теперь документ приходит СОБРАННЫМ (narrative_showcase.page
+ * из той же модели), а этот файл лишь вешает на него поведение, цепляясь за те же
+ * координаты, что рендерер уже проставил (`data-kind`, `data-role`, `data-field`).
  *
- * Теперь документ приходит СОБРАННЫМ (narrative_showcase.body из той же модели),
- * а этот файл лишь вешает на него поведение, цепляясь за те же координаты, что
- * рендерер уже проставил (`data-kind`, `data-role`, `data-field`). Вторая
- * ипостась — ЭФИР 16:9 — остаётся динамической: проектор строит кадр из модели,
- * и это не документ, а показ.
+ * КОРЕНЬ №2 (замер 2026-08-19, принципал): ВТОРАЯ ПОДАЧА НЕ ИМЕЛА КООРДИНАТЫ.
+ * Она звалась «Эфир 16:9» — словом о ФОРМАТЕ, а не о том, куда ведёт; жила
+ * `classList.toggle('hidden')`; не имела ни адреса, ни истории, ни возврата
+ * («из эфира оно меня не вернуло»); и со слайда некуда было уйти — ни в рассказ,
+ * ни в запись. Всё это ОДИН дефект: подача была РЕЖИМОМ, а не видом над тем же
+ * рядом единиц.
+ *
+ * ЛЕЧЕНИЕ. Подачи объявлены моделью (`views`); ключ подачи И ЕСТЬ её координата —
+ * в разметке (`data-view` / `data-view-mount`), в оформлении (`body[data-view]`)
+ * и в адресе (`#<ключ>/<единица>`). Переключение подачи СОХРАНЯЕТ текущую единицу
+ * и пишется в историю, поэтому «назад» возвращает, а ссылка на слайд делится.
+ * Имён подач в коде нет ни одного.
  */
 
 (function () {
@@ -42,11 +49,23 @@
     .filter(s => s && s.file && typeof s.seconds === 'number')
     .sort((a, b) => a.seconds - b.seconds);
 
+  /* АДРЕС ЕДИНИЦЫ В ДОКУМЕНТЕ — тот же, что проставил рендерер. Одно место. */
+  const anchorOf = (frame) => `doc-segments-${frame.id}`;
+
+  /* МАНИФЕСТАЦИЯ ОБЪЯВЛЕННОГО РОДА — из модели, а не из формулы адреса. */
+  function manifest(unit, kind) {
+    const at = (unit && unit.fragment && unit.fragment.at) || [];
+    for (let i = 0; i < at.length; i++) if (at[i] && at[i].type === kind) return at[i];
+    return null;
+  }
+
   class PresentationEngine {
     constructor() {
       this.data = null;
       this.frames = [];
-      this.state = { currentSlideIndex: 0, currentMode: 'editorial', hudVisible: true, lastScrollY: 0 };
+      this.views = [];                 // [ключ, …] в порядке объявления модели
+      this.chrome = {};
+      this.state = { currentSlideIndex: 0, view: '', hudVisible: true, lastScrollY: 0 };
       this.hudIdleTimer = null;
     }
 
@@ -63,53 +82,60 @@
         return;
       }
 
+      this.views = Object.keys(this.data.views || {});
+      this.chrome = this.data.chrome || {};
       this.frames = projectable(this.data.segments);
       this.cacheElements();
       this.nameSurface();
       this.renderBroadcastThumbnails();
-      this.initTheme();
       this.bindEvents();
       this.updateSlideDisplay(0);
+      this.applyLocation(false);       // адрес — источник начальной подачи
 
       // System API for Video Remounting & External Automation
       window.RozetPresentation = {
         goToSlide: (idx) => this.goToSlide(idx),
         setLectureTime: (sec) => this.setLectureTime(sec),
-        setMode: (m) => this.setMode(m),
+        setView: (v) => this.setView(v),
         frames: () => this.frames.length
       };
     }
 
     cacheElements() {
+      const q = (s) => document.querySelector(s);
       this.el = {
         body: document.body,
-        editorialView: document.getElementById('editorialView'),
-        broadcastView: document.getElementById('broadcastView'),
-        navBrand: document.getElementById('navBrand'),
-        btnModeEditorial: document.getElementById('btnModeEditorial'),
-        btnModeBroadcast: document.getElementById('btnModeBroadcast'),
-        btnThemeToggle: document.getElementById('btnThemeToggle'),
-        stageImg: document.getElementById('stageImg'),
-        stageHud: document.getElementById('stageHud'),
-        hudAuthor: document.getElementById('hudAuthor'),
-        hudTimecode: document.getElementById('hudTimecode'),
-        hudSlideCounter: document.getElementById('hudSlideCounter'),
-        hudTag: document.getElementById('hudTag'),
-        hudTitle: document.getElementById('hudTitle'),
-        hudCite: document.getElementById('hudCite'),
-        btnPrevSlide: document.getElementById('btnPrevSlide'),
-        btnNextSlide: document.getElementById('btnNextSlide'),
-        btnToggleHud: document.getElementById('btnToggleHud'),
-        btnFullscreen: document.getElementById('btnFullscreen'),
-        thumbsTrack: document.getElementById('thumbsTrack')
+        navBrand: q('#navBrand'),
+        buttons: Array.from(document.querySelectorAll('[data-view]')),
+        mounts: Array.from(document.querySelectorAll('[data-view-mount]')),
+        stageImg: q('#stageImg'),
+        stageHud: q('#stageHud'),
+        hudAuthor: q('#hudAuthor'),
+        hudTimecode: q('#hudTimecode'),
+        hudSlideCounter: q('#hudSlideCounter'),
+        hudTag: q('#hudTag'),
+        hudTitle: q('#hudTitle'),
+        hudCite: q('#hudCite'),
+        hudInStory: q('#hudInStory'),
+        hudInVideo: q('#hudInVideo'),
+        btnPrevSlide: q('#btnPrevSlide'),
+        btnNextSlide: q('#btnNextSlide'),
+        btnToggleHud: q('#btnToggleHud'),
+        btnFullscreen: q('#btnFullscreen'),
+        thumbsTrack: q('#thumbsTrack'),
+        broadcastView: q('[data-view-mount="' + (this.views[1] || '') + '"]')
       };
+    }
+
+    mount(view) {
+      return this.el.mounts.filter(m => m.getAttribute('data-view-mount') === view)[0] || null;
     }
 
     /* ИМЯ ПОВЕРХНОСТИ ЧИТАЕТСЯ С ДОКУМЕНТА, а не составляется здесь: прежде хром
      * склеивал `${author} / ${title} · ${subtitle}` в коде — третье написание тех
      * же слов (и русская грамматика в нём ломалась: «Инструмент Ольга Розет»). */
     nameSurface() {
-      const doc = this.el.editorialView;
+      const doc = this.mount(this.views[0]);
       if (!doc) return;
       const text = (sel) => (doc.querySelector(sel) || {}).textContent || '';
       const title = text('h1');
@@ -123,7 +149,7 @@
     }
 
     /* =========================================================================
-       ЭФИР 16:9 — ПРОЕКТОР (не документ: кадр строится из модели)
+       ПОКАЗ — ПРОЕКТОР (не документ: кадр строится из модели)
        ========================================================================= */
     renderBroadcastThumbnails() {
       if (!this.el.thumbsTrack || !this.frames.length) return;
@@ -158,15 +184,28 @@
         }, 60);
       }
 
-      if (this.el.hudTimecode) this.el.hudTimecode.textContent = `⏱ ${frame.timecode || ''}`;
-      // СЧЁТЧИК ЕСТЬ ПОЛОЖЕНИЕ В РЯДУ, а не имя единицы: имя у неё своё и не порядковое.
+      if (this.el.hudTimecode) this.el.hudTimecode.textContent = frame.timecode || '';
+      // СЧЁТЧИК ЕСТЬ ПОЛОЖЕНИЕ В РЯДУ. Ведущий ноль («01 / 30») не несёт ничего —
+      // лапидарность; связка «из» приезжает из модели, а не из кода.
       if (this.el.hudSlideCounter) {
-        this.el.hudSlideCounter.textContent =
-          `${String(index + 1).padStart(2, '0')} / ${this.frames.length}`;
+        const of = this.chrome.of ? ` ${this.chrome.of} ` : ' / ';
+        this.el.hudSlideCounter.textContent = `${index + 1}${of}${this.frames.length}`;
       }
       if (this.el.hudTag) this.el.hudTag.textContent = frame.tag || '';
       if (this.el.hudTitle) this.el.hudTitle.textContent = frame.title || '';
       if (this.el.hudCite) this.el.hudCite.textContent = said(frame.cite);
+
+      // ДВЕ ДВЕРИ С КАЖДОГО СЛАЙДА (принципал 2026-08-19): в рассказ и в запись.
+      // Обе — координаты, которые модель УЖЕ несёт; новых данных не заводится.
+      if (this.el.hudInStory) this.el.hudInStory.setAttribute('href', '#' + anchorOf(frame));
+      if (this.el.hudInVideo) {
+        const v = manifest(frame, 'video');
+        this.el.hudInVideo.hidden = !v;
+        if (v) {
+          this.el.hudInVideo.setAttribute('href', v.url);
+          this.el.hudInVideo.textContent = v.label || this.chrome.in_video || v.url;
+        }
+      }
 
       if (this.el.thumbsTrack) {
         this.el.thumbsTrack.querySelectorAll('.thumb-item').forEach((t, i) => {
@@ -180,7 +219,10 @@
       });
     }
 
-    goToSlide(index) { this.updateSlideDisplay(index); }
+    goToSlide(index, record) {
+      this.updateSlideDisplay(index);
+      if (record !== false && this.state.view === this.views[1]) this.record(true);
+    }
     nextSlide() { if (this.state.currentSlideIndex < this.frames.length - 1) this.goToSlide(this.state.currentSlideIndex + 1); }
     prevSlide() { if (this.state.currentSlideIndex > 0) this.goToSlide(this.state.currentSlideIndex - 1); }
 
@@ -206,48 +248,73 @@
     }
 
     /* =========================================================================
-       КОНТРОЛЛЕР
+       ПОДАЧА — ВИД НАД ОДНИМ РЯДОМ ЕДИНИЦ, У КОТОРОГО ЕСТЬ КООРДИНАТА
        ========================================================================= */
-    initTheme() {
-      if (typeof window.__applyTheme === 'function') {
-        window.__applyTheme();
-      } else {
-        document.documentElement.setAttribute('data-theme', localStorage.getItem('dela.theme.v1') || 'day');
-      }
+
+    /** Адрес текущего положения: подача по умолчанию адресуется единицей, вторая —
+     *  парой «подача/единица». Отсюда ссылка на слайд делится, а «назад» работает. */
+    address(view, index) {
+      const frame = this.frames[index] || null;
+      if (view === this.views[0]) return frame ? '#' + anchorOf(frame) : location.pathname;
+      return '#' + view + '/' + (frame ? frame.id : '');
     }
 
-    toggleTheme() {
-      const next = (document.documentElement.getAttribute('data-theme') || 'day') === 'day' ? 'night' : 'day';
-      document.documentElement.setAttribute('data-theme', next);
-      try { localStorage.setItem('dela.theme.v1', next); } catch (e) { /* приватный режим */ }
+    record(replace) {
+      const url = this.address(this.state.view, this.state.currentSlideIndex);
+      const st = { view: this.state.view, unit: this.state.currentSlideIndex };
+      try {
+        if (replace) history.replaceState(st, '', url); else history.pushState(st, '', url);
+      } catch (e) { /* file:// — история недоступна, поведение остаётся */ }
     }
 
-    setMode(mode) {
-      this.state.currentMode = mode;
-      const broadcast = mode === 'broadcast';
-      if (broadcast) this.state.lastScrollY = window.scrollY;
-      this.el.body.className = broadcast ? 'mode-broadcast' : 'mode-editorial';
-      if (this.el.editorialView) this.el.editorialView.classList.toggle('hidden', broadcast);
-      if (this.el.broadcastView) this.el.broadcastView.classList.toggle('hidden', !broadcast);
-      [[this.el.btnModeBroadcast, broadcast], [this.el.btnModeEditorial, !broadcast]].forEach(([btn, on]) => {
-        if (!btn) return;
-        btn.classList.toggle('active', on);
-        btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    setView(view, push) {
+      if (!view || this.views.indexOf(view) < 0 || view === this.state.view) return;
+      const first = this.views[0];
+      if (view !== first) this.state.lastScrollY = window.scrollY;
+      this.state.view = view;
+      // ОФОРМЛЕНИЕ ЧИТАЕТ ТУ ЖЕ КООРДИНАТУ: `body[data-view]`, а не второе слово.
+      this.el.body.setAttribute('data-view', view);
+      this.el.mounts.forEach(m =>
+        m.classList.toggle('hidden', m.getAttribute('data-view-mount') !== view));
+      this.el.buttons.forEach(b => {
+        const on = b.getAttribute('data-view') === view;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-selected', on ? 'true' : 'false');
       });
-      if (broadcast) {
+      if (view !== first) {
         this.updateSlideDisplay(this.state.currentSlideIndex);
       } else {
         window.requestAnimationFrame(() => window.scrollTo({ top: this.state.lastScrollY || 0, behavior: 'smooth' }));
       }
+      if (push !== false) this.record(false);
     }
 
-    /* ШТАМП ЕДИНИЦЫ — ДВЕРЬ В ЭФИР. Подпись двери берётся с ХРОМА (кнопка режима),
+    /** Адрес → положение. `#<подача>/<единица>` открывает вторую подачу на СВОЁМ
+     *  слайде; всё прочее есть обычный якорь документа. */
+    applyLocation(push) {
+      const h = decodeURIComponent(location.hash || '').replace(/^#/, '');
+      const cut = h.indexOf('/');
+      const view = cut > 0 ? h.slice(0, cut) : '';
+      if (view && this.views.indexOf(view) > 0) {
+        const id = h.slice(cut + 1);
+        const idx = this.frames.findIndex(f => f.id === id);
+        if (idx >= 0) this.updateSlideDisplay(idx);
+        this.setView(view, push);
+        return true;
+      }
+      this.setView(this.views[0], push);
+      return false;
+    }
+
+    /* ШТАМП ЕДИНИЦЫ — ДВЕРЬ В ПОКАЗ. Подпись двери берётся с ХРОМА (кнопка подачи),
      * а имя цели — с самой единицы: новой прозы в коде не рождается. */
     bindDocumentJumps() {
-      const doc = this.el.editorialView;
-      if (!doc) return;
-      const home = new Map(this.frames.map((f, i) => [`doc-segments-${f.id}`, i]));
-      const modeWord = (this.el.btnModeBroadcast && this.el.btnModeBroadcast.textContent || '').trim();
+      const doc = this.mount(this.views[0]);
+      if (!doc || this.views.length < 2) return;
+      const stage = this.views[1];
+      const home = new Map(this.frames.map((f, i) => [anchorOf(f), i]));
+      const btn = this.el.buttons.filter(b => b.getAttribute('data-view') === stage)[0];
+      const word = (btn && btn.textContent || '').trim();
       doc.querySelectorAll('[data-kind="segment"] [data-role="stamp"]').forEach(stamp => {
         const holder = stamp.closest('[data-kind="segment"]');
         const idx = holder && home.get(holder.id);
@@ -255,10 +322,27 @@
         const name = (holder.querySelector('[data-role="title"]') || {}).textContent || '';
         stamp.setAttribute('role', 'button');
         stamp.setAttribute('tabindex', '0');
-        stamp.setAttribute('aria-label', [modeWord, name].filter(Boolean).join(' — '));
-        const go = (e) => { e.preventDefault(); this.setMode('broadcast'); this.goToSlide(idx); };
+        stamp.setAttribute('aria-label', [word, name].filter(Boolean).join(' — '));
+        const go = (e) => { e.preventDefault(); this.goToSlide(idx, false); this.setView(stage); };
         stamp.addEventListener('click', go);
         stamp.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') go(e); });
+      });
+    }
+
+    /** ССЫЛКА В ДОКУМЕНТ ВОЗВРАЩАЕТ В ДОКУМЕНТ. Обход блоков («к содержанию»),
+     *  «в рассказе» из плашки, любая внутренняя ссылка: цель лежит в подаче
+     *  по умолчанию, значит переход к ней ЕСТЬ переход к ней — а не прыжок в
+     *  скрытый узел, из которого читателя ничто не вернуло (принципал 2026-08-19). */
+    bindReturns() {
+      const first = this.views[0];
+      document.addEventListener('click', (e) => {
+        const a = e.target && e.target.closest && e.target.closest('a[href^="#"]');
+        if (!a || this.state.view === first) return;
+        const id = a.getAttribute('href').slice(1);
+        const target = id && document.getElementById(id);
+        const doc = this.mount(first);
+        if (!target || !doc || !doc.contains(target)) return;
+        this.setView(first);
       });
     }
 
@@ -309,22 +393,31 @@
     }
 
     bindEvents() {
-      if (this.el.btnModeEditorial) this.el.btnModeEditorial.addEventListener('click', () => this.setMode('editorial'));
-      if (this.el.btnModeBroadcast) this.el.btnModeBroadcast.addEventListener('click', () => this.setMode('broadcast'));
-      if (this.el.btnThemeToggle) this.el.btnThemeToggle.addEventListener('click', () => this.toggleTheme());
+      this.el.buttons.forEach(b =>
+        b.addEventListener('click', () => this.setView(b.getAttribute('data-view'))));
       if (this.el.btnPrevSlide) this.el.btnPrevSlide.addEventListener('click', () => this.prevSlide());
       if (this.el.btnNextSlide) this.el.btnNextSlide.addEventListener('click', () => this.nextSlide());
       if (this.el.btnToggleHud) this.el.btnToggleHud.addEventListener('click', () => this.toggleHud());
       if (this.el.btnFullscreen) this.el.btnFullscreen.addEventListener('click', () => this.toggleFullscreen());
       this.bindDocumentJumps();
+      this.bindReturns();
       this.bindZoom();
       this.bindFragments();
 
+      window.addEventListener('popstate', (e) => {
+        const st = e.state;
+        if (st && typeof st.unit === 'number') this.updateSlideDisplay(st.unit);
+        if (st && st.view) this.setView(st.view, false);
+        else this.applyLocation(false);
+      });
+
       window.addEventListener('keydown', (e) => {
         if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
-        if ('tTеЕ'.includes(e.key)) { this.toggleTheme(); return; }
-        if ('mMьЬ'.includes(e.key)) { this.setMode(this.state.currentMode === 'editorial' ? 'broadcast' : 'editorial'); return; }
-        if (this.state.currentMode !== 'broadcast') return;
+        const first = this.views[0], stage = this.views[1];
+        if ('mMьЬ'.includes(e.key) && stage) {
+          this.setView(this.state.view === first ? stage : first); return;
+        }
+        if (this.state.view === first) return;
         if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown' || 'jJоО'.includes(e.key)) {
           e.preventDefault(); this.nextSlide();
         } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || 'kKлЛ'.includes(e.key)) {
@@ -334,16 +427,16 @@
         } else if ('fFаА'.includes(e.key)) {
           e.preventDefault(); this.toggleFullscreen();
         } else if (e.key === 'Escape') {
-          this.setMode('editorial');
+          this.setView(first);
         }
       });
 
       const resetHudIdle = () => {
-        if (this.state.currentMode !== 'broadcast' || !this.el.broadcastView) return;
+        if (this.state.view === this.views[0] || !this.el.broadcastView) return;
         this.el.broadcastView.classList.remove('hud-idle');
         clearTimeout(this.hudIdleTimer);
         this.hudIdleTimer = setTimeout(() => {
-          if (this.state.currentMode === 'broadcast' && this.el.broadcastView) {
+          if (this.state.view !== this.views[0] && this.el.broadcastView) {
             this.el.broadcastView.classList.add('hud-idle');
           }
         }, 3500);
