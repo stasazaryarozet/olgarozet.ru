@@ -387,7 +387,28 @@ body {
   border-radius: 6px;
   overflow: hidden;
 }
-#doc figure[data-kind="segment"] img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+/* ПРОПОРЦИЯ — ФАКТ НОСИТЕЛЯ, А НЕ ПРАВИЛО ОФОРМЛЕНИЯ. Здесь стояло
+   `aspect-ratio: 16/9; object-fit: cover` — форма, верная для 30 слайдов и КАДРИРУЮЩАЯ
+   8 разворотов журналов (5 портретных 1500×2000, 3 — 2000×1500; замер 2026-08-19).
+   Рендерер объявляет ИЗМЕРЕННЫЕ width/height, поэтому браузер знает пропорцию сам:
+   место резервируется точно, ничего не обрезается, и новый носитель любой формы
+   приезжает без правки стиля. */
+#doc figure[data-kind="segment"] img { width: 100%; height: auto; }
+#doc a[data-role="zoom"] { display: block; cursor: zoom-in; }
+#doc [data-form="atomic"] a[data-role="zoom"] img { width: 100%; height: auto; }
+
+/* ── УВЕЛИЧЕНИЕ ────────────────────────────────────────────────────────
+   Надстройка над ЯКОРЕМ документа: без скрипта ссылка открывает носитель,
+   со скриптом он показывается на месте. Второго поведения не заводится. */
+dialog[data-role="zoom"] {
+  max-width: 100vw; max-height: 100vh; width: max-content; height: max-content;
+  padding: 0; border: 0; background: transparent;
+}
+dialog[data-role="zoom"]::backdrop { background: rgba(0, 0, 0, 0.82); }
+dialog[data-role="zoom"] img {
+  display: block; max-width: 96vw; max-height: 94vh;
+  width: auto; height: auto; cursor: zoom-out;
+}
 #doc figcaption { padding: 0.75rem 0.85rem 1rem; font-size: var(--fs-xs, 0.8125rem); color: var(--ink-soft); }
 #doc figcaption b { display: block; font-weight: 400; }
 #doc figcaption [data-role="note"] {

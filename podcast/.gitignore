@@ -1,0 +1,11 @@
+# Тяжёлая часть проекции Подкаста — ВЛОЖЕНИЯ и ОБЛОЖКА. Домом их байтов остаётся реестр
+# Материалов (~/.local/share/dela/media/clips/), домом факта — data.yaml::podcasts.
+# Здесь они лишь материализованы под адрес; восстанавливаются одной командой:
+#     python3 scripts/podcast_rss.py olgarozet --materialize
+# Та же форма, что у site/styles-vs-trends/audio/lecture.m4a (39 МБ, вне индекса).
+# feed.xml и index.html ОСТАЮТСЯ в индексе: они текстовые и они НЕСУТ АДРЕС —
+# без index.html подкаталог перестаёт быть единицей адресного пространства
+# (broadcast_relation.address_space ← site_page.slugs_under) и деплой снимет его как сироту.
+*.m4a
+*.mp3
+cover.jpg

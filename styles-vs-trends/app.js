@@ -262,6 +262,52 @@
       });
     }
 
+    /* ГРАНИЦА ФРАГМЕНТА ИСПОЛНЯЕТСЯ, А НЕ ТОЛЬКО ОБЪЯВЛЯЕТСЯ.
+       Документ адресует интервал носителя стандартом (Media Fragments URI:
+       `…m4a#t=НАЧАЛО,КОНЕЦ`), но КОНЕЦ чтут не все браузеры — начало чтут все.
+       Необъявленная остановка обратила бы «обрыв не по месту» в «не
+       останавливается вовсе», поэтому конец удерживается здесь. Интервал НЕ
+       переписывается: он читается из того же адреса, что стоит в разметке —
+       второго дома у границы нет. */
+    bindFragments() {
+      document.querySelectorAll('audio[src*="#t="]').forEach((a) => {
+        const m = /#t=([\d.]+)(?:,([\d.]+))?/.exec(a.getAttribute('src') || '');
+        if (!m) return;
+        const t0 = parseFloat(m[1]);
+        const t1 = m[2] === undefined ? NaN : parseFloat(m[2]);
+        if (!isFinite(t1)) return;
+        a.addEventListener('timeupdate', () => {
+          if (a.currentTime >= t1) { a.pause(); a.currentTime = t1; }
+        });
+        a.addEventListener('play', () => {
+          if (a.currentTime < t0 || a.currentTime >= t1) a.currentTime = t0;
+        });
+      });
+    }
+
+    /* УВЕЛИЧЕНИЕ — НАДСТРОЙКА НАД ЯКОРЕМ ДОКУМЕНТА, а не отдельная способность.
+       Документ уже несёт <a data-role="zoom" href="…носитель…">: без скрипта ссылка
+       открывает изображение, со скриптом оно показывается, не уводя со страницы.
+       Один делегированный слушатель на документ — узлы могут появляться и исчезать. */
+    bindZoom() {
+      const dlg = document.createElement('dialog');
+      dlg.setAttribute('data-role', 'zoom');
+      const big = document.createElement('img');
+      dlg.appendChild(big);
+      document.body.appendChild(dlg);
+      if (!dlg.showModal) return;                 // старый браузер — остаётся ссылка
+      dlg.addEventListener('click', () => dlg.close());
+      document.addEventListener('click', (e) => {
+        const a = e.target && e.target.closest && e.target.closest('a[data-role="zoom"]');
+        if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+        const inner = a.querySelector('img');
+        e.preventDefault();
+        big.src = a.getAttribute('href');
+        big.alt = (inner && inner.alt) || '';
+        dlg.showModal();
+      });
+    }
+
     bindEvents() {
       if (this.el.btnModeEditorial) this.el.btnModeEditorial.addEventListener('click', () => this.setMode('editorial'));
       if (this.el.btnModeBroadcast) this.el.btnModeBroadcast.addEventListener('click', () => this.setMode('broadcast'));
@@ -271,6 +317,8 @@
       if (this.el.btnToggleHud) this.el.btnToggleHud.addEventListener('click', () => this.toggleHud());
       if (this.el.btnFullscreen) this.el.btnFullscreen.addEventListener('click', () => this.toggleFullscreen());
       this.bindDocumentJumps();
+      this.bindZoom();
+      this.bindFragments();
 
       window.addEventListener('keydown', (e) => {
         if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
