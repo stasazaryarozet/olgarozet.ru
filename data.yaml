@@ -77,6 +77,15 @@ people:
     location: uzbekistan
     confirmed: '2026-03-28'
 partners:
+  bhsad:
+    name: Британская высшая школа дизайна
+    name_genitive: Британской высшей школы дизайна
+    name_prepositional: Британской высшей школе дизайна
+    short_name: Британка
+    full_name: Британская высшая школа дизайна (Universal University)
+    type: organization
+    location: moscow
+    url: https://britishdesign.ru
   bukhara_center:
     name: Бухарский Центр Ремёсел
     type: organization
