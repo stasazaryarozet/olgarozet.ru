@@ -327,10 +327,9 @@
       ],
       "lead": "Ольга листает свежие бумажные номера Elle Decoration (июль–август 2026) и Livingetc (май 2026) и разбирает развороты по тем же семи осям. Съёмка разворотов — её собственная; фрагменты приводятся в обзорных целях с указанием издания.",
       "members": [
-        "elle-decoration-iyul-avgust-2026",
-        "livingetc-may-2026",
-        "elle-decoration-highlights",
-        "livingetc-spreads"
+        "elle-decoration-bus-palladium",
+        "elle-decoration-hoxton",
+        "livingetc-house-rules"
       ],
       "num": "Глава 5 · 1:08:29 – 1:14:11",
       "fragment": {
@@ -363,8 +362,8 @@
         "text": "Всё связано с нашим «тач-тач-тач» — задержаться на этой земле, задержаться в телесном опыте"
       },
       "members": [
-        "matritsa-semi-osey",
-        "dekorirovanie-interera-v-britanke"
+        "seven-axis-matrix",
+        "bhsad-decorating"
       ],
       "num": "Глава 6 · 1:14:11 – 1:20:51",
       "fragment": {
@@ -458,7 +457,7 @@
       "tag": "Теория · макростили",
       "cite": {
         "act": "caption",
-        "text": "Стиль — это фундаментальный каркас эпохи, а тренд — ее быстрая реакция"
+        "text": "Стиль — это фундаментальный каркас эпохи, а тренд — её быстрая реакция"
       },
       "seconds": 394,
       "axis": [
@@ -1429,6 +1428,10 @@
       },
       "tag": "Elle Decoration · июль–август 2026",
       "basis": "figure",
+      "axis": [
+        "colors",
+        "textures"
+      ],
       "light": "elle_decor_IMG_7477.webp",
       "light_geometry": [
         1500,
@@ -1445,6 +1448,10 @@
       },
       "tag": "Elle Decoration · июль–август 2026",
       "basis": "figure",
+      "axis": [
+        "ornaments",
+        "materials"
+      ],
       "light": "elle_decor_IMG_7480.webp",
       "light_geometry": [
         1500,
@@ -1461,6 +1468,10 @@
       },
       "tag": "Livingetc · май 2026",
       "basis": "figure",
+      "axis": [
+        "ornaments",
+        "textures"
+      ],
       "light": "livingetc_IMG_7578.webp",
       "light_geometry": [
         2000,
