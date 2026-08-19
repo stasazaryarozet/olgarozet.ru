@@ -2721,6 +2721,10 @@ urls:
   telegram: https://t.me/olga_rozet
   telegram_handle: '@olgaroset'
   youtube: https://www.youtube.com/@olga_rozet
+  # УДЕРЖАНО ИЗ ВИТРИНЫ, НЕ УДАЛЕНО. Канал есть и на него ссылается страница
+  # рассказа-показа; из пиктограмм общего подвала он снят. Снять удержание —
+  # удалить эту строку (site_generator.channels: `<канал>_withheld`).
+  youtube_withheld: 'принципал 2026-08-20: «временно убрать YouTube из пиктограмм соц. сетей»'
 artworks:
 - 04.jpg
 - 05.jpg
