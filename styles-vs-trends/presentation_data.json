@@ -38,9 +38,33 @@
     },
     "badges": [
       "Рассказ-показ",
-      "81 минута лекции",
-      "36 фрагментов рассказа",
-      "7 осей авторской матрицы",
+      {
+        "count": "minutes",
+        "forms": [
+          "минута",
+          "минуты",
+          "минут"
+        ],
+        "text": "{n} {word} лекции"
+      },
+      {
+        "count": "segments",
+        "forms": [
+          "фрагмент",
+          "фрагмента",
+          "фрагментов"
+        ],
+        "text": "{n} {word} рассказа"
+      },
+      {
+        "count": "axes",
+        "forms": [
+          "ось",
+          "оси",
+          "осей"
+        ],
+        "text": "{n} {word} авторской матрицы"
+      },
       "Развороты Elle Decoration · Livingetc"
     ],
     "footer": {
@@ -99,22 +123,6 @@
         "derivation": "7b477457902c42cb4a8561177ff7c6fca0c3aebc364e87c6550abb397ab2619d"
       },
       "inputs_sha": "40c8ab0af099ba5a7752b91d9ebbcbcce262a2fd6412c04d12f1835cbd1eb148"
-    },
-    "fragment": {
-      "t0": 0,
-      "t1": 4852,
-      "at": [
-        {
-          "type": "audio",
-          "url": "audio/lecture.m4a#t=0,4852",
-          "label": "Слушать запись целиком · 00:00 – 1:20:52"
-        },
-        {
-          "type": "video",
-          "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=0",
-          "label": "Смотреть видеозапись лекции"
-        }
-      ]
     }
   },
   "axes": {
@@ -169,24 +177,7 @@
       "seconds": [
         0,
         1007
-      ],
-      "num": "Глава 01 · 00:00 – 16:47",
-      "fragment": {
-        "t0": 0,
-        "t1": 1006,
-        "at": [
-          {
-            "type": "audio",
-            "url": "audio/lecture.m4a#t=0,1006",
-            "label": "Слушать эту главу · 00:00 – 16:46"
-          },
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=0",
-            "label": "Эта глава в видеозаписи · 00:00"
-          }
-        ]
-      }
+      ]
     },
     {
       "id": "sec-transformism",
@@ -205,24 +196,7 @@
         "Отказ от избытка.",
         "Пересборка утилитарного.",
         "Честность взгляда."
-      ],
-      "num": "Глава 02 · 16:47 – 31:17",
-      "fragment": {
-        "t0": 1006,
-        "t1": 1877,
-        "at": [
-          {
-            "type": "audio",
-            "url": "audio/lecture.m4a#t=1006,1877",
-            "label": "Слушать эту главу · 16:46 – 31:17"
-          },
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1006",
-            "label": "Эта глава в видеозаписи · 16:46"
-          }
-        ]
-      }
+      ]
     },
     {
       "id": "sec-retail",
@@ -231,24 +205,7 @@
       "seconds": [
         1877,
         3058
-      ],
-      "num": "Глава 03 · 31:17 – 50:58",
-      "fragment": {
-        "t0": 1877,
-        "t1": 3058,
-        "at": [
-          {
-            "type": "audio",
-            "url": "audio/lecture.m4a#t=1877,3058",
-            "label": "Слушать эту главу · 31:17 – 50:58"
-          },
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1877",
-            "label": "Эта глава в видеозаписи · 31:17"
-          }
-        ]
-      }
+      ]
     },
     {
       "id": "sec-hospitality",
@@ -261,23 +218,6 @@
       "cite": {
         "act": "gloss",
         "text": "Освобождение гостиничного номера от псевдоискусства. Драматизм через пустоту"
-      },
-      "num": "Глава 04 · 50:58 – 1:08:29",
-      "fragment": {
-        "t0": 3058,
-        "t1": 4109,
-        "at": [
-          {
-            "type": "audio",
-            "url": "audio/lecture.m4a#t=3058,4109",
-            "label": "Слушать эту главу · 50:58 – 1:08:29"
-          },
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=3058",
-            "label": "Эта глава в видеозаписи · 50:58"
-          }
-        ]
       }
     },
     {
@@ -294,24 +234,7 @@
         "livingetc-may-2026",
         "elle-decoration-highlights",
         "livingetc-spreads"
-      ],
-      "num": "Глава 05 · 1:08:29 – 1:14:11",
-      "fragment": {
-        "t0": 4109,
-        "t1": 4451,
-        "at": [
-          {
-            "type": "audio",
-            "url": "audio/lecture.m4a#t=4109,4451",
-            "label": "Слушать эту главу · 1:08:29 – 1:14:11"
-          },
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4109",
-            "label": "Эта глава в видеозаписи · 1:08:29"
-          }
-        ]
-      }
+      ]
     },
     {
       "id": "sec-bhsad",
@@ -328,24 +251,7 @@
       "members": [
         "matritsa-semi-osey",
         "dekorirovanie-interera-v-britanke"
-      ],
-      "num": "Глава 06 · 1:14:11 – 1:20:51",
-      "fragment": {
-        "t0": 4451,
-        "t1": 4851,
-        "at": [
-          {
-            "type": "audio",
-            "url": "audio/lecture.m4a#t=4451,4851",
-            "label": "Слушать эту главу · 1:14:11 – 1:20:51"
-          },
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4451",
-            "label": "Эта глава в видеозаписи · 1:14:11"
-          }
-        ]
-      }
+      ]
     }
   ],
   "segments": [
@@ -362,24 +268,7 @@
       "axis": [
         "philosophy"
       ],
-      "page": 1,
-      "timecode": "00:00",
-      "fragment": {
-        "t0": 0,
-        "t1": 349,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=0",
-            "label": "Этот слайд в видеозаписи · 00:00"
-          }
-        ]
-      },
-      "light": "slide-01.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 1
     },
     {
       "id": "politiko-ekonomicheskiy-kontekst",
@@ -394,24 +283,7 @@
       "axis": [
         "philosophy"
       ],
-      "page": 2,
-      "timecode": "05:47",
-      "fragment": {
-        "t0": 349,
-        "t1": 394,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=349",
-            "label": "Этот слайд в видеозаписи · 05:49"
-          }
-        ]
-      },
-      "light": "slide-02.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 2
     },
     {
       "id": "bolshie-stili-epohi",
@@ -427,24 +299,7 @@
         "philosophy",
         "morphology"
       ],
-      "page": 3,
-      "timecode": "06:34",
-      "fragment": {
-        "t0": 394,
-        "t1": 613,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=394",
-            "label": "Этот слайд в видеозаписи · 06:34"
-          }
-        ]
-      },
-      "light": "slide-03.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 3
     },
     {
       "id": "opredelenie-trenda",
@@ -459,24 +314,7 @@
       "axis": [
         "philosophy"
       ],
-      "page": 4,
-      "timecode": "10:13",
-      "fragment": {
-        "t0": 613,
-        "t1": 797,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=613",
-            "label": "Этот слайд в видеозаписи · 10:13"
-          }
-        ]
-      },
-      "light": "slide-04.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 4
     },
     {
       "id": "vozvraschenie-k-kornyam-4-klyuchevyh-trenda",
@@ -493,24 +331,7 @@
         "textures",
         "materials"
       ],
-      "page": 5,
-      "timecode": "13:17",
-      "fragment": {
-        "t0": 797,
-        "t1": 1006,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=797",
-            "label": "Этот слайд в видеозаписи · 13:17"
-          }
-        ]
-      },
-      "light": "slide-05.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 5
     },
     {
       "id": "transformism-by-harry-nuriev",
@@ -527,24 +348,7 @@
         "morphology",
         "technologies"
       ],
-      "page": 6,
-      "timecode": "16:47",
-      "fragment": {
-        "t0": 1006,
-        "t1": 1877,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1006",
-            "label": "Этот слайд в видеозаписи · 16:46"
-          }
-        ]
-      },
-      "light": "slide-06.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 6
     },
     {
       "id": "zlata-kornilova-glifart",
@@ -562,24 +366,7 @@
         "materials",
         "ornaments"
       ],
-      "page": 7,
-      "timecode": "31:17",
-      "fragment": {
-        "t0": 1877,
-        "t1": 1923,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1877",
-            "label": "Этот слайд в видеозаписи · 31:17"
-          }
-        ]
-      },
-      "light": "slide-07.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 7
     },
     {
       "id": "arhaika-i-sovremennyy-zhest",
@@ -595,24 +382,7 @@
         "materials",
         "technologies"
       ],
-      "page": 8,
-      "timecode": "32:03",
-      "fragment": {
-        "t0": 1923,
-        "t1": 2208,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1923",
-            "label": "Этот слайд в видеозаписи · 32:03"
-          }
-        ]
-      },
-      "light": "slide-08.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 8
     },
     {
       "id": "kurator-fransua-delklo-fran-ois-delclaux",
@@ -628,24 +398,7 @@
         "materials",
         "textures"
       ],
-      "page": 9,
-      "timecode": "36:47",
-      "fragment": {
-        "t0": 2208,
-        "t1": 2552,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=2208",
-            "label": "Этот слайд в видеозаписи · 36:48"
-          }
-        ]
-      },
-      "light": "slide-09.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 9
     },
     {
       "id": "organicheskie-poverhnosti-i-relef",
@@ -661,24 +414,7 @@
         "textures",
         "morphology"
       ],
-      "page": 10,
-      "timecode": "42:32",
-      "fragment": {
-        "t0": 2552,
-        "t1": 2645,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=2552",
-            "label": "Этот слайд в видеозаписи · 42:32"
-          }
-        ]
-      },
-      "light": "slide-10.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 10
     },
     {
       "id": "kulturnaya-pamyat-predmetov",
@@ -694,24 +430,7 @@
         "ornaments",
         "philosophy"
       ],
-      "page": 11,
-      "timecode": "44:06",
-      "fragment": {
-        "t0": 2645,
-        "t1": 2771,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=2645",
-            "label": "Этот слайд в видеозаписи · 44:05"
-          }
-        ]
-      },
-      "light": "slide-11.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 11
     },
     {
       "id": "martsin-rusak-marcin-rusak",
@@ -730,24 +449,7 @@
         "technologies",
         "philosophy"
       ],
-      "page": 12,
-      "timecode": "46:11",
-      "fragment": {
-        "t0": 2771,
-        "t1": 2836,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=2771",
-            "label": "Этот слайд в видеозаписи · 46:11"
-          }
-        ]
-      },
-      "light": "slide-12.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 12
     },
     {
       "id": "facultative-works-eduard-eremchuk-i-katya-pyatitskaya",
@@ -766,24 +468,7 @@
         "morphology",
         "technologies"
       ],
-      "page": 13,
-      "timecode": "47:14",
-      "fragment": {
-        "t0": 2836,
-        "t1": 2917,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=2836",
-            "label": "Этот слайд в видеозаписи · 47:16"
-          }
-        ]
-      },
-      "light": "slide-13.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 13
     },
     {
       "id": "yoomoota-taras-zheltyshev",
@@ -801,24 +486,7 @@
         "colors",
         "philosophy"
       ],
-      "page": 14,
-      "timecode": "48:36",
-      "fragment": {
-        "t0": 2917,
-        "t1": 3058,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=2917",
-            "label": "Этот слайд в видеозаписи · 48:37"
-          }
-        ]
-      },
-      "light": "slide-14.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 14
     },
     {
       "id": "kurator-rudi-genar-rudy-gu-naire",
@@ -835,24 +503,7 @@
         "morphology",
         "philosophy"
       ],
-      "page": 15,
-      "timecode": "50:58",
-      "fragment": {
-        "t0": 3058,
-        "t1": 3282,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=3058",
-            "label": "Этот слайд в видеозаписи · 50:58"
-          }
-        ]
-      },
-      "light": "slide-15.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 15
     },
     {
       "id": "pereosmyslennoe-barokko-cherez-pustotu",
@@ -868,24 +519,7 @@
         "morphology",
         "textures"
       ],
-      "page": 16,
-      "timecode": "54:41",
-      "fragment": {
-        "t0": 3282,
-        "t1": 3522,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=3282",
-            "label": "Этот слайд в видеозаписи · 54:42"
-          }
-        ]
-      },
-      "light": "slide-16.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 16
     },
     {
       "id": "monolitnyy-kamen-i-naturalnyy-tekstil",
@@ -901,24 +535,7 @@
         "textures",
         "materials"
       ],
-      "page": 17,
-      "timecode": "58:41",
-      "fragment": {
-        "t0": 3522,
-        "t1": 3586,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=3522",
-            "label": "Этот слайд в видеозаписи · 58:42"
-          }
-        ]
-      },
-      "light": "slide-17.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 17
     },
     {
       "id": "kurator-elizabet-lerish-elizabeth-leriche",
@@ -936,24 +553,7 @@
         "materials",
         "ornaments"
       ],
-      "page": 18,
-      "timecode": "59:45",
-      "fragment": {
-        "t0": 3586,
-        "t1": 3760,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=3586",
-            "label": "Этот слайд в видеозаписи · 59:46"
-          }
-        ]
-      },
-      "light": "slide-18.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 18
     },
     {
       "id": "sloi-vremeni-v-sovremennom-interere",
@@ -969,24 +569,7 @@
         "morphology",
         "ornaments"
       ],
-      "page": 19,
-      "timecode": "1:02:40",
-      "fragment": {
-        "t0": 3760,
-        "t1": 3861,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=3760",
-            "label": "Этот слайд в видеозаписи · 1:02:40"
-          }
-        ]
-      },
-      "light": "slide-19.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 19
     },
     {
       "id": "traditsionnye-metody-v-sovremennom-tsikle",
@@ -1002,24 +585,7 @@
         "materials",
         "textures"
       ],
-      "page": 20,
-      "timecode": "1:04:21",
-      "fragment": {
-        "t0": 3861,
-        "t1": 4109,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=3861",
-            "label": "Этот слайд в видеозаписи · 1:04:21"
-          }
-        ]
-      },
-      "light": "slide-20.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 20
     },
     {
       "id": "polistaem-interernye-zhurnaly-2026-goda",
@@ -1035,24 +601,7 @@
         "philosophy",
         "materials"
       ],
-      "page": 21,
-      "timecode": "1:08:29",
-      "fragment": {
-        "t0": 4109,
-        "t1": 4121,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4109",
-            "label": "Этот слайд в видеозаписи · 1:08:29"
-          }
-        ]
-      },
-      "light": "slide-21.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 21
     },
     {
       "id": "elle-decoration-syurrealizm-i-forma",
@@ -1068,24 +617,7 @@
         "morphology",
         "colors"
       ],
-      "page": 22,
-      "timecode": "1:08:41",
-      "fragment": {
-        "t0": 4121,
-        "t1": 4193,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4121",
-            "label": "Этот слайд в видеозаписи · 1:08:41"
-          }
-        ]
-      },
-      "light": "slide-22.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 22
     },
     {
       "id": "elle-decoration-faktura-lna-i-kozhi",
@@ -1101,24 +633,7 @@
         "textures",
         "materials"
       ],
-      "page": 23,
-      "timecode": "1:09:53",
-      "fragment": {
-        "t0": 4193,
-        "t1": 4247,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4193",
-            "label": "Этот слайд в видеозаписи · 1:09:53"
-          }
-        ]
-      },
-      "light": "slide-23.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 23
     },
     {
       "id": "palisandr-reechnye-stavni-i-teplaya-skandinavskaya-geometriya",
@@ -1130,24 +645,7 @@
         "materials",
         "morphology"
       ],
-      "page": 24,
-      "timecode": "1:10:46",
-      "fragment": {
-        "t0": 4247,
-        "t1": 4283,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4247",
-            "label": "Этот слайд в видеозаписи · 1:10:47"
-          }
-        ]
-      },
-      "light": "slide-24.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 24
     },
     {
       "id": "priglushennaya-ohra-i-napravlennyy-svet-na-stol",
@@ -1159,24 +657,7 @@
         "colors",
         "ornaments"
       ],
-      "page": 25,
-      "timecode": "1:11:23",
-      "fragment": {
-        "t0": 4283,
-        "t1": 4329,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4283",
-            "label": "Этот слайд в видеозаписи · 1:11:23"
-          }
-        ]
-      },
-      "light": "slide-25.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 25
     },
     {
       "id": "priroda-vnutri-doma-zhivye-rasteniya-otkrytyy-kamen-i-derevo",
@@ -1188,24 +669,7 @@
         "materials",
         "textures"
       ],
-      "page": 26,
-      "timecode": "1:12:08",
-      "fragment": {
-        "t0": 4329,
-        "t1": 4379,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4329",
-            "label": "Этот слайд в видеозаписи · 1:12:09"
-          }
-        ]
-      },
-      "light": "slide-26.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 26
     },
     {
       "id": "sherstyanye-pledy-grubyy-hlopok-i-otsutstvie-sinteticheskogo-bleska",
@@ -1217,24 +681,7 @@
         "textures",
         "materials"
       ],
-      "page": 27,
-      "timecode": "1:12:58",
-      "fragment": {
-        "t0": 4379,
-        "t1": 4421,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4379",
-            "label": "Этот слайд в видеозаписи · 1:12:59"
-          }
-        ]
-      },
-      "light": "slide-27.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 27
     },
     {
       "id": "sintez-zhurnalnogo-analiza-2026",
@@ -1250,24 +697,7 @@
         "philosophy",
         "textures"
       ],
-      "page": 28,
-      "timecode": "1:13:40",
-      "fragment": {
-        "t0": 4421,
-        "t1": 4451,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4421",
-            "label": "Этот слайд в видеозаписи · 1:13:41"
-          }
-        ]
-      },
-      "light": "slide-28.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 28
     },
     {
       "id": "samostoyatelnaya-analitika-trendov",
@@ -1288,24 +718,7 @@
         "technologies",
         "philosophy"
       ],
-      "page": 29,
-      "timecode": "1:14:11",
-      "fragment": {
-        "t0": 4451,
-        "t1": 4733,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4451",
-            "label": "Этот слайд в видеозаписи · 1:14:11"
-          }
-        ]
-      },
-      "light": "slide-29.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 29
     },
     {
       "id": "programma-dekorirovanie-interera-v-britanke",
@@ -1321,24 +734,7 @@
         "philosophy",
         "morphology"
       ],
-      "page": 30,
-      "timecode": "1:18:53",
-      "fragment": {
-        "t0": 4733,
-        "t1": 4851,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4733",
-            "label": "Этот слайд в видеозаписи · 1:18:53"
-          }
-        ]
-      },
-      "light": "slide-30.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
+      "page": 30
     },
     {
       "id": "elle-decoration-iyul-avgust-2026",
@@ -1347,12 +743,7 @@
       "cite": {
         "act": "caption",
         "text": "Трансформация гаража в 70-м люкс: вафельный лен, черная кожа, патина латуни."
-      },
-      "light": "elle_decor_IMG_7477.webp",
-      "light_geometry": [
-        1500,
-        2000
-      ]
+      }
     },
     {
       "id": "livingetc-may-2026",
@@ -1361,12 +752,7 @@
       "cite": {
         "act": "caption",
         "text": "Датский модернизм 1960-х: палисандр, реечные ставни и теплая древесина."
-      },
-      "light": "livingetc_IMG_7576.webp",
-      "light_geometry": [
-        2000,
-        1500
-      ]
+      }
     },
     {
       "id": "elle-decoration-highlights",
@@ -1375,12 +761,7 @@
       "cite": {
         "act": "caption",
         "text": "Минеральная гамма: терракота, известняк и матовая глубина цвета."
-      },
-      "light": "elle_decor_IMG_7480.webp",
-      "light_geometry": [
-        1500,
-        2000
-      ]
+      }
     },
     {
       "id": "livingetc-spreads",
@@ -1389,12 +770,7 @@
       "cite": {
         "act": "caption",
         "text": "Тактильное зонирование: тяжелые шторы и естественный свет."
-      },
-      "light": "livingetc_IMG_7578.webp",
-      "light_geometry": [
-        2000,
-        1500
-      ]
+      }
     },
     {
       "id": "matritsa-semi-osey",
@@ -1424,33 +800,5 @@
         }
       ]
     }
-  ],
-  "speech": {
-    "acts": {
-      "quote": {
-        "owes_source": true,
-        "quoted": true
-      },
-      "gloss": {
-        "owes_source": false,
-        "quoted": false
-      },
-      "caption": {
-        "owes_source": false,
-        "quoted": false
-      },
-      "shown": {
-        "owes_source": true,
-        "quoted": false
-      },
-      "motto": {
-        "owes_source": false,
-        "quoted": true
-      }
-    },
-    "draw_marks": [
-      "«",
-      "»"
-    ]
-  }
+  ]
 }
