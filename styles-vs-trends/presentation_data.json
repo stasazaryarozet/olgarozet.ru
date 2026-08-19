@@ -325,7 +325,7 @@
         4109,
         4451
       ],
-      "lead": "Ольга листает свежие бумажные номера Elle Decoration (июль–август 2026) и Livingetc (май 2026) и разбирает развороты по тем же семи осям. Съёмка разворотов — её собственная; фрагменты приводятся в обзорных целях с указанием издания.",
+      "lead": "Съёмка разворотов — её собственная; фрагменты приводятся в обзорных целях с указанием издания.",
       "members": [
         "elle-decoration-bus-palladium",
         "elle-decoration-hoxton",
@@ -1461,6 +1461,12 @@
     {
       "id": "livingetc-house-rules",
       "file": "livingetc_IMG_7578.jpg",
+      "region": [
+        0,
+        0,
+        50,
+        100
+      ],
       "title": "Правила Люси Барлоу",
       "cite": {
         "act": "caption",
@@ -1472,10 +1478,10 @@
         "ornaments",
         "textures"
       ],
-      "light": "livingetc_IMG_7578.webp",
+      "light": "livingetc_IMG_7578.0-0-50-100.webp",
       "light_geometry": [
-        2000,
-        1500
+        1333,
+        2000
       ]
     },
     {
