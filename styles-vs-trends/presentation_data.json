@@ -1,8 +1,16 @@
 {
   "meta": {
-    "title": "Стили vs Тренды",
+    "title": "Стили<br>vs Тренды",
     "subtitle": "Какие прижились, а какие забыты?",
-    "pretitle": "Рассказ-показ",
+    "pretitle": [
+      "<span class=\"is-caps\">РАССКАЗ-ПОКАЗ</span><br>",
+      "Для ",
+      {
+        "entity": "bhsad",
+        "case": "genitive"
+      },
+      " · Maison&Objet 2026"
+    ],
     "author": "Ольга Розет",
     "staccato": [
       "Из 1920-х в 2020-е.",
@@ -20,7 +28,7 @@
         },
         "chapter": {
           "audio": "{a} – {b}",
-          "video": "🕒 {a}"
+          "video": "Глава в видеозаписи · {a}"
         },
         "segment": {}
       },
@@ -37,7 +45,8 @@
     },
     "badges": [
       "7 осей анализа",
-      "33 сегмента"
+      "33 сегмента",
+      "81 минута лекции"
     ],
     "footer": {
       "links": [
@@ -117,15 +126,7 @@
         "name_prepositional": "Британской высшей школе дизайна",
         "url": "https://britishdesign.ru"
       }
-    },
-    "context": [
-      "Для ",
-      {
-        "entity": "bhsad",
-        "case": "genitive"
-      },
-      " · Maison&Objet 2026"
-    ]
+    }
   },
   "axes": {
     "morphology": {
@@ -191,7 +192,7 @@
           {
             "type": "video",
             "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=0",
-            "label": "🕒 00:00"
+            "label": "Глава в видеозаписи · 00:00"
           }
         ]
       }
@@ -223,7 +224,7 @@
           {
             "type": "video",
             "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1006",
-            "label": "🕒 16:46"
+            "label": "Глава в видеозаписи · 16:46"
           }
         ]
       }
@@ -249,7 +250,7 @@
           {
             "type": "video",
             "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1877",
-            "label": "🕒 31:17"
+            "label": "Глава в видеозаписи · 31:17"
           }
         ]
       }
@@ -279,7 +280,7 @@
           {
             "type": "video",
             "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=3058",
-            "label": "🕒 50:58"
+            "label": "Глава в видеозаписи · 50:58"
           }
         ]
       }
@@ -311,7 +312,7 @@
           {
             "type": "video",
             "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4109",
-            "label": "🕒 1:08:29"
+            "label": "Глава в видеозаписи · 1:08:29"
           }
         ]
       }
@@ -345,7 +346,7 @@
           {
             "type": "video",
             "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4451",
-            "label": "🕒 1:14:11"
+            "label": "Глава в видеозаписи · 1:14:11"
           }
         ]
       }
@@ -469,7 +470,7 @@
     {
       "id": "zlata-kornilova-glifart",
       "file": "slide-07.png",
-      "title": "Злата Корнилова · glifart/",
+      "title": "Злата Корнилова",
       "tag": "Retail · Злата Корнилова",
       "cite": {
         "act": "caption",
