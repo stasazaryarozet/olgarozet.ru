@@ -1,8 +1,9 @@
 {
   "meta": {
-    "title": "Стили vs Тренды",
+    "title": "Стили<br>vs Тренды",
     "subtitle": "Какие прижились, а какие забыты?",
     "pretitle": [
+      "<span class=\"is-caps\">РАССКАЗ-ПОКАЗ</span><br>",
       "Для ",
       {
         "entity": "bhsad",
@@ -29,9 +30,7 @@
           "audio": "{a} – {b}",
           "video": "Глава в видеозаписи · {a}"
         },
-        "segment": {
-          "video": "В видеозаписи · {a}"
-        }
+        "segment": {}
       },
       "head": "{title} — {author}",
       "tag": "{name} · {issue}",
@@ -45,10 +44,9 @@
       }
     },
     "badges": [
-      "Рассказ-показ",
-      "81 минута лекции",
-      "33 фрагмента рассказа",
-      "7 осей анализа"
+      "7 осей анализа",
+      "33 сегмента",
+      "81 минута лекции"
     ],
     "footer": {
       "links": [
@@ -202,7 +200,7 @@
     {
       "id": "sec-transformism",
       "layout": "feature",
-      "title": "Гарри Нуриев — Transformism",
+      "title": "Гарри Нуриев. Transformism",
       "seconds": [
         1007,
         1877

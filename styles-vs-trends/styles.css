@@ -140,18 +140,7 @@ body {
 }
 #doc > nav li:not(:last-child)::after {
   content: "○";
-  color: var(--muted);
-  margin-top: 0.5rem;
-  font-size: var(--fs-xs);
-}
-#doc > nav li {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-#doc > nav li:not(:last-child)::after {
-  content: "○";
-  color: var(--muted);
+  color: var(--accent);
   margin-top: 0.5rem;
   font-size: var(--fs-xs);
 }
@@ -159,11 +148,11 @@ body {
   font-size: var(--fs-xs);
   text-transform: uppercase;
   letter-spacing: var(--tracking-caps);
-  color: var(--muted);
+  color: var(--accent);
   text-decoration: none;
 }
 #doc > nav a:hover,
-#doc > nav a:focus-visible { color: var(--accent); }
+#doc > nav a:focus-visible { text-decoration: underline; }
 
 /* ── СЕКЦИЯ ───────────────────────────────────────────────────────────── */
 #doc section {
