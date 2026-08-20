@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "Стили vs Тренды",
+    "title": "СТИЛИ vs ТРЕНДЫ",
     "subtitle": "Какие прижились, а какие забыты?",
     "pretitle": "Рассказ-показ",
     "author": "Ольга Розет",
@@ -15,7 +15,7 @@
       "chapters": "Глава {n} · {a} – {b}",
       "record": {
         "root": {
-          "audio": "Запись целиком · {a} – {b}",
+          "audio": "",
           "video": "ВИДЕОЗАПИСЬ"
         },
         "chapter": {
@@ -98,11 +98,6 @@
       "t0": 0,
       "t1": 4852,
       "at": [
-        {
-          "type": "audio",
-          "url": "audio/lecture.m4a#t=0,4852",
-          "label": "Запись целиком · 00:00 – 1:20:52"
-        },
         {
           "type": "video",
           "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=0",
@@ -355,7 +350,7 @@
     {
       "id": "opening",
       "file": "slide-01.png",
-      "title": "Стили vs Тренды",
+      "title": "СТИЛИ vs ТРЕНДЫ",
       "tag": "Введение · титул",
       "cite": {
         "act": "caption",

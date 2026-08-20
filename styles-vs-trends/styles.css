@@ -475,21 +475,33 @@ h1[data-role="title"] {
 }
 h1[data-role="title"] .t-emph {
     display: block;
-    margin: 0.2em 0;
-    font-style: normal;
-    color: var(--dim); /* or any distinct color for VS if needed */
+    margin: 0.3em 0;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-style: italic;
+    font-weight: normal;
+    text-transform: lowercase; /* explicitly force lowercase vs */
+    color: var(--muted);
 }
 
 /* 3. Оглавление строго красным */
 #doc-nav::before {
     content: "Оглавление";
     display: block;
-    color: var(--red, red); /* strictly red as requested */
+    color: var(--red, red);
     font-size: 0.9em;
     text-transform: uppercase;
     letter-spacing: var(--tracking-caps);
     font-weight: bold;
     margin-bottom: 1rem;
+}
+
+#doc > nav li:not(:last-child)::after {
+    content: none !important;
+    display: none !important;
+}
+
+#doc > nav a {
+    color: var(--red, red) !important;
 }
 
 /* 4. Гарри Нуриев все еще съехавший, двойные разделители перед Глава 2 */
@@ -505,13 +517,31 @@ h1[data-role="title"] .t-emph {
     border-bottom: none !important;
 }
 
-/* 5. 81 минута на отдельной строке между аудио и видео */
-/* We target the root video block which follows the root audio block */
+/* 5. "81 минута лекции" и "и" на отдельных строках между аудио и видео */
 header p[data-kind="video"]::before {
-    content: "81 минута лекции";
+    content: "81 минута лекции\Aи";
+    white-space: pre-wrap;
     display: block;
-    font-size: 0.9em;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-style: italic;
+    text-transform: none; /* keep lowercase for 'и', but allow numbers */
+    font-size: 1.1em;
     margin-bottom: 0.8em;
-    color: var(--dim);
+    color: var(--muted);
 }
 
+
+/* Improve composition of segment cards */
+#doc div[data-kind="segment"],
+#doc figure[data-kind="segment"] {
+    display: flex;
+    flex-direction: column;
+}
+#doc figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+#doc figcaption > * {
+    margin: 0 !important;
+}
