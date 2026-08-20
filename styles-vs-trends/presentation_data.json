@@ -369,17 +369,6 @@
       "page": 1,
       "basis": "figure",
       "timecode": "00:00",
-      "fragment": {
-        "t0": 0,
-        "t1": 394,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=0",
-            "label": "В видеозаписи · 00:00"
-          }
-        ]
-      },
       "light": "slide-01.webp",
       "light_geometry": [
         2000,
@@ -403,17 +392,6 @@
       "page": 3,
       "basis": "figure",
       "timecode": "06:34",
-      "fragment": {
-        "t0": 394,
-        "t1": 613,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=394",
-            "label": "В видеозаписи · 06:34"
-          }
-        ]
-      },
       "light": "slide-03.webp",
       "light_geometry": [
         2000,
@@ -436,17 +414,6 @@
       "page": 4,
       "basis": "figure",
       "timecode": "10:13",
-      "fragment": {
-        "t0": 613,
-        "t1": 797,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=613",
-            "label": "В видеозаписи · 10:13"
-          }
-        ]
-      },
       "light": "slide-04.webp",
       "light_geometry": [
         2000,
@@ -471,17 +438,6 @@
       "page": 5,
       "basis": "figure",
       "timecode": "13:17",
-      "fragment": {
-        "t0": 797,
-        "t1": 1006,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=797",
-            "label": "В видеозаписи · 13:17"
-          }
-        ]
-      },
       "light": "slide-05.webp",
       "light_geometry": [
         2000,
@@ -505,17 +461,6 @@
       ],
       "page": 6,
       "timecode": "16:47",
-      "fragment": {
-        "t0": 1006,
-        "t1": 1877,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1006",
-            "label": "В видеозаписи · 16:46"
-          }
-        ]
-      },
       "light": "slide-06.webp",
       "light_geometry": [
         2000,
@@ -541,17 +486,6 @@
       "page": 7,
       "basis": "figure",
       "timecode": "31:17",
-      "fragment": {
-        "t0": 1877,
-        "t1": 1923,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1877",
-            "label": "В видеозаписи · 31:17"
-          }
-        ]
-      },
       "light": "slide-07.webp",
       "light_geometry": [
         2000,
@@ -575,17 +509,6 @@
       "page": 8,
       "basis": "figure",
       "timecode": "32:03",
-      "fragment": {
-        "t0": 1923,
-        "t1": 2208,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1923",
-            "label": "В видеозаписи · 32:03"
-          }
-        ]
-      },
       "light": "slide-08.webp",
       "light_geometry": [
         2000,
@@ -608,17 +531,6 @@
       ],
       "page": 9,
       "timecode": "36:47",
-      "fragment": {
-        "t0": 2208,
-        "t1": 2552,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=2208",
-            "label": "В видеозаписи · 36:48"
-          }
-        ]
-      },
       "light": "slide-09.webp",
       "light_geometry": [
         2000,
@@ -642,17 +554,6 @@
       "page": 10,
       "basis": "figure",
       "timecode": "42:32",
-      "fragment": {
-        "t0": 2552,
-        "t1": 2645,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=2552",
-            "label": "В видеозаписи · 42:32"
-          }
-        ]
-      },
       "light": "slide-10.webp",
       "light_geometry": [
         2000,
@@ -676,17 +577,6 @@
       "page": 11,
       "basis": "figure",
       "timecode": "44:06",
-      "fragment": {
-        "t0": 2645,
-        "t1": 2771,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=2645",
-            "label": "В видеозаписи · 44:05"
-          }
-        ]
-      },
       "light": "slide-11.webp",
       "light_geometry": [
         2000,
@@ -713,17 +603,6 @@
       "page": 12,
       "basis": "figure",
       "timecode": "46:11",
-      "fragment": {
-        "t0": 2771,
-        "t1": 2836,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=2771",
-            "label": "В видеозаписи · 46:11"
-          }
-        ]
-      },
       "light": "slide-12.webp",
       "light_geometry": [
         2000,
@@ -750,17 +629,6 @@
       "page": 13,
       "basis": "figure",
       "timecode": "47:14",
-      "fragment": {
-        "t0": 2836,
-        "t1": 2917,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=2836",
-            "label": "В видеозаписи · 47:16"
-          }
-        ]
-      },
       "light": "slide-13.webp",
       "light_geometry": [
         2000,
@@ -786,17 +654,6 @@
       "page": 14,
       "basis": "figure",
       "timecode": "48:36",
-      "fragment": {
-        "t0": 2917,
-        "t1": 3058,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=2917",
-            "label": "В видеозаписи · 48:37"
-          }
-        ]
-      },
       "light": "slide-14.webp",
       "light_geometry": [
         2000,
@@ -821,17 +678,6 @@
       "page": 15,
       "basis": "figure",
       "timecode": "50:58",
-      "fragment": {
-        "t0": 3058,
-        "t1": 3282,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=3058",
-            "label": "В видеозаписи · 50:58"
-          }
-        ]
-      },
       "light": "slide-15.webp",
       "light_geometry": [
         2000,
@@ -855,17 +701,6 @@
       "page": 16,
       "basis": "figure",
       "timecode": "54:41",
-      "fragment": {
-        "t0": 3282,
-        "t1": 3522,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=3282",
-            "label": "В видеозаписи · 54:42"
-          }
-        ]
-      },
       "light": "slide-16.webp",
       "light_geometry": [
         2000,
@@ -889,17 +724,6 @@
       "page": 17,
       "basis": "figure",
       "timecode": "58:41",
-      "fragment": {
-        "t0": 3522,
-        "t1": 3586,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=3522",
-            "label": "В видеозаписи · 58:42"
-          }
-        ]
-      },
       "light": "slide-17.webp",
       "light_geometry": [
         2000,
@@ -925,17 +749,6 @@
       "page": 18,
       "basis": "figure",
       "timecode": "59:45",
-      "fragment": {
-        "t0": 3586,
-        "t1": 3760,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=3586",
-            "label": "В видеозаписи · 59:46"
-          }
-        ]
-      },
       "light": "slide-18.webp",
       "light_geometry": [
         2000,
@@ -959,17 +772,6 @@
       "page": 19,
       "basis": "figure",
       "timecode": "1:02:40",
-      "fragment": {
-        "t0": 3760,
-        "t1": 3861,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=3760",
-            "label": "В видеозаписи · 1:02:40"
-          }
-        ]
-      },
       "light": "slide-19.webp",
       "light_geometry": [
         2000,
@@ -993,17 +795,6 @@
       "page": 20,
       "basis": "figure",
       "timecode": "1:04:21",
-      "fragment": {
-        "t0": 3861,
-        "t1": 4109,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=3861",
-            "label": "В видеозаписи · 1:04:21"
-          }
-        ]
-      },
       "light": "slide-20.webp",
       "light_geometry": [
         2000,
@@ -1026,17 +817,6 @@
       ],
       "page": 21,
       "timecode": "1:08:29",
-      "fragment": {
-        "t0": 4109,
-        "t1": 4121,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4109",
-            "label": "В видеозаписи · 1:08:29"
-          }
-        ]
-      },
       "light": "slide-21.webp",
       "light_geometry": [
         2000,
@@ -1060,17 +840,6 @@
       "page": 22,
       "basis": "figure",
       "timecode": "1:08:41",
-      "fragment": {
-        "t0": 4121,
-        "t1": 4193,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4121",
-            "label": "В видеозаписи · 1:08:41"
-          }
-        ]
-      },
       "light": "slide-22.webp",
       "light_geometry": [
         2000,
@@ -1094,17 +863,6 @@
       "page": 23,
       "basis": "figure",
       "timecode": "1:09:53",
-      "fragment": {
-        "t0": 4193,
-        "t1": 4247,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4193",
-            "label": "В видеозаписи · 1:09:53"
-          }
-        ]
-      },
       "light": "slide-23.webp",
       "light_geometry": [
         2000,
@@ -1128,17 +886,6 @@
       },
       "basis": "figure",
       "timecode": "1:10:46",
-      "fragment": {
-        "t0": 4247,
-        "t1": 4283,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4247",
-            "label": "В видеозаписи · 1:10:47"
-          }
-        ]
-      },
       "light": "slide-24.webp",
       "light_geometry": [
         2000,
@@ -1162,17 +909,6 @@
       },
       "basis": "figure",
       "timecode": "1:11:23",
-      "fragment": {
-        "t0": 4283,
-        "t1": 4329,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4283",
-            "label": "В видеозаписи · 1:11:23"
-          }
-        ]
-      },
       "light": "slide-25.webp",
       "light_geometry": [
         2000,
@@ -1196,17 +932,6 @@
       },
       "basis": "figure",
       "timecode": "1:12:08",
-      "fragment": {
-        "t0": 4329,
-        "t1": 4379,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4329",
-            "label": "В видеозаписи · 1:12:09"
-          }
-        ]
-      },
       "light": "slide-26.webp",
       "light_geometry": [
         2000,
@@ -1230,17 +955,6 @@
       },
       "basis": "figure",
       "timecode": "1:12:58",
-      "fragment": {
-        "t0": 4379,
-        "t1": 4421,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4379",
-            "label": "В видеозаписи · 1:12:59"
-          }
-        ]
-      },
       "light": "slide-27.webp",
       "light_geometry": [
         2000,
@@ -1264,17 +978,6 @@
       "page": 28,
       "basis": "figure",
       "timecode": "1:13:40",
-      "fragment": {
-        "t0": 4421,
-        "t1": 4451,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4421",
-            "label": "В видеозаписи · 1:13:41"
-          }
-        ]
-      },
       "light": "slide-28.webp",
       "light_geometry": [
         2000,
@@ -1303,17 +1006,6 @@
       "page": 29,
       "basis": "figure",
       "timecode": "1:14:11",
-      "fragment": {
-        "t0": 4451,
-        "t1": 4851,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4451",
-            "label": "В видеозаписи · 1:14:11"
-          }
-        ]
-      },
       "light": "slide-29.webp",
       "light_geometry": [
         2000,
