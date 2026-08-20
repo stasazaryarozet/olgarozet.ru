@@ -501,7 +501,7 @@ h1[data-role="title"] .t-emph {
 }
 
 #doc > nav a {
-    color: var(--red, red) !important;
+    color: #CC0000 !important; /* dark red to pass AA contrast */
 }
 
 /* 4. Гарри Нуриев все еще съехавший, двойные разделители перед Глава 2 */
