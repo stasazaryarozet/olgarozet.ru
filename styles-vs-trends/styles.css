@@ -368,7 +368,10 @@ dialog[data-role="zoom"] img {
   font-size: var(--fs-xs);
   color: var(--muted);
 }
-#doc [data-by] { display: block; margin-top: 0.4rem; color: var(--muted); }
+/* ГОЛОС — ОТДЕЛЬНАЯ СТРОКА ПОД РЕЧЬЮ. Прежде селектор целил в АТРИБУТ `data-by`,
+   то есть красил саму речь, а имя произнёсшего читателю не показывалось вовсе
+   (Inv-PROV, замер 2026-08-20). Роль — та же, что у всей разметки класса. */
+#doc [data-role="by"] { display: block; margin-top: 0.4rem; font-size: var(--fs-xs); color: var(--muted); }
 #doc figcaption [data-role="prose"] { margin-top: 0.5rem; }
 #doc figcaption [data-role="strophe"] { display: flex; flex-wrap: wrap; gap: 0.25rem 0.75rem; margin-top: 0.5rem; color: var(--muted); }
 
