@@ -126,11 +126,34 @@ body {
 /* ── ОГЛАВЛЕНИЕ: путь читателя есть проекция той же геометрии ──────────── */
 #doc > nav ul {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem 1.25rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
   padding: var(--sp-3) 0;
   border-bottom: 1px solid var(--rule);
+  list-style: none;
+}
+#doc > nav li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#doc > nav li:not(:last-child)::after {
+  content: "○";
+  color: var(--muted);
+  margin-top: 0.5rem;
+  font-size: var(--fs-xs);
+}
+#doc > nav li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#doc > nav li:not(:last-child)::after {
+  content: "○";
+  color: var(--muted);
+  margin-top: 0.5rem;
+  font-size: var(--fs-xs);
 }
 #doc > nav a {
   font-size: var(--fs-xs);

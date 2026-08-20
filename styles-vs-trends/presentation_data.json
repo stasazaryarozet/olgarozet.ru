@@ -11,7 +11,6 @@
       " · Maison&Objet 2026"
     ],
     "author": "Ольга Розет",
-    "composer": "Система «Дела»",
     "staccato": [
       "Из 1920-х в 2020-е.",
       {
@@ -24,7 +23,7 @@
       "record": {
         "root": {
           "audio": "Запись целиком · {a} – {b}",
-          "video": "Видеозапись"
+          "video": "ВИДЕОЗАПИСЬ"
         },
         "chapter": {
           "audio": "{a} – {b}",
@@ -48,7 +47,7 @@
     "badges": [
       "Рассказ-показ",
       "81 минута лекции",
-      "35 фрагментов рассказа",
+      "33 фрагмента рассказа",
       "7 осей анализа"
     ],
     "footer": {
@@ -118,7 +117,7 @@
         {
           "type": "video",
           "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=0",
-          "label": "Видеозапись"
+          "label": "ВИДЕОЗАПИСЬ"
         }
       ]
     },
@@ -374,7 +373,7 @@
       "timecode": "00:00",
       "fragment": {
         "t0": 0,
-        "t1": 349,
+        "t1": 394,
         "at": [
           {
             "type": "video",
@@ -384,38 +383,6 @@
         ]
       },
       "light": "slide-01.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
-    },
-    {
-      "id": "design-in-context",
-      "file": "slide-02.png",
-      "title": "Дизайн внутри контекста",
-      "tag": "Контекст · геополитика",
-      "cite": {
-        "act": "quote",
-        "text": "Дизайн всегда находится в мировом политическом и экономическом контексте"
-      },
-      "seconds": 347,
-      "axis": [
-        "philosophy"
-      ],
-      "page": 2,
-      "timecode": "05:47",
-      "fragment": {
-        "t0": 349,
-        "t1": 394,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=349",
-            "label": "В видеозаписи · 05:49"
-          }
-        ]
-      },
-      "light": "slide-02.webp",
       "light_geometry": [
         2000,
         1125
@@ -560,7 +527,7 @@
     {
       "id": "zlata-kornilova-glifart",
       "file": "slide-07.png",
-      "title": "Злата Корнилова · Glifart",
+      "title": "Злата Корнилова",
       "tag": "Retail · Злата Корнилова",
       "cite": {
         "act": "caption",
@@ -597,7 +564,7 @@
       "id": "archaic-and-gesture",
       "file": "slide-08.png",
       "title": "Архаика и жест",
-      "tag": "Retail · Glifart",
+      "tag": "Retail",
       "cite": {
         "act": "caption",
         "text": "Сохранение ручного ткачества в диалоге с современной архитектурой"
@@ -1340,7 +1307,7 @@
       "timecode": "1:14:11",
       "fragment": {
         "t0": 4451,
-        "t1": 4733,
+        "t1": 4851,
         "at": [
           {
             "type": "video",
@@ -1350,40 +1317,6 @@
         ]
       },
       "light": "slide-29.webp",
-      "light_geometry": [
-        2000,
-        1125
-      ]
-    },
-    {
-      "id": "bhsad-programme",
-      "file": "slide-30.png",
-      "title": "Программа в Британке",
-      "tag": "БВШД · флагманский курс",
-      "cite": {
-        "act": "caption",
-        "text": "Старт 22 октября 2026 · 8 месяцев глубокой практики и калибровки оптики"
-      },
-      "seconds": 4733,
-      "axis": [
-        "philosophy",
-        "morphology"
-      ],
-      "page": 30,
-      "basis": "figure",
-      "timecode": "1:18:53",
-      "fragment": {
-        "t0": 4733,
-        "t1": 4851,
-        "at": [
-          {
-            "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4733",
-            "label": "В видеозаписи · 1:18:53"
-          }
-        ]
-      },
-      "light": "slide-30.webp",
       "light_geometry": [
         2000,
         1125
@@ -1486,7 +1419,8 @@
       "links": [
         {
           "entity": "bhsad",
-          "label": "Программа на сайте школы"
+          "label": "Программа на сайте школы",
+          "url": "https://britishdesign.ru/courses/dekorirovanie-interera-uglublennyy-kurs/"
         }
       ]
     }
