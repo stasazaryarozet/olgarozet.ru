@@ -1,7 +1,3 @@
-
-
-
-
 /* ==========================================================================
    Styles for Styles vs Trends (Maison&Objet 2026 Presentation)
    Derived strictly from Dela Design Tokens (_tokens.generated.css / _design.yaml)
@@ -80,7 +76,6 @@ body {
 #doc > header > [data-field="pretitle"] {
   font-size: var(--fs-xs);
   text-transform: uppercase;
-    letter-spacing: var(--tracking-caps);
   letter-spacing: var(--tracking-caps);
   color: var(--accent);
   font-weight: 600;
@@ -143,8 +138,19 @@ body {
   flex-direction: column;
   align-items: center;
 }
-
-
+#doc > nav li:not(:last-child)::after {
+  content: "○";
+  color: var(--accent);
+  margin-top: 0.5rem;
+  font-size: var(--fs-xs);
+}
+#doc > nav a {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--accent);
+  text-decoration: none;
+}
 #doc > nav a:hover,
 #doc > nav a:focus-visible { text-decoration: underline; }
 
@@ -198,7 +204,6 @@ body {
 #doc section > [data-role="note"] {
   font-size: var(--fs-2xs);
   text-transform: uppercase;
-    letter-spacing: var(--tracking-caps);
   letter-spacing: var(--tracking-caps);
   color: var(--accent);
   font-weight: 600;
@@ -365,7 +370,6 @@ dialog[data-role="zoom"] img {
 #doc figcaption b { display: block; font-weight: 400; }
 #doc figcaption [data-role="note"] {
   text-transform: uppercase;
-    letter-spacing: var(--tracking-caps);
   letter-spacing: var(--tracking-caps);
   font-size: var(--fs-2xs);
   color: var(--accent);
@@ -390,7 +394,6 @@ dialog[data-role="zoom"] img {
   display: inline-block;
   font-size: var(--fs-2xs);
   text-transform: uppercase;
-    letter-spacing: var(--tracking-caps);
   letter-spacing: var(--tracking-caps);
   color: var(--accent);
   margin-bottom: 0.5rem;
@@ -442,139 +445,4 @@ dialog[data-role="zoom"] img {
   font-style: italic;
   letter-spacing: var(--tracking-emphasis);
   font-feature-settings: "kern" 1, "liga" 1;
-}
-
-/* ==========================================================================
-   Architectural Presentation Overrides (2026-08-20)
-   Inv-CSS-Semantic-Decoupling: No HTML tags in data, all visual structures
-   (headers, markers, line breaks) are CSS driven.
-   ========================================================================== */
-
-/* 1. Технический заголовок "Рассказ-показ" ПРОПИСНЫМИ, не крупно */
-p[data-field="pretitle"] {
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-caps);
-    font-size: 0.85em;
-    letter-spacing: var(--tracking-caps);
-    text-align: center;
-    margin-bottom: 0.5em;
-    font-weight: 600;
-}
-
-/* 2. В верхнем заголовке VS отдельной строкой */
-h1[data-role="title"] {
-    text-align: center;
-}
-h1[data-role="title"] .t-emph {
-    display: block;
-    margin: 0.3em 0;
-    font-family: "Playfair Display", "Cormorant Garamond", "Didot", "Bodoni MT", "Times New Roman", serif;
-    font-size: 1.3em;
-    font-weight: 300;
-    font-style: italic;
-    text-transform: lowercase;
-    color: var(--muted);
-}
-
-/* 3. Оглавление строго красным */
-
-
-
-
-
-
-/* 4. Гарри Нуриев все еще съехавший, двойные разделители перед Глава 2 */
-#doc-chapters-sec-transformism {
-    border-top: none !important;
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-}
-/* If there's a gap caused by the previous section's margin */
-#doc-axes {
-    margin-bottom: 0 !important;
-    padding-bottom: 0 !important;
-    border-bottom: none !important;
-}
-
-/* 5. "81 минута лекции" и "и" на отдельных строках между аудио и видео */
-/* 5. "и" на отдельной строке между аудио и видео */
-header p[data-kind="video"]::before {
-    content: "и";
-    white-space: pre-wrap;
-    display: block;
-    font-family: "Playfair Display", "Cormorant Garamond", "Georgia", serif;
-    font-style: italic;
-    text-transform: lowercase;
-    font-size: 1.1em;
-    margin-bottom: 0.8em;
-    color: var(--muted);
-}
-
-
-/* Improve composition of segment cards */
-#doc div[data-kind="segment"],
-#doc figure[data-kind="segment"] {
-    display: flex;
-    flex-direction: column;
-}
-#doc figcaption {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-#doc figcaption > * {
-    margin: 0 !important;
-}
-
-#doc-nav::before {
-    content: "Оглавление";
-    display: block;
-    color: #CC0000;
-    font-size: 0.9em;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-caps);
-    font-weight: bold;
-    margin-bottom: 1rem;
-}
-
-#doc > nav li:not(:last-child)::after {
-    color: #CC0000 !important;
-}
-
-#doc > nav a {
-    color: #CC0000 !important;
-    text-transform: uppercase !important;
-}
-
-@media (prefers-color-scheme: dark) {
-    html:not([data-theme="day"]) #doc-nav::before {
-        color: #ff5a5a;
-    }
-    html:not([data-theme="day"]) #doc > nav a,
-    html:not([data-theme="day"]) #doc > nav li:not(:last-child)::after {
-        color: #ff5a5a !important;
-    }
-}
-html[data-theme="night"] #doc-nav::before {
-    color: #ff5a5a;
-}
-html[data-theme="night"] #doc > nav a,
-html[data-theme="night"] #doc > nav li:not(:last-child)::after {
-    color: #ff5a5a !important;
-}
-
-/* Stopwatch and link in segments should be red */
-time[data-field="timecode"] {
-    color: #CC0000 !important;
-}
-time[data-field="timecode"] a {
-    color: inherit !important;
-}
-@media (prefers-color-scheme: dark) {
-    html:not([data-theme="day"]) time[data-field="timecode"] {
-        color: #ff5a5a !important;
-    }
-}
-html[data-theme="night"] time[data-field="timecode"] {
-    color: #ff5a5a !important;
 }
