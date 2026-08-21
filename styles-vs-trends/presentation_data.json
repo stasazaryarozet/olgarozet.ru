@@ -1,9 +1,10 @@
 {
   "meta": {
-    "title": "Стили<br>vs Тренды",
+    "title": "Стили vs Тренды",
     "subtitle": "Какие прижились, а какие забыты?",
     "pretitle": [
-      "<span class=\"is-caps\">РАССКАЗ-ПОКАЗ</span><br>",
+      "Рассказ-показ",
+      "\n",
       "Для ",
       {
         "entity": "bhsad",
@@ -73,7 +74,7 @@
     "source": {
       "deck": "../../_raw/stili-vs-trendy-presentation-2026.pdf",
       "recording": {
-        "oid": "5021439358a04c14",
+        "oid": "0ec923657ff4aba0",
         "at": [
           {
             "type": "audio",
@@ -123,7 +124,6 @@
       "bhsad": {
         "name": "Британская высшая школа дизайна",
         "name_genitive": "Британской высшей школы дизайна",
-        "name_prepositional": "Британской высшей школе дизайна",
         "url": "https://britishdesign.ru"
       }
     }
@@ -182,12 +182,12 @@
       "num": "Глава 1 · 00:00 – 16:47",
       "fragment": {
         "t0": 0,
-        "t1": 1006,
+        "t1": 1007,
         "at": [
           {
             "type": "audio",
-            "url": "audio/lecture.m4a#t=0,1006",
-            "label": "00:00 – 16:46"
+            "url": "audio/lecture.m4a#t=0,1007",
+            "label": "00:00 – 16:47"
           },
           {
             "type": "video",
@@ -213,18 +213,18 @@
       ],
       "num": "Глава 2 · 16:47 – 31:17",
       "fragment": {
-        "t0": 1006,
+        "t0": 1007,
         "t1": 1877,
         "at": [
           {
             "type": "audio",
-            "url": "audio/lecture.m4a#t=1006,1877",
-            "label": "16:46 – 31:17"
+            "url": "audio/lecture.m4a#t=1007,1877",
+            "label": "16:47 – 31:17"
           },
           {
             "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1006",
-            "label": "Глава в видеозаписи · 16:46"
+            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1007",
+            "label": "Глава в видеозаписи · 16:47"
           }
         ]
       }
@@ -360,7 +360,7 @@
       "tag": "Введение · титул",
       "cite": {
         "act": "caption",
-        "text": "Ольга Розет — художник, искусствовед, куратор программы «Декорирование интерьера» в БВШД"
+        "text": "Ольга Розет — дизайнер и декоратор интерьера, искусствовед, куратор программы «Декорирование интерьера» в БВШД"
       },
       "seconds": 0,
       "axis": [
@@ -1072,7 +1072,7 @@
         "ornaments",
         "textures"
       ],
-      "light": "livingetc_IMG_7578~0-0-50-100.webp",
+      "light": "livingetc_IMG_7578.webp",
       "light_geometry": [
         1333,
         2000
