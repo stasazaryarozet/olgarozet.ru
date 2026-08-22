@@ -53,7 +53,10 @@ body {
    <article>, 67 из 227 единиц прозы до него не доезжали).
    ========================================================================== */
 #doc {
-  max-width: var(--max-width);
+  /* ХОЛСТ, НЕ МЕРА. --max-width = потолок хаба (~50em); на широком экране он
+     оставлял рассказ-показ островом в пустоте. --page — редакционный холст Spec
+     (text/site.md); проза/речь ниже по-прежнему --measure. */
+  max-width: var(--page);
   margin: 0 auto;
   padding: var(--space-section) var(--space-padding) var(--space-top);
 }
@@ -70,8 +73,9 @@ body {
 /* ── ШАПКА ────────────────────────────────────────────────────────────── */
 #doc > header {
   text-align: center;
-  padding: var(--space-section) 1rem 2.5rem;
+  padding: var(--space-section) 0 calc(var(--space-section) * 0.85);
   border-bottom: 1px solid var(--rule);
+  margin-bottom: var(--sp-2);
 }
 #doc > header > [data-field="pretitle"] {
   font-size: var(--fs-xs);
@@ -501,6 +505,83 @@ dialog[data-role="zoom"] img {
   #doc [data-layout="feature"] > [data-kind="segment"],
   #doc [data-layout="feature"] > :not(h2):not([data-kind="segment"]) { grid-column: 1; grid-row: auto; }
 }
+
+/* ── ШИРОКИЙ ЭКРАН: холст rail|body (тот же порог, что у статьи — --breakpoint)
+   Замер 1600×900: центрированный столбец ~50em оставлял половину вьюпорта пустой.
+   Здесь холст --page; проза остаётся на --measure; сетки глав едят 1fr. */
+@media (min-width: 880px) {
+  #doc {
+    display: grid;
+    grid-template-columns: var(--rail) minmax(0, 1fr);
+    column-gap: var(--gutter);
+    align-content: start;
+  }
+  #doc > * {
+    grid-column: 2;
+    min-width: 0;
+  }
+
+  /* Шапка: мачта | эпиграф+запись — асимметрия вместо телефона по центру. */
+  #doc > header {
+    text-align: start;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(16rem, 0.8fr);
+    column-gap: var(--gutter);
+    row-gap: var(--sp-3);
+    align-items: end;
+  }
+  #doc > header > [data-field="pretitle"],
+  #doc > header > [data-field="context"],
+  #doc > header h1,
+  #doc > header > [data-field="subtitle"],
+  #doc > header > [data-field="author"],
+  #doc > header > [data-field="staccato"],
+  #doc > header > [data-field="badges"] {
+    grid-column: 1;
+  }
+  #doc > header > blockquote,
+  #doc > header > [data-role="by"],
+  #doc > header > [data-role="record"] {
+    grid-column: 2;
+  }
+  #doc > header > blockquote { margin: 0 0 var(--sp-2); }
+  #doc > header > [data-field="subtitle"] {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  #doc > header > [data-field="staccato"],
+  #doc > header > [data-field="badges"] {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  #doc > header > [data-role="record"][data-kind="audio"] {
+    margin-top: 0;
+  }
+  #doc > header audio {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Оглавление — дорожки по холсту, не вертикальная бусина. */
+  #doc > nav::before { text-align: start; }
+  #doc > nav ul {
+    align-items: stretch;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: var(--sp-2) var(--gutter);
+    text-align: start;
+  }
+  #doc > nav li { align-items: flex-start; }
+  #doc > nav li:not(:last-child)::after { display: none; }
+
+  /* Вводные секции: мера чтения, не растяжка на весь холст. */
+  #doc section > [data-role="prose"],
+  #doc section > [data-role="speech"],
+  #doc section > blockquote {
+    max-width: var(--measure);
+  }
+}
+
 /* ── Уважение к prefers-reduced-motion (Inv-CSS-prefers-reduced-motion) ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
