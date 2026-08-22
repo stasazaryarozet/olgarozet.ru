@@ -42,6 +42,18 @@
     });
   }
 
+  /* ОДИН ПЛЕЕР НА ВИДУ (эргономика Сайта Системы, принципал 2026-08-19):
+     слушать можно только одну запись за раз — соседние <audio> встают. */
+  function bindExclusiveAudio() {
+    document.addEventListener('play', function (e) {
+      var t = e.target;
+      if (!t || t.tagName !== 'AUDIO') return;
+      document.querySelectorAll('audio').forEach(function (other) {
+        if (other !== t) other.pause();
+      });
+    }, true);
+  }
+
   /* УВЕЛИЧЕНИЕ — НАДСТРОЙКА НАД ЯКОРЕМ ДОКУМЕНТА, а не отдельная способность.
      Документ уже несёт <a data-role="zoom" href="…носитель…">: без скрипта ссылка
      открывает изображение, со скриптом оно показывается, не уводя со страницы.
@@ -65,7 +77,7 @@
     });
   }
 
-  function enrich() { bindFragments(); bindZoom(); }
+  function enrich() { bindFragments(); bindExclusiveAudio(); bindZoom(); }
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', enrich);
