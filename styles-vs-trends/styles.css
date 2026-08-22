@@ -526,21 +526,6 @@ h1[data-role="title"] .t-emph {
     border-bottom: none !important;
 }
 
-/* 5. "81 минута лекции" и "и" на отдельных строках между аудио и видео */
-/* 5. "и" на отдельной строке между аудио и видео */
-header p[data-kind="video"]::before {
-    content: "и";
-    white-space: pre-wrap;
-    display: block;
-    font-family: "Playfair Display", "Cormorant Garamond", "Georgia", serif;
-    font-style: italic;
-    text-transform: lowercase;
-    font-size: 1.1em;
-    margin-bottom: 0.8em;
-    color: var(--muted);
-}
-
-
 /* Improve composition of segment cards */
 #doc div[data-kind="segment"],
 #doc figure[data-kind="segment"] {
