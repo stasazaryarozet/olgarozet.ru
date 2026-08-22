@@ -522,6 +522,12 @@ dialog[data-role="zoom"] img {
   letter-spacing: var(--tracking-emphasis);
   font-feature-settings: "kern" 1, "liga" 1;
 }
+/* Связка внутри дисплейного заголовка: не наследует 700 и чернила имени —
+   иначе «vs» читается третьим именем, а не отношением (Inv-TYPO-emphasis-token). */
+#doc > header h1 .t-emph {
+  font-weight: 400;
+  color: var(--muted);
+}
 
 /* «и» между аудио и видео — композиция принципала (2026-08-20).
    Изъятие Inv-TYPO-italic-real-cut уже называет этот селектор. Гарнитура —
