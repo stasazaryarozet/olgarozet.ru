@@ -1,21 +1,17 @@
 {
   "meta": {
     "title": "СТИЛИ vs ТРЕНДЫ",
-    "subtitle": "Какие прижились, а какие забыты?",
+    "subtitle": "Какие прижились\nа какие забыты\n?",
     "pretitle": "Рассказ-показ",
     "author": "Ольга Розет",
     "staccato": [
-      "Из 1920-х в 2020-е.",
-      {
-        "act": "gloss",
-        "text": "Материя сохраняет то, что забывает глаз"
-      }
+      "Из 1920-х в 2020-е."
     ],
     "display": {
       "chapters": "Глава {n} · {a} – {b}",
       "record": {
         "root": {
-          "audio": "",
+          "audio": "{a} – {b}",
           "video": "ВИДЕОЗАПИСЬ"
         },
         "chapter": {
@@ -99,6 +95,11 @@
       "t1": 4852,
       "at": [
         {
+          "type": "audio",
+          "url": "audio/lecture.m4a#t=0,4852",
+          "label": "00:00 – 1:20:52"
+        },
+        {
           "type": "video",
           "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=0",
           "label": "ВИДЕОЗАПИСЬ"
@@ -120,7 +121,52 @@
         "case": "genitive"
       },
       " · Maison&Objet 2026"
-    ]
+    ],
+    "cite": {
+      "act": "quote",
+      "text": "Материя сохраняет то, что забывает глаз",
+      "by": "Франсуа Делькло"
+    },
+    "presentation": {
+      "root": [
+        {
+          "role": "note",
+          "field": "pretitle"
+        },
+        {
+          "role": "note",
+          "field": "context"
+        },
+        {
+          "role": "title",
+          "field": "title"
+        },
+        {
+          "role": "note",
+          "field": "subtitle"
+        },
+        {
+          "role": "note",
+          "field": "author"
+        },
+        {
+          "role": "strophe",
+          "field": "staccato"
+        },
+        {
+          "role": "speech",
+          "field": "cite"
+        },
+        {
+          "role": "strophe",
+          "field": "badges"
+        },
+        {
+          "role": "record",
+          "field": "fragment"
+        }
+      ]
+    }
   },
   "axes": {
     "morphology": {
@@ -444,8 +490,9 @@
       "title": "Манифест Transformism",
       "tag": "Дизайнер года · манифест",
       "cite": {
-        "act": "gloss",
-        "text": "Если XVIII век говорил цветом, XIX — формой, а XX — философией, то сегодняшний голос — это голос восприятия... Пришло время не создавать больше, а видеть яснее"
+        "act": "quote",
+        "text": "Если XVIII век говорил цветом, XIX — формой, а XX — философией, то сегодняшний голос — это голос восприятия... Пришло время не создавать больше, а видеть яснее",
+        "by": "Гарри Нуриев"
       },
       "seconds": 1007,
       "axis": [
@@ -515,8 +562,9 @@
       "title": "Куратор Франсуа Делькло",
       "tag": "What's New? In Retail",
       "cite": {
-        "act": "gloss",
-        "text": "Материя сохраняет то, что забывает глаз"
+        "act": "quote",
+        "text": "Материя сохраняет то, что забывает глаз",
+        "by": "Франсуа Делькло"
       },
       "seconds": 2207,
       "axis": [

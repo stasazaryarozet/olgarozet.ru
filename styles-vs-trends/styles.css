@@ -81,6 +81,13 @@ body {
   font-weight: 600;
   margin-bottom: var(--sp-2);
 }
+#doc > header > [data-field="context"] {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--ink-soft);
+  margin-bottom: var(--sp-3);
+}
 #doc > header h1 {
   font-size: var(--font-size-h1);
   line-height: var(--lh-display);
@@ -91,6 +98,7 @@ body {
   font-size: clamp(var(--fs-m), 1rem + 1.6vw, var(--fs-xl));
   color: var(--ink-soft);
   margin-bottom: var(--sp-2);
+  line-height: var(--lh-snug, 1.35);
 }
 #doc > header > [data-field="author"] {
   font-size: var(--fs-s);
@@ -106,6 +114,26 @@ body {
   font-size: var(--fs-s);
   color: var(--muted);
   letter-spacing: var(--tracking-fine);
+}
+/* Эпиграф шапки: цитата + атрибуция (не путать со стаккато-строкой).
+   Без font-style:italic — Inv-TYPO-italic-real-cut: в гротеске курсив синтетический. */
+#doc > header > blockquote {
+  margin: 0 auto var(--sp-2);
+  max-width: 28rem;
+  font-size: var(--fs-s);
+  color: var(--ink-soft);
+  border: 0;
+  padding: 0;
+  letter-spacing: var(--tracking-fine);
+}
+#doc > header > [data-role="by"] {
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  margin: 0 0 var(--sp-4);
+  font-style: normal;
+}
+#doc > header > [data-role="by"]::before {
+  content: "— ";
 }
 #doc > header [data-field="badges"] {
   display: flex;
