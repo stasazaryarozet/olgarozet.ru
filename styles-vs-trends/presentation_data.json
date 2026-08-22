@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "СТИЛИ vs ТРЕНДЫ",
-    "subtitle": "Какие прижились\nа какие забыты\n?",
+    "subtitle": "Какие прижились\nа какие забыты?",
     "pretitle": "Рассказ-показ",
     "author": "Ольга Розет",
     "staccato": [
@@ -11,7 +11,7 @@
       "chapters": "Глава {n} · {a} – {b}",
       "record": {
         "root": {
-          "audio": "{a} – {b}",
+          "audio": "",
           "video": "ВИДЕОЗАПИСЬ"
         },
         "chapter": {
@@ -97,7 +97,7 @@
         {
           "type": "audio",
           "url": "audio/lecture.m4a#t=0,4852",
-          "label": "00:00 – 1:20:52"
+          "label": ""
         },
         {
           "type": "video",
@@ -156,10 +156,6 @@
         {
           "role": "speech",
           "field": "cite"
-        },
-        {
-          "role": "strophe",
-          "field": "badges"
         },
         {
           "role": "record",
