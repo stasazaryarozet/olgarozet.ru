@@ -11,6 +11,7 @@
       "chapters": "Глава {n} · {a} – {b}",
       "record": {
         "root": {
+          "audio": "",
           "video": "ВИДЕОЗАПИСЬ"
         },
         "chapter": {
@@ -93,6 +94,11 @@
       "t0": 0,
       "t1": 4852,
       "at": [
+        {
+          "type": "audio",
+          "url": "audio/lecture.m4a#t=0,4852",
+          "label": ""
+        },
         {
           "type": "video",
           "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=0",

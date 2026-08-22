@@ -526,6 +526,19 @@ h1[data-role="title"] .t-emph {
     border-bottom: none !important;
 }
 
+/* «и» на отдельной строке между аудио и видео — решение принципала */
+header p[data-kind="video"]::before {
+    content: "и";
+    white-space: pre-wrap;
+    display: block;
+    font-family: "Playfair Display", "Cormorant Garamond", "Georgia", serif;
+    font-style: italic;
+    text-transform: lowercase;
+    font-size: 1.1em;
+    margin-bottom: 0.8em;
+    color: var(--muted);
+}
+
 /* Improve composition of segment cards */
 #doc div[data-kind="segment"],
 #doc figure[data-kind="segment"] {
