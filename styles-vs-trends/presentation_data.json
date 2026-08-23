@@ -127,42 +127,6 @@
       "act": "quote",
       "text": "Материя сохраняет то, что забывает глаз",
       "by": "Франсуа Делькло"
-    },
-    "presentation": {
-      "root": [
-        {
-          "role": "note",
-          "field": "pretitle"
-        },
-        {
-          "role": "note",
-          "field": "context"
-        },
-        {
-          "role": "title",
-          "field": "title"
-        },
-        {
-          "role": "note",
-          "field": "subtitle"
-        },
-        {
-          "role": "note",
-          "field": "author"
-        },
-        {
-          "role": "strophe",
-          "field": "staccato"
-        },
-        {
-          "role": "speech",
-          "field": "cite"
-        },
-        {
-          "role": "record",
-          "field": "fragment"
-        }
-      ]
     }
   },
   "axes": {
