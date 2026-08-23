@@ -506,69 +506,102 @@ dialog[data-role="zoom"] img {
   #doc [data-layout="feature"] > :not(h2):not([data-kind="segment"]) { grid-column: 1; grid-row: auto; }
 }
 
-/* ── ШИРОКИЙ ЭКРАН: компоновка = функция чтения лекции
-   Замер 2026-08-23: общие grid-row у левой и правой колонок (subtitle∥by,
-   author∥audio) давали перекрёстное чтение — «хаос», не вкус. Корневой
-   приём: две СТОПКИ (только grid-column + dense), без общих номеров строк.
-   Оглавление остаётся путём чтения (макс. 2 дорожки), не dashboard auto-fill. */
+/* ── ШИРОКИЙ ЭКРАН: rail|main — та же идиома, что .article-wrapper
+   (Müller-Brockmann, text/site.md). Холст = --page; проза = --measure;
+   оглавление — липкий рельс; сетки глав и осей едят main-колонку целиком.
+   Замер 2026-08-23: центрированная «колонка в пустоте» и auto-fill осей
+   давали dashboard, не чтение лекции. */
 @media (min-width: 880px) {
+  #doc {
+    display: grid;
+    grid-template-columns: minmax(var(--rail), 11rem) minmax(0, 1fr);
+    column-gap: var(--gutter);
+    align-items: start;
+  }
+
   #doc > header {
+    grid-column: 1 / -1;
     text-align: start;
     display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
-    column-gap: calc(var(--gutter) * 1.5);
+    grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
+    column-gap: calc(var(--gutter) * 2);
     row-gap: var(--sp-2);
     align-items: start;
-    grid-auto-flow: dense;
   }
-  /* Мачта — колонка 1; эпиграф+запись — колонка 2. Порядок документа
-     сохраняется внутри каждой стопки; dense заполняет верх обеих. */
   #doc > header > [data-field="pretitle"],
   #doc > header > [data-field="context"],
   #doc > header h1,
   #doc > header > [data-field="subtitle"],
   #doc > header > [data-field="author"],
   #doc > header > [data-field="staccato"],
-  #doc > header > [data-field="badges"] {
-    grid-column: 1;
-  }
+  #doc > header > [data-field="badges"] { grid-column: 1; }
   #doc > header > blockquote,
   #doc > header > [data-role="by"],
-  #doc > header > [data-role="record"] {
-    grid-column: 2;
-  }
-  #doc > header > blockquote { margin: 0 0 var(--sp-2); }
-  #doc > header > [data-field="subtitle"] {
-    margin-left: 0;
-    margin-right: 0;
-  }
+  #doc > header > [data-role="record"] { grid-column: 2; }
+  #doc > header > blockquote,
+  #doc > header > [data-field="subtitle"] { margin-left: 0; margin-right: 0; }
   #doc > header > [data-field="staccato"],
   #doc > header > [data-field="badges"] {
     align-items: flex-start;
     justify-content: flex-start;
   }
-  #doc > header audio {
-    width: 100%;
-    max-width: 100%;
-  }
+  #doc > header audio { width: 100%; max-width: 100%; }
 
-  /* Оглавление — путь читателя (≤2 колонки), не плитка по всему холсту. */
-  #doc > nav::before { text-align: start; }
+  #doc > nav {
+    grid-column: 1;
+    grid-row: 2 / -2;
+    position: sticky;
+    top: var(--sp-4);
+    align-self: start;
+    border-bottom: 0;
+    padding: 0;
+    margin: 0;
+  }
+  #doc > nav::before { text-align: start; margin-bottom: var(--sp-3); }
   #doc > nav ul {
+    flex-direction: column;
     align-items: stretch;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--sp-2) var(--gutter);
-    text-align: start;
+    gap: 0.35rem;
+    padding: 0;
+    border-bottom: 0;
   }
   #doc > nav li { align-items: flex-start; }
   #doc > nav li:not(:last-child)::after { display: none; }
+  #doc > nav a { text-align: start; line-height: var(--lh-tight); }
 
-  /* Вводные секции: мера чтения; сетки глав едят холст сами. */
+  #doc > section,
+  #doc > footer { grid-column: 2; }
+
   #doc section > [data-role="prose"],
   #doc section > [data-role="speech"],
-  #doc section > blockquote {
+  #doc section > blockquote,
+  #doc > header > [data-field="subtitle"],
+  #doc > header > blockquote {
     max-width: var(--measure);
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  #doc dl { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  #doc [data-layout="grid"],
+  #doc [data-layout="portraits"],
+  #doc [data-layout="gallery"],
+  #doc [data-layout="closing"] {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  }
+  #doc [data-layout="feature"] {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  #doc dl {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-3) var(--gutter);
+  }
+  #doc [data-layout="gallery"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
