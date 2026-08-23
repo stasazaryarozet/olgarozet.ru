@@ -511,25 +511,11 @@ dialog[data-role="zoom"] img {
   #doc [data-layout="feature"] > :not(h2):not([data-kind="segment"]) { grid-column: 1; grid-row: auto; }
 }
 
-/* ── ШИРОКИЙ ЭКРАН: rail|main — та же идиома, что .article-wrapper
-   (Müller-Brockmann, text/site.md). Холст = --page; проза = --measure;
-   оглавление — липкий рельс; сетки глав — ФИКСИРОВАННЫЕ дорожки main-колонки
-   (не auto-fill dashboard). Gate: data-register из Spec::wide_register.
-   Σ 2026-08-23: auto-fill + TOC сразу после header → «слабо-хаотично» /
-   «оглавление в самом начале»; DOM теперь header→body→nav, CSS поднимает
-   nav в рельс поверх тела. */
+/* ── ШИРОКИЙ ЭКРАН: холст `--page`, поток = зрение (Spec::wide_register).
+   Nav — после тела на любой ширине; sticky-рельс снят (замер 2026-08-24:
+   grid-row поднимал оглавление «впереди всего»). Сетки — фиксированные дорожки. */
 @media (min-width: 880px) {
-  #doc[data-register="wide"] {
-    display: grid;
-    grid-template-columns: var(--rail) minmax(0, 1fr);
-    column-gap: var(--gutter);
-    align-items: start;
-  }
-  /* УМОЛЧАНИЕ = MAIN (как .article-wrapper > * { grid-column: 2 }). */
-  #doc[data-register="wide"] > * { grid-column: 2; }
-
   #doc[data-register="wide"] > header {
-    grid-column: 1 / -1;
     text-align: start;
     display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
@@ -559,36 +545,6 @@ dialog[data-role="zoom"] img {
   }
   #doc[data-register="wide"] > header audio { width: 100%; max-width: 100%; }
 
-  /* ПУТЬ ЧИТАТЕЛЯ → РЕЛЬС. DOM-порядок: после секций; здесь — колонка 1,
-     строка от конца шапки до подвала, sticky. */
-  #doc[data-register="wide"] > nav {
-    grid-column: 1;
-    grid-row: 2 / -2;
-    position: sticky;
-    top: var(--sp-4);
-    align-self: start;
-    border-bottom: 0;
-    padding: 0;
-    margin: 0;
-  }
-  #doc[data-register="wide"] > nav::before {
-    text-align: start;
-    margin-bottom: var(--sp-3);
-  }
-  #doc[data-register="wide"] > nav ul {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.35rem;
-    padding: 0;
-    border-bottom: 0;
-  }
-  #doc[data-register="wide"] > nav li { align-items: flex-start; }
-  #doc[data-register="wide"] > nav li:not(:last-child)::after { display: none; }
-  #doc[data-register="wide"] > nav a {
-    text-align: start;
-    line-height: var(--lh-tight);
-  }
-
   #doc[data-register="wide"] section > [data-role="prose"],
   #doc[data-register="wide"] section > [data-role="speech"],
   #doc[data-register="wide"] section > blockquote,
@@ -599,12 +555,10 @@ dialog[data-role="zoom"] img {
     margin-right: 0;
   }
 
-  /* ОСИ: 3 дорожки — закон Spec, не auto-fill dashboard. */
   #doc[data-register="wide"] dl {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  /* ГЛАВЫ: фиксированные дорожки main-колонки (не auto-fill). */
   #doc[data-register="wide"] [data-layout="grid"],
   #doc[data-register="wide"] [data-layout="portraits"],
   #doc[data-register="wide"] [data-layout="closing"] {
