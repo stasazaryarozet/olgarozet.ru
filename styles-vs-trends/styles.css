@@ -506,21 +506,23 @@ dialog[data-role="zoom"] img {
   #doc [data-layout="feature"] > :not(h2):not([data-kind="segment"]) { grid-column: 1; grid-row: auto; }
 }
 
-/* ── ШИРОКИЙ ЭКРАН: холст --page, шапка асимметрична
-   Замер 1600×900: центрированный столбец ~50em оставлял половину вьюпорта пустой.
-   Рельс на #doc без маргиналий сжимал мачту влево и оставлял правый столбец
-   шапки под сгибом (`align-items: end`) — снят. Холст = --page; проза = --measure;
-   сетки глав едят ширину холста. Порог — тот же, что у статьи (--breakpoint). */
+/* ── ШИРОКИЙ ЭКРАН: компоновка = функция чтения лекции
+   Замер 2026-08-23: общие grid-row у левой и правой колонок (subtitle∥by,
+   author∥audio) давали перекрёстное чтение — «хаос», не вкус. Корневой
+   приём: две СТОПКИ (только grid-column + dense), без общих номеров строк.
+   Оглавление остаётся путём чтения (макс. 2 дорожки), не dashboard auto-fill. */
 @media (min-width: 880px) {
-  /* Шапка: мачта | эпиграф+запись — оба края первого экрана заняты. */
   #doc > header {
     text-align: start;
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
+    grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
     column-gap: calc(var(--gutter) * 1.5);
     row-gap: var(--sp-2);
     align-items: start;
+    grid-auto-flow: dense;
   }
+  /* Мачта — колонка 1; эпиграф+запись — колонка 2. Порядок документа
+     сохраняется внутри каждой стопки; dense заполняет верх обеих. */
   #doc > header > [data-field="pretitle"],
   #doc > header > [data-field="context"],
   #doc > header h1,
@@ -535,17 +537,11 @@ dialog[data-role="zoom"] img {
   #doc > header > [data-role="record"] {
     grid-column: 2;
   }
-  /* Эпиграф начинается на уровне дисплейного заголовка, не у pretitle. */
-  #doc > header > [data-field="pretitle"] { grid-row: 1; }
-  #doc > header > [data-field="context"] { grid-row: 2; }
-  #doc > header h1 { grid-row: 3; }
-  #doc > header > blockquote { grid-row: 3; margin: 0 0 var(--sp-2); }
-  #doc > header > [data-role="by"] { grid-row: 4; margin: 0 0 var(--sp-3); }
-  #doc > header > [data-field="subtitle"] { grid-row: 4; margin-left: 0; margin-right: 0; }
-  #doc > header > [data-field="author"] { grid-row: 5; }
-  #doc > header > [data-field="staccato"] { grid-row: 6; }
-  #doc > header > [data-role="record"][data-kind="audio"] { grid-row: 5; }
-  #doc > header > [data-role="record"][data-kind="video"] { grid-row: 6; }
+  #doc > header > blockquote { margin: 0 0 var(--sp-2); }
+  #doc > header > [data-field="subtitle"] {
+    margin-left: 0;
+    margin-right: 0;
+  }
   #doc > header > [data-field="staccato"],
   #doc > header > [data-field="badges"] {
     align-items: flex-start;
@@ -556,19 +552,19 @@ dialog[data-role="zoom"] img {
     max-width: 100%;
   }
 
-  /* Оглавление — дорожки по холсту, не вертикальная бусина. */
+  /* Оглавление — путь читателя (≤2 колонки), не плитка по всему холсту. */
   #doc > nav::before { text-align: start; }
   #doc > nav ul {
     align-items: stretch;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--sp-2) var(--gutter);
     text-align: start;
   }
   #doc > nav li { align-items: flex-start; }
   #doc > nav li:not(:last-child)::after { display: none; }
 
-  /* Вводные секции: мера чтения, не растяжка на весь холст. */
+  /* Вводные секции: мера чтения; сетки глав едят холст сами. */
   #doc section > [data-role="prose"],
   #doc section > [data-role="speech"],
   #doc section > blockquote {
