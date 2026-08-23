@@ -508,18 +508,22 @@ dialog[data-role="zoom"] img {
 
 /* ── ШИРОКИЙ ЭКРАН: rail|main — та же идиома, что .article-wrapper
    (Müller-Brockmann, text/site.md). Холст = --page; проза = --measure;
-   оглавление — липкий рельс; сетки глав и осей едят main-колонку целиком.
-   Замер 2026-08-23: центрированная «колонка в пустоте» и auto-fill осей
-   давали dashboard, не чтение лекции. */
+   оглавление — липкий рельс; сетки глав — ФИКСИРОВАННЫЕ дорожки main-колонки
+   (не auto-fill dashboard). Gate: data-register из Spec::wide_register.
+   Σ 2026-08-23: auto-fill + TOC сразу после header → «слабо-хаотично» /
+   «оглавление в самом начале»; DOM теперь header→body→nav, CSS поднимает
+   nav в рельс поверх тела. */
 @media (min-width: 880px) {
-  #doc {
+  #doc[data-register="wide"] {
     display: grid;
-    grid-template-columns: minmax(var(--rail), 11rem) minmax(0, 1fr);
+    grid-template-columns: var(--rail) minmax(0, 1fr);
     column-gap: var(--gutter);
     align-items: start;
   }
+  /* УМОЛЧАНИЕ = MAIN (как .article-wrapper > * { grid-column: 2 }). */
+  #doc[data-register="wide"] > * { grid-column: 2; }
 
-  #doc > header {
+  #doc[data-register="wide"] > header {
     grid-column: 1 / -1;
     text-align: start;
     display: grid;
@@ -528,26 +532,31 @@ dialog[data-role="zoom"] img {
     row-gap: var(--sp-2);
     align-items: start;
   }
-  #doc > header > [data-field="pretitle"],
-  #doc > header > [data-field="context"],
-  #doc > header h1,
-  #doc > header > [data-field="subtitle"],
-  #doc > header > [data-field="author"],
-  #doc > header > [data-field="staccato"],
-  #doc > header > [data-field="badges"] { grid-column: 1; }
-  #doc > header > blockquote,
-  #doc > header > [data-role="by"],
-  #doc > header > [data-role="record"] { grid-column: 2; }
-  #doc > header > blockquote,
-  #doc > header > [data-field="subtitle"] { margin-left: 0; margin-right: 0; }
-  #doc > header > [data-field="staccato"],
-  #doc > header > [data-field="badges"] {
+  #doc[data-register="wide"] > header > [data-field="pretitle"],
+  #doc[data-register="wide"] > header > [data-field="context"],
+  #doc[data-register="wide"] > header h1,
+  #doc[data-register="wide"] > header > [data-field="subtitle"],
+  #doc[data-register="wide"] > header > [data-field="author"],
+  #doc[data-register="wide"] > header > [data-field="staccato"],
+  #doc[data-register="wide"] > header > [data-field="badges"] { grid-column: 1; }
+  #doc[data-register="wide"] > header > blockquote,
+  #doc[data-register="wide"] > header > [data-role="by"],
+  #doc[data-register="wide"] > header > [data-role="record"] { grid-column: 2; }
+  #doc[data-register="wide"] > header > blockquote,
+  #doc[data-register="wide"] > header > [data-field="subtitle"] {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  #doc[data-register="wide"] > header > [data-field="staccato"],
+  #doc[data-register="wide"] > header > [data-field="badges"] {
     align-items: flex-start;
     justify-content: flex-start;
   }
-  #doc > header audio { width: 100%; max-width: 100%; }
+  #doc[data-register="wide"] > header audio { width: 100%; max-width: 100%; }
 
-  #doc > nav {
+  /* ПУТЬ ЧИТАТЕЛЯ → РЕЛЬС. DOM-порядок: после секций; здесь — колонка 1,
+     строка от конца шапки до подвала, sticky. */
+  #doc[data-register="wide"] > nav {
     grid-column: 1;
     grid-row: 2 / -2;
     position: sticky;
@@ -557,50 +566,59 @@ dialog[data-role="zoom"] img {
     padding: 0;
     margin: 0;
   }
-  #doc > nav::before { text-align: start; margin-bottom: var(--sp-3); }
-  #doc > nav ul {
+  #doc[data-register="wide"] > nav::before {
+    text-align: start;
+    margin-bottom: var(--sp-3);
+  }
+  #doc[data-register="wide"] > nav ul {
     flex-direction: column;
     align-items: stretch;
     gap: 0.35rem;
     padding: 0;
     border-bottom: 0;
   }
-  #doc > nav li { align-items: flex-start; }
-  #doc > nav li:not(:last-child)::after { display: none; }
-  #doc > nav a { text-align: start; line-height: var(--lh-tight); }
+  #doc[data-register="wide"] > nav li { align-items: flex-start; }
+  #doc[data-register="wide"] > nav li:not(:last-child)::after { display: none; }
+  #doc[data-register="wide"] > nav a {
+    text-align: start;
+    line-height: var(--lh-tight);
+  }
 
-  #doc > section,
-  #doc > footer { grid-column: 2; }
-
-  #doc section > [data-role="prose"],
-  #doc section > [data-role="speech"],
-  #doc section > blockquote,
-  #doc > header > [data-field="subtitle"],
-  #doc > header > blockquote {
+  #doc[data-register="wide"] section > [data-role="prose"],
+  #doc[data-register="wide"] section > [data-role="speech"],
+  #doc[data-register="wide"] section > blockquote,
+  #doc[data-register="wide"] > header > [data-field="subtitle"],
+  #doc[data-register="wide"] > header > blockquote {
     max-width: var(--measure);
     margin-left: 0;
     margin-right: 0;
   }
 
-  #doc dl { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-
-  #doc [data-layout="grid"],
-  #doc [data-layout="portraits"],
-  #doc [data-layout="gallery"],
-  #doc [data-layout="closing"] {
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  /* ОСИ: 3 дорожки — закон Spec, не auto-fill dashboard. */
+  #doc[data-register="wide"] dl {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  #doc [data-layout="feature"] {
+
+  /* ГЛАВЫ: фиксированные дорожки main-колонки (не auto-fill). */
+  #doc[data-register="wide"] [data-layout="grid"],
+  #doc[data-register="wide"] [data-layout="portraits"],
+  #doc[data-register="wide"] [data-layout="closing"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #doc[data-register="wide"] [data-layout="gallery"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #doc[data-register="wide"] [data-layout="feature"] {
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
   }
 }
 
 @media (min-width: 1200px) {
-  #doc dl {
+  #doc[data-register="wide"] dl {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--sp-3) var(--gutter);
   }
-  #doc [data-layout="gallery"] {
+  #doc[data-register="wide"] [data-layout="gallery"] {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
