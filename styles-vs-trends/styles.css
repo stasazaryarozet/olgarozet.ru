@@ -169,44 +169,33 @@ body {
   color: var(--ink-soft);
 }
 
-/* ── ОГЛАВЛЕНИЕ: путь читателя есть проекция той же геометрии ──────────── */
+/* ── ОГЛАВЛЕНИЕ: путь читателя — компактная полоса, не «баннер» ─────────── */
 #doc > nav ul {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  padding: var(--sp-3) 0;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.35rem 0.5rem;
+  padding: var(--sp-2) 0 var(--sp-3);
   border-bottom: 1px solid var(--rule);
   list-style: none;
 }
 #doc > nav li {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: block;
 }
 #doc > nav li:not(:last-child)::after {
-  content: "○";
-  color: var(--accent);
-  margin-top: 0.5rem;
-  font-size: var(--fs-xs);
+  content: none;
 }
 #doc > nav::before {
-  content: "Оглавление";
-  display: block;
-  color: var(--accent);
-  font-size: var(--fs-xs);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-caps);
-  font-weight: 600;
-  margin-bottom: var(--sp-2);
-  text-align: center;
+  content: none;
 }
 #doc > nav a {
+  display: inline-block;
   font-size: var(--fs-xs);
-  text-transform: uppercase;
   letter-spacing: var(--tracking-caps);
   color: var(--accent);
   text-decoration: none;
+  padding: 0.15rem 0;
 }
 #doc > nav a:hover,
 #doc > nav a:focus-visible { text-decoration: underline; }
@@ -297,7 +286,7 @@ html[data-theme="day"] #doc audio { color-scheme: light; }
 /* ── ОСИ: семь карточек, а не семь вкладок ────────────────────────────── */
 #doc dl {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+  grid-template-columns: 1fr;
   gap: var(--sp-2);
   counter-reset: axis;
 }
@@ -391,13 +380,29 @@ html[data-theme="day"] #doc audio { color-scheme: light; }
 }
 #doc section[data-kind="chapter"] > :not([data-kind="segment"]) { grid-column: 1 / -1; }
 #doc section[data-kind="chapter"] > * { min-width: 0; }
-#doc [data-layout="grid"]      { grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); }
-#doc [data-layout="portraits"] { grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); }
-#doc [data-layout="gallery"]   { grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr)); }
-#doc [data-layout="closing"]   { grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
-#doc [data-layout="feature"]   { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
-#doc [data-layout="feature"] > [data-kind="segment"] { grid-column: 1; grid-row: 2 / span 20; }
-#doc [data-layout="feature"] > :not(h2):not([data-kind="segment"]) { grid-column: 2; }
+#doc [data-layout="grid"],
+#doc [data-layout="portraits"],
+#doc [data-layout="gallery"],
+#doc [data-layout="closing"] {
+  grid-template-columns: 1fr;
+}
+#doc [data-layout="feature"]   { grid-template-columns: 1fr; }
+@media (min-width: 680px) {
+  #doc dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #doc [data-layout="grid"],
+  #doc [data-layout="portraits"],
+  #doc [data-layout="closing"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #doc [data-layout="gallery"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #doc [data-layout="feature"] {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  }
+  #doc [data-layout="feature"] > [data-kind="segment"] { grid-column: 1; grid-row: 2 / span 20; }
+  #doc [data-layout="feature"] > :not(h2):not([data-kind="segment"]) { grid-column: 2; }
+}
 
 /* ── ЕДИНИЦА ──────────────────────────────────────────────────────────── */
 #doc [data-kind="segment"] {
