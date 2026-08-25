@@ -1,30 +1,31 @@
 <!DOCTYPE html>
+
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <title>Записаться — Ольга Розет</title>
-<meta name="description" content="Подключить к вашему делу на 40 минут — 15 000 ₽">
-<link rel="canonical" href="https://olgarozet.ru/init/">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Записаться — Ольга Розет">
-<meta property="og:description" content="Подключить к вашему делу на 40 минут — 15 000 ₽">
-<meta property="og:url" content="https://olgarozet.ru/init/">
-<meta property="og:image" content="https://olgarozet.ru/olga_footer.png">
-<meta property="og:locale" content="ru_RU">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Записаться — Ольга Розет">
-<meta name="twitter:description" content="Подключить к вашему делу на 40 минут — 15 000 ₽">
-<meta name="twitter:image" content="https://olgarozet.ru/olga_footer.png">
-<link rel="icon" type="image/png" href="/favicon.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
+<meta content="Подключить к вашему делу на 40 минут — 15 000 ₽" name="description"/>
+<link href="https://olgarozet.ru/init/" rel="canonical"/>
+<meta content="website" property="og:type"/>
+<meta content="Записаться — Ольга Розет" property="og:title"/>
+<meta content="Подключить к вашему делу на 40 минут — 15 000 ₽" property="og:description"/>
+<meta content="https://olgarozet.ru/init/" property="og:url"/>
+<meta content="https://olgarozet.ru/olga_footer.png" property="og:image"/>
+<meta content="ru_RU" property="og:locale"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Записаться — Ольга Розет" name="twitter:title"/>
+<meta content="Подключить к вашему делу на 40 минут — 15 000 ₽" name="twitter:description"/>
+<meta content="https://olgarozet.ru/olga_footer.png" name="twitter:image"/>
+<link href="/favicon.png" rel="icon" type="image/png"/>
+<link href="/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="/manifest.json" rel="manifest"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#111111" media="(prefers-color-scheme: dark)" name="theme-color"/>
 <!-- Inv-WEB-font-preconnect (text/site.md): early DNS+TLS handshake к font CDN.
      Reduces FCP/LCP by ~100-300ms на TLS-cold connections. -->
-<link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
-<link rel="dns-prefetch" href="https://fonts.bunny.net">
+<link crossorigin="" href="https://fonts.bunny.net" rel="preconnect"/>
+<link href="https://fonts.bunny.net" rel="dns-prefetch"/>
 <script>
 // Day/night theme — user-override-first, then solar-automatic. FOUC-critical:
 // runs synchronously in <head> before paint. Resolution: read dela.theme.v1
@@ -62,7 +63,7 @@
   setInterval(window.__applyTheme, 300000);
 })();
 </script>
-<link rel="stylesheet" href="/styles.css?v=19bb2976d9">
+<link href="/styles.css?v=19bb2976d9" rel="stylesheet"/>
 <style>
 .booking{max-width:420px;margin:0 auto;padding:2.5rem 1.5rem 2rem}
 .booking h2{font-size:clamp(1.1rem,1rem + 0.3vw,1.3rem);text-align:center;font-weight:600;margin-bottom:.15rem}
@@ -113,16 +114,12 @@
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
-
-<button type="button" class="theme-toggle" data-theme-toggle aria-label="Тема: авто (по солнцу) — переключить">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="dela.theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());btn.addEventListener("click",function(){var i=STATES.indexOf(current());var next=STATES[(i+1)%STATES.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
-
-
+<button aria-label="Тема: авто (по солнцу) — переключить" class="theme-toggle" data-theme-toggle="" type="button">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="dela.theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());btn.addEventListener("click",function(){var i=STATES.indexOf(current());var next=STATES[(i+1)%STATES.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
 <main id="main" role="main">
 <div class="booking" role="main">
-<h2>Консультация</h2>
+<h2 data-case="upper">Консультация</h2>
 <p class="sub">40 мин · 15 000 ₽ · онлайн</p>
 <p class="tz" id="tz-note">выберите удобное время</p>
-
 <noscript>
 <div class="no-slots">
 <p>Подключить к вашему делу на 40 минут</p>
@@ -130,27 +127,20 @@
 <p><a href="https://t.me/olgaroset">@olgaroset</a> · <a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p>
 </div>
 </noscript>
-
-<div id="step-slots" role="listbox" aria-label="Выберите время"></div>
+<div aria-label="Выберите время" id="step-slots" role="listbox"></div>
 <div class="more" id="more" style="display:none">
-  <button type="button" onclick="showAll()">ещё даты →</button>
+<button onclick="showAll()" type="button">ещё даты →</button>
 </div>
-
-<form class="bk-form" id="bk-form" onsubmit="return false" novalidate aria-label="Контактные данные">
-  <label class="bk-label" for="bk-name">Имя</label>
-  <input class="bk-input" id="bk-name" name="name" autocomplete="name"
-         required minlength="2" aria-required="true">
-  <label class="bk-label" for="bk-contact">Телефон, Telegram или Email</label>
-  <input class="bk-input" id="bk-contact" name="contact"
-         required minlength="3" aria-required="true">
-  <button class="bk-btn" id="bk-btn" type="submit" disabled
-          aria-disabled="true">Выберите время</button>
+<form aria-label="Контактные данные" class="bk-form" id="bk-form" novalidate="" onsubmit="return false">
+<label class="bk-label" for="bk-name">Имя</label>
+<input aria-required="true" autocomplete="name" class="bk-input" id="bk-name" minlength="2" name="name" required=""/>
+<label class="bk-label" for="bk-contact">Телефон, Telegram или Email</label>
+<input aria-required="true" class="bk-input" id="bk-contact" minlength="3" name="contact" required=""/>
+<button aria-disabled="true" class="bk-btn" disabled="" id="bk-btn" type="submit">Выберите время</button>
 </form>
-
-<div class="msg" id="bk-msg" role="status" aria-live="polite"></div>
+<div aria-live="polite" class="msg" id="bk-msg" role="status"></div>
 <p class="back"><a href="/">← назад</a></p>
 </div>
-
 <script>
 var API="https://script.google.com/macros/s/AKfycbzeulk8nVhROOmrnysLKRLGqM_naMEgVhtPl50ch_GCilibJ7MXv2rWlGlq1hz1SWc/exec";
 var SLOTS=[{"id": "es_ad4e5bf6de44", "start": "2026-08-26T10:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "8t0mvnsmnplr00tb1mcod8cevc"}, {"id": "es_ecf50d2d8823", "start": "2026-08-26T12:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "7ttfhsjheddsth33fh7jhpa86g"}, {"id": "es_a325bda9e9c5", "start": "2026-08-26T15:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "a599q6t12s1pnsjhvekp7imjec"}, {"id": "es_bd74b903530e", "start": "2026-08-27T10:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "ddbq2hsqtk11f56h928n2kbor4"}, {"id": "es_d3a392e6686a", "start": "2026-08-27T12:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "5q1vc3qehvi5mc926o4ojlfkto"}, {"id": "es_1a1cf86d6ad1", "start": "2026-08-27T15:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "4ejcjni93nlkd9oe3g6jei2ae8"}, {"id": "es_58451198b6cd", "start": "2026-08-28T10:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "4mnptfged98e4jvoqdoppbucdk"}, {"id": "es_0790357bb208", "start": "2026-08-28T12:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "g648757uaio1t4kfgufigdjds4"}, {"id": "es_24ed81495439", "start": "2026-08-28T15:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "d5l2e9guaq97n8fppeatak7f20"}, {"id": "es_513010af9a31", "start": "2026-08-31T10:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "09joc7s9h7rse9gmu8davlftfg"}, {"id": "es_b312ee395d1a", "start": "2026-08-31T12:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "9alod9unslj2f0t495k1ijpass"}, {"id": "es_9ea83f751ab4", "start": "2026-08-31T15:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "491lb6jrbuq3jvinvquj8tjjcs"}, {"id": "es_f497a66c85c7", "start": "2026-09-01T10:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "4vu676l9vpevutq8506ju7tv1o"}, {"id": "es_f4f5b9d4f1b8", "start": "2026-09-01T12:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "54etu96vr5eqnlt8oa5g293mbs"}, {"id": "es_7d85d7d04788", "start": "2026-09-01T15:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "hl3387gkjjchbvi67t47gtikv8"}, {"id": "es_ccdea4ff371b", "start": "2026-09-02T10:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "t9p4nll2f3ci8pj9rv75nm97cc"}, {"id": "es_0e12762d5218", "start": "2026-09-02T12:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "sf5tqfs9aaus13v4imurgivpho"}, {"id": "es_eaa4fce2da51", "start": "2026-09-02T15:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "rsgdvktcsfb5ibljueonndop8g"}, {"id": "es_52c4d6c0877c", "start": "2026-09-03T10:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "766erqn362pj6ce8bldtevla9c"}, {"id": "es_e5ac58dbb3c6", "start": "2026-09-03T12:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "j0kdpsn0vtq05g6vqfq4s7ecl4"}, {"id": "es_3a9969cf58ba", "start": "2026-09-03T15:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "pm6nhr4b2t0qfjqe9jte0v13gg"}, {"id": "es_31f877a49c03", "start": "2026-09-04T10:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "t4vr0jle138r9m1h0eba9c87do"}, {"id": "es_ad7c51993bb0", "start": "2026-09-04T12:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "bi475hhae92p3gl9up32timvts"}, {"id": "es_83e12d040251", "start": "2026-09-04T15:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "odue05a5kjc0ib2960840r3jg0"}];
@@ -247,9 +237,7 @@ if(d.ok){submitted=true;
 }
 </script>
 </main>
-
-
-<link rel="stylesheet" href="/media.css"><script src="/media.js" defer></script>
+<link href="/media.css" rel="stylesheet"/><script defer="" src="/media.js"></script>
 <script>
 /* Display-window indicator 1[from ≤ now < until) per viewer clock
    (Inv-STF-window-derived, surface-temporal-fixpoint.md). The reveal
