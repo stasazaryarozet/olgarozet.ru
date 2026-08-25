@@ -139,18 +139,18 @@
       ],
       "num": "Глава 1 · 00:00 – 16:47",
       "fragment": {
-        "t0": 0,
-        "t1": 1006,
+        "t0": 2,
+        "t1": 1009,
         "at": [
           {
             "type": "audio",
-            "url": "audio/lecture.m4a#t=0,1006",
-            "label": "00:00 – 16:46"
+            "url": "audio/lecture.m4a#t=2,1009",
+            "label": "00:02 – 16:49"
           },
           {
             "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=0",
-            "label": "🕒 00:00"
+            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=2",
+            "label": "🕒 00:02"
           }
         ]
       }
@@ -171,18 +171,18 @@
       ],
       "num": "Глава 2 · 16:47 – 31:17",
       "fragment": {
-        "t0": 1006,
-        "t1": 1877,
+        "t0": 1009,
+        "t1": 1875,
         "at": [
           {
             "type": "audio",
-            "url": "audio/lecture.m4a#t=1006,1877",
-            "label": "16:46 – 31:17"
+            "url": "audio/lecture.m4a#t=1009,1875",
+            "label": "16:49 – 31:15"
           },
           {
             "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1006",
-            "label": "🕒 16:46"
+            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1009",
+            "label": "🕒 16:49"
           }
         ]
       }
@@ -197,18 +197,18 @@
       ],
       "num": "Глава 3 · 31:17 – 50:58",
       "fragment": {
-        "t0": 1877,
+        "t0": 1875,
         "t1": 3058,
         "at": [
           {
             "type": "audio",
-            "url": "audio/lecture.m4a#t=1877,3058",
-            "label": "31:17 – 50:58"
+            "url": "audio/lecture.m4a#t=1875,3058",
+            "label": "31:15 – 50:58"
           },
           {
             "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1877",
-            "label": "🕒 31:17"
+            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1875",
+            "label": "🕒 31:15"
           }
         ]
       }
@@ -224,12 +224,12 @@
       "num": "Глава 4 · 50:58 – 1:08:29",
       "fragment": {
         "t0": 3058,
-        "t1": 4109,
+        "t1": 4111,
         "at": [
           {
             "type": "audio",
-            "url": "audio/lecture.m4a#t=3058,4109",
-            "label": "50:58 – 1:08:29"
+            "url": "audio/lecture.m4a#t=3058,4111",
+            "label": "50:58 – 1:08:31"
           },
           {
             "type": "video",
@@ -255,18 +255,18 @@
       ],
       "num": "Глава 5 · 1:08:29 – 1:14:11",
       "fragment": {
-        "t0": 4109,
-        "t1": 4451,
+        "t0": 4111,
+        "t1": 4454,
         "at": [
           {
             "type": "audio",
-            "url": "audio/lecture.m4a#t=4109,4451",
-            "label": "1:08:29 – 1:14:11"
+            "url": "audio/lecture.m4a#t=4111,4454",
+            "label": "1:08:31 – 1:14:14"
           },
           {
             "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4109",
-            "label": "🕒 1:08:29"
+            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4111",
+            "label": "🕒 1:08:31"
           }
         ]
       }
@@ -289,18 +289,18 @@
       ],
       "num": "Глава 6 · 1:14:11 – 1:20:51",
       "fragment": {
-        "t0": 4451,
+        "t0": 4454,
         "t1": 4851,
         "at": [
           {
             "type": "audio",
-            "url": "audio/lecture.m4a#t=4451,4851",
-            "label": "1:14:11 – 1:20:51"
+            "url": "audio/lecture.m4a#t=4454,4851",
+            "label": "1:14:14 – 1:20:51"
           },
           {
             "type": "video",
-            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4451",
-            "label": "🕒 1:14:11"
+            "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4454",
+            "label": "🕒 1:14:14"
           }
         ]
       }
