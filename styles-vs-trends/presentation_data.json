@@ -1178,6 +1178,11 @@
       "motto": {
         "owes_source": false,
         "quoted": true
+      },
+      "transcribed": {
+        "owes_source": false,
+        "quoted": false,
+        "constructed": true
       }
     },
     "draw_marks": [
