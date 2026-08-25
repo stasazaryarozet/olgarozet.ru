@@ -77,7 +77,7 @@ body {
   border-bottom: 1px solid var(--rule);
   margin-bottom: var(--sp-2);
 }
-#doc > header > [data-field="pretitle"] {
+#doc > header [data-field="pretitle"] {
   font-size: var(--fs-xs);
   text-transform: uppercase;
   letter-spacing: var(--tracking-caps);
@@ -85,7 +85,7 @@ body {
   font-weight: 600;
   margin-bottom: var(--sp-2);
 }
-#doc > header > [data-field="context"] {
+#doc > header [data-field="context"] {
   font-size: var(--fs-xs);
   text-transform: uppercase;
   letter-spacing: var(--tracking-caps);
@@ -107,7 +107,7 @@ body {
   margin-bottom: var(--sp-3);
   text-wrap: balance;
 }
-#doc > header > [data-field="subtitle"] {
+#doc > header [data-field="subtitle"] {
   font-size: clamp(var(--fs-m), 1.05rem + 1.2vw, var(--fs-l));
   color: var(--ink-soft);
   margin-bottom: var(--sp-2);
@@ -118,7 +118,7 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
-#doc > header > [data-field="author"] {
+#doc > header [data-field="author"] {
   font-size: var(--fs-s);
   color: var(--muted);
   margin-bottom: var(--sp-4);
@@ -135,7 +135,7 @@ body {
 }
 /* Эпиграф шапки: цитата + атрибуция (не путать со стаккато-строкой).
    Без font-style:italic — Inv-TYPO-italic-real-cut: в гротеске курсив синтетический. */
-#doc > header > blockquote {
+#doc > header blockquote {
   margin: 0 auto var(--sp-2);
   max-width: var(--measure);
   font-size: var(--fs-s);
@@ -144,13 +144,13 @@ body {
   padding: 0;
   letter-spacing: var(--tracking-fine);
 }
-#doc > header > [data-role="by"] {
+#doc > header [data-role="by"] {
   font-size: var(--fs-xs);
   color: var(--muted);
   margin: 0 0 var(--sp-4);
   font-style: normal;
 }
-#doc > header > [data-role="by"]::before {
+#doc > header [data-role="by"]::before {
   content: "— ";
 }
 #doc > header [data-field="badges"] {
@@ -515,36 +515,45 @@ dialog[data-role="zoom"] img {
    Nav — после тела на любой ширине; sticky-рельс снят (замер 2026-08-24:
    grid-row поднимал оглавление «впереди всего»). Сетки — фиксированные дорожки. */
 @media (min-width: 880px) {
-  /* КОЛОНКА ЕСТЬ ФУНКЦИЯ РОЛИ, А НЕ ПЕРЕЧЕНЬ ИМЁН ПОЛЕЙ. Здесь стояли СЕМЬ литералов
-     `[data-field=…]`, тогда как Спека класса объявляет ровно обратное: «код знает
-     конечный словарь РОЛЕЙ и то, как роль реализуется разметкой; какое ПОЛЕ играет
-     роль — не знает и знать не должен» (narrative-showcase::presentation). CSS есть
-     код; всякое новое поле автора молча уезжало в колонку 1, и никто этого не видел.
-     Теперь: колонка имени — умолчание, колонка ГОЛОСА И НОСИТЕЛЯ — по ролям (speech
-     реализуется `blockquote`, её подпись — `by`, манифестация — `record`).
-     `dense` — это `wide_register.spread_unit: column`: единица чтения разворота есть
-     колонка, поэтому правая начинается СВЕРХУ, а не там, где её первый узел встретился
-     в потоке (замер 2026-08-25: 744 px пустоты при экране 1080). */
+  /* КОЛОНКИ ОБЪЯВЛЕНЫ ДАННЫМИ И ПРИЕЗЖАЮТ СТРУКТУРОЙ (`wide_register.spread` →
+     `<div data-col>`). Здесь стояли СЕМЬ литералов `[data-field=…]`, тогда как Спека
+     класса объявляет ровно обратное: «код знает конечный словарь РОЛЕЙ; какое ПОЛЕ
+     играет роль — не знает и знать не должен». CSS есть код: всякое новое поле автора
+     молча уезжало в колонку 1, и никто этого не видел. Теперь оформление не знает ни
+     полей, ни ролей — только КОЛОНКУ, а какая роль в какой колонке, сказано в Спеке.
+     И колонка стала СТОПКОЙ: дорожки одной сетки делили строки, отчего правая
+     начиналась там, где её первый узел встретился в потоке, и рвалась по высотам левой
+     (замер 2026-08-25: 744 px пустоты сверху, 174 px между манифестациями). */
   #doc[data-register="wide"] > header {
     text-align: start;
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
-    grid-auto-flow: row dense;
+    /* ШИРИНА КОЛОНКИ ГОЛОСА ЕСТЬ МЕРА СТРОКИ, А НЕ ДОЛЯ ХОЛСТА. Доля (0.85fr) росла
+       вместе с экраном и на 1920 давала 760 px под реплику в 190 px — пустота была
+       ОБЪЯВЛЕНА самой сеткой. Мера объявлена моделью типографики
+       (--measure, Inv-TYPO-measure-reading-width, Bringhurst §2.1.2) — то же число,
+       которым уже ограничены эпиграф и подзаголовок. */
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, var(--measure));
     column-gap: calc(var(--gutter) * 2);
     row-gap: var(--sp-2);
     align-items: start;
   }
-  #doc[data-register="wide"] > header > * { grid-column: 1; }
-  #doc[data-register="wide"] > header > blockquote,
-  #doc[data-register="wide"] > header > [data-role="by"],
-  #doc[data-register="wide"] > header > [data-role="record"] { grid-column: 2; }
-  #doc[data-register="wide"] > header > blockquote,
-  #doc[data-register="wide"] > header > [data-field="subtitle"] {
+  /* КОЛОНКА ТЯНЕТ СВОИХ ДЕТЕЙ (align-items по умолчанию — stretch): у абзаца ширина
+     есть ширина колонки, а не ширина его букв. `flex-start` здесь сжимал каждого
+     ребёнка до содержимого, и плеер, чья ширина объявлена как 100 % родителя, схлопнулся
+     в НОЛЬ (замер: `record w=0`) — ⊥, надевший вид значения. */
+  #doc[data-register="wide"] > header > [data-col] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+    min-width: 0;
+  }
+  #doc[data-register="wide"] > header blockquote,
+  #doc[data-register="wide"] > header [data-field="subtitle"] {
     margin-left: 0;
     margin-right: 0;
   }
-  #doc[data-register="wide"] > header > [data-field="staccato"],
-  #doc[data-register="wide"] > header > [data-field="badges"] {
+  #doc[data-register="wide"] > header [data-field="staccato"],
+  #doc[data-register="wide"] > header [data-field="badges"] {
     align-items: flex-start;
     justify-content: flex-start;
   }
@@ -553,8 +562,8 @@ dialog[data-role="zoom"] img {
   #doc[data-register="wide"] section > [data-role="prose"],
   #doc[data-register="wide"] section > [data-role="speech"],
   #doc[data-register="wide"] section > blockquote,
-  #doc[data-register="wide"] > header > [data-field="subtitle"],
-  #doc[data-register="wide"] > header > blockquote {
+  #doc[data-register="wide"] > header [data-field="subtitle"],
+  #doc[data-register="wide"] > header blockquote {
     max-width: var(--measure);
     margin-left: 0;
     margin-right: 0;
