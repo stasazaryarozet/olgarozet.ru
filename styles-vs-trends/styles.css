@@ -515,21 +515,26 @@ dialog[data-role="zoom"] img {
    Nav — после тела на любой ширине; sticky-рельс снят (замер 2026-08-24:
    grid-row поднимал оглавление «впереди всего»). Сетки — фиксированные дорожки. */
 @media (min-width: 880px) {
+  /* КОЛОНКА ЕСТЬ ФУНКЦИЯ РОЛИ, А НЕ ПЕРЕЧЕНЬ ИМЁН ПОЛЕЙ. Здесь стояли СЕМЬ литералов
+     `[data-field=…]`, тогда как Спека класса объявляет ровно обратное: «код знает
+     конечный словарь РОЛЕЙ и то, как роль реализуется разметкой; какое ПОЛЕ играет
+     роль — не знает и знать не должен» (narrative-showcase::presentation). CSS есть
+     код; всякое новое поле автора молча уезжало в колонку 1, и никто этого не видел.
+     Теперь: колонка имени — умолчание, колонка ГОЛОСА И НОСИТЕЛЯ — по ролям (speech
+     реализуется `blockquote`, её подпись — `by`, манифестация — `record`).
+     `dense` — это `wide_register.spread_unit: column`: единица чтения разворота есть
+     колонка, поэтому правая начинается СВЕРХУ, а не там, где её первый узел встретился
+     в потоке (замер 2026-08-25: 744 px пустоты при экране 1080). */
   #doc[data-register="wide"] > header {
     text-align: start;
     display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
+    grid-auto-flow: row dense;
     column-gap: calc(var(--gutter) * 2);
     row-gap: var(--sp-2);
     align-items: start;
   }
-  #doc[data-register="wide"] > header > [data-field="pretitle"],
-  #doc[data-register="wide"] > header > [data-field="context"],
-  #doc[data-register="wide"] > header h1,
-  #doc[data-register="wide"] > header > [data-field="subtitle"],
-  #doc[data-register="wide"] > header > [data-field="author"],
-  #doc[data-register="wide"] > header > [data-field="staccato"],
-  #doc[data-register="wide"] > header > [data-field="badges"] { grid-column: 1; }
+  #doc[data-register="wide"] > header > * { grid-column: 1; }
   #doc[data-register="wide"] > header > blockquote,
   #doc[data-register="wide"] > header > [data-role="by"],
   #doc[data-register="wide"] > header > [data-role="record"] { grid-column: 2; }
