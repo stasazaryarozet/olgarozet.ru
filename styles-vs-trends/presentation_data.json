@@ -15,8 +15,8 @@
           "video": "ВИДЕОЗАПИСЬ"
         },
         "chapter": {
-          "audio": "{a} – {b}",
-          "video": "🕒 {a}"
+          "audio": "",
+          "video": "смотреть с этого места"
         },
         "segment": {}
       },
@@ -25,6 +25,8 @@
       "description": "{subtitle}"
     },
     "sections": {
+      "contents": "Оглавление",
+      "nav": "Перейти к главе",
       "axes": {
         "note": "Инструмент Ольги Розет",
         "title": "Оси анализа",
@@ -146,12 +148,12 @@
           {
             "type": "audio",
             "url": "audio/lecture.m4a#t=2,1009",
-            "label": "00:02 – 16:49"
+            "label": ""
           },
           {
             "type": "video",
             "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=2",
-            "label": "🕒 00:02"
+            "label": "смотреть с этого места"
           }
         ]
       },
@@ -179,12 +181,12 @@
           {
             "type": "audio",
             "url": "audio/lecture.m4a#t=1009,1875",
-            "label": "16:49 – 31:15"
+            "label": ""
           },
           {
             "type": "video",
             "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1009",
-            "label": "🕒 16:49"
+            "label": "смотреть с этого места"
           }
         ]
       }
@@ -205,12 +207,12 @@
           {
             "type": "audio",
             "url": "audio/lecture.m4a#t=1875,3058",
-            "label": "31:15 – 50:58"
+            "label": ""
           },
           {
             "type": "video",
             "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=1875",
-            "label": "🕒 31:15"
+            "label": "смотреть с этого места"
           }
         ]
       },
@@ -232,12 +234,12 @@
           {
             "type": "audio",
             "url": "audio/lecture.m4a#t=3058,4111",
-            "label": "50:58 – 1:08:31"
+            "label": ""
           },
           {
             "type": "video",
             "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=3058",
-            "label": "🕒 50:58"
+            "label": "смотреть с этого места"
           }
         ]
       },
@@ -265,12 +267,12 @@
           {
             "type": "audio",
             "url": "audio/lecture.m4a#t=4111,4454",
-            "label": "1:08:31 – 1:14:14"
+            "label": ""
           },
           {
             "type": "video",
             "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4111",
-            "label": "🕒 1:08:31"
+            "label": "смотреть с этого места"
           }
         ]
       }
@@ -299,12 +301,12 @@
           {
             "type": "audio",
             "url": "audio/lecture.m4a#t=4454,4851",
-            "label": "1:14:14 – 1:20:51"
+            "label": ""
           },
           {
             "type": "video",
             "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=4454",
-            "label": "🕒 1:14:14"
+            "label": "смотреть с этого места"
           }
         ]
       },

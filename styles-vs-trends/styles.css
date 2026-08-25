@@ -169,8 +169,68 @@ body {
   color: var(--ink-soft);
 }
 
-/* ── ОГЛАВЛЕНИЕ: путь читателя — компактная полоса, не «баннер» ─────────── */
-#doc > nav ul {
+/* ── ДВА ПОКАЗА ОБХОДА, ДВА ОФОРМЛЕНИЯ ────────────────────────────────────
+   «Оглавление» (обещание, под шапкой) и «путь» (возврат, в конце) суть разные
+   речевые акты и потому оформляются врозь. Прежде оба ловились селектором
+   `#doc > nav` — одно правило на два объекта, — и оглавление выходило облаком
+   тегов. Селектор теперь именует ОБЪЕКТ, а не его место в дереве.
+   Итерация оформления выполнена Composer 2.5 (`agent -p`, party:cursor) по
+   замеру и брифу; принято после сверки токенов и прогона закона формы. */
+/* ── ОГЛАВЛЕНИЕ (#doc-contents): вертикальный список под шапкой ─────────── */
+#doc-contents ul {
+  display: flex;
+  flex-direction: column;
+  padding: var(--sp-2) 0 var(--sp-3);
+  border-bottom: 1px solid var(--rule);
+  list-style: none;
+}
+#doc-contents li {
+  border-top: 1px solid var(--rule);
+}
+#doc-contents li:first-child {
+  border-top: 0;
+}
+#doc-contents a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: var(--sp-2) 0;
+}
+#doc-contents a:hover,
+#doc-contents a:focus-visible { text-decoration: underline; }
+#doc-contents [data-role="stamp"] {
+  display: block;
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-caps);
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+#doc-contents [data-role="title"] {
+  font-size: var(--fs-s);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: var(--lh-tight);
+}
+@media (min-width: 880px) {
+  #doc-contents a {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: var(--sp-2);
+    align-items: baseline;
+  }
+  #doc-contents [data-role="stamp"] {
+    margin-bottom: 0;
+    color: var(--ink-soft);
+  }
+  /* Пункт без штампа («Оси анализа») — без пустой колонки слева. */
+  #doc-contents a:not(:has([data-role="stamp"])) [data-role="title"] {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ── НАВИГАЦИЯ (#doc-nav): компактная полоса в конце ───────────────────── */
+#doc-nav ul {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
@@ -180,16 +240,16 @@ body {
   border-bottom: 1px solid var(--rule);
   list-style: none;
 }
-#doc > nav li {
+#doc-nav li {
   display: block;
 }
-#doc > nav li:not(:last-child)::after {
+#doc-nav li:not(:last-child)::after {
   content: none;
 }
-#doc > nav::before {
+#doc-nav::before {
   content: none;
 }
-#doc > nav a {
+#doc-nav a {
   display: inline-block;
   font-size: var(--fs-xs);
   letter-spacing: var(--tracking-caps);
@@ -197,8 +257,8 @@ body {
   text-decoration: none;
   padding: 0.15rem 0;
 }
-#doc > nav a:hover,
-#doc > nav a:focus-visible { text-decoration: underline; }
+#doc-nav a:hover,
+#doc-nav a:focus-visible { text-decoration: underline; }
 
 /* ── СЕКЦИЯ ───────────────────────────────────────────────────────────── */
 #doc section {
@@ -373,35 +433,50 @@ html[data-theme="day"] #doc audio { color-scheme: light; }
 #doc [data-role="links"] a:focus-visible { border-color: var(--accent); color: var(--accent); }
 
 /* ── ГЛАВА: раскладку выбирает АВТОР, разметка единиц одна ────────────── */
-#doc section[data-kind="chapter"] {
+/* СЕКЦИЯ ЕСТЬ СТОПКА СВОИХ ЧАСТЕЙ, А НЕ СЕТКА ЭКСПОНАТОВ. Экспонаты несёт ИХ
+   СОБСТВЕННЫЙ носитель (`[data-collection]`), и раскладка их — свойство ЕГО, а не
+   секции. Пока носителя не было, единственным способом разложить членов были дорожки
+   ЧУЖОЙ сетки; сетка синхронизирует, и вся разница экстентов членов становилась мёртвым
+   низом (замер 2026-08-25: 18 находок `band_slack_max`, до 2034 px в одной главе). */
+#doc section[data-kind="chapter"] { display: block; }
+#doc section[data-kind="chapter"] > * { min-width: 0; }
+#doc section[data-kind="chapter"] > [data-collection] { margin-top: var(--sp-3); }
+
+/* ── РОД СВЯЗИ ЧЛЕНОВ ОБЪЯВЛЕН ДАННЫМИ (`layouts.<имя>.relation`) ─────────
+   flow — последовательность: строки нет вовсе, дорожки балансирует БРАУЗЕР
+          (его собственная задача о минимальном максимуме — тот, чей это факт);
+   row  — ровня: строка значима, и потому дорожки сетки.
+   ЧИСЛО ДОРОЖЕК — свойство ХОЛСТА и потому живёт здесь; РОД СВЯЗИ — свойство
+   содержимого и потому живёт в объявлении. */
+/* КОЛЛЕКЦИЯ ИЗ ОДНОГО НЕ ИМЕЕТ ВНУТРЕННЕЙ РАСКЛАДКИ: отношения между членами нет,
+   и дорожек не бывает больше, чем членов. Мощность приезжает числом от производителя. */
+#doc [data-collection][data-members="1"] { display: block; columns: initial; }
+#doc [data-relation="flow"] { columns: 1; column-gap: var(--sp-2); }
+#doc [data-relation="flow"] > * { break-inside: avoid; margin-bottom: var(--sp-3); }
+#doc [data-relation="row"] {
   display: grid;
+  grid-template-columns: 1fr;
   gap: var(--sp-3) var(--sp-2);
   align-items: start;
 }
-#doc section[data-kind="chapter"] > :not([data-kind="segment"]) { grid-column: 1 / -1; }
-#doc section[data-kind="chapter"] > * { min-width: 0; }
-#doc [data-layout="grid"],
-#doc [data-layout="portraits"],
-#doc [data-layout="gallery"],
-#doc [data-layout="closing"] {
-  grid-template-columns: 1fr;
-}
-#doc [data-layout="feature"]   { grid-template-columns: 1fr; }
 @media (min-width: 680px) {
   #doc dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  #doc [data-layout="grid"],
-  #doc [data-layout="portraits"],
-  #doc [data-layout="closing"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  #doc [data-layout="gallery"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  #doc [data-layout="feature"] {
+  #doc [data-relation="flow"] { columns: 2; }
+  #doc [data-relation="row"]  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* РАЗВОРОТ СЕКЦИИ (`feature`) — отношение между НОСИТЕЛЕМ экспоната и прозой,
+     то есть свойство СЕКЦИИ, а не коллекции: одна единица подле текста. */
+  #doc section[data-layout="feature"] {
+    display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: var(--sp-3) var(--sp-2);
+    align-items: start;
   }
-  #doc [data-layout="feature"] > [data-kind="segment"] { grid-column: 1; grid-row: 2 / span 20; }
-  #doc [data-layout="feature"] > :not(h2):not([data-kind="segment"]) { grid-column: 2; }
+  #doc section[data-layout="feature"] > h2 { grid-column: 1 / -1; }
+  #doc section[data-layout="feature"] > [data-collection] { grid-column: 1; grid-row: 2 / span 20; margin-top: 0; }
+  #doc section[data-layout="feature"] > :not(h2):not([data-collection]) { grid-column: 2; }
+}
+@media (min-width: 1200px) {
+  #doc [data-layout="gallery"] [data-relation="flow"] { columns: 3; }
 }
 
 /* ── ЕДИНИЦА ──────────────────────────────────────────────────────────── */
@@ -540,8 +615,17 @@ dialog[data-role="zoom"] img {
      разворот СОБОЙ: строка flex переносится ровно тогда, когда полы обеих колонок
      перестают умещаться, — то есть условие существования разворота выведено из
      содержимого, а не угадано вторым порогом рядом с 880. */
-  #doc[data-register="wide"] > header {
-    text-align: start;
+  #doc[data-register="wide"] > header { text-align: start; }
+  /* РАЗВОРОТ СУЩЕСТВУЕТ ТОГДА, КОГДА ЕГО ОБЪЯВИЛИ ДАННЫЕ, А НЕ КОГДА ШИРОК ЭКРАН.
+     Здесь `display: flex` висел на РЕГИСТРЕ — то есть оформление само решало, что шапка
+     о двух колонках, а данные лишь поставляли обёртки. Стоило объявлению снять разворот
+     (`wide_register.spread: {}`), как ряд flex остался и разложил в строку уже не
+     колонки, а САМИ УЗЛЫ СТАНЦЫ: имя рассказа-показа 174 px рядом с подзаголовком
+     33 px, 141 px мёртвых (замер `band_slack_max` 2026-08-25, найден законом за одну
+     итерацию после правки данных). Условие ряда есть НАЛИЧИЕ КОЛОНОК, и спросить о нём
+     надо у разметки, которую породило объявление, — тогда «развернуть/свернуть» есть
+     строка данных, и оформление следует за ней по построению. */
+  #doc[data-register="wide"] > header:has(> [data-col]) {
     display: flex;
     flex-wrap: wrap;
     column-gap: calc(var(--gutter) * 2);
@@ -582,7 +666,10 @@ dialog[data-role="zoom"] img {
     align-items: flex-start;
     justify-content: flex-start;
   }
-  #doc[data-register="wide"] > header audio { width: 100%; max-width: 100%; }
+  /* ПЛЕЕР ТЯНЕТСЯ ПО КОЛОНКЕ, А БЕЗ КОЛОНКИ — ПО МЕРЕ СТРОКИ: у элемента управления
+     нет причины быть шире прозы, рядом с которой он стоит. */
+  #doc[data-register="wide"] > header audio { width: 100%; max-width: var(--measure); }
+  #doc[data-register="wide"] > header:has(> [data-col]) audio { max-width: 100%; }
 
   #doc[data-register="wide"] section > [data-role="prose"],
   #doc[data-register="wide"] section > [data-role="speech"],
