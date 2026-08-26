@@ -147,7 +147,6 @@ body {
 #doc > header {
   text-align: center;
   padding: var(--space-section) 0 calc(var(--space-section) * 0.85);
-  border-bottom: 1px solid var(--rule);
   margin-bottom: var(--sp-2);
 }
 #doc > header [data-field="pretitle"] {
@@ -261,33 +260,22 @@ body {
    тегов. Селектор теперь именует ОБЪЕКТ, а не его место в дереве.
    Итерация оформления выполнена Composer 2.5 (`agent -p`, party:cursor) по
    замеру и брифу; принято после сверки токенов и прогона закона формы. */
-/* ── ОГЛАВЛЕНИЕ (#doc-contents): центрированный перечень, буллит вместо линейки
-   Принципал 2026-08-26: «блок оглавления не горизонтальными линиями, а жирными
-   буллитами по центру». Линейка между пунктами есть знак ТАБЛИЦЫ — она обещает
-   ряды и колонки, которых у обещания нет; буллит есть знак ПЕРЕЧНЯ и говорит
-   ровно то, чем оглавление является. Вместе с линейками ушла и разбивка на две
-   колонки (штамп слева, имя справа): колонки были той же таблицей, только на
-   широком экране. */
+/* ── ОГЛАВЛЕНИЕ (#doc-contents): центрированный перечень без линеек-таблицы
+   Принципал 2026-08-26: «буллиты не перед названиями глав, а вместо горизонтальных
+   линий, отделяющих содержание; крупные». Линейка обещает ряды и колонки, которых
+   у обещания нет; типографский dinkus по центру — знак РАЗДЕЛА блоков. Вместе с
+   линейками ушла и разбивка на две колонки (штамп слева, имя справа): колонки
+   были той же таблицей, только на широком экране. */
 #doc-contents ul {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--sp-2);
   padding: var(--sp-3) 0;
-  border-bottom: 1px solid var(--rule);
   list-style: none;
   text-align: center;
 }
 #doc-contents li { max-width: var(--measure); }
-/* БУЛЛИТ ПРИНАДЛЕЖИТ ПУНКТУ, А НЕ ССЫЛКЕ: он метка перечня и в цель перехода не
-   входит — иначе читатель «жмёт на точку». Жирный — тот же вес, каким набрано имя
-   главы; чернила акцента — тот же голос, что у самой ссылки. */
-#doc-contents li::before {
-  content: "•";
-  font-weight: 700;
-  color: var(--accent);
-  margin-right: 0.45em;
-}
 /* ЗОНА НАЖАТИЯ ЕСТЬ ВЕЛИЧИНА, А НЕ СЛЕДСТВИЕ ОТСТУПА — тот же токен, что у рёбер
    осей ниже (`--touch-min`), и своего числа здесь нет. */
 #doc-contents a {
@@ -322,8 +310,25 @@ body {
   justify-content: flex-start;
   gap: 0.35rem 0.5rem;
   padding: var(--sp-2) 0 var(--sp-3);
-  border-bottom: 1px solid var(--rule);
   list-style: none;
+}
+/* ДИНКУС ВМЕСТО ЛИНЕЙКИ — знак РАЗДЕЛА блоков, а не табличный ряд (принципал
+   2026-08-26: крупный «•» по центру там, где линейка отделяла содержание).
+   Одно правило на три стыка: шапка, оглавление, навигация — не три копии. */
+#doc > header::after,
+#doc-contents ul::after,
+#doc-nav ul::after {
+  content: "•";
+  display: block;
+  text-align: center;
+  /* КРУПНЫЙ (принципал: «крупные»). Глиф «•» занимает ~0.23em своего кегля,
+     поэтому ступень шкалы берётся ДИСПЛЕЙНАЯ: на --fs-l точка вышла бы 5px —
+     меньше снятой линейки, т.е. замена была бы понижением, а не заменой. */
+  font-size: var(--fs-2xl);
+  line-height: 1;
+  color: var(--rule);
+  padding-top: var(--sp-2);
+  padding-bottom: var(--sp-2);
 }
 #doc-nav li {
   display: block;
@@ -498,10 +503,15 @@ html[data-theme="day"] #doc audio { color-scheme: light; }
    2026-08-19) — её не видно, она конфликтует с жестом страницы и прячет ровно то,
    ради чего ось и раскрыта. Карточка растёт по содержанию; высоту держит сама
    сетка (`auto-fill` по ширине, ряд по самой высокой). */
+/* РЁБРА ОТДЕЛЕНЫ ОТ ПРОЗЫ — иначе список единиц читается продолжением абзаца
+   (принципал 2026-08-26: «ссылки графически отделены от сути»). */
 #doc dl dd [data-role="links"] {
   flex-wrap: wrap;
   gap: 0.25rem 0.4rem;
-  padding-bottom: 0.25rem;
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-2);
+  padding-bottom: var(--sp-2);
+  border-top: 1px solid var(--rule-soft);
 }
 #doc dl dd [data-role="links"] li { flex: 0 1 auto; min-width: 0; }
 #doc dl dd [data-role="links"] a { max-width: 100%; }
@@ -537,6 +547,20 @@ html[data-theme="day"] #doc audio { color-scheme: light; }
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: bottom;
+}
+/* ОСЬ В ПОДПИСИ СЕГМЕНТА — ТЭГ, А НЕ ПРОДОЛЖЕНИЕ ПРОЗЫ (принципал 2026-08-26:
+   «Философия времени», «Формообразование» — в скруглённых обрамлениях). Рёбра
+   внутри карточки оси (`#doc dl dd`) намеренно без пилюли — другой речевой акт. */
+#doc [data-field="axis"] a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-min, 44px);
+  padding: var(--sp-1) var(--sp-2);
+  font-size: var(--fs-xs);
+  text-decoration: none;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-control);
+  background-color: var(--surface-deep);
 }
 
 
