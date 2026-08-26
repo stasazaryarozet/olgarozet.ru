@@ -78,12 +78,14 @@ people:
     confirmed: '2026-03-28'
 partners:
   bhsad:
-    name: Британская Высшая Школа Дизайна
-    name_genitive: Британской Высшей Школы Дизайна
-    name_prepositional: Британской Высшей Школе Дизайна
-    type: school
-    url: https://britishdesign.ru
+    name: Британская высшая школа дизайна
+    name_genitive: Британской высшей школы дизайна
+    name_prepositional: Британской высшей школе дизайна
+    short_name: Британка
+    full_name: Британская высшая школа дизайна (Universal University)
+    type: organization
     location: moscow
+    url: https://britishdesign.ru
   bukhara_center:
     name: Бухарский Центр Ремёсел
     type: organization
@@ -2719,7 +2721,10 @@ urls:
   telegram: https://t.me/olga_rozet
   telegram_handle: '@olgaroset'
   youtube: https://www.youtube.com/@olga_rozet
-  youtube_withheld: временно — из пиктограмм подвала (принципал 2026-08-26; ранее то же 2026-08-20)
+  # УДЕРЖАНО ИЗ ВИТРИНЫ, НЕ УДАЛЕНО. Канал есть и на него ссылается страница
+  # рассказа-показа; из пиктограмм общего подвала он снят. Снять удержание —
+  # удалить эту строку (site_generator.channels: `<канал>_withheld`).
+  youtube_withheld: 'принципал 2026-08-20: «временно убрать YouTube из пиктограмм соц. сетей»'
 artworks:
 - 04.jpg
 - 05.jpg
