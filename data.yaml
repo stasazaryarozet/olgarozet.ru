@@ -78,9 +78,9 @@ people:
     confirmed: '2026-03-28'
 partners:
   bhsad:
-    name: Британская высшая школа дизайна
-    name_genitive: Британской высшей школы дизайна
-    name_prepositional: Британской высшей школе дизайна
+    name: Британская Высшая Школа Дизайна
+    name_genitive: Британской Высшей Школы Дизайна
+    name_prepositional: Британской Высшей Школе Дизайна
     type: school
     url: https://britishdesign.ru
     location: moscow
@@ -2719,6 +2719,7 @@ urls:
   telegram: https://t.me/olga_rozet
   telegram_handle: '@olgaroset'
   youtube: https://www.youtube.com/@olga_rozet
+  youtube_withheld: временно — из пиктограмм подвала (принципал 2026-08-26; ранее то же 2026-08-20)
 artworks:
 - 04.jpg
 - 05.jpg
