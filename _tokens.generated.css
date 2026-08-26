@@ -7,6 +7,7 @@
 */
 :root {
   --accent: #c92020;  /* color · knowledge/people/olgarozet/site/_design.yaml */
+  --atom-min: 15rem;  /* length · knowledge/system/specifications/text/site.md */
   --baseline: 1.6925rem;  /* length · knowledge/system/specifications/text/typography.md */
   --breakpoint: 880px;  /* length · knowledge/system/specifications/text/site.md */
   --cta-bg: #1a1a1a;  /* color · knowledge/people/olgarozet/site/_design.yaml */

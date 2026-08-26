@@ -12,7 +12,7 @@
       "record": {
         "root": {
           "audio": "",
-          "video": "ВИДЕОЗАПИСЬ"
+          "video": "Видеозапись"
         },
         "chapter": {
           "audio": "",
@@ -105,7 +105,7 @@
         {
           "type": "video",
           "url": "https://www.youtube.com/watch?v=ckibrSjKEZY&t=0",
-          "label": "ВИДЕОЗАПИСЬ"
+          "label": "Видеозапись"
         }
       ]
     },

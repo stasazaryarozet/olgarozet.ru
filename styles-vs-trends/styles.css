@@ -600,7 +600,7 @@ dialog[data-role="zoom"] img {
 /* ── АТОМАРНАЯ ФОРМА ЛИСТА ────────────────────────────────────────────── */
 #doc [data-form="atomic"] [data-role="figure"] {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--atom-min)), 1fr));
   gap: 0.6rem;
   padding: 0.6rem 0.6rem 0;
 }
@@ -763,6 +763,19 @@ dialog[data-role="zoom"] img {
 #doc > header h1 .t-emph {
   font-weight: 400;
   color: var(--muted);
+}
+
+/* ── ПРОПИСНЫЕ ССЫЛКИ-ЗАПИСИ ПРИХОДЯТ ФОРМОЙ, А НЕ ИЗ ДАННЫХ ───────────────
+   Ярлык «Видеозапись» — СЛОВО САМОЙ СИСТЕМЫ (модель страницы), а не транскрипция
+   листа, и он был набран прописными В ДАННЫХ: читатель получал капс с НУЛЕВОЙ
+   разрядкой, а закон о разрядке этого не видел — он читает правило, а правила не
+   было (замер 2026-08-26, `Inv-TYPO-case-is-form-not-text`, 12 находок из 78).
+   Датум приведён к естественному регистру, решение о регистре отдано форме, и
+   разрядка приезжает вместе с ним ОДНИМ токеном: вход в капс здесь стал единственным,
+   а значит Inv-TYPO-consistent-tracking-caps на этом узле тотален по построению. */
+#doc > header [data-role="record"] a {
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
 }
 
 /* «и» между аудио и видео — композиция принципала (2026-08-20).
