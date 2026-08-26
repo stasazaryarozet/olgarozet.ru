@@ -498,9 +498,14 @@ html[data-theme="day"] #doc audio { color-scheme: light; }
    за границу карточки (flex-элемент по умолчанию не уже своего содержимого). */
 #doc [data-role="links"] li { max-width: 100%; min-width: 0; }
 #doc [data-role="links"] a {
-  display: inline-block;
+  /* ЗОНА НАЖАТИЯ ЕСТЬ ВЕЛИЧИНА, А НЕ СЛЕДСТВИЕ ОТСТУПА (замер ревизии 2026-08-26:
+     чип осей 163×29px при объявленном `--touch-min: 44px`). Токен уже объявлен
+     Системой; правило лишь ПОТРЕБЛЯЕТ его, своего числа здесь нет. */
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-min, 44px);
   max-width: 100%;
-  padding: 0.15rem 0.5rem;
+  padding: 0.15rem 0.75rem;
   border: 1px solid var(--rule);
   border-radius: var(--radius-control);
   font-size: var(--fs-xs);
@@ -623,6 +628,12 @@ html[data-theme="day"] #doc audio { color-scheme: light; }
 
 #doc figure[data-kind="segment"] img { width: 100%; height: auto; }
 #doc a[data-role="zoom"] { display: block; cursor: zoom-in; }
+/* Клавиатурный обход шёл по UA-умолчанию (1px auto), тогда как у страницы есть
+   объявленное кольцо фокуса. Замер ревизии 2026-08-26: 48 ленивых растров. */
+#doc a[data-role="zoom"]:focus-visible {
+  outline: var(--focus-outline-min, 2px) solid var(--accent);
+  outline-offset: 2px;
+}
 #doc [data-form="atomic"] a[data-role="zoom"] img { width: 100%; height: auto; }
 
 /* ── УВЕЛИЧЕНИЕ ────────────────────────────────────────────────────────
@@ -903,3 +914,24 @@ dialog[data-role="zoom"] img {
   padding-top: 0;
 }
 
+
+
+/* ── ЦЕЛЬ КАСАНИЯ И ПЕЧАТЬ — ДВЕ ГРАНИ ОДНОГО: ФОРМА У ЧИТАТЕЛЯ ──────────── */
+/* Штамп таймкода ведёт в запись; замер ревизии 2026-08-26 — 43×18px при
+   объявленном `--touch-min`. Растёт зона, не кегль: мера строки не трогается. */
+#doc [data-role="stamp"] a {
+  display: inline-block;
+  min-height: var(--touch-min, 44px);
+  padding: 0.55rem 0.4rem;
+  margin: -0.55rem -0.4rem;
+}
+
+/* ПЕЧАТЬ ЕСТЬ ВТОРАЯ ПРОЕКЦИЯ ОДНОГО ДОКУМЕНТА, А НЕ СНИМОК ЭКРАНА. Замер
+   ревизии 2026-08-26: карточка уносила на бумагу фон #ECEAE3 и цветную заливку
+   поверхности — тонер за декорацию, которой на бумаге нет предмета. */
+@media print {
+  #doc,
+  #doc [data-kind="segment"] { background: transparent !important; }
+  #doc [data-kind="segment"] { border: 1px solid #999; break-inside: avoid; }
+  #doc a[data-role="zoom"] { break-inside: avoid; }
+}
