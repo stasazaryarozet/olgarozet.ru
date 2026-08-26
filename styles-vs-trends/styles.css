@@ -556,6 +556,23 @@ html[data-theme="day"] #doc audio { color-scheme: light; }
    Рендерер объявляет ИЗМЕРЕННЫЕ width/height, поэтому браузер знает пропорцию сам:
    место резервируется точно, ничего не обрезается, и новый носитель любой формы
    приезжает без правки стиля. */
+/* ── НАДПИСЬ ЛИСТА — ЦИТАТА ЧУЖОЙ ФОРМЫ, А НЕ ПРОЗА ЭТОГО ДОКУМЕНТА ─────────
+   Атомы, снятые с разобранного слайда, набраны ЕГО типографикой. Прописные там —
+   НАБЛЮДЁННЫЙ ФАКТ артефакта, а не решение документа кричать: понизить их значило бы
+   испортить запись, а «TRANSFORMISM BY HARRY NURIEV» несёт имя. Пока роль была `prose`,
+   надпись объявлялась прозой САМОЙ СТРАНИЦЫ — отсюда 66 находок из 102 всей меры.
+   Роль объявлена (`narrative-showcase.md::leaves.atomic.role`), и надпись получает свой
+   ярус: кегль подписи, чернила вспомогательные. Разрядка — только там, где регистр
+   ИЗМЕРЕН прописным (`data-case`): капс без разрядки слипается (Мильчин §3.2.4), а
+   строчной надписи разрядка не нужна. Ни одного числа — только токены модели. */
+#doc [data-role="inscription"] {
+  font-size: var(--fs-xs);
+  color: var(--ink-soft);
+}
+#doc [data-role="inscription"][data-case="upper"] {
+  letter-spacing: var(--tracking-caps);
+}
+
 #doc figure[data-kind="segment"] img { width: 100%; height: auto; }
 #doc a[data-role="zoom"] { display: block; cursor: zoom-in; }
 #doc [data-form="atomic"] a[data-role="zoom"] img { width: 100%; height: auto; }
