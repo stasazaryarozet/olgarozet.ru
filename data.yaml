@@ -78,12 +78,14 @@ people:
     confirmed: '2026-03-28'
 partners:
   bhsad:
-    name: Британская Высшая Школа Дизайна
-    name_genitive: Британской Высшей Школы Дизайна
-    name_prepositional: Британской Высшей Школе Дизайна
-    type: school
-    url: https://britishdesign.ru
+    name: Британская высшая школа дизайна
+    name_genitive: Британской высшей школы дизайна
+    name_prepositional: Британской высшей школе дизайна
+    short_name: Британка
+    full_name: Британская высшая школа дизайна (Universal University)
+    type: organization
     location: moscow
+    url: https://britishdesign.ru
   bukhara_center:
     name: Бухарский Центр Ремёсел
     type: organization
@@ -683,10 +685,10 @@ events:
     - Прошлое •от|рас•крывает будущее
     trailing: .
   - role: link
-    url: olgarozet.ru/maison-objet-2026/
+    url: olgarozet.ru/styles-vs-trends/
     lines:
     - 'Рассказ-показ:'
-    - «Тренды Maison&Objet 2026»
+    - «Стили vs Тренды»
   lines:
   - 'Летом:'
   - 'Диптих электронных лекций:'
@@ -762,6 +764,7 @@ events:
   - telegram_channel
   t_key: 2026-08
   skoro_state: pending
+  link: /styles-vs-trends/
   title: 'Стили & Тренды: Прошлое раскрывает будущее'
   date: лето 2026
   audience: []
@@ -1906,14 +1909,14 @@ publications:
 
     '
   schema_version: 1
-- id: maison-objet-2026-site
+- id: styles-vs-trends-site
   channel: site
-  entity_id: maison-objet-2026
+  entity_id: styles-vs-trends
   entity_type: static_page
   status: published
-  url: /maison-objet-2026/
+  url: /styles-vs-trends/
   uploaded_at: '2026-08-14T15:00:00+00:00'
-  title: 'Рассказ-показ: «Тренды Maison&Objet 2026»'
+  title: 'Рассказ-показ: «Стили vs Тренды» (Maison&Objet 2026)'
   utility_synopsis: 'Рассказ-показ Ольги Розет — интерактивный визуальный конспект
     и 16:9 презентация
 
@@ -2718,7 +2721,10 @@ urls:
   telegram: https://t.me/olga_rozet
   telegram_handle: '@olgaroset'
   youtube: https://www.youtube.com/@olga_rozet
-  youtube_withheld: временно — из пиктограмм подвала (принципал 2026-08-26; ранее то же 2026-08-20)
+  # УДЕРЖАНО ИЗ ВИТРИНЫ, НЕ УДАЛЕНО. Канал есть и на него ссылается страница
+  # рассказа-показа; из пиктограмм общего подвала он снят. Снять удержание —
+  # удалить эту строку (site_generator.channels: `<канал>_withheld`).
+  youtube_withheld: 'принципал 2026-08-20: «временно убрать YouTube из пиктограмм соц. сетей»'
 artworks:
 - 04.jpg
 - 05.jpg
