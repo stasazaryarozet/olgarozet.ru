@@ -956,7 +956,7 @@
       ],
       "page": 27,
       "cite": {
-        "act": "quote",
+        "act": "transcribed",
         "text": "The goal is not to tell a fixed story but to create a framework in which different stories can exist",
         "by": "Livingetc"
       },
@@ -995,7 +995,7 @@
     {
       "id": "seven-axes",
       "file": "slide-29.png",
-      "title": "Самостоятельная аналитика трендов",
+      "title": "Самостоятельная аналитика",
       "tag": "Матрица · семь осей",
       "seconds": 4451,
       "axis": [
@@ -1103,7 +1103,7 @@
       "page": 30,
       "basis": "deck",
       "tag": "Курс",
-      "title": "Декорирование интерьера в Британке",
+      "title": "Декорирование интерьера",
       "seconds": 4780,
       "timecode": "1:19:40",
       "light": "slide-30.webp",
