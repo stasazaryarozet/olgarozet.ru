@@ -1446,7 +1446,7 @@ _CHANNEL_LABEL_SOCIAL = {"instagram": "Instagram", "telegram": "Telegram", "yout
 WITHHELD = "_withheld"
 
 
-def channels(urls: dict[str, Any]) -> list[tuple[str, str]]:
+def channels(urls: dict[str, Any], *, shown_only: bool = False) -> list[tuple[str, str]]:
     """Каналы владельца — ВЫВЕДЕНЫ из объявленного адресного пространства, не перечислены.
 
     Стол lumen [0627ce36] + директива админа 2026-07-12 («максимально грамотное обеспечение
@@ -1468,9 +1468,20 @@ def channels(urls: dict[str, Any]) -> list[tuple[str, str]]:
     суффиксным словарём, каким уже объявлено тождество (`*_handle`): `<канал>_withheld`
     несёт ПРИЧИНУ, адрес остаётся на месте, и снятие удержания есть удаление одной строки
     данных. Прочие читатели `urls` видят ровно то же, что видели: канал у владельца ЕСТЬ,
-    и это правда — из ВИТРИНЫ снята его пиктограмма, а не он сам."""
+    и это правда — из ВИТРИНЫ снята его пиктограмма, а не он сам.
+
+    ── И ЭТО ОБЕЩАНИЕ ОБЯЗАНО БЫТЬ ИСПОЛНИМЫМ (замер 2026-08-26) ─────────────────
+    Строка выше стояла, а исполнить её было НЕЧЕМ: у деривации один выход, и оба её
+    потребителя — витрина подвала и `schema.org::sameAs` — читали ОДИН И ТОТ ЖЕ список.
+    Удержание пиктограммы стирало канал и у МАШИНЫ: `sameAs` есть каноническая декларация
+    «это те же самые каналы этого лица», и снятие адреса ОТТУДА утверждает не «мы его не
+    показываем», а «его нет» — то есть подделывает факт, ради сохранности которого
+    удержание и заводилось. ПОКАЗ и ТОЖДЕСТВО суть разные вопросы к одному адресному
+    пространству, и различить их обязан ВЫХОД, а не комментарий: умолчание — всё
+    объявленное (тождество), `shown_only` — витрина."""
     urls = urls or {}
-    held = {k[: -len(WITHHELD)] for k in urls if k.endswith(WITHHELD)}
+    held = ({k[: -len(WITHHELD)] for k in urls if k.endswith(WITHHELD)}
+            if shown_only else set())
     return [(k, v) for k, v in urls.items()
             if isinstance(v, str) and v.startswith(("http://", "https://"))
             and k not in held]
@@ -1505,7 +1516,7 @@ def _footer(urls: dict[str, Any], bio_title: str, portrait: str = "", portrait_n
     # ТОЖДЕСТВЕННА прежней ([IG] портрет [TG]) — новый канал не перерисовывает страницу, он
     # в неё ВСТАЁТ. Композиция ВЫВОДИТСЯ из числа каналов, поэтому четвёртый не потребует
     # ничьей правки шаблона.
-    chans = channels(urls)
+    chans = channels(urls, shown_only=True)   # ВИТРИНА: удержанная пиктограмма не рисуется
     half = (len(chans) + 1) // 2
     left = "\n    ".join(_social_link(k, u) for k, u in chans[:half])
     right = "\n    ".join(_social_link(k, u) for k, u in chans[half:])
@@ -1598,7 +1609,7 @@ def stamp_form_addresses(html: str) -> str:
 
 
 def _layout(d: dict[str, Any], *, title: str, description: str, body: str,
-            nav: bool = False, canonical: str | None = None,
+            canonical: str | None = None,
             extra_head: str = "", footer: bool = True, structured: str | None = None,
             surface: str = "", cookie_banner_enabled: bool = False, doc_menu: str = "",
             banner: str = "", slug: str = "") -> str:
@@ -1632,6 +1643,21 @@ def _layout(d: dict[str, Any], *, title: str, description: str, body: str,
     # закон, что `refs ⊆ delivered` у site_closure, только про содержание, а не про
     # существование файла: ссылка обязана иметь КОНЕЦ.
     #
+    # ВТОРАЯ ПОЛОВИНА ФЛАГА СНЯТА 2026-08-26 (принципал: «пусть из любого места сайта
+    # сверху есть ссылка на корень; минимально»). `nav` оставался МНЕНИЕМ вызывающего о
+    # том, уместен ли возврат, — и трое вызывающих отвечали на него по-разному: индекс
+    # молчанием (умолчание False), статические страницы и галерея — True, лендинг —
+    # вычислением `not _has_dedicated_fqdn`. Рассказ-показ не отвечал вовсе и потому
+    # четвёртые сутки стоял БЕЗ выхода на корень: ошибка не в чьём-то ответе, а в том,
+    # что вопрос вообще задавали вызывающему.
+    #
+    # ВОЗВРАТ ЕСТЬ ОТНОШЕНИЕ СТРАНИЦЫ К КОРНЮ, И СТРАНИЦА ЕГО УЖЕ НЕСЁТ: `canonical` —
+    # её собственный адрес, вычисленный к этой минуте. Страница есть корень ⟺ её
+    # канонический адрес и есть корень сайта; всякая иная — не корень, и ей возврат
+    # нужен. Тем же ходом растворяется случай FQDN-лендинга: его canonical есть
+    # `https://<fqdn>` (`_event_canonical`), то есть корень СВОЕГО сайта, — стрелка
+    # снимается сама, без флага и без второго вычисления «есть ли у события домен».
+    #
     # Условие ВЫВЕДЕНО из той же величины, которой p_site решает свою шапку (строка ниже
     # по файлу: «Условие ВЫВЕДЕНО из самих секций, а не объявлено флагом»), и спрошено У
     # НЕЁ САМОЙ — второго кодирования пустоты не заводится. Появится у владельца хоть
@@ -1656,8 +1682,10 @@ def _layout(d: dict[str, Any], *, title: str, description: str, body: str,
                 "_index_carries ⊥ (%s: %s) — навигация СОХРАНЯЕТСЯ, а не снимается",
                 type(e).__name__, e)
             return None
+    _here = (canonical or "").rstrip("/")
+    _is_root = (not _here) or _here == _canonical(d).rstrip("/")
     nav_html = ('<nav class="nav-fade"><a href="/" aria-label="На главную">←</a></nav>'
-                if nav and _index_carries() is not False else '')
+                if not _is_root and _index_carries() is not False else '')
     ftr = _footer(d.get("urls", {}), (d.get("bio") or {}).get("title", ""), portrait, portrait_night) if footer else ''
     # ХРОМ, ДЕЙСТВУЮЩИЙ НАД СОДЕРЖАНИЕМ, ТРЕБУЕТ СОДЕРЖАНИЯ — тот же закон, что снял
     # стрелку ← выше: аффорданс, чей референт пуст, лжёт о нём. «Перейти к содержанию»
@@ -4014,18 +4042,17 @@ def p_event_landing(d: dict[str, Any], ev: dict[str, Any]) -> str:
     suppress_cookie_explicit = (m.get("suppress_cookie_banner") if hasattr(m, "get")
                                 else getattr(m, "suppress_cookie_banner", None))
     suppress_cookie = suppress_cookie_explicit if suppress_cookie_explicit is not None else suppress_legal
-    # nav-back arrow useful только когда landing rendered как owner-domain sub-page
-    # (olgarozet.ru/<event-id>/ → back к owner root). Event-bound FQDN landings
-    # (parisinseptember.ru) — back-arrow к / leads к same page (sole content) →
-    # noise. Admin direct 2026-05-11 «сверху стрелка не нужна». Conditional:
-    # event has dedicated web_addresses → suppress nav-back.
-    _has_dedicated_fqdn = bool(ev.get("web_addresses"))
+    # СТРЕЛКА «НА ГЛАВНУЮ» БОЛЬШЕ НЕ РЕШАЕТСЯ ЗДЕСЬ. Директива принципала 2026-05-11
+    # («на лендинге с собственным доменом сверху стрелка не нужна») исполняется теперь
+    # ПО ПОСТРОЕНИЮ: `_layout` снимает возврат у страницы, чей canonical И ЕСТЬ корень
+    # своего сайта, а у FQDN-лендинга он именно таков (`_event_canonical`). Условие
+    # `not bool(ev.web_addresses)` было ВТОРЫМ вычислением того же факта — и вместе с
+    # ним исчезает вопрос «а как отвечает четвёртый вызывающий».
     return _layout(
         d,
         title=title_full,
         description=_meta_trim(lead_meta or m.concept if hasattr(m, "concept") else m.get("concept", title_full)),
         body=body,
-        nav=not _has_dedicated_fqdn,
         canonical=_event_canonical(d, ev),
         structured=_event_jsonld(d, ev),
         # Owner-portrait footer belongs to owner-site (olgarozet.ru) only —
@@ -4901,7 +4928,6 @@ def p_static_page(d: dict[str, Any], md_text: str, slug: str = "",
         title=(title or "Страница"),
         description=_meta_trim(description),
         body=article,
-        nav=True,
         canonical=canonical or None,
         # Static pages are owner-level (legal/manifesto). Owner-portrait
         # footer suppressed to mirror event-landing convention — legal-footer
@@ -4955,7 +4981,6 @@ def p_art(d: dict[str, Any]) -> str:
         title=f"{bio['title']} — {art_label}",
         description=f"{art_label} — {bio['title']}",
         body=body,
-        nav=True,
         canonical=f"{_canonical(d)}/art/",
         footer=False,  # gallery is immersive — no global footer
     )

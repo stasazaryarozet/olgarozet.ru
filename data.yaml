@@ -683,7 +683,7 @@ events:
     - Прошлое •от|рас•крывает будущее
     trailing: .
   - role: link
-    url: olgarozet.ru/maison-objet-2026/
+    entity: maison-objet-2026-site
     lines:
     - 'Рассказ-показ:'
     - «Тренды Maison&Objet 2026»
@@ -936,7 +936,14 @@ events:
 
       Уже вышел [[paris-2026-09-live-2-konspekt-page|конспект эфира]] — о том,
 
-      что архитектуру нужно проживать телом.'
+      что архитектуру нужно проживать телом.
+
+
+      Maison & Objet проходит дважды в год. Январский выпуск разобран целиком:
+      [рассказ-показ «Тренды Maison & Objet 2026»](https://olgarozet.ru/maison-objet-2026/)
+      — 34 фрагмента с таймкодами, семь осей разбора, аудио и полный транскрипт.
+
+      Из этих осей в Париже работают материал, фактура и цвет — по ним и смотрим интерьеры.'
   - title: Перед поездкой
   - title: Условия и сроки
   internal_questions:
@@ -1179,6 +1186,18 @@ events:
     entity: paris-2026-09-live-2-konspekt-page
     lines:
     - 'Конспект второго эфира:'
+    wrap: '(
+
+      {text}
+
+      {link}
+
+      )'
+  - role: link
+    entity: maison-objet-2026-site
+    lines:
+    - 'Январский выпуск той же выставки,'
+    - 'разобранный по семи осям:'
     wrap: '(
 
       {text}
@@ -1912,6 +1931,7 @@ publications:
   entity_type: static_page
   status: published
   url: /maison-objet-2026/
+  external_url: https://olgarozet.ru/maison-objet-2026/
   uploaded_at: '2026-08-14T15:00:00+00:00'
   title: 'Рассказ-показ: «Тренды Maison&Objet 2026»'
   utility_synopsis: 'Рассказ-показ Ольги Розет — интерактивный визуальный конспект
