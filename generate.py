@@ -117,7 +117,18 @@ def _load_typo_rules(lang: str = "ru") -> dict[str, Any]:
 def _compile_typo_regexes(rules: dict[str, Any]) -> tuple[Any, ...]:
     """Compile NBSP regex pair from rule data. One-time at module init."""
     units = rules.get("nbsp_units") or []
-    preps = rules.get("nbsp_prepositions") or []
+    # СКРЕПЛЕНИЕ ЕСТЬ ЗАПРЕТ ПЕРЕНОСА, И ЕГО ЦЕНА РАСТЁТ С ДЛИНОЙ СЛОВА. Правило
+    # Мильчина и Лебедева §100 говорит об ОДНОБУКВЕННЫХ предлогах и союзах: короткое
+    # служебное слово, оставшееся в конце строки, читается как обрыв. Перечень же вырос
+    # до шестибуквенных («спустя», «помимо», «чтобы»), и скрепление стало ПРОИЗВОДИТЬ
+    # неразрывные единицы длиннее меры: замер 2026-08-26, 360px — «без псевдоискусства»
+    # требует 397px в колонке 292px, и перенос внутри слова движку уже недоступен, ибо
+    # единица содержит пробел. Правило, введённое против обрыва строки, само порождало
+    # разрыв слова по буквам. Порог — ДАННОЕ языка; перечень остаётся словарём
+    # служебных слов, а длина решает, к какому из них правило применимо.
+    _pmax = rules.get("nbsp_preposition_max_len")
+    preps = [p for p in (rules.get("nbsp_prepositions") or [])
+             if _pmax is None or len(str(p)) <= int(_pmax)]
     unit_re = None
     if units:
         unit_alt = "|".join(units)
