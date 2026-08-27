@@ -1947,6 +1947,40 @@ publications:
 
     '
   schema_version: 1
+- id: maison-objet-2026-january-tg
+  channel: telegram_channel
+  entity_id: maison-objet-2026-january-site
+  entity_type: telegram_post
+  target_material: maison-objet-2026-january-site
+  status: published
+  url: https://t.me/olga_rozet/110
+  external_url: https://t.me/olga_rozet/110
+  uploaded_at: '2026-08-27T04:28:55+00:00'
+  title: 'Рассказ-показ Maison&Objet 2026 — Telegram'
+  platform_id: '110'
+  wave_type: educational_culture
+  related_event: paris-2026-09
+  utility_synopsis: |
+    TG-пост «Тренды Maison&Objet 2026» с аудиофрагментом «Конспект по семи осям».
+    Текст впитан с провайдера (surface_freshness absorb, msg 110).
+  schema_version: 1
+- id: maison-objet-2026-january-ig
+  channel: instagram
+  entity_id: maison-objet-2026-january-site
+  entity_type: ig_post
+  target_material: maison-objet-2026-january-site
+  status: published
+  url: https://www.instagram.com/p/DchIPAeFvKM/
+  external_url: https://www.instagram.com/p/DchIPAeFvKM/
+  uploaded_at: '2026-08-26T21:00:43+00:00'
+  title: 'SUITE 2046 — Instagram (январский Maison&Objet)'
+  platform_id: DchIPAeFvKM
+  wave_type: educational_culture
+  related_event: paris-2026-09
+  utility_synopsis: |
+    IG-пост «СНАЧАЛА УБРАТЬ» по SUITE 2046. Текст впитан с провайдера
+    (observed-publication + surface_freshness absorb, shortcode DchIPAeFvKM).
+  schema_version: 1
 - id: vrsac-tg-73
   channel: telegram_channel
   entity_id: vrsac-2026
