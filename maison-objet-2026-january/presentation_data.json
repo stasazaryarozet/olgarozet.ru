@@ -113,16 +113,16 @@
       ]
     },
     "entities": {
+      "paris": {
+        "name": "Париж",
+        "name_accusative": "Париж",
+        "name_prepositional": "Париже"
+      },
       "bhsad": {
         "name": "Британская Высшая Школа Дизайна",
         "name_genitive": "Британской Высшей Школы Дизайна",
         "name_prepositional": "Британской Высшей Школе Дизайна",
         "url": "https://britishdesign.ru"
-      },
-      "paris": {
-        "name": "Париж",
-        "name_accusative": "Париж",
-        "name_prepositional": "Париже"
       }
     },
     "context": [
