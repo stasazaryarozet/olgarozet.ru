@@ -88,10 +88,10 @@ body {
    ОФОРМЛЕНИЕ ССЫЛКИ ЕСТЬ СВОЙСТВО РОДА УЗЛА, А НЕ ЕГО МЕСТА, и потому объявлено
    ровно раз. Место вправе решать РАСКЛАДКУ (ряд, отбивка, зона нажатия) — оно не
    вправе решать, чем ссылка выглядит.
-   Цвет — акцент темы, а не второй hex: на этой поверхности он есть бренд
-   владельца (text/site.md::accent-editorial сузил Outremer до статьи-бумаги). */
+   Цвет ссылок в теле — чернила прозы (`--ink`), не акцент Outremer: иначе вся
+   перекрёстная навигация читается как «синие ссылки» (замер 2026-08-27). */
 #doc a {
-  color: var(--accent);
+  color: var(--ink);
   text-decoration: underline;
   text-decoration-thickness: from-font;
   text-underline-offset: 0.18em;
@@ -548,9 +548,8 @@ html[data-theme="day"] #doc audio { color-scheme: light; }
   text-overflow: ellipsis;
   vertical-align: bottom;
 }
-/* ОСЬ В ПОДПИСИ СЕГМЕНТА — ТЭГ, А НЕ ПРОДОЛЖЕНИЕ ПРОЗЫ (принципал 2026-08-26:
-   «Философия времени», «Формообразование» — в скруглённых обрамлениях). Рёбра
-   внутри карточки оси (`#doc dl dd`) намеренно без пилюли — другой речевой акт. */
+/* Ребро графа — один речевой акт: graph_tag в обе проекции (сегмент и ось). */
+#doc a[data-link-form="graph_tag"],
 #doc [data-field="axis"] a {
   display: inline-flex;
   align-items: center;

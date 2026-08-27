@@ -113,16 +113,16 @@
       ]
     },
     "entities": {
-      "paris": {
-        "name": "Париж",
-        "name_accusative": "Париж",
-        "name_prepositional": "Париже"
-      },
       "bhsad": {
         "name": "Британская Высшая Школа Дизайна",
         "name_genitive": "Британской Высшей Школы Дизайна",
         "name_prepositional": "Британской Высшей Школе Дизайна",
         "url": "https://britishdesign.ru"
+      },
+      "paris": {
+        "name": "Париж",
+        "name_accusative": "Париж",
+        "name_prepositional": "Париже"
       }
     },
     "context": [
@@ -471,8 +471,8 @@
       "title": "Определение тренда",
       "tag": "Понятийный аппарат",
       "cite": {
-        "act": "transcribed",
-        "text": "Тренд (англицизм от trend — тенденция) основная тенденция (направление) изменения чего-либо."
+        "act": "gloss",
+        "text": "Тренд — основная направленность изменения чего-либо."
       },
       "seconds": 613,
       "axis": [
@@ -543,7 +543,7 @@
       ]
     },
     {
-      "id": "zlata-kornilova-glifart",
+      "id": "zlata-kornilova",
       "file": "slide-07.png",
       "title": "Злата Корнилова",
       "tag": "Retail",
