@@ -78,14 +78,12 @@ people:
     confirmed: '2026-03-28'
 partners:
   bhsad:
-    name: Британская высшая школа дизайна
-    name_genitive: Британской высшей школы дизайна
-    name_prepositional: Британской высшей школе дизайна
-    short_name: Британка
-    full_name: Британская высшая школа дизайна (Universal University)
-    type: organization
-    location: moscow
+    name: Британская Высшая Школа Дизайна
+    name_genitive: Британской Высшей Школы Дизайна
+    name_prepositional: Британской Высшей Школе Дизайна
+    type: school
     url: https://britishdesign.ru
+    location: moscow
   bukhara_center:
     name: Бухарский Центр Ремёсел
     type: organization
@@ -685,10 +683,10 @@ events:
     - Прошлое •от|рас•крывает будущее
     trailing: .
   - role: link
-    url: olgarozet.ru/styles-vs-trends/
+    entity: maison-objet-2026-january-site
     lines:
     - 'Рассказ-показ:'
-    - «Стили vs Тренды»
+    - «Тренды Maison&Objet 2026»
   lines:
   - 'Летом:'
   - 'Диптих электронных лекций:'
@@ -764,7 +762,6 @@ events:
   - telegram_channel
   t_key: 2026-08
   skoro_state: pending
-  link: /styles-vs-trends/
   title: 'Стили & Тренды: Прошлое раскрывает будущее'
   date: лето 2026
   audience: []
@@ -939,7 +936,14 @@ events:
 
       Уже вышел [[paris-2026-09-live-2-konspekt-page|конспект эфира]] — о том,
 
-      что архитектуру нужно проживать телом.'
+      что архитектуру нужно проживать телом.
+
+
+      Maison & Objet проходит дважды в год. Январский выпуск разобран целиком:
+      [рассказ-показ «Тренды Maison&Objet 2026»](https://olgarozet.ru/maison-objet-2026-january/)
+      — 30 фрагментов с таймкодами, семь осей разбора, аудио и полный транскрипт.
+
+      Из этих осей в Париже работают материал, фактура и цвет — по ним и смотрим интерьеры.'
   - title: Перед поездкой
   - title: Условия и сроки
   internal_questions:
@@ -1182,6 +1186,18 @@ events:
     entity: paris-2026-09-live-2-konspekt-page
     lines:
     - 'Конспект второго эфира:'
+    wrap: '(
+
+      {text}
+
+      {link}
+
+      )'
+  - role: link
+    entity: maison-objet-2026-january-site
+    lines:
+    - 'Январский выпуск той же выставки,'
+    - 'разобранный по семи осям:'
     wrap: '(
 
       {text}
@@ -1909,18 +1925,19 @@ publications:
 
     '
   schema_version: 1
-- id: styles-vs-trends-site
+- id: maison-objet-2026-january-site
   channel: site
-  entity_id: styles-vs-trends
+  entity_id: maison-objet-2026-january
   entity_type: static_page
   status: published
-  url: /styles-vs-trends/
+  url: /maison-objet-2026-january/
+  external_url: https://olgarozet.ru/maison-objet-2026-january/
   uploaded_at: '2026-08-14T15:00:00+00:00'
-  title: 'Рассказ-показ: «Стили vs Тренды» (Maison&Objet 2026)'
+  title: 'Рассказ-показ: «Тренды Maison&Objet 2026»'
   utility_synopsis: 'Рассказ-показ Ольги Розет — интерактивный визуальный конспект
     и 16:9 презентация
 
-    по материалам лекции «Тренды Maison&Objet 2026. Какие прижились, а какие забыты?».
+    по материалам лекции «Тренды Maison&Objet 2026. Какие забыты, а какие прижились?».
 
     Включает 7-осевую авторскую матрицу анализа интерьера, 30 слайдов высокого разрешения
 
@@ -2721,10 +2738,7 @@ urls:
   telegram: https://t.me/olga_rozet
   telegram_handle: '@olgaroset'
   youtube: https://www.youtube.com/@olga_rozet
-  # УДЕРЖАНО ИЗ ВИТРИНЫ, НЕ УДАЛЕНО. Канал есть и на него ссылается страница
-  # рассказа-показа; из пиктограмм общего подвала он снят. Снять удержание —
-  # удалить эту строку (site_generator.channels: `<канал>_withheld`).
-  youtube_withheld: 'принципал 2026-08-20: «временно убрать YouTube из пиктограмм соц. сетей»'
+  youtube_withheld: временно — из пиктограмм подвала (принципал 2026-08-26; ранее то же 2026-08-20)
 artworks:
 - 04.jpg
 - 05.jpg
