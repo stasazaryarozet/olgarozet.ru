@@ -3092,17 +3092,31 @@ transport_legs:
     availability:
     - {from: 2026-10-25, to: 2027-03-23, label: зимнее расписание 2026/27}
     runs:
-    - {id: HY 9908, at: "03:30", days: [tue, thu, sat],
-       note: вылет Внуково 21:35 накануне (пн, ср, пт), Uzbekistan Airways}
-    - {id: UT 807, at: "04:15", days: [mon, tue, wed, thu, sat, sun],
-       note: вылет Внуково 22:25 накануне (все дни кроме чт), Utair}
-    - {id: C6 414, at: "02:10", days: [mon, wed, fri, sun],
-       note: вылет Домодедово 20:15 накануне (вт, чт, сб, вс), Centrum Air}
+    - id: HY 9908
+      carrier: Uzbekistan Airways
+      at: "03:30"
+      days: [tue, thu, sat]
+      departs: {airport: Внуково, at: "21:35", day: накануне}
+      note: дни вылета — пн, ср, пт
+    - id: UT 807
+      carrier: Utair
+      at: "04:15"
+      days: [mon, tue, wed, thu, sat, sun]
+      departs: {airport: Внуково, at: "22:25", day: накануне}
+      note: вылет все дни кроме чт
+    - id: C6 414
+      carrier: Centrum Air
+      at: "02:10"
+      days: [mon, wed, fri, sun]
+      departs: {airport: Домодедово, at: "20:15", day: накануне}
+      note: дни вылета — вт, чт, сб, вс
     - id: SU 1876
+      carrier: Аэрофлот
       at: "06:10"
       days: [wed, fri, sat, sun]
+      departs: {airport: Шереметьево, at: "00:10", day: тех же суток}
       note: >-
-        вылет Шереметьево 00:10 тех же суток, Аэрофлот. Дни ВЫВЕДЕНЫ, а не сняты: борт
+        Дни ВЫВЕДЕНЫ, а не сняты: борт
         разворачивается в Бухаре за 80 минут и уходит обратно рейсом SU 1877 07:30, чьи
         дни (ср, пт, сб, вс) подтверждены двумя источниками; оба рейса объявлены как
         4 раза в неделю и оба показывают среду
@@ -3126,20 +3140,34 @@ transport_legs:
     availability:
     - {from: 2026-09-30, to: 2027-03-25, label: зимнее расписание 2026/27}
     runs:
-    - {id: HY 9907, at: "05:25", days: [tue, thu, sat],
-       note: прибытие Внуково 07:35, Uzbekistan Airways; летний код того же слота — HY 9607}
+    - id: HY 9907
+      carrier: Uzbekistan Airways
+      at: "05:25"
+      days: [tue, thu, sat]
+      arrives: {airport: Внуково, at: "07:35"}
+      note: летний код того же слота — HY 9607
     - id: UT 808
+      carrier: Utair
       at: "05:45"
       days: [tue, thu, sat, sun]
+      arrives: {airport: Внуково, at: "07:55"}
       note: >-
-        прибытие Внуково 07:55, Utair. Дни СПОРНЫ: rasp.yandex и avia.tutu дают четверг
+        Дни СПОРНЫ: rasp.yandex и avia.tutu дают четверг
         (сентябрьские вылеты 3, 10, 17, 24), третий источник дает вт-пт-вс на зиму. Взяты
         два согласных против одного; на ответ «последний вылет в четверг» спор не влияет —
         без этого рейса остается HY 9907 в 05:25, те же полшестого утра
-    - {id: SU 1877, at: "07:30", days: [wed, fri, sat, sun],
-       note: прибытие Шереметьево 09:50, Аэрофлот; четверга НЕТ — согласны два источника}
-    - {id: HH 709, at: "10:00", days: [sun],
-       note: прибытие Домодедово 12:10, Qanot Sharq; по 31.01 включительно}
+    - id: SU 1877
+      carrier: Аэрофлот
+      at: "07:30"
+      days: [wed, fri, sat, sun]
+      arrives: {airport: Шереметьево, at: "09:50"}
+      note: четверга НЕТ — согласны два источника
+    - id: HH 709
+      carrier: Qanot Sharq
+      at: "10:00"
+      days: [sun]
+      arrives: {airport: Домодедово, at: "12:10"}
+      note: по 31.01 включительно
     lead:                              # цепь стадий ПЕРЕД вылетом; час выселения ВЫВОДИТСЯ
     - {stage: дорога до аэропорта, leg: oldtown_bhk_ground}
     - stage: аэропорт до вылета
