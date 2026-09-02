@@ -177,6 +177,33 @@ languages:
     UZ: uz
     RU: ru
 places:
+  poi_kalyan_bukhara:
+    name: Пои-Калян (мечеть Калян, минарет, медресе Мири-Араб)
+    location: bukhara
+    availability: always
+    hours:
+      mon: "09:00-17:00"
+      tue: "09:00-17:00"
+      wed: "09:00-17:00"
+      thu: "09:00-17:00"
+      fri: ["09:00-12:00", "14:00-17:00"]   # ДЖУМА: мечеть закрыта для посетителей
+                                              # ровно 12:00-14:00 — это ДЫРА В ЧАСАХ,
+                                              # а не потерянный день
+      sat: "09:00-17:00"
+      sun: "09:00-17:00"
+    source: mindtrip.ai · adrastravel.com · tripadvisor (замер 2026-09-02)
+    note: >-
+      Действующая мечеть. По пятницам закрыта для туристов на время джума-намаза,
+      12:00-14:00; минарет и медресе Мири-Араб этим не затронуты.
+  ark_bukhara:
+    name: Крепость Арк (историко-краеведческий музей)
+    location: bukhara
+    availability: always
+    hours: {mon: "09:00-17:00", tue: "09:00-17:00", wed: "09:00-17:00",
+            thu: "09:00-17:00", fri: "09:00-17:00", sat: "09:00-17:00",
+            sun: "09:00-17:00"}
+    source: afisha.uz (замер 2026-09-02, ОДИН источник)
+    note: Ежедневно, недельного выходного не заявлено. Подтвердить у Насуллобека.
   appartement_molitor_corbusier:
     name: Appartement-atelier Le Corbusier
     location: paris
