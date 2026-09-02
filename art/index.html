@@ -66,18 +66,15 @@
 <link href="/styles.css?v=de2a10bec1" rel="stylesheet"/>
 </head>
 <body>
-<a class="skip-link" href="#main">Перейти к содержанию</a>
 <nav class="nav-fade"><a aria-label="На главную" href="/">←</a></nav>
-<button aria-label="Тема: авто (по солнцу) — переключить" class="theme-toggle" data-theme-toggle="" type="button">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="dela.theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить",CYCLE=["day", "night"],MODE_ATTR="data-theme";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());function rendered(){var a=null;try{a=document.documentElement.getAttribute(MODE_ATTR);}catch(e){}return (CYCLE.indexOf(a)!==-1)?a:null;}btn.addEventListener("click",function(){var seen=rendered();var i=CYCLE.indexOf(seen);var next=CYCLE[(i+1)%CYCLE.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
 <main id="main" role="main">
 <div class="progress-bar" id="progress"></div>
-<nav class="art-series"><a href="kartinki-na-kartone/">Картинки на картоне</a></nav>
 <main class="gallery">
 <div class="artwork"><img alt="Наш Монгол" loading="lazy" src="/art/img/7de7a040e91e.jpg"/></div>
 <div class="artwork"><img alt="Бузина" loading="lazy" src="/art/img/ef9993fa114d.jpg"/></div>
 <div class="artwork"><img alt="Ящерицы и шишки" loading="lazy" src="/art/img/47bf6bf5054e.jpg"/></div>
 <div class="artwork"><img alt="Улитки" loading="lazy" src="/art/img/f3cb3ae0bd36.jpg"/></div>
-<div class="artwork"><img alt="Лошадь Вердонского ущелья" loading="lazy" src="/art/img/e3c26bd0fa4e.jpg"/></div>
+<div class="artwork"><img alt="Лошадь Вердонского ущелья" loading="lazy" src="/art/img/e3c26bd0fa4e-sheet.jpg"/></div>
 <div class="artwork"><img alt="Ольга Розет — Произведение" loading="lazy" src="/art/img/04.jpg"/></div>
 <div class="artwork"><img alt="Ольга Розет — Произведение" loading="lazy" src="/art/img/05.jpg"/></div>
 <div class="artwork"><img alt="Ольга Розет — Произведение" loading="lazy" src="/art/img/06.jpg"/></div>
@@ -173,7 +170,6 @@
 <div class="artwork"><img alt="Ольга Розет — Произведение" loading="lazy" src="/art/img/zoloto_lyubvi.jpg"/></div>
 </main>
 </main>
-<link href="/media.css" rel="stylesheet"/><script defer="" src="/media.js"></script>
 <script>
 /* Display-window indicator 1[from ≤ now < until) per viewer clock
    (Inv-STF-window-derived, surface-temporal-fixpoint.md). The reveal
