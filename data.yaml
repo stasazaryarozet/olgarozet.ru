@@ -489,11 +489,13 @@ event_series:
       - Приготовить себе еду
   styles_and_trends:
     name: Стили & Тренды
-    # Имя коммерческого диптиха Розет (ч.1 «открывает» / ч.2 «раскрывает») — НЕ девиз
-    # январского M&O, даже когда звучит в речи (админ 2026-09-01; тема ярмарки по-русски:
-    # texts/interior-plus-design-material.md «Прошлое как ключ к будущему»).
+    # Имя коммерческой лекции Розет — НЕ девиз январского M&O, даже когда звучит в речи
+    # (админ 2026-09-01; тема ярмарки по-русски: texts/interior-plus-design-material.md
+    # «Прошлое как ключ к будущему»). Двоичность СНЯТА (админ 2026-09-03): «исходим из
+    # того, что это одно событие» — прежде здесь стояло `format: diptych` и имя несло
+    # «ч.1 открывает / ч.2 раскрывает».
     subtitle: Прошлое открывает будущее
-    format: diptych
+    format: lecture
     program:
     - kind: lecture
       by: olgarozet
@@ -669,176 +671,6 @@ events:
 # 776e5e07…): «Декорирование интерьера в Британке · Старт 22 октября 2026 · 8 месяцев ·
 # очно». Заведён как ОБЪЕКТ, чтобы лекция вела к нему; broadcast НЕ объявлен — вещание
 # отдельное решение принципала. Внесено lumen 2026-08-15.
-- id: decorating-interiors-bhsad-2026
-  type: course
-  t_key: 2026-10-22
-  title: Декорирование интерьера в Британке
-  date: старт 22 октября
-  duration: 8 месяцев
-  audience: []
-  organizers:
-  - olgarozet
-  format:
-  - in-person
-  - course
-  status: PLANNING
-  concept: Авторская программа Ольги Розет в Британской высшей школе дизайна
-  url: https://britishdesign.ru
-- id: lecture_styles_trends_diptych
-  type: lecture
-  broadcast:
-  - site
-  - telegram_channel
-  t_key: 2026-08
-  skoro_state: pending
-  title: Стили & Тренды (Диптих)
-  date: лето 2026
-  audience: []
-  organizers:
-  - olgarozet
-  format:
-  - online
-  - lecture
-  event_series: styles_and_trends
-  status: PLANNING
-  beats:
-  - role: when
-    from: horizon
-  - role: type
-    lines:
-    - Диптих
-    - 'электронных лекций:'
-  - role: concept
-    lines:
-    - Прошлое •от|рас•крывает будущее
-    trailing: .
-  - role: link
-    entity: maison-objet-2026-january-site
-    lines:
-    - 'Рассказ-показ:'
-    - «Тренды Maison&Objet 2026»
-  lines:
-  - 'Летом:'
-  - 'Диптих электронных лекций:'
-  - '"Прошлое •от|рас•крывает будущее".'
-  lead: 'Диптих электронных лекций Ольги Розет. Часть 1: От Античности до Контекстуального
-    Модернизма. Часть 2: От Модернизма к Трендам 2026.'
-  sections:
-  - title: Темы
-    items:
-    - 'Часть 1: Античность, Романский стиль, Готика, Ренессанс, Барокко, Классицизм'
-    - 'Часть 2: Модернизм, Минимализм, Ар Деко, Тренды 2026 (Эскапизм, Ugly-дизайн,
-      Трансформизм)'
-- id: lecture_styles_trends_part1
-  parent_id: lecture_styles_trends_diptych
-  type: lecture
-  broadcast:
-  - site
-  - telegram_channel
-  t_key: 2026-08
-  skoro_state: pending
-  title: 'Стили & Тренды: Прошлое открывает будущее'
-  date: лето 2026
-  audience: []
-  organizers:
-  - olgarozet
-  format:
-  - online
-  - lecture
-  event_series: styles_and_trends
-  status: PLANNING
-  beats:
-  - role: when
-    from: horizon
-  - role: type
-    lines:
-    - 'Электронная лекция:'
-  - role: concept
-    lines:
-    - Стили & Тренды
-    trailing: ':'
-  - role: detail
-    lines:
-    - Прошлое открывает будущее
-  - role: detail
-    lines:
-    - Часть 1
-  lines:
-  - Летом
-  - ''
-  - 'Электронная лекция:'
-  - ''
-  - '«Стили & Тренды»:'
-  - Прошлое открывает будущее
-  - Часть 1
-  lead: 'Онлайн-лекция Ольги Розет. Часть 1: Большие стили — от Античности через Готику,
-    Ренессанс, Барокко, Классицизм до Контекстуального Модернизма. Философия каждой
-    эпохи и её отражение в интерьере.'
-  sections:
-  - title: Темы
-    items:
-    - Античность — мир как идеальный порядок (Космоцентризм)
-    - Романский стиль — Теоцентризм, аскетизм, тяжёлые камни
-    - Готика — метафизика света, схоластика
-    - Ренессанс — человек как мера, Золотое сечение
-    - Барокко — ошеломляющее впечатление, динамика, иллюзии
-    - Классицизм и Ампир — рационализм, симметрия, Old Money
-    - Контекстуальный Модернизм
-- id: lecture_styles_trends_part2
-  parent_id: lecture_styles_trends_diptych
-  type: lecture
-  broadcast:
-  - site
-  - telegram_channel
-  t_key: 2026-08
-  skoro_state: pending
-  title: 'Стили & Тренды: Прошлое раскрывает будущее'
-  date: лето 2026
-  audience: []
-  organizers:
-  - olgarozet
-  format:
-  - online
-  - lecture
-  event_series: styles_and_trends
-  status: PLANNING
-  beats:
-  - role: when
-    from: horizon
-  - role: type
-    lines:
-    - 'Электронная лекция:'
-  - role: concept
-    lines:
-    - Стили & Тренды
-    trailing: ':'
-  - role: detail
-    lines:
-    - Прошлое раскрывает будущее
-  - role: detail
-    lines:
-    - Часть 2
-  lines:
-  - Летом
-  - ''
-  - 'Электронная лекция:'
-  - ''
-  - '«Стили & Тренды»:'
-  - Прошлое раскрывает будущее
-  - Часть 2
-  lead: 'Онлайн-лекция Ольги Розет. Часть 2: Модернизм (Де Стейл, Конструктивизм,
-    Баухаус, Брутализм), Минимализм, Ар Деко, тренды 2026 (Maison&Objet, Эскапизм,
-    Ugly-/Дофаминовый дизайн, Трансформизм Нуриева) и современные стилистики (Контемпорари).'
-  sections:
-  - title: Темы
-    items:
-    - Модернизм — 7 направлений (Де Стейл → Mid-Century → Брутализм)
-    - Минимализм — пространственная чистота, дематериализация
-    - Ар Деко — демонстративное потребление, Веблен
-    - 'Тренды 2026: Эскапизм и ностальгия, Maison&Objet'
-    - Ugly-дизайн и Дофаминовый дизайн — нейробиология внимания
-    - Трансформизм (Harry Nuriev)
-    - 'Современные стилистики: Контемпорари'
 - id: paris-2026-09
   type: travel
   project: design-travels
@@ -1436,15 +1268,196 @@ events:
   participation_funnel:
     stage_in: viewed_live_2
     stage_out: lead_paris_2026_09
+- id: lecture_styles_trends
+  type: lecture
+  broadcast:
+  - site
+  - telegram_channel
+  # ОДНО СОБЫТИЕ, НЕ ДИПТИХ (админ 2026-09-03). Прежде здесь стояли три ряда — родитель
+  # `lecture_styles_trends_diptych` и части `_part1`/`_part2`; двоичность жила и в имени
+  # («Диптих»), и в тактах, и в разделе «Темы». Ряды слиты: темы обеих частей — одним
+  # списком, ссылка-образец на уже изданный рассказ-показ сохранена.
+  #
+  # t_key/date СНЯТЫ (Σ tellus 2026-09-03). «Летом 2026» стало ЛОЖЬЮ: горизонт 2026-08
+  # истёк, а обещание живо — колода «СТИЛИ & ТРЕНДЫ · ПРОШЛОЕ ОТКРЫВАЕТ БУДУЩЕЕ» (39 стр.,
+  # Corel) получена от Ольги TG #5978 2026-08-23, порядок страниц 8→10→9 по её же правке,
+  # впущена visum 2026-08-24 / lumen 2026-08-25; недостаёт ВИДЕОЗАПИСИ. Спека знает ровно
+  # этот случай: ⊥ ⟺ t_key не якорь — «Дату-время объявим», позиция НЕИЗВЕСТНА, и это
+  # ЗНАЧЕНИЕ, а не выдуманный день (entity-event.md §horizon). Назовут съёмку — вернётся
+  # якорь, а не другая догадка.
+  skoro_state: pending
+  title: 'Стили & Тренды: Прошлое открывает будущее'
+  audience: []
+  organizers:
+  - olgarozet
+  format:
+  - online
+  - lecture
+  event_series: styles_and_trends
+  status: PLANNING
+  beats:
+  - role: when
+    from: horizon
+  - role: type
+    lines:
+    - 'Электронная лекция:'
+  - role: concept
+    lines:
+    - Стили & Тренды
+    trailing: ':'
+  - role: detail
+    lines:
+    - Прошлое открывает будущее
+  - role: link
+    entity: maison-objet-2026-january-site
+    lines:
+    - 'Рассказ-показ:'
+    - «Тренды Maison&Objet 2026»
+  lines:
+  - 'Дату-время объявим:'
+  - ''
+  - 'Электронная лекция:'
+  - ''
+  - '«Стили & Тренды»:'
+  - Прошлое открывает будущее
+  lead: 'Онлайн-лекция Ольги Розет: большие стили и современные тренды — от Античности
+    через Готику, Ренессанс, Барокко и Классицизм к Модернизму, Минимализму и Ар Деко
+    и далее к трендам 2026 года. Философия каждой эпохи и её отражение в интерьере.'
+  sections:
+  - title: Темы
+    items:
+    - Античность — мир как идеальный порядок (Космоцентризм)
+    - Романский стиль — Теоцентризм, аскетизм, тяжёлые камни
+    - Готика — метафизика света, схоластика
+    - Ренессанс — человек как мера, Золотое сечение
+    - Барокко — ошеломляющее впечатление, динамика, иллюзии
+    - Классицизм и Ампир — рационализм, симметрия, Old Money
+    - Контекстуальный Модернизм
+    - Модернизм — 7 направлений (Де Стейл → Mid-Century → Брутализм)
+    - Минимализм — пространственная чистота, дематериализация
+    - Ар Деко — демонстративное потребление, Веблен
+    - 'Тренды 2026: Эскапизм и ностальгия, Maison&Objet'
+    - Ugly-дизайн и Дофаминовый дизайн — нейробиология внимания
+    - Трансформизм (Harry Nuriev)
+    - 'Современные стилистики: Контемпорари'
+- id: meeting_2026_05
+  type: meeting
+  broadcast:
+  - site
+  - telegram_channel
+  title: Человек и Ремесло
+  # t_key СНЯТ (Σ tellus 2026-09-03). Спека называла его своим именем: «⊥ ⟺ start не якорь —
+  # „Дату-время объявим“: позиция НЕИЗВЕСТНА, и это значение, а не выдуманный день; сегодня
+  # там стоит фиктивное 2026-08-31» (entity-event.md §horizon). Событие само говорит строкой
+  # «Дату-время объявим» — и одновременно несло дату, чтобы попасть в разбиение. Ныне ⊥
+  # горизонта наследует якорь соседа сверху (skoro.carry_anchors), поэтому место, куда его
+  # положил автор, держится порядком списка, а месяц не утверждается ничем.
+  date: до осени
+  audience: []
+  organizers:
+  - olgarozet
+  format:
+  - online
+  - meeting
+  series: meeting_chelovek_remeslo
+  first_online_in_series: true
+  pricing:
+    regular:
+      amount: 5000
+      currency: RUB
+    early_bird:
+      amount: 2500
+      currency: RUB
+      until: '2026-05-01'
+  cohort: null
+  duration: null
+  registration: null
+  status: PLANNING
+  history:
+  - season: 2025-12
+    venue: cdl
+    format: offline
+    occurrences: 2
+    theme: Человек и Ремесло
+    price_rub: 5000
+  lead: 'Первая онлайн-встреча серии «Встречи с Ольгой» — продолжение офлайн-встреч
+    в ЦДЛ (декабрь 2025) в новом формате: доклад, диалог, нетворкинг.'
+  sections:
+  - title: Формат
+    intro: Три части одной встречи.
+    items:
+    - <strong>Доклад Ольги</strong> — наблюдения и материалы из дизайн-путешествий
+      и собственных вылазок
+    - <strong>Профессиональный диалог</strong> с Ольгой
+    - <strong>Нетворкинг участников</strong> друг с другом
+  - title: Стоимость
+    items:
+    - <strong>5 000 ₽</strong> — обычная стоимость
+    - <strong>2 500 ₽</strong> — early-bird до 1 мая 2026
+    - Возможна скидка или бесплатное место по запросу — write o.g.rozet@gmail.com
+  - title: Подготовка
+    intro: Рекомендуется заранее.
+    items:
+    - Выделить место и время
+    - Приготовить себе еду
+  signup:
+    title: Записаться на встречу
+    note: Оставьте email — пришлю ссылку и точное время за день до встречи.
+  about_organizer:
+    gloss: Автор серии «Встречи».
+    link_text: olgarozet.ru
+    link_url: https://olgarozet.ru/
+  skoro_state: pending
+  beats:
+  # Метка времени БЫЛА НАПИСАНА РУКОЙ, потому что на ⊥ вывод отдавал пусто; ныне Спека
+  # называет фразу сама (`text/telegram::skoro_composition.bottom_when_state`, Σ tellus
+  # 2026-09-03), и рука воспроизводила её побайтно. Копия, совпадающая с выводом, — не
+  # страховка, а второй дом: она молчит сегодня и лжёт в тот день, когда событие сдвинут.
+  - role: when
+    from: horizon
+  - role: type
+    lines:
+    - Онлайн-Встреча
+  - role: detail
+    lines:
+    - 'на манер наших оффлайновых:'
+  - role: multi-component
+    items:
+    - - Доклад
+    - - 🔥
+    - - деловое и личное общение
+      - со мной и друг-другом
+    - - еда у экрана
+  lines:
+  - Дату-время объявим
+  - ''
+  - Онлайн-Встреча
+  - 'на манер наших оффлайновых:'
+  - ''
+  - Доклад
+  - +
+  - 🔥
+  - +
+  - деловое и личное общение
+  - со мной и друг-другом
+  - +
+  - еда у экрана
 - id: lecture_protofunctionalism_shakers
   type: lecture
   broadcast:
   - site
   - telegram_channel
-  t_key: 2026-10
+  # t_key СНЯТ (Σ tellus 2026-09-03). «2026-10» поставил peter 2026-08-14 (fb592724445f0),
+  # выведя месяц из соседней прозы `date: осень 2026` — которая тоже его, 2026-07-30
+  # (36ec78689eb0b). Осень не есть октябрь: ключ утверждал БОЛЬШЕ источника. Единственное
+  # слово Ольги об этой лекции — TG 2026-07-30: «по лекциям темы. просто фиксирую.
+  # Шейкеры-предтеча современного дизайна… Совсем новая лекция» — тема, не срок. Догадка
+  # без свидетеля печаталась тем же голосом, что замер («В октябре» рядом с «8–11 сентября»).
+  # ⊥ есть ЗНАЧЕНИЕ (entity-event.md §horizon): ряд держит место, куда его положил автор, а
+  # месяц не утверждается ничем. Админ 2026-09-03 поставил лекцию в сентябрьскую группу —
+  # это ПОРЯДОК: заголовок месяца он писал только там, где называл месяц сам.
   skoro_state: pending
   title: 'Протофункционализм и будущее: Быт и мебель шейкеров'
-  date: осень 2026
   audience: []
   organizers:
   - olgarozet
@@ -1466,6 +1479,135 @@ events:
   - role: detail
     lines:
     - Быт и мебель шейкеров
+- id: paintings_on_cardboard
+  type: event
+  broadcast:
+  - site
+  - telegram_channel
+  t_key: 2026-06
+  t_end: open
+  skoro_state: period
+  title: Картины на картоне
+  date: лето–осень 2026
+  audience: []
+  organizers:
+  - olgarozet
+  format: []
+  status: PLANNING
+  beats:
+  - role: when
+    from: horizon
+  - role: type
+    lines:
+    - Карт|ины на карт|оне
+- id: decorating-interiors-bhsad-2026
+  type: course
+  t_key: 2026-10-22
+  title: Декорирование интерьера в Британке
+  date: старт 22 октября
+  duration: 8 месяцев
+  audience: []
+  organizers:
+  - olgarozet
+  format:
+  - in-person
+  - course
+  status: PLANNING
+  concept: Авторская программа Ольги Розет в Британской высшей школе дизайна
+  url: https://britishdesign.ru
+- id: excursion_melnikov_nov_2026
+  type: event
+  broadcast:
+  - site
+  - telegram_channel
+  # ОКТЯБРЬ НАЗВАН АДМИНОМ 2026-09-03 («Октябрь — московская экскурсия») — это ПЕРВЫЙ
+  # свидетель у этой строки. Прежнее «2026-11» поставил peter 2026-08-14 из собственной же
+  # прозы «конец ноября» (ee915c235e95d, 2026-07-21), не сославшись ни на что; в словах Ольги
+  # экскурсии нет вовсе. Рукописная метка «В конце» уточняла ИМЕННО тот ноябрь и вместе с ним
+  # лишилась почвы — метку теперь говорит горизонт. Имя ряда (`…_nov_2026`) остаётся: это
+  # рукоять, на неё ссылается `activity-plan.yaml`, и она ничего не печатает.
+  t_key: 2026-10
+  skoro_state: period
+  title: Экскурсия по Мельникову
+  audience: []
+  organizers:
+  - olgarozet
+  format:
+  - excursion
+  pricing: null
+  cohort: null
+  duration: null
+  registration: null
+  status: PLANNING
+  beats:
+  - role: when
+    from: horizon
+  - role: type
+    lines:
+    - Экскурсия
+  - role: detail
+    lines:
+    - по круглому дому Мельникова
+  lines:
+  - В октябре
+  - ''
+  - Экскурсия
+  - ''
+  - по круглому дому Мельникова
+- id: course_price_value
+  type: publication
+  broadcast:
+  - site
+  - telegram_channel
+  # t_key/date СНЯТЫ (Σ tellus 2026-09-03): «Летом 2026» истекло, а тело этой же записи
+  # говорит «даты старта уточняются» — заголовок противоречил собственному телу. ⊥ горизонта
+  # («Дату-время объявим») есть ЗНАЧЕНИЕ, а не пропуск (entity-event.md §horizon).
+  skoro_state: pending
+  beats:
+  - role: when
+    from: horizon
+  - role: type
+    lines:
+    - 'Рассказ-показ:'
+  - role: concept
+    lines:
+    - Цена и Ценность
+  lines:
+  - 'Дату-время объявим:'
+  - ''
+  - 'Рассказ-показ:'
+  - ''
+  - «Цена и Ценность»
+  title: Цена и Ценность
+  audience: []
+  organizers:
+  - olgarozet
+  format:
+  - online
+  - course
+  pricing: null
+  cohort: null
+  duration: null
+  registration: null
+  status: PLANNING
+  lead: Онлайн-курс «Цена и Ценность» — анонс. Программа собирается.
+  sections:
+  - title: Что известно
+    items:
+    - 'Формат: онлайн-курс'
+    - 'Автор: Ольга Розет'
+  - title: Что уточняется
+    intro: Программа в работе.
+    items:
+    - темы и количество модулей
+    - стоимость и формат early-bird
+    - даты старта
+  signup:
+    title: Записаться в лист ожидания
+    note: Оставьте email — пришлю программу и стоимость первой при готовности.
+  about_organizer:
+    link_text: olgarozet.ru
+    link_url: https://olgarozet.ru/
 - id: uzbekistan_2026_fall
   type: travel
   title: Бухара
@@ -1653,15 +1795,71 @@ events:
   - ''
   - Мастерской
   - «Розет»
+- id: meeting_2026_12_offline
+  type: meeting
+  broadcast:
+  - site
+  - telegram_channel
+  # ДОБАВЛЕНО СЛОВОМ АДМИНА 2026-09-03: «Декабрь — оффлайн встреча, как была в ЦДЛ
+  # (добавляю)». Месяц назван им — это якорь. Больше не названо НИЧЕГО, и здесь не стоит
+  # ничего сверх: ни площадки (сказано «как была в ЦДЛ», а не «в ЦДЛ»), ни дня, ни цены,
+  # ни темы. Состав встречи взят у единственного свидетеля этого рода в корпусе —
+  # `meeting_2026_05` (лид: «продолжение офлайн-встреч в ЦДЛ (декабрь 2025) в новом формате:
+  # доклад, диалог, нетворкинг»; `history`: 2025-12, venue cdl, offline, два проведения,
+  # «Человек и Ремесло», 5000 ₽). Неизвестное стоит открытыми вопросами, а не догадкой.
+  t_key: 2026-12
+  skoro_state: period
+  title: Встреча с Ольгой
+  audience: []
+  organizers:
+  - olgarozet
+  format:
+  - offline
+  - meeting
+  status: PLANNING
+  beats:
+  - role: when
+    from: horizon
+  - role: type
+    lines:
+    - Оффлайн-Встреча
+  - role: detail
+    lines:
+    - 'на манер наших встреч в ЦДЛ:'
+  - role: multi-component
+    items:
+    - - Доклад
+    - - профессиональный диалог
+    - - нетворкинг участников
+  lines:
+  - В декабре
+  - ''
+  - Оффлайн-Встреча
+  - 'на манер наших встреч в ЦДЛ:'
+  - ''
+  - Доклад
+  - +
+  - профессиональный диалог
+  - +
+  - нетворкинг участников
+  open_questions:
+  - to:
+    - olgarozet
+    q: Площадка декабрьской офлайн-встречи — ЦДЛ снова или другое место?
+  - to:
+    - olgarozet
+    q: День декабря, тема и стоимость участия?
 - id: serbia_2027
   type: travel
   title: Сербия
   t_key: '2027'
   date: в следующем году
   link: /program-2027/
-  broadcast:
-  - site
-  - telegram_channel
+  # ВЕЩАНИЕ СНЯТО (админ 2026-09-03: «2027 пусть внутри Системы, но пока не объявляем»).
+  # Сущность цела — цела программа, аудитория, площадки, лист ожидания и открытые вопросы;
+  # снят ровно ОДИН признак: на какие поверхности ряд выходит. Пустой `broadcast` есть
+  # объявление «мир этого пока не знает», а не удаление — ровно так же живёт курс в Британке.
+  broadcast: []
   audience:
   - architects
   - designers
@@ -1748,214 +1946,6 @@ events:
   - ''
   - лекция
   - и мастер-класс
-- id: course_price_value
-  type: publication
-  broadcast:
-  - site
-  - telegram_channel
-  t_key: 2026-08
-  skoro_state: pending
-  beats:
-  - role: when
-    from: horizon
-  - role: type
-    lines:
-    - 'Рассказ-показ:'
-  - role: concept
-    lines:
-    - Цена и Ценность
-  lines:
-  - Летом
-  - ''
-  - 'Рассказ-показ:'
-  - ''
-  - «Цена и Ценность»
-  title: Цена и Ценность
-  date: лето 2026
-  audience: []
-  organizers:
-  - olgarozet
-  format:
-  - online
-  - course
-  pricing: null
-  cohort: null
-  duration: null
-  registration: null
-  status: PLANNING
-  lead: Онлайн-курс «Цена и Ценность» — анонс. Программа собирается.
-  sections:
-  - title: Что известно
-    items:
-    - 'Формат: онлайн-курс'
-    - 'Автор: Ольга Розет'
-  - title: Что уточняется
-    intro: Программа в работе.
-    items:
-    - темы и количество модулей
-    - стоимость и формат early-bird
-    - даты старта
-  signup:
-    title: Записаться в лист ожидания
-    note: Оставьте email — пришлю программу и стоимость первой при готовности.
-  about_organizer:
-    link_text: olgarozet.ru
-    link_url: https://olgarozet.ru/
-- id: paintings_on_cardboard
-  type: event
-  broadcast:
-  - site
-  - telegram_channel
-  t_key: 2026-06
-  t_end: open
-  skoro_state: period
-  title: Картины на картоне
-  date: лето–осень 2026
-  audience: []
-  organizers:
-  - olgarozet
-  format: []
-  status: PLANNING
-  beats:
-  - role: when
-    from: horizon
-  - role: type
-    lines:
-    - Карт|ины на карт|оне
-- id: meeting_2026_05
-  type: meeting
-  broadcast:
-  - site
-  - telegram_channel
-  title: Человек и Ремесло
-  # t_key СНЯТ (Σ tellus 2026-09-03). Спека называла его своим именем: «⊥ ⟺ start не якорь —
-  # „Дату-время объявим“: позиция НЕИЗВЕСТНА, и это значение, а не выдуманный день; сегодня
-  # там стоит фиктивное 2026-08-31» (entity-event.md §horizon). Событие само говорит строкой
-  # «Дату-время объявим» — и одновременно несло дату, чтобы попасть в разбиение. Ныне ⊥
-  # горизонта наследует якорь соседа сверху (skoro.carry_anchors), поэтому место, куда его
-  # положил автор, держится порядком списка, а месяц не утверждается ничем.
-  date: до осени
-  audience: []
-  organizers:
-  - olgarozet
-  format:
-  - online
-  - meeting
-  series: meeting_chelovek_remeslo
-  first_online_in_series: true
-  pricing:
-    regular:
-      amount: 5000
-      currency: RUB
-    early_bird:
-      amount: 2500
-      currency: RUB
-      until: '2026-05-01'
-  cohort: null
-  duration: null
-  registration: null
-  status: PLANNING
-  history:
-  - season: 2025-12
-    venue: cdl
-    format: offline
-    occurrences: 2
-    theme: Человек и Ремесло
-    price_rub: 5000
-  lead: 'Первая онлайн-встреча серии «Встречи с Ольгой» — продолжение офлайн-встреч
-    в ЦДЛ (декабрь 2025) в новом формате: доклад, диалог, нетворкинг.'
-  sections:
-  - title: Формат
-    intro: Три части одной встречи.
-    items:
-    - <strong>Доклад Ольги</strong> — наблюдения и материалы из дизайн-путешествий
-      и собственных вылазок
-    - <strong>Профессиональный диалог</strong> с Ольгой
-    - <strong>Нетворкинг участников</strong> друг с другом
-  - title: Стоимость
-    items:
-    - <strong>5 000 ₽</strong> — обычная стоимость
-    - <strong>2 500 ₽</strong> — early-bird до 1 мая 2026
-    - Возможна скидка или бесплатное место по запросу — write o.g.rozet@gmail.com
-  - title: Подготовка
-    intro: Рекомендуется заранее.
-    items:
-    - Выделить место и время
-    - Приготовить себе еду
-  signup:
-    title: Записаться на встречу
-    note: Оставьте email — пришлю ссылку и точное время за день до встречи.
-  about_organizer:
-    gloss: Автор серии «Встречи».
-    link_text: olgarozet.ru
-    link_url: https://olgarozet.ru/
-  skoro_state: pending
-  beats:
-  - role: when
-    lines:
-    - 'Дату-время объявим:'
-  - role: type
-    lines:
-    - Онлайн-Встреча
-  - role: detail
-    lines:
-    - 'на манер наших оффлайновых:'
-  - role: multi-component
-    items:
-    - - Доклад
-    - - 🔥
-    - - деловое и личное общение
-      - со мной и друг-другом
-    - - еда у экрана
-  lines:
-  - Дату-время объявим
-  - ''
-  - Онлайн-Встреча
-  - 'на манер наших оффлайновых:'
-  - ''
-  - Доклад
-  - +
-  - 🔥
-  - +
-  - деловое и личное общение
-  - со мной и друг-другом
-  - +
-  - еда у экрана
-- id: excursion_melnikov_nov_2026
-  type: event
-  broadcast:
-  - site
-  - telegram_channel
-  t_key: 2026-11
-  skoro_state: period
-  title: Экскурсия по Мельникову
-  date: конец ноября
-  audience: []
-  organizers:
-  - olgarozet
-  format:
-  - excursion
-  pricing: null
-  cohort: null
-  duration: null
-  registration: null
-  status: PLANNING
-  beats:
-  - role: when
-    lines:
-    - В конце
-  - role: type
-    lines:
-    - Экскурсия
-  - role: detail
-    lines:
-    - по круглому дому Мельникова
-  lines:
-  - В конце
-  - ''
-  - Экскурсия
-  - ''
-  - по круглому дому Мельникова
 publications:
 - id: prog-2027-site
   channel: site
