@@ -129,11 +129,17 @@ def _compile_typo_regexes(rules: dict[str, Any]) -> tuple[Any, ...]:
     _pmax = rules.get("nbsp_preposition_max_len")
     preps = [p for p in (rules.get("nbsp_prepositions") or [])
              if _pmax is None or len(str(p)) <= int(_pmax)]
+    # СКРЕПЛЕНИЕ НЕ ПЕРЕСЕКАЕТ ПЕРЕВОД СТРОКИ (Σ tellus 2026-09-04). `\s` включает `\n`, и
+    # правило, введённое против ОБРЫВА, который сделает движок переноса, съедало обрыв,
+    # который сделал АВТОР: «вместе с\nНатальей Логиновой» превращалось в одну строку.
+    # Замерено на доске «Скоро», где всякий перевод строки — авторский (вертикальное
+    # стаккато ломает такт по строкам). Внутристрочный пробел — `[^\S\n]`.
+    _H = r"[^\S\n]"
     unit_re = None
     if units:
         unit_alt = "|".join(units)
         unit_re = _re.compile(
-            rf"(\d+(?:[.,]\d+)?)\s+({unit_alt})(?=\W|$)",
+            rf"(\d+(?:[.,]\d+)?){_H}+({unit_alt})(?=\W|$)",
             _re.IGNORECASE | _re.UNICODE,
         )
     prep_re = None
@@ -153,7 +159,7 @@ def _compile_typo_regexes(rules: dict[str, Any]) -> tuple[Any, ...]:
         # с em-dash, brackets — orphan slipped through these. Relaxed к \S covers
         # все non-whitespace destinations (admin 2026-05-10 strict audit).
         prep_re = _re.compile(
-            rf"(?<![\w])({prep_alt})\s+(?=\S)",
+            rf"(?<![\w])({prep_alt}){_H}+(?=[^\s])",
         )
     # Третий класс правил (данные, generic): NBSP-скрепление сепараторов.
     # nbsp_before: пробел ПЕРЕД знаком → NBSP («слово —» не рвётся: тире не
@@ -1836,18 +1842,41 @@ def _effective_stage(event: dict[str, Any], now_iso: str | None = None) -> str:
     """Inv-EV-stage-time-derived (entity-event.md::stage_time_derivation),
     datetime-precise per Inv-STF-datetime-precise (surface-temporal-fixpoint.md):
 
-      - now ≥ end(t_end)                → CONCLUDED  (the moment the event ends —
-                                          same-day for a datetime t_end; live-2 class)
-      - start(t_key) ≤ now < end(t_end) → ONGOING    (when stored ∈ ongoing_eligible_stages)
-      - otherwise                        → stored stage unchanged
+      [start, end) = skoro.horizon(E)     — ОДНА дверь конца, та же, что у κ
+      - now ≥ end       → CONCLUDED   («прошло» — auto-excluded from forward surfaces)
+      - start ≤ now < end → ONGOING   (when stored ∈ ongoing_eligible_stages)
+      - horizon ⊥ / otherwise → stored stage unchanged
+
+    КОНЕЦ У СОБЫТИЯ ОДИН, И ЧИТАЮТ ЕГО ОДНОЙ ДВЕРЬЮ (Σ tellus 2026-09-03). Здесь стояло
+    `anchor_dt(event.get("t_end"))` — то есть ПОЛЕ, — тогда как `skoro.horizon` выводит конец
+    из ПАРЫ границ и объявляет три рода (entity-event.md §horizon, редакция 2026-08-12):
+
+        точка   ⟺ `t_end` нет      ⇒ end = конец периода САМОГО start («2026-08» = весь август)
+        отрезок ⟺ `t_end` — якорь  ⇒ end = его исключительная верхняя граница
+        луч     ⟺ `t_end: open`    ⇒ end = +∞ (конец есть и не наступит)
+
+    У одного события оказалось ДВА конца, и только один из читателей знал выведенный. Цена
+    замерена на живом корпусе 2026-09-03: `skoro.anchor_of` уже опиралась на этот гейт вслух
+    («интервал ЦЕЛИКОМ в прошлом… „Скоро“ такое отфильтрует»), а гейт конца не видел — и
+    «Скоро» Ольги открывалось блоком АВГУСТ (Диптих · «Цена и Ценность» · Онлайн-Встреча)
+    третьего сентября, на сайте и в TG #62 разом, ВЫШЕ Парижа, до которого оставалось 5 дней.
+    Точка без `t_end` не могла завершиться НИКОГДА, поэтому обещание с прошедшим горизонтом
+    держалось на доске вечно и печатало прошлый месяц как свой.
+
+    Родовое следствие, а не частный случай: всякая сущность, объявившая `horizon_bounds`,
+    получает тотальную по времени стадию даром — тем же ходом, которым §G получила κ.
+    Хроника (`landing_section`) при этом не теряет прошлых вех: что показывать — решает
+    `renderable_for[σ]`, и CONCLUDED там объявлен ЯВНО, а не выпадал по недостижимости.
 
     Anchors via the canonical datetime_parsers.anchor_dt (datetime = exact
     moment; date-only = its whole day/month/year). `now_iso` — ISO string, date
     or datetime, tz-aware ok (normalised к naive-UTC); a date-only now means
     that day's 00:00. Defaults к the current UTC instant. Witness:
-    tests/test_effective_stage_datetime_precise.py (cross-owner grid + live-2 pin).
+    tests/test_effective_stage_datetime_precise.py (cross-owner grid + live-2 pin)
+    + tests/test_event_horizon_totality.py (the three interval kinds × the gate).
     """
-    from datetime_parsers import anchor_dt, now_utc_naive, parse_iso_ts
+    from datetime_parsers import now_utc_naive, parse_iso_ts
+    from skoro import horizon as _horizon        # lazy: skoro↔site_generator — обе двери ленивы
     stored = (event.get("status") or event.get("lifecycle", {}).get("stage") or "PLANNING")
     if now_iso is None:
         now = now_utc_naive()
@@ -1855,11 +1884,13 @@ def _effective_stage(event: dict[str, Any], now_iso: str | None = None) -> str:
         now = parse_iso_ts(now_iso, naive_utc=True)
         if now is None:
             return stored
-    end = anchor_dt(event.get("t_end"), end=True)
-    if end and now >= end:
+    h = _horizon(event)
+    if h is None:                    # ⊥ горизонта («Дату-время объявим») — позиция НЕИЗВЕСТНА,
+        return stored                # и неизвестное не истекает: стадия остаётся хранимой
+    start, end = h
+    if now >= end:
         return "CONCLUDED"
-    start = anchor_dt(event.get("t_key"))
-    if start and end and start <= now < end and stored in _ongoing_eligible():
+    if start <= now < end and stored in _ongoing_eligible():
         return "ONGOING"
     return stored
 
@@ -2293,13 +2324,18 @@ def p_site(d: dict[str, Any]) -> str:
     # Per Inv-CMP-STYLE-CTA-anchor-uniform: hub-event-card CTA points к canonical FQDN landing
     # (event.web_addresses[0]). SkoroSpec encapsulates entry formatting per Surface; site
     # variant reads same Spec table.
-    from skoro import render as render_skoro_digest_dispatch
+    from skoro import render as render_skoro_digest_dispatch, board_header as _board_header
     events_html = render_skoro_digest_dispatch(d, "site")
+    # ИМЯ ДОСКИ — ИЗ ОДНОГО ОБЪЯВЛЕНИЯ (channel.md::skoro_digest_render.header). Здесь оно
+    # стояло ЛИТЕРАЛОМ «СКОРО:» — третьим домом того же слова рядом с двумя `open_str`, — и
+    # дома уже разошлись в знаке препинания: принципал 2026-09-04 пишет «СКОРО» без
+    # двоеточия, и правка одного дома оставила бы страницу говорить своё.
+    skoro_header = _board_header()
     # The heading is a PROMISE about content; with nothing to announce, «СКОРО:» over empty
     # space is a stub in markup rather than in data. Wrapper follows its content (the same
     # identity-absorption as the about-section), so a total record renders byte-identically.
     events_section = f"""      <section id="events" aria-labelledby="events-heading">
-        <h2 id="events-heading">СКОРО:</h2>
+        <h2 id="events-heading">{skoro_header}</h2>
 {events_html}
       </section>""" if events_html.strip() else ""
 
