@@ -46,6 +46,8 @@ consultations:
   redirect_from:
   - booking
   cta: Записаться
+  heading: 'Включить меня в дело:'
+  no_times: пока времён нет
 booking:
   transport_url_ref: booking_webhook_url
 people:
@@ -2291,6 +2293,25 @@ publications:
     - paris-2026-09-ig-story-1
     - paris-2026-09-ig-story-2
     - paris-2026-09-ig-story-3
+  schema_version: 1
+- id: olga-tg-booking-availability
+  channel: telegram_channel
+  entity_id: consultations
+  entity_type: telegram_post
+  kind: booking_availability
+  target_event: null
+  status: published
+  uploaded_at: '2025-12-24T09:29:21Z'
+  external_url: https://t.me/olga_rozet/35
+  platform_id: '35'
+  title: Включить меня в дело — зеркало доступности записи @olga_rozet
+  utility_synopsis: 'Пост-зеркало доступности записи (TG msg #35, набран рукой владельца
+    2025-12-24). Правится живьём из consultations × engage.booking_open
+    (channel.md::booking_availability_render): открыто — предложение и «Записаться» ребром
+    на страницу записи; закрыто — «ПОКА ВРЕМЁН НЕТ». Зарегистрирован 2026-09-08.
+
+    '
+  campaign_id: null
   schema_version: 1
 - id: paris-2026-09-ig-post-main
   channel: instagram
