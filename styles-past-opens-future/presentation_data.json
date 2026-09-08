@@ -1,0 +1,1135 @@
+{
+ "meta": {
+  "title": "СТИЛИ\nИ ТРЕНДЫ",
+  "subtitle": "Зачем понимать стили,\nесли современность\nне требует канонов\n?",
+  "pretitle": "Рассказ-показ",
+  "author": "Ольга Розет",
+  "context": [
+   "Часть первая · Стили · Прошлое открывает будущее"
+  ],
+  "cite": {
+   "act": "quote",
+   "text": "Атмосфера = идеология / философия / ценности жизни"
+  },
+  "badges": [
+   "7 стилей",
+   "7 осей анализа",
+   "19 понятий"
+  ],
+  "display": {
+   "chapters": "Глава {n} · {a} – {b}",
+   "record": {
+    "root": {
+     "audio": "",
+     "video": "Видеозапись"
+    },
+    "chapter": {
+     "audio": "",
+     "video": "смотреть с этого места"
+    },
+    "segment": {}
+   },
+   "head": "{title} — {author}",
+   "tag": "{name} · {issue}",
+   "description": "{subtitle}"
+  },
+  "sections": {
+   "contents": "Оглавление",
+   "nav": "Перейти к главе",
+   "terms": {
+    "note": "Словарь",
+    "title": "Понятия",
+    "lead": "Термины лекции в порядке появления. Каждое понятие ведёт к единицам, где оно работает."
+   },
+   "axes": {
+    "note": "Инструмент",
+    "title": "Оси анализа",
+    "lead": "Те же семь осей, которыми разбираются тренды, — здесь применены к стилям. Прошлое читается той же оптикой, что настоящее: у каждой единицы указано, какими осями она читается."
+   }
+  },
+  "footer": {
+   "links": [
+    {
+     "label": "olgarozet.ru",
+     "url": "https://olgarozet.ru"
+    }
+   ]
+  },
+  "source": {
+   "deck": "../../_raw/stili-trendy-part1-order-8-10-9.pdf",
+   "rasters": "../../site-sources/styles-past-opens-future/img",
+   "recording": {
+    "oid": "35309e2b84cb74b5",
+    "at": []
+   }
+  },
+  "provenance": {
+   "derived_by": "lumen",
+   "derived_at": "2026-09-08",
+   "method": "прочтение дека (лист → единица, надписи — атомами) · черновая аудиозапись 2026-08-22 как носитель времени (секунды по репликам «следующий слайд» и совпадению надписей с речью; итоговая запись заменит носитель — секунды выводятся заново)",
+   "inputs": {
+    "deck": "236132695f8e208fb29961a1e40e8a6b14a80b9fa44b414cf6960fd4213ae5dc",
+    "recording": "35309e2b84cb74b580e0e35788970e206f7a8baf8e5c7b9aa966d1d7a582b720"
+   }
+  },
+  "genre": "narrative-showcase",
+  "presentation": {
+   "root": [
+    {
+     "role": "note",
+     "field": "pretitle"
+    },
+    {
+     "role": "note",
+     "field": "context"
+    },
+    {
+     "role": "title",
+     "field": "title"
+    },
+    {
+     "role": "note",
+     "field": "subtitle"
+    },
+    {
+     "role": "strophe",
+     "field": "staccato"
+    },
+    {
+     "role": "speech",
+     "field": "cite"
+    },
+    {
+     "role": "strophe",
+     "field": "badges"
+    },
+    {
+     "role": "record",
+     "field": "fragment"
+    }
+   ],
+   "term": [
+    {
+     "role": "title",
+     "field": "name"
+    },
+    {
+     "role": "prose",
+     "field": "text"
+    }
+   ]
+  },
+  "collections": {
+   "terms": {
+    "kind": "term",
+    "form": "definitions",
+    "identity": "id",
+    "members": "segments",
+    "member_key": "terms"
+   }
+  }
+ },
+ "chapters": [
+  {
+   "id": "prologue",
+   "layout": "gallery",
+   "title": "Камертон",
+   "lead": "Два интерьера, с которых лекция начинается без объяснений: библиотека Лауры Гонзалес и салон Humbert & Poyet. К ним стоит вернуться в конце и прочитать по осям.",
+   "members": [
+    "title-leaf",
+    "laura-gonzalez-library",
+    "humbert-poyet-salon"
+   ]
+  },
+  {
+   "id": "apparatus",
+   "layout": "grid",
+   "title": "Понятия",
+   "lead": "Зачем понимать элементы стилей, если современность не требует канонов?",
+   "text": "Ответ листа 7 — атмосфера. Стиль здесь не набор визуальных признаков, которым учат на курсах истории дизайна, а идеология, философия и ценности жизни, воплощённые в пространстве. Дальше каждая глава берёт одну эпоху и спрашивает, во что она верила и как это видно в интерьере сегодня.",
+   "members": [
+    "what-is-style",
+    "grand-styles",
+    "interior-styles",
+    "atmosphere"
+   ]
+  },
+  {
+   "id": "antiquity",
+   "layout": "grid",
+   "title": "Античность",
+   "lead": "Во что верила античность: мир как идеальный порядок, где всё на своём месте, а мера всему — человек.",
+   "text": "Космос против хаоса; у Рима к порядку добавляется польза. Сегодня этот порядок читается у Понтремоли на вилле Керилос и у Лагерфельда, который делает из ордера мебель.",
+   "members": [
+    "antiquity-cosmos",
+    "villa-kerylos",
+    "lagerfeld-columns"
+   ]
+  },
+  {
+   "id": "romanesque",
+   "layout": "grid",
+   "title": "Романский стиль",
+   "lead": "Романская эпоха видит в центре Бога и ждёт конца света, поэтому в жилище нет ничего лишнего.",
+   "text": "Толстые стены, окна-бойницы, тишина внутри и опасность снаружи: храм как убежище. Тот же аскетизм у Вервордта в Гравенвезеле и в доме Hidden Hills, где вместо золота и хрусталя выбраны тишина и свет.",
+   "members": [
+    "romanesque-refuge",
+    "vervoordt-gravenwezel",
+    "vervoordt-threshold",
+    "hidden-hills-house"
+   ]
+  },
+  {
+   "id": "gothic",
+   "layout": "grid",
+   "title": "Готика",
+   "lead": "Готика хочет показать, как устроен рай: Бог как высшая математика и свет как Его тень.",
+   "text": "Прозрачное здание, структура видна от крупного к мелкому, стены из цветного стекла. Тот же жест у Калатравы в Oculus и в доме Фарнсуорт, залитом красными лазерами.",
+   "members": [
+    "gothic-light",
+    "oculus-calatrava",
+    "farnsworth-lasers",
+    "farnsworth-interior",
+    "farnsworth-exterior"
+   ]
+  },
+  {
+   "id": "renaissance",
+   "layout": "grid",
+   "title": "Ренессанс",
+   "lead": "Ренессанс возвращает меру человеку: золотое сечение, круг и купол, гармония вместо долгого пути к алтарю.",
+   "text": "Стоящий под куполом становится осью координат. Кольцо Фостера в Apple Park и цилиндр в Дубае, кессоны Дирана и Перегалли, арки Ван Дуйсена, лучевой пол Гуаданьино.",
+   "members": [
+    "renaissance-measure",
+    "apple-dubai-mall",
+    "apple-park",
+    "dirand-restaurant",
+    "studio-peregalli",
+    "van-duysen-antwerp",
+    "aesop-guadagnino",
+    "guadagnino-wood"
+   ]
+  },
+  {
+   "id": "baroque",
+   "layout": "grid",
+   "title": "Барокко",
+   "lead": "Барокко отказывается от статичного мира: динамика, иллюзия и масштаб ради статуса.",
+   "text": "Интерьер как инструмент впечатления и даже подавления через театрализацию — рекламная кампания эпохи. Сегодня это Mondrian Doha Марселя Вандерса: витражный купол, спиральная лестница, люстры в белых дисках.",
+   "members": [
+    "baroque-theatre",
+    "mondrian-doha-pool",
+    "mondrian-doha-ballroom"
+   ]
+  },
+  {
+   "id": "classicism-empire",
+   "layout": "grid",
+   "title": "Классицизм и Ампир",
+   "lead": "Просвещение верит в факты и логику: мир не театр, а идеально работающие часы, симметрия как закон.",
+   "text": "Сегодня классицизм — стиль Old Money и власти: контроль, стабильность, традиция. Ампир — стиль победителей: шатёр генерала, полоска, орлы и лавр. Носители: Томас Фезант, Жан-Луи Деньо, «Уютная Империя» Ralph Lauren.",
+   "members": [
+    "classicism-clockwork",
+    "pheasant-hall",
+    "deniot-enfilade",
+    "deniot-salon",
+    "ralph-lauren-dining",
+    "ralph-lauren-bedroom"
+   ]
+  },
+  {
+   "id": "contextual-modernism",
+   "layout": "grid",
+   "title": "Контекстуальный модернизм",
+   "lead": "Современность без канона: интерьер читает контекст места и складывает его слои.",
+   "text": "Cour des Vosges бюро Lecoadic-Scotto в Париже: балки и сталь, замша и латунь, розовая штора и синяя ниша. Всё, что накопили эпохи, работает здесь без цитат.",
+   "members": [
+    "cour-des-vosges-room",
+    "cour-des-vosges-salon",
+    "cour-des-vosges-bedroom"
+   ]
+  },
+  {
+   "id": "exercise",
+   "layout": "closing",
+   "title": "Упражнение",
+   "lead": "Прочитайте свой интерьер так, как в лекции прочитаны Керилос и Гравенвезел.",
+   "members": [
+    "exercise-steps"
+   ]
+  },
+  {
+   "id": "self-check",
+   "layout": "gallery",
+   "title": "Самопроверка",
+   "lead": "Семь интерьеров из колоды без подписей. Назовите философию, потом проверьте ответ.",
+   "members": [
+    "check-order",
+    "check-silence",
+    "check-light",
+    "check-measure",
+    "check-drama",
+    "check-clock",
+    "check-context"
+   ]
+  }
+ ],
+ "terms": {
+  "style": {
+   "name": "Стиль",
+   "text": "Тип здания или интерьера с устойчивыми признаками конструкции и облика. Опознаётся по форме и геометрии, материалам и типу декора; классифицируется по времени и месту."
+  },
+  "grand-style": {
+   "name": "Большой стиль",
+   "text": "Художественная система, охватившая все пространственные искусства, с единой идеологией и собственной тектонической логикой. Их шесть: античный ордер, романский, готика, ренессанс, барокко, классицизм с ампиром."
+  },
+  "interior-style": {
+   "name": "Интерьерный стиль",
+   "text": "Устойчивая система признаков внутри замкнутого объёма: колористическая схема, материалы поверхностей, морфология мебели, схема света. Рождается утилитарностью и сжатием большого стиля до комнаты; живёт короче здания."
+  },
+  "atmosphere": {
+   "name": "Атмосфера",
+   "text": "То, ради чего нужны стили без канонов: идеология, философия и ценности жизни, воплощённые в пространстве. Ключ всей лекции."
+  },
+  "cosmocentrism": {
+   "name": "Космоцентризм",
+   "text": "Античная картина мира: мир как идеальный порядок, где каждая деталь на своём месте. Порядок — признак гармонии, его противник — хаос."
+  },
+  "human-as-module": {
+   "name": "Человек как модуль",
+   "text": "Мера античного порядка — человек: из его пропорций выводится ордер, а у Рима к порядку добавляется польза."
+  },
+  "theocentrism": {
+   "name": "Теоцентризм",
+   "text": "Романская картина мира: Бог в центре как единственный свет; храм — убежище с толстыми стенами и окнами-бойницами, внутри тишина и порядок, снаружи шум и опасность."
+  },
+  "eschatology": {
+   "name": "Эсхатология",
+   "text": "Ожидание конца света: без горизонта планирования в жилище нет ничего лишнего — отсюда аскетизм романского интерьера."
+  },
+  "wabi-sabi": {
+   "name": "Ваби-саби",
+   "text": "Эстетика тишины, несовершенства и пустоты. У Вервордта в Hidden Hills — келья монаха, переосмысленная для XXI века: вместо золота и хрусталя тишина и свет."
+  },
+  "scholasticism": {
+   "name": "Схоластика",
+   "text": "Готическая мысль: Бог как высшая математика. Здание прозрачно, его структура видна от крупного к мелкому."
+  },
+  "lux-nova": {
+   "name": "Lux Nova",
+   "text": "«Новый свет»: солнечный свет, прошедший через витраж, становится божественным. Здание как стеклянный фонарь, показывающий, как устроен рай."
+  },
+  "human-measure": {
+   "name": "Человек — мера",
+   "text": "«Человек — мера всех вещей»: Витрувианский человек Леонардо. Сегодня это называют эргономикой."
+  },
+  "golden-ratio": {
+   "name": "Золотое сечение",
+   "text": "Математика красоты — пропорция, которой Ренессанс измерял гармонию."
+  },
+  "circle-and-dome": {
+   "name": "Круг и купол",
+   "text": "Идеальная форма: центральная симметрия, все точки равноудалены от центра. Стоящий под куполом становится осью координат — вместо долгого пути к алтарю в длинном средневековом храме."
+  },
+  "theatricality": {
+   "name": "Театрализация",
+   "text": "Интерьер как инструмент впечатления и статуса: динамика и иллюзия вместо статичного порядка, никаких прямых линий. Рекламная кампания эпохи."
+  },
+  "rationalism": {
+   "name": "Рационализм",
+   "text": "Просвещение: факты и логика. Мир — не театр, а идеально работающие часы; симметрия — закон."
+  },
+  "old-money": {
+   "name": "Old Money",
+   "text": "Нынешнее прочтение классицизма: контроль, стабильность, богатство, традиция. Выбор тех, кто показывает гражданский долг."
+  },
+  "empire-style": {
+   "name": "Ампир",
+   "text": "Стиль победителей: интерьер как шатёр генерала — полоска, орлы, мечи, щиты, золото и лавровые венки; примат власти."
+  },
+  "contextual-modernism": {
+   "name": "Контекстуальный модернизм",
+   "text": "Современный интерьер без канона: читает контекст места и складывает его слои — балки, замша, сталь и латунь в Cour des Vosges."
+  }
+ },
+ "axes": {
+  "morphology": {
+   "shortTitle": "Формообразование",
+   "title": "Морфология",
+   "text": "Как эпоха строит форму: колонна как модуль у античности, тяжёлая стена у романики, рёбра и вертикаль у готики, круг и купол у ренессанса, кривая и спираль у барокко, ось и симметрия у классицизма."
+  },
+  "colors": {
+   "shortTitle": "Цвета",
+   "title": "Интенсивность, температура, характер",
+   "text": "Цвет как знак эпохи: мрамор и охра античности, патина и белёные стены романики, цветной свет готики, зелёные и золотые кессоны ренессанса, чёрно-белая драма барокко, чёрное с золотом ампира."
+  },
+  "ornaments": {
+   "shortTitle": "Орнаменты",
+   "title": "Узор как осмысленный выбор",
+   "text": "Орнамент называет идеологию: меандр и мозаика античности, аскеза романики, витраж готики, кессон и роспись ренессанса, витражный купол барокко, полоска и лавр ампира."
+  },
+  "textures": {
+   "shortTitle": "Текстуры",
+   "title": "Тактильность и столкновение фактур",
+   "text": "Фактура несёт время: патина стен у Вервордта, кожа и стекло у Мис ван дер Роэ, полосатый диван Перегалли, шотландский плед Ralph Lauren, замша и сталь в Cour des Vosges."
+  },
+  "materials": {
+   "shortTitle": "Материалы",
+   "title": "Честность сырья без имитаций",
+   "text": "Материал — первый признак стиля: мрамор античности, камень романики, цветное стекло готики, дерево и камень ренессанса, зеркало и хрусталь барокко, буазери и позолота классицизма."
+  },
+  "technologies": {
+   "shortTitle": "Технологии",
+   "title": "Чем построено и что умеет эпоха",
+   "text": "Каждая эпоха строит из того, что умеет: ордерная система, каркас готики, купол ренессанса; сегодня — стеклянный фасад Фостера, лазеры Kraftwerk у Фарнсуорт, геометрическая обшивка у Гуаданьино."
+  },
+  "philosophy": {
+   "shortTitle": "Философия времени",
+   "title": "Идеология и философия времени и места",
+   "text": "Ось, с которой начинается каждая глава: что эпоха считала главным — порядок, Бога, свет, человека, впечатление, разум — и как это видно в современном интерьере."
+  }
+ },
+ "segments": [
+  {
+   "id": "title-leaf",
+   "file": "slide-01.png",
+   "title": "Прошлое открывает будущее",
+   "tag": "Титул",
+   "cite": {
+    "act": "caption",
+    "text": "Колонный зал с современным стеллажом"
+   },
+   "axis": [
+    "philosophy"
+   ],
+   "page": 1,
+   "basis": "figure"
+  },
+  {
+   "id": "laura-gonzalez-library",
+   "file": "slide-02.png",
+   "title": "Лаура Гонзалес",
+   "tag": "Камертон · библиотека",
+   "cite": {
+    "act": "caption",
+    "text": "Библиотека: белый скульптурный камин и округлый белый диван"
+   },
+   "axis": [
+    "morphology",
+    "colors",
+    "materials"
+   ],
+   "page": 2,
+   "basis": "figure"
+  },
+  {
+   "id": "humbert-poyet-salon",
+   "file": "slide-03.png",
+   "title": "Humbert & Poyet",
+   "tag": "Камертон · салон",
+   "cite": {
+    "act": "caption",
+    "text": "Синяя ширма, шторы с паттерном, белые кресла, мрамор"
+   },
+   "axis": [
+    "colors",
+    "ornaments",
+    "materials"
+   ],
+   "page": 3,
+   "basis": "figure"
+  },
+  {
+   "id": "what-is-style",
+   "file": "slide-04.png",
+   "title": "Что такое стиль",
+   "tag": "Понятия · определение",
+   "axis": [
+    "morphology",
+    "materials",
+    "ornaments"
+   ],
+   "terms": [
+    "style",
+    "grand-style"
+   ],
+   "page": 4
+  },
+  {
+   "id": "grand-styles",
+   "file": "slide-05.png",
+   "title": "Большие стили",
+   "tag": "Понятия · шесть систем",
+   "axis": [
+    "philosophy"
+   ],
+   "terms": [
+    "grand-style"
+   ],
+   "page": 5
+  },
+  {
+   "id": "interior-styles",
+   "file": "slide-06.png",
+   "title": "Интерьерные стили",
+   "tag": "Понятия · маркеры",
+   "axis": [
+    "colors",
+    "materials",
+    "morphology",
+    "technologies"
+   ],
+   "terms": [
+    "interior-style"
+   ],
+   "page": 6
+  },
+  {
+   "id": "atmosphere",
+   "file": "slide-07.png",
+   "title": "Атмосфера",
+   "tag": "Понятия · ключ лекции",
+   "cite": {
+    "act": "quote",
+    "text": "Атмосфера = идеология / философия / ценности жизни"
+   },
+   "axis": [
+    "philosophy"
+   ],
+   "terms": [
+    "atmosphere"
+   ],
+   "page": 7
+  },
+  {
+   "id": "antiquity-cosmos",
+   "file": "slide-08.png",
+   "title": "Мир как порядок",
+   "tag": "Античность · философия",
+   "axis": [
+    "philosophy",
+    "morphology"
+   ],
+   "terms": [
+    "cosmocentrism",
+    "human-as-module"
+   ],
+   "page": 8
+  },
+  {
+   "id": "villa-kerylos",
+   "file": "slide-09.png",
+   "title": "Вилла Керилос",
+   "tag": "Античность · Понтремоли, 1902–1908",
+   "cite": {
+    "act": "caption",
+    "text": "Колонный зал с мозаикой и меандром; спальня с красными колоннами и росписью"
+   },
+   "axis": [
+    "ornaments",
+    "materials",
+    "morphology"
+   ],
+   "page": 9,
+   "basis": "figure"
+  },
+  {
+   "id": "lagerfeld-columns",
+   "file": "slide-10.png",
+   "title": "Колонны Лагерфельда",
+   "tag": "Античность · носитель",
+   "cite": {
+    "act": "caption",
+    "text": "Мебель-колонны: чёрные столы-ордеры, белые мраморные табуреты, зеркало, консоль"
+   },
+   "axis": [
+    "morphology",
+    "materials"
+   ],
+   "page": 10,
+   "basis": "figure"
+  },
+  {
+   "id": "romanesque-refuge",
+   "file": "slide-11.png",
+   "title": "Храм как убежище",
+   "tag": "Романский стиль · философия",
+   "axis": [
+    "philosophy",
+    "materials"
+   ],
+   "terms": [
+    "theocentrism",
+    "eschatology"
+   ],
+   "page": 11
+  },
+  {
+   "id": "vervoordt-gravenwezel",
+   "file": "slide-12.png",
+   "title": "Замок Гравенвезел",
+   "tag": "Романский стиль · Аксель Вервордт",
+   "cite": {
+    "act": "caption",
+    "text": "Белые чехлы, балки, камин; хозяева с собакой"
+   },
+   "axis": [
+    "materials",
+    "textures",
+    "colors"
+   ],
+   "page": 12,
+   "basis": "figure"
+  },
+  {
+   "id": "vervoordt-threshold",
+   "file": "slide-13.png",
+   "title": "Проём и камень",
+   "tag": "Романский стиль · разворот книги",
+   "cite": {
+    "act": "caption",
+    "text": "Дверной проём с занавесью; каменный пол"
+   },
+   "axis": [
+    "materials",
+    "textures"
+   ],
+   "page": 13,
+   "basis": "figure"
+  },
+  {
+   "id": "hidden-hills-house",
+   "file": "slide-14.png",
+   "title": "Hidden Hills House",
+   "tag": "Романский стиль · ваби-саби",
+   "axis": [
+    "philosophy",
+    "colors",
+    "materials"
+   ],
+   "terms": [
+    "wabi-sabi"
+   ],
+   "page": 14
+  },
+  {
+   "id": "gothic-light",
+   "file": "slide-15.png",
+   "title": "Метафизика света",
+   "tag": "Готика · философия",
+   "axis": [
+    "philosophy",
+    "technologies",
+    "materials"
+   ],
+   "terms": [
+    "scholasticism",
+    "lux-nova"
+   ],
+   "page": 15
+  },
+  {
+   "id": "oculus-calatrava",
+   "file": "slide-16.png",
+   "title": "Oculus",
+   "tag": "Готика · Сантьяго Калатрава",
+   "cite": {
+    "act": "caption",
+    "text": "Неф-рёбра изнутри; белая галерея-аркада"
+   },
+   "axis": [
+    "morphology",
+    "technologies"
+   ],
+   "page": 16,
+   "basis": "figure"
+  },
+  {
+   "id": "farnsworth-lasers",
+   "file": "slide-17.png",
+   "title": "Фарнсуорт в лазерах",
+   "tag": "Готика · Мис ван дер Роэ, 1945–1951",
+   "axis": [
+    "technologies",
+    "philosophy"
+   ],
+   "page": 17
+  },
+  {
+   "id": "farnsworth-interior",
+   "file": "slide-18.png",
+   "title": "Интерьер Фарнсуорт",
+   "tag": "Готика · носитель",
+   "cite": {
+    "act": "caption",
+    "text": "Кожаная мебель Barcelona, стеклянные стены"
+   },
+   "axis": [
+    "materials",
+    "morphology"
+   ],
+   "page": 18,
+   "basis": "figure"
+  },
+  {
+   "id": "farnsworth-exterior",
+   "file": "slide-19.png",
+   "title": "Дом в лесу",
+   "tag": "Готика · носитель",
+   "cite": {
+    "act": "caption",
+    "text": "Стеклянный дом в осеннем лесу"
+   },
+   "axis": [
+    "materials",
+    "philosophy"
+   ],
+   "page": 19,
+   "basis": "figure"
+  },
+  {
+   "id": "renaissance-measure",
+   "file": "slide-20.png",
+   "title": "Человек как мера",
+   "tag": "Ренессанс · философия",
+   "axis": [
+    "philosophy",
+    "morphology"
+   ],
+   "terms": [
+    "human-measure",
+    "golden-ratio",
+    "circle-and-dome"
+   ],
+   "page": 20
+  },
+  {
+   "id": "apple-dubai-mall",
+   "file": "slide-21.png",
+   "title": "Apple Dubai Mall",
+   "tag": "Ренессанс · Норман Фостер",
+   "cite": {
+    "act": "caption",
+    "text": "Цилиндрический стеклянный фасад с решёткой, ночь"
+   },
+   "axis": [
+    "morphology",
+    "technologies",
+    "materials"
+   ],
+   "page": 21,
+   "basis": "figure"
+  },
+  {
+   "id": "apple-park",
+   "file": "slide-22.png",
+   "title": "Apple Park",
+   "tag": "Ренессанс · Норман Фостер",
+   "cite": {
+    "act": "caption",
+    "text": "Кольцо кампуса с воздуха"
+   },
+   "axis": [
+    "morphology",
+    "philosophy"
+   ],
+   "page": 22,
+   "basis": "figure"
+  },
+  {
+   "id": "dirand-restaurant",
+   "file": "slide-23.png",
+   "title": "Ресторан Дирана",
+   "tag": "Ренессанс · Жозеф Диран",
+   "cite": {
+    "act": "caption",
+    "text": "Зелёные диваны и кресла, гигантские светильники-фонари, кессонный потолок"
+   },
+   "axis": [
+    "colors",
+    "morphology",
+    "ornaments"
+   ],
+   "page": 23,
+   "basis": "figure"
+  },
+  {
+   "id": "studio-peregalli",
+   "file": "slide-24.png",
+   "title": "Studio Peregalli",
+   "tag": "Ренессанс · Перегалли и Сартори Римини",
+   "cite": {
+    "act": "caption",
+    "text": "Зелёные расписные стены, кессонный потолок, полосатый диван"
+   },
+   "axis": [
+    "ornaments",
+    "colors"
+   ],
+   "page": 24,
+   "basis": "figure"
+  },
+  {
+   "id": "van-duysen-antwerp",
+   "file": "slide-25.png",
+   "title": "Ван Дуйсен",
+   "tag": "Ренессанс · Антверпен",
+   "cite": {
+    "act": "caption",
+    "text": "Белый зал с арочными окнами, чёрный балкон-антресоль"
+   },
+   "axis": [
+    "morphology",
+    "colors"
+   ],
+   "page": 25,
+   "basis": "figure"
+  },
+  {
+   "id": "aesop-guadagnino",
+   "file": "slide-26.png",
+   "title": "Магазин Aesop",
+   "tag": "Ренессанс · Лука Гуаданьино",
+   "cite": {
+    "act": "caption",
+    "text": "Каменный остров-умывальник, лучевой пол"
+   },
+   "axis": [
+    "materials",
+    "ornaments",
+    "morphology"
+   ],
+   "page": 26,
+   "basis": "figure"
+  },
+  {
+   "id": "guadagnino-wood",
+   "file": "slide-27.png",
+   "title": "Дерево Гуаданьино",
+   "tag": "Ренессанс · Лука Гуаданьино",
+   "cite": {
+    "act": "caption",
+    "text": "Деревянная геометрическая обшивка, камины, ковры с орнаментом"
+   },
+   "axis": [
+    "materials",
+    "ornaments",
+    "textures"
+   ],
+   "page": 27,
+   "basis": "figure"
+  },
+  {
+   "id": "baroque-theatre",
+   "file": "slide-28.png",
+   "title": "Театр статуса",
+   "tag": "Барокко · философия",
+   "axis": [
+    "philosophy",
+    "morphology"
+   ],
+   "terms": [
+    "theatricality"
+   ],
+   "page": 28
+  },
+  {
+   "id": "mondrian-doha-pool",
+   "file": "slide-29.png",
+   "title": "Бассейн",
+   "tag": "Барокко · Mondrian Doha, Марсель Вандерс",
+   "cite": {
+    "act": "caption",
+    "text": "Витражный купол, чёрно-белые полосатые стены, люстры"
+   },
+   "axis": [
+    "ornaments",
+    "colors",
+    "textures"
+   ],
+   "page": 29,
+   "basis": "figure"
+  },
+  {
+   "id": "mondrian-doha-ballroom",
+   "file": "slide-30.png",
+   "title": "Бальный зал",
+   "tag": "Барокко · Mondrian Doha, Марсель Вандерс",
+   "cite": {
+    "act": "caption",
+    "text": "Люстры в белых дисках, колонны-балясины, ковёр-орнамент"
+   },
+   "axis": [
+    "ornaments",
+    "morphology"
+   ],
+   "page": 30,
+   "basis": "figure"
+  },
+  {
+   "id": "classicism-clockwork",
+   "file": "slide-31.png",
+   "title": "Мир как часы",
+   "tag": "Классицизм и Ампир · философия",
+   "axis": [
+    "philosophy",
+    "morphology"
+   ],
+   "terms": [
+    "rationalism",
+    "old-money",
+    "empire-style"
+   ],
+   "page": 31
+  },
+  {
+   "id": "pheasant-hall",
+   "file": "slide-32.png",
+   "title": "Томас Фезант",
+   "tag": "Классицизм · носитель",
+   "cite": {
+    "act": "caption",
+    "text": "Арочное зеркало, шахматный мраморный пол, кушетка"
+   },
+   "axis": [
+    "ornaments",
+    "materials",
+    "morphology"
+   ],
+   "page": 32,
+   "basis": "figure"
+  },
+  {
+   "id": "deniot-enfilade",
+   "file": "slide-33.png",
+   "title": "Анфилада Деньо",
+   "tag": "Классицизм · Жан-Луи Деньо",
+   "cite": {
+    "act": "caption",
+    "text": "Зеркало-солнце, полосатые обои, зеркальная консоль"
+   },
+   "axis": [
+    "ornaments",
+    "morphology"
+   ],
+   "page": 33,
+   "basis": "figure"
+  },
+  {
+   "id": "deniot-salon",
+   "file": "slide-34.png",
+   "title": "Золотая гостиная",
+   "tag": "Ампир · Жан-Луи Деньо",
+   "cite": {
+    "act": "caption",
+    "text": "Буазери с позолотой, ампирные кресла, табуреты-курули"
+   },
+   "axis": [
+    "materials",
+    "ornaments",
+    "colors"
+   ],
+   "page": 34,
+   "basis": "figure"
+  },
+  {
+   "id": "ralph-lauren-dining",
+   "file": "slide-35.png",
+   "title": "Столовая-библиотека",
+   "tag": "Ампир · Ralph Lauren Home, «Уютная Империя»",
+   "cite": {
+    "act": "caption",
+    "text": "Чёрная столовая-библиотека, портрет военного, красные розы"
+   },
+   "axis": [
+    "colors",
+    "philosophy",
+    "ornaments"
+   ],
+   "page": 35,
+   "basis": "figure"
+  },
+  {
+   "id": "ralph-lauren-bedroom",
+   "file": "slide-36.png",
+   "title": "Спальня Империи",
+   "tag": "Ампир · Ralph Lauren Home, «Уютная Империя»",
+   "cite": {
+    "act": "caption",
+    "text": "Чёрно-золотые панели, шотландский плед, кожаное изголовье"
+   },
+   "axis": [
+    "ornaments",
+    "textures",
+    "colors"
+   ],
+   "page": 36,
+   "basis": "figure"
+  },
+  {
+   "id": "cour-des-vosges-room",
+   "file": "slide-37.png",
+   "title": "Номер",
+   "tag": "Контекстуальный модернизм · Cour des Vosges, Lecoadic-Scotto",
+   "cite": {
+    "act": "caption",
+    "text": "Балки, замша, сталь, круглый экран"
+   },
+   "axis": [
+    "materials",
+    "textures",
+    "philosophy"
+   ],
+   "terms": [
+    "contextual-modernism"
+   ],
+   "page": 37,
+   "basis": "figure"
+  },
+  {
+   "id": "cour-des-vosges-salon",
+   "file": "slide-38.png",
+   "title": "Гостиная",
+   "tag": "Контекстуальный модернизм · Cour des Vosges",
+   "cite": {
+    "act": "caption",
+    "text": "Грибовидная латунная лампа, розовый диван, голубые кресла"
+   },
+   "axis": [
+    "colors",
+    "morphology"
+   ],
+   "page": 38,
+   "basis": "figure"
+  },
+  {
+   "id": "cour-des-vosges-bedroom",
+   "file": "slide-39.png",
+   "title": "Спальня",
+   "tag": "Контекстуальный модернизм · Cour des Vosges",
+   "cite": {
+    "act": "caption",
+    "text": "Розовая штора, синяя ниша с картиной, стопка книг"
+   },
+   "axis": [
+    "colors",
+    "philosophy"
+   ],
+   "page": 39,
+   "basis": "figure"
+  },
+  {
+   "id": "exercise-steps",
+   "title": "Семь вопросов",
+   "tag": "Упражнение · инструмент",
+   "desc": "Возьмите свой интерьер или объект заказчика и пройдите по семи осям. Итог — одна фраза: какая философия стоит за этим пространством и чем она видна. Так обосновывают концепцию перед заказчиком.",
+   "specs": [
+    "Формообразование: какая геометрия держит пространство — ордер, свод, круг, ось?",
+    "Цвета: что доминирует по площади и по температуре?",
+    "Орнаменты: есть ли они и какую идею называют?",
+    "Текстуры: что хочется тронуть и о каком времени это говорит?",
+    "Материалы: настоящие или имитации — камень, дерево, стекло, металл?",
+    "Технологии: чем это построено и что умеет эпоха?",
+    "Философия времени: во что верит хозяин этого пространства?"
+   ]
+  },
+  {
+   "id": "check-order",
+   "file": "slide-09.png",
+   "title": "Проверка 1",
+   "tag": "Самопроверка",
+   "desc": "Какой порядок здесь главнее хозяина?",
+   "links": [
+    {
+     "label": "Ответ · глава 3",
+     "url": "#doc-chapters-antiquity"
+    }
+   ],
+   "basis": "figure"
+  },
+  {
+   "id": "check-silence",
+   "file": "slide-13.png",
+   "title": "Проверка 2",
+   "tag": "Самопроверка",
+   "desc": "Во что верит эта тишина?",
+   "links": [
+    {
+     "label": "Ответ · глава 4",
+     "url": "#doc-chapters-romanesque"
+    }
+   ],
+   "basis": "figure"
+  },
+  {
+   "id": "check-light",
+   "file": "slide-16.png",
+   "title": "Проверка 3",
+   "tag": "Самопроверка",
+   "desc": "Откуда здесь свет и зачем?",
+   "links": [
+    {
+     "label": "Ответ · глава 5",
+     "url": "#doc-chapters-gothic"
+    }
+   ],
+   "basis": "figure"
+  },
+  {
+   "id": "check-measure",
+   "file": "slide-22.png",
+   "title": "Проверка 4",
+   "tag": "Самопроверка",
+   "desc": "Чем измерена эта форма?",
+   "links": [
+    {
+     "label": "Ответ · глава 6",
+     "url": "#doc-chapters-renaissance"
+    }
+   ],
+   "basis": "figure"
+  },
+  {
+   "id": "check-drama",
+   "file": "slide-29.png",
+   "title": "Проверка 5",
+   "tag": "Самопроверка",
+   "desc": "Кого и чем впечатляет это пространство?",
+   "links": [
+    {
+     "label": "Ответ · глава 7",
+     "url": "#doc-chapters-baroque"
+    }
+   ],
+   "basis": "figure"
+  },
+  {
+   "id": "check-clock",
+   "file": "slide-34.png",
+   "title": "Проверка 6",
+   "tag": "Самопроверка",
+   "desc": "Что здесь закон: движение или симметрия?",
+   "links": [
+    {
+     "label": "Ответ · глава 8",
+     "url": "#doc-chapters-classicism-empire"
+    }
+   ],
+   "basis": "figure"
+  },
+  {
+   "id": "check-context",
+   "file": "slide-39.png",
+   "title": "Проверка 7",
+   "tag": "Самопроверка",
+   "desc": "Какие слои сложены в этой комнате?",
+   "links": [
+    {
+     "label": "Ответ · глава 9",
+     "url": "#doc-chapters-contextual-modernism"
+    }
+   ],
+   "basis": "figure"
+  }
+ ]
+}
