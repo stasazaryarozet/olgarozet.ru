@@ -18,7 +18,7 @@ bio:
   art_page_label: Искусство
   booking_page_label: Записаться
   artist:
-    text: ХУДОЖНИК
+    text: Художник
     link: art/
   inspire: 'Вдохновляю —
 
