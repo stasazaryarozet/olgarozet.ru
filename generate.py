@@ -1131,6 +1131,31 @@ def _styles_cache_bust() -> str:
     return ""
 
 
+def _feed_links(d: "dict[str, Any] | None") -> str:
+    """Автообнаружение подач (§1.4 объявления: «весь сайт подаётся в RSS ОБРАЗЦОВО»).
+
+    Ссылка на ленту в шапке КАЖДОЙ страницы и есть то, чем подача становится образцовой:
+    читатель подписывается из любой точки сайта, а не только со страницы издания. Перечень
+    подач ВЫВОДИТСЯ (издание × объявленные подкасты), а не набирается: шестая подача есть
+    строка данных, а не правка шапки."""
+    if not d:
+        return ""
+    import site_presentation as _spf
+    rows: "list[tuple[str, str]]" = []
+    root = _canonical(d)
+    # Перехвата здесь НЕТ сознательно: `declared_sections` отдаёт пустой алфавит, когда
+    # объявления нет, а нечитаемое объявление есть ряд закона (Inv-SITE-declared-space-carried),
+    # а не повод шапке молча недосчитаться подачи.
+    if "/journal" in (_spf.declared_sections(d) or ()):
+        label = str((d.get("journal") or {}).get("label") or "Journal")
+        rows.append((f"{root}/journal/feed.xml", label))
+    for pod in (d.get("podcasts") or []):
+        if isinstance(pod, dict) and pod.get("slug"):
+            rows.append((f"{root}/{pod['slug']}/feed.xml", str(pod.get("title") or "")))
+    return "".join(f'\n<link rel="alternate" type="application/rss+xml" '
+                   f'title="{_t(title)}" href="{_t(href)}">' for href, title in rows)
+
+
 def _head(title: str, description: str, *, canonical: str,
           og_image: str = "", extra: str = "", structured: str | None = None,
           d: dict[str, Any] | None = None) -> str:
@@ -1168,7 +1193,7 @@ def _head(title: str, description: str, *, canonical: str,
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{t}</title>
 <meta name="description" content="{desc}">
-<link rel="canonical" href="{cn}">
+<link rel="canonical" href="{cn}">{_feed_links(d)}
 <meta property="og:type" content="website">
 <meta property="og:title" content="{t}">
 <meta property="og:description" content="{desc}">
@@ -1705,8 +1730,17 @@ def _layout(d: dict[str, Any], *, title: str, description: str, body: str,
             return None
     _here = (canonical or "").rstrip("/")
     _is_root = (not _here) or _here == _canonical(d).rstrip("/")
-    nav_html = ('<nav class="nav-fade"><a href="/" aria-label="На главную">←</a></nav>'
-                if not _is_root and _index_carries() is not False else '')
+    # ПЛАШКА НЕСЁТ РЯД ССЫЛОК, А НЕ ОДНУ ЛИТЕРАЛЬНУЮ (§1.7 объявления: ссылка на раздел
+    # учеников видна в ЛЮБОЙ точке вертикального скролла). Возврат остаётся условным (он
+    # есть отношение страницы к корню), постоянные ссылки — выведены из данных владельца и
+    # стоят на КАЖДОЙ странице, включая корень: иначе «в любой точке» не выполняется там,
+    # где скролл длиннее всего.
+    _back = ('<a href="/" aria-label="На главную">←</a>'
+             if not _is_root and _index_carries() is not False else '')
+    _persist = _chrome_links(d)
+    nav_html = (f'<nav class="nav-fade"><span class="nav-left">{_back}</span>'
+                f'<span class="nav-right">{_persist}</span></nav>'
+                if (_back or _persist) else '')
     ftr = _footer(d.get("urls", {}), (d.get("bio") or {}).get("title", ""), portrait, portrait_night) if footer else ''
     # ХРОМ, ДЕЙСТВУЮЩИЙ НАД СОДЕРЖАНИЕМ, ТРЕБУЕТ СОДЕРЖАНИЯ — тот же закон, что снял
     # стрелку ← выше: аффорданс, чей референт пуст, лжёт о нём. «Перейти к содержанию»
@@ -2438,7 +2472,12 @@ def p_site(d: dict[str, Any]) -> str:
       </aside>
     </section>"""
         desc = "<br>".join(cons["description"].strip().splitlines())
-        avail = "<br>".join(cons["availability"].strip().splitlines())
+        # ПРИГЛАШЕНИЕ ВЫВЕДЕНО (§8 объявления): местонахождение живёт в рамке плана, падеж —
+        # в таблице мест, день и месяц — в лексиконе; здесь только сборка. Прежде вторая
+        # строка называла одну страну навсегда и старела молча.
+        import site_presentation as _sp_inv
+        avail = "<br>".join([*cons["availability"].strip().splitlines(),
+                             *_sp_inv.invitation(d)])
         return f"""    <section id="consultations" aria-labelledby="consultations-heading">
       <h2 id="consultations-heading">Консультации:</h2>
       <p>{desc}</p>
@@ -2516,7 +2555,9 @@ def p_site(d: dict[str, Any]) -> str:
     #
     # Условие ВЫВЕДЕНО из самих секций, а не объявлено флагом: владелец, у которого появится
     # хоть одна, получит шапку обратно без чьей-либо правки.
-    sections = "\n\n".join(p for p in (bio_html, cons_html, recent_html, events_section)
+    index_nav = _sections_digest(d)
+    sections = "\n\n".join(p for p in (bio_html, index_nav, cons_html, recent_html,
+                                        events_section)
                            if (p or "").strip())
     header = f"    <header>\n      <h1>{bio['title']}</h1>\n    </header>\n\n" if sections else ""
     body = f"""  <div class="content-wrapper">
@@ -5407,6 +5448,269 @@ def _art_items(d: dict[str, Any], works: "list[dict[str, Any]]") -> str:
     )
 
 
+def _chrome_links(d: dict[str, Any]) -> str:
+    """§1.7 объявления — ссылка, видимая в ЛЮБОЙ точке вертикального скролла.
+
+    Перечень ВЫВОДИТСЯ из данных владельца (`site_chrome.persistent`), а не набирается в
+    разметке: здесь стояла одна ссылка литералом, и вторая потребовала бы второго условия у
+    вызывающего. Раздел без носителя в плашку не попадает — плашка не обещает того, чего нет."""
+    import observation as _O
+
+    import site_presentation as _sp
+    import site_structure as _ss
+    decl = _O.value_or(_ss.declared(_sp.owner_of(d)), None)
+    built = {a.rstrip("/") or "/"
+             for a in _O.value_or(_ss.realized(_sp.owner_of(d)), frozenset())}
+    out = []
+    for addr in ((d.get("site_chrome") or {}).get("persistent") or []):
+        a = str(addr).rstrip("/")
+        name = (decl.sections.get(a) if decl is not None else "") or a.strip("/")
+        if a in built:
+            out.append(f'<a href="{_t(a + "/")}">{_h(name)}</a>')
+    return "".join(out)
+
+
+def _order_toggle(d: dict[str, Any], target: str) -> str:
+    """§1.5 объявления — «пользователь может переключать» порядок ряда.
+
+    Порядок ЗАДАН разметкой (сверху новое) и остаётся верным без единой строки скрипта;
+    переключение есть прогрессивное улучшение поверх верной страницы, а не условие её
+    правильности. Обратный порядок делается НАБОРОМ (`flex-direction: column-reverse`), а не
+    перестановкой узлов: знаки швов стоят МЕЖДУ записями и при перестановке узлов оказались
+    бы по краям.
+
+    Кнопка — настоящая `button` с `aria-pressed`: состояние читается диктором, цель не меньше
+    --touch-min, наведение ничего не открывает."""
+    words = (d.get("site_chrome") or {}).get("order_toggle") or {}
+    off, on = str(words.get("label") or ""), str(words.get("label_on") or "")
+    if not off or not on:
+        return ""
+    return (f'      <button type="button" class="order-toggle" aria-pressed="false"'
+            f' data-label-off="{_t(off)}" data-label-on="{_t(on)}"'
+            f' data-target="{_t(target)}"'
+            f' onclick="(function(b){{var s=document.getElementById(b.dataset.target);'
+            f'var r=s.getAttribute(\'data-order\')===\'oldest\';'
+            f's.setAttribute(\'data-order\',r?\'newest\':\'oldest\');'
+            f'b.setAttribute(\'aria-pressed\',r?\'false\':\'true\');'
+            f'b.textContent=r?b.dataset.labelOff:b.dataset.labelOn;'
+            f'try{{localStorage.setItem(\'dela:order:\'+b.dataset.target,'
+            f's.getAttribute(\'data-order\'));}}catch(e){{}}}})(this)">{_h(off)}</button>')
+
+
+def _sections_digest(d: dict[str, Any]) -> str:
+    """§1.6 объявления — ВСЕ разделы проецируются в индекс в краткой форме.
+
+    Исключение объявлено там же и ровно одно: «Искусство» в сводку не входит — ведёт на него
+    только ссылка «Художник», которая на индексе уже стоит. Перечень ВЫВОДИТСЯ из таблицы
+    разделов объявления; раздел, добавленный принципалом строкой, появляется здесь сам.
+
+    Раздел без носителя в сводку не попадает: ссылка на 404 есть обещание, которого страница
+    не держит (проекции спрашиваются у той же деривации, что строит мир)."""
+    import site_presentation as _sp
+    import site_structure as _ss
+    import observation as _O
+    decl = _O.value_or(_ss.declared(_sp.owner_of(d)), None)
+    if decl is None:
+        return ""
+    built = {a.rstrip("/") or "/"
+             for a in _O.value_or(_ss.realized(_sp.owner_of(d)), frozenset())}
+    label = str((d.get("site_chrome") or {}).get("index_heading") or "")
+    skip = {"/", *[str(x) for x in ((d.get("site_chrome") or {}).get("index_skip") or [])]}
+    items = "".join(
+        f'        <li><a href="{_t(addr + "/")}">{_h(name)}</a></li>\n'
+        for addr, name in sorted(decl.sections.items(), key=lambda kv: kv[1])
+        if addr not in skip and addr in built)
+    if not items:
+        return ""
+    return (f'    <nav id="sections" class="sections" aria-labelledby="sections-heading">\n'
+            f'      <h2 id="sections-heading">{_h(label)}</h2>\n'
+            f'      <ul>\n{items}      </ul>\n    </nav>')
+
+
+def p_journal_feed(d: dict[str, Any]) -> str:
+    """Подача издания. Ряды — те же, что на странице; формат — общий построитель сайта."""
+    import observation as _O
+
+    import site_feed as _f
+    import site_presentation as _sp
+    root, bio = _canonical(d), (d.get("bio") or {})
+    label = str((d.get("journal") or {}).get("label") or "Journal")
+    items = []
+    for e in _sp.journal_entries(d):
+        # СОБСТВЕННЫЙ АДРЕС ЕСТЬ У КАЖДОГО ПОСТА (§4): объект полной версии либо якорь в ленте.
+        link = f"{root}{e.full_url}" if e.full_url else f"{root}/journal/#{e.slug}"
+        items.append(_f.Item(title=e.title, link=link, at=e.at,
+                             description=_O.value_or(e.summary, ""),
+                             guid=f"{root}/journal/#{e.slug}"))
+    return _f.channel({"title": f"{bio.get('title', '')} — {label}",
+                       "link": f"{root}/journal/",
+                       "description": str(bio.get("description") or ""),
+                       "language": str(bio.get("language") or "ru")}, items)
+
+
+def p_getbusy(d: dict[str, Any]) -> str:
+    """Доступ для учеников (§9 объявления) — раздел, объявляющий СВОИ ДВЕРИ и свою границу.
+
+    Способы входа — ДАННЫЕ (признак включения объявлен принципалом: важность и
+    распространённость у аудитории), поэтому шестой способ есть строка, а не правка кода.
+    Кнопок, которые никуда не ведут, здесь нет: доступ опирается на первый коммерческий
+    продукт, и пока продукта нет — раздел ГОВОРИТ это, а не изображает работающий вход.
+    Заявление о работающей двери, за которой двери нет, дороже отсутствия раздела."""
+    bio, gb = d.get("bio") or {}, (d.get("getbusy") or {})
+    label = str(gb.get("label") or "")
+    ways = "".join(f'        <li>{_h(str(w.get("label") or w.get("id") or ""))}</li>\n'
+                   for w in (gb.get("auth") or []) if isinstance(w, dict))
+    note = str(gb.get("note") or "")
+    ways_block = (f'      <p class="ways-heading">{_h(str(gb.get("auth_heading") or ""))}</p>\n'
+                  f'      <ul class="ways">\n{ways}      </ul>\n') if ways else ""
+    body = f"""  <section class="board getbusy" id="getbusy" aria-labelledby="getbusy-heading">
+      <h1 id="getbusy-heading">{_h(label)}</h1>
+{f'      <p class="getbusy-note">{_h(note)}</p>' if note else ""}
+{ways_block}  </section>"""
+    return _layout(
+        d,
+        title=f"{bio['title']} — {label}",
+        description=f"{label} — {bio['title']}",
+        body=body,
+        canonical=f"{_canonical(d)}/getbusy/",
+    )
+
+
+def p_journal(d: dict[str, Any]) -> str:
+    """Journal — ОТДЕЛЬНОЕ ИЗДАНИЕ, взятое из общего источника (§4 объявления).
+
+    Ряды выводит `site_presentation.journal_entries` из журнала публикаций; здесь — только
+    оформление. Собственный адрес есть у КАЖДОГО поста: при двух версиях он ведёт на объект
+    полной версии, при одной — на якорь поста здесь же, и потому постоянная ссылка есть у
+    поста без исключений."""
+    import site_presentation as _sp
+    bio = d.get("bio") or {}
+    space = _sp.space(d)
+    _j = d.get("journal") or {}
+    label = str(_j.get("label") or "Journal")
+    _perma = str(_j.get("permalink_label") or "")
+    rows = []
+    import observation as _O
+    for e in _sp.journal_entries(d):
+        when = _O.value_or(_sp.human_date(e.at), "")
+        _summary = _O.value_or(e.summary, "")
+        head = (f'<a href="{_t(e.full_url)}">{_h(e.title)}</a>' if e.full_url
+                else _h(e.title))
+        rows.append(
+            f'      <article class="post" id="{_t(e.slug)}">\n'
+            f'        <h2><a class="permalink" href="#{_t(e.slug)}" '
+            f'aria-label="{_h(_perma)}">§</a> {head}</h2>\n'
+            + (f'        <p class="post-when">{_h(when)}</p>\n' if when else "")
+            # ⊥ КРАТКОЙ ВЕРСИИ НЕ ПЕЧАТАЕТСЯ КАК ЕЁ ОТСУТСТВИЕ: и «не объявлено», и «не смог
+            # прочесть» дают страницу без эссенции, но второе едет рядом законом, а не молча.
+            + (f'        <p class="post-summary">{_h(_summary)}</p>\n' if _summary else "")
+            + "      </article>")
+    body_rows = "\n".join(rows) or (
+        f'      <p class="collection-empty">{_h(str(space.get("empty_label") or ""))}</p>')
+    body = f"""  <section class="board journal" id="journal" aria-labelledby="journal-heading">
+      <h1 id="journal-heading">{_h(label)}</h1>
+      <nav class="tabs">{_order_toggle(d, "journal")}</nav>
+{body_rows}
+  </section>"""
+    return _layout(
+        d,
+        title=f"{bio['title']} — {label}",
+        description=f"{label} — {bio['title']}",
+        body=body,
+        canonical=f"{_canonical(d)}/journal/",
+    )
+
+
+def p_collection(d: dict[str, Any], u: "Any") -> str:
+    """ОДИН строитель страницы-собрания — на все собрания Событий и все ведра их тройки.
+
+    Содержание (кто члены) и представление (в каком порядке и разбиении) приходят готовым
+    РАЗВОРОТОМ из `site_presentation.unfold`; здесь — только оформление. Прежде «собрание»
+    было переписано четырежды (доска «Скоро», «НЕДАВНО», слой серии, сетка работ) при том,
+    что род набора уже назван разметкой — `class="board"`.
+
+    Запись События берётся у ТОГО ЖЕ функтора, что и доска «Скоро» (`skoro.digest_of` с
+    порядком от вызывающего): формат записи на сайте обязан быть один, иначе собрание и доска
+    покажут одно Событие двумя разными способами.
+
+    ПУСТОЕ СОБРАНИЕ НЕ ИСЧЕЗАЕТ: «объявлено, содержания пока нет» есть ФАКТ (§7 объявления —
+    «Раздел объявлен; содержания в нём пока нет»), и страница его говорит."""
+    import dataclasses as _dc
+
+    import site_presentation as _sp
+    from skoro import SKORO_SPECS as _SPECS, digest_of as _digest
+    bio = d.get("bio") or {}
+    spec = _SPECS.get("site")
+    if spec is None:                    # ⊥ формы записи — носитель мира не трогать
+        return None                     # noqa: RET501 — Projection.render: None = «не могу»
+    # ЗНАК ШВА ПЛОСКОГО СОБРАНИЯ — РЯДОВОЙ (▰), вторая ступень лестницы. Знак принадлежит
+    # ПОЗИЦИИ в цепи уровней: внешний (◑) сказал бы о ярусах, которых здесь нет, а внутренний
+    # («и») есть союз внутри ПРОГОНА одного рода — между двумя разными Событиями он ложен.
+    flat = _dc.replace(spec, partition=[], rank_separators=(tuple(spec.rank_separators)[1:2]
+                                             or tuple(spec.rank_separators)[-1:]))
+    body_rows = _digest(list(u.members), d, "site", flat, aggregate_order=False).text \
+        if u.members else ""
+    space = _sp.space(d)
+    if not body_rows.strip():
+        body_rows = (f'      <p class="collection-empty">'
+                     f'{_h(str(space.get("empty_label") or ""))}</p>')
+    seg = [x for x in u.address.split("/") if x]
+    labels = _crumb_labels(d, seg)
+    # ПОСЛЕДНЯЯ КРОШКА НЕ ССЫЛКА: ссылка на себя есть обещание перехода, которого нет.
+    crumbs = "".join(
+        (f'<a href="{"../" * (len(seg) - i - 1)}">{_h(t)}</a> ' if i < len(seg) - 1
+         else f"<b>{_h(t)}</b>")
+        for i, t in enumerate(labels))
+    # ПЕРВИЧНО СОБЫТИЕ, А НЕ ЕГО ВРЕМЯ (§5 объявления): заголовком стоит СОБРАНИЕ, а ведро —
+    # состоянием вкладки. Заголовок «Скоро» повторил бы ровно ту ошибку, которую §5 снимает.
+    heading = labels[0] if labels else u.label
+    _cur = ' aria-current="page"'
+    tabs = "".join(
+        '<a class="tab" href="{}"{}>{}</a> '.format(
+            _tab_href(u, b.leaf), _cur if (u.bucket and u.bucket.leaf == b.leaf) else "",
+            _h(b.label))
+        for b in _sp.buckets(d).values())
+    # СЕКЦИЯ, А НЕ MAIN: `_layout` уже оборачивает тело в <main id="main" role="main">, и
+    # второй main той же страницы есть дефект разметки и диктора разом.
+    body = f"""  <section class="board collection" id="collection"
+           aria-labelledby="collection-heading">
+      <nav class="crumbs">{crumbs}</nav>
+      <h1 id="collection-heading">{_h(heading)}</h1>
+      <nav class="tabs">{tabs}{_order_toggle(d, "collection")}</nav>
+{body_rows}
+  </section>"""
+    return _layout(
+        d,
+        title=f"{bio['title']} — {' · '.join(labels) if labels else u.label}",
+        description=f"{' · '.join(labels) if labels else u.label} — {bio['title']}",
+        body=body,
+        canonical=f"{_canonical(d)}{_page.Page(u.address.strip('/')).url}",
+    )
+
+
+def _crumb_labels(d: dict[str, Any], seg: "list[str]") -> "list[str]":
+    """Имена крошек — из ОБЪЯВЛЕНИЯ (таблица разделов) и данных владельца, не из кода."""
+    import observation as _O
+
+    import site_presentation as _sp
+    import site_structure as _ss
+    decl = _O.value_or(_ss.declared(_sp.owner_of(d)), None)
+    out: "list[str]" = []
+    for i in range(len(seg)):
+        addr = "/" + "/".join(seg[: i + 1])
+        if decl is not None and addr in decl.sections:
+            out.append(decl.sections[addr])
+        else:
+            b = _sp.buckets(d).get(seg[i])
+            out.append(b.label if b else seg[i])
+    return out
+
+
+def _tab_href(u: "Any", leaf: str) -> str:
+    """Адрес ведра относительно текущей единицы — функция координаты, не таблица ссылок."""
+    return f"{leaf}/" if u.bucket is None else f"../{leaf}/"
+
+
 def p_art(d: dict[str, Any]) -> str:
     """Полное пространство. Работы из data.artworks (единственный источник)."""
     bio = d.get("bio") or {}
@@ -6047,6 +6351,25 @@ def owner_projections(d: dict[str, Any]) -> "list[Projection]":
         if _r is not None:
             out.append(Projection(f"art-img:{_r.filename}", PurePosixPath("art/img") / _r.filename,
                                   lambda r=_r: _rendition_bytes(r)))
+    # СОБРАНИЯ СОБЫТИЙ — КВАНТОР ПО РАЗВОРОТУ ОБЪЯВЛЕННОГО ПРОСТРАНСТВА (site_presentation).
+    # Двенадцать адресов рождаются ОДНОЙ деривацией, а новый вид Событий получает свои четыре
+    # адреса правкой объявления принципала — без единой строки кода здесь.
+    import site_presentation as _spres
+    # JOURNAL — ОТДЕЛЬНОЕ ИЗДАНИЕ ТОГО ЖЕ ИСТОЧНИКА (§4): проекция есть, потому что раздел
+    # ОБЪЯВЛЕН, а не потому что в нём сегодня есть записи (Inv-SITE-owner-projection-total
+    # судит объявление, и пустое издание честно говорит «содержания пока нет»).
+    _sections = _spres.declared_sections(d) or ()
+    if "/journal" in _sections:
+        out.append(Projection("journal", _page.Page("journal").file, lambda: p_journal(d)))
+    if "/journal" in _sections:
+        out.append(Projection("journal:feed", PurePosixPath("journal/feed.xml"),
+                              lambda: p_journal_feed(d)))
+    if "/getbusy" in _sections and d.get("getbusy"):
+        out.append(Projection("getbusy", _page.Page("getbusy").file, lambda: p_getbusy(d)))
+    for _u in _spres.unfold(d):
+        out.append(Projection(f"events:{_u.address}",
+                              _page.Page(_u.address.strip("/")).file,
+                              lambda u=_u: p_collection(d, u)))
     cons = d.get("consultations")
     # КАДРЫ ПРОЕКЦИЙ — ТОЖЕ НОСИТЕЛИ ЭТОГО НАБОРА. Карусель Instagram берет изображения ПО
     # АДРЕСУ Сайта (один выведенный артефакт, две поверхности), поэтому кадр, на который канал

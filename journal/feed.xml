@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Ольга Розет — Journal</title>
+    <link>https://olgarozet.ru/journal/</link>
+    <description>Ольга Розет — художник, искусствовед, дизайнер интерьеров. Консультации, путешествия, искусство.</description>
+    <language>ru</language>
+    <item>
+      <title>Рассказ-показ: «Тренды Maison&amp;Objet 2026»</title>
+      <link>https://olgarozet.ru/maison-objet-2026-january/</link>
+      <pubDate>Fri, 14 Aug 2026 15:00:00 GMT</pubDate>
+      <guid isPermaLink="false">https://olgarozet.ru/journal/#maison-objet-2026-january</guid>
+    </item>
+    <item>
+      <title>Конспект некоторых фрагментов прямого эфира</title>
+      <link>https://olgarozet.ru/2026-stream-conspectus/</link>
+      <pubDate>Fri, 10 Jul 2026 02:30:00 GMT</pubDate>
+      <guid isPermaLink="false">https://olgarozet.ru/journal/#2026-stream-conspectus</guid>
+    </item>
+    <item>
+      <title>Программа-2027</title>
+      <link>https://olgarozet.ru/program-2027/</link>
+      <pubDate>Fri, 24 Apr 2026 12:00:00 GMT</pubDate>
+      <guid isPermaLink="false">https://olgarozet.ru/journal/#program-2027</guid>
+    </item>
+  </channel>
+</rss>
