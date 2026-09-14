@@ -65,17 +65,20 @@
   setInterval(window.__applyTheme, 300000);
 })();
 </script>
-<link href="/styles.css?v=d353fecd21" rel="stylesheet"/>
+<link href="/styles.css?v=b265f2b28a" rel="stylesheet"/>
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
-<nav class="nav-fade"><span class="nav-left"><a aria-label="На главную" href="/">←</a></span><span class="nav-right"><a href="/getbusy/">Доступ для учеников</a></span></nav>
+<nav class="nav-fade"><span class="nav-left"><a aria-label="На главную" href="/">←</a></span><span class="nav-right"><a href="https://olgarozet.ru/getbusy/">Доступ для учеников</a></span></nav>
 <button aria-label="Тема: авто (по солнцу) — переключить" class="theme-toggle" data-theme-toggle="" type="button">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="dela.theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить",CYCLE=["day", "night"],MODE_ATTR="data-theme";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());function rendered(){var a=null;try{a=document.documentElement.getAttribute(MODE_ATTR);}catch(e){}return (CYCLE.indexOf(a)!==-1)?a:null;}btn.addEventListener("click",function(){var seen=rendered();var i=CYCLE.indexOf(seen);var next=CYCLE[(i+1)%CYCLE.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
 <main id="main" role="main">
+<article class="article-wrapper">
 <section aria-labelledby="collection-heading" class="board collection" id="collection">
+<header class="head">
 <nav class="crumbs"><a href="../">Дизайн-Путешествия</a> <b>Скоро</b></nav>
 <h1 data-case="upper" id="collection-heading">Дизайн-Путешествия</h1>
 <nav class="tabs"><a class="tab" href="../done/">Уже</a> <a class="tab" href="../now/">Сейчас</a> <a aria-current="page" class="tab" href="../soon/">Скоро</a> <button aria-pressed="false" class="order-toggle" data-label-off="Сначала старое" data-label-on="Сначала новое" data-target="collection" onclick="(function(b){var s=document.getElementById(b.dataset.target);var r=s.getAttribute('data-order')==='oldest';s.setAttribute('data-order',r?'newest':'oldest');b.setAttribute('aria-pressed',r?'false':'true');b.textContent=r?b.dataset.labelOff:b.dataset.labelOn;try{localStorage.setItem('dela:order:'+b.dataset.target,s.getAttribute('data-order'));}catch(e){}})(this)" type="button">Сначала старое</button></nav>
+</header>
 <article class="event ev-period">
 <p class="when proper-case">2027</p>
 <p class="type as-is">Сербия</p>
@@ -90,6 +93,7 @@
 <p class="partner as-is">совместно с<br/>Центром Ремесел<br/>Матлубы Базаровой</p>
 </article>
 </section>
+</article>
 </main>
 <footer>
 <div class="footer-content">
