@@ -71,12 +71,14 @@
             "type": "audio",
             "url": "audio/lecture-trends-maison-and-objet-2026.m4a",
             "interval": "#t={t0},{t1}",
-            "needs": "extent"
+            "needs": "extent",
+            "reach": "public"
           },
           {
             "type": "video",
             "url": "https://www.youtube.com/watch?v=ckibrSjKEZY",
-            "interval": "&t={t0}"
+            "interval": "&t={t0}",
+            "reach": "public"
           }
         ]
       },
