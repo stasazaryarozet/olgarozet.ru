@@ -5,19 +5,19 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <title>Записаться — Ольга Розет</title>
-<meta content="Подключить к вашему делу на 40 минут — 15 000  ₽" name="description"/>
+<meta content="Подключить к вашему делу на 40 минут — 15 000 ₽" name="description"/>
 <link href="https://olgarozet.ru/init/" rel="canonical"/>
 <link href="https://olgarozet.ru/journal/feed.xml" rel="alternate" title="Journal" type="application/rss+xml"/>
 <link href="https://olgarozet.ru/audiobroadcast/feed.xml" rel="alternate" title="Ольга Розет" type="application/rss+xml"/>
 <meta content="website" property="og:type"/>
 <meta content="Записаться — Ольга Розет" property="og:title"/>
-<meta content="Подключить к вашему делу на 40 минут — 15 000  ₽" property="og:description"/>
+<meta content="Подключить к вашему делу на 40 минут — 15 000 ₽" property="og:description"/>
 <meta content="https://olgarozet.ru/init/" property="og:url"/>
 <meta content="https://olgarozet.ru/olga_footer.png" property="og:image"/>
 <meta content="ru_RU" property="og:locale"/>
 <meta content="summary_large_image" name="twitter:card"/>
 <meta content="Записаться — Ольга Розет" name="twitter:title"/>
-<meta content="Подключить к вашему делу на 40 минут — 15 000  ₽" name="twitter:description"/>
+<meta content="Подключить к вашему делу на 40 минут — 15 000 ₽" name="twitter:description"/>
 <meta content="https://olgarozet.ru/olga_footer.png" name="twitter:image"/>
 <link href="/favicon.png" rel="icon" type="image/png"/>
 <link href="/apple-touch-icon.png" rel="apple-touch-icon"/>
@@ -65,7 +65,7 @@
   setInterval(window.__applyTheme, 300000);
 })();
 </script>
-<link href="/styles.css?v=b48cd1d06b" rel="stylesheet"/>
+<style>@layer owner, law; @import url("/styles.css?v=a8a13eda50") layer(owner); @import url("/_tokens.generated.css?v=6cc164c81e") layer(law);</style>
 <style>
 .booking{max-width:420px;margin:0 auto;padding:2.5rem 1.5rem 2rem}
 .booking h2{font-size:clamp(1.1rem,1rem + 0.3vw,1.3rem);text-align:center;font-weight:600;margin-bottom:.15rem}
@@ -121,13 +121,13 @@
 <main id="main" role="main">
 <div class="booking" role="main">
 <h2 data-case="upper">Консультация</h2>
-<p class="sub">40 мин · 15 000 ₽ · онлайн</p>
+<p class="sub">40 мин · 15 000 ₽ · Онлайн</p>
 <p class="tz" id="tz-note">выберите удобное время</p>
 <noscript>
 <div class="no-slots">
 <p>Подключить к вашему делу на 40 минут</p>
 <p>Напишите для записи:</p>
-<p><a href="https://t.me/olgaroset">@olgaroset</a> · <a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p>
+<p><a href="https://t.me/olgaroset" rel="noopener">@olgaroset</a> · <a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p>
 </div>
 </noscript>
 <div aria-label="Выберите время" id="step-slots" role="listbox"></div>
@@ -160,7 +160,7 @@ SLOTS.forEach(function(s){
 });
 allDays=Object.keys(days).map(function(k){return{key:k,slots:days[k]}});
 if(allDays.length===0){
-  document.getElementById("step-slots").innerHTML="<div class='no-slots'>Свободного времени нет.<br><a href='https://t.me/olgaroset'>Написать Ольге</a></div>";
+  document.getElementById("step-slots").innerHTML="<div class='no-slots'>\u0421\u0432\u043e\u0431\u043e\u0434\u043d\u043e\u0433\u043e \u0432\u0440\u0435\u043c\u0435\u043d\u0438 \u043d\u0435\u0442.<br>\u041d\u0430\u043f\u0438\u0448\u0438\u0442\u0435 \u041e\u043b\u044c\u0433\u0435 \u043d\u0430\u043f\u0440\u044f\u043c\u0443\u044e \u2014 \u043f\u0440\u0435\u0434\u043b\u043e\u0436\u0443 \u0432\u0440\u0435\u043c\u044f:<br><a href='https://t.me/olgaroset'>@olgaroset</a></div>";
 }else{
   render(allDays.length);
 }
