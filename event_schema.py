@@ -1,0 +1,383 @@
+"""event_schema.py — single typed shape for an Event entity in data.yaml.
+
+ONE schema → graph-clean rendering across:
+  • site_generator.p_event_landing  (HTML projection)
+  • broadcast_html.update_landing   (per-fqdn deploy)
+  • site_preview                    (live render)
+  • schema.org JSON-LD              (SEO markup)
+
+Anti-pattern eliminated: dozens of `.get(…) or {}` chains scattered across
+render code, each silently degrading on missing fields. Replaced with a
+single `validate(ev) → EventModel | InvalidEvent` call at render entry.
+
+Implementation: pydantic-v2 if available; else dataclass + custom validate.
+Both produce the same `EventModel` shape — call sites are pydantic-agnostic.
+Every render path imports `validate(ev)` and uses the validated model;
+fail-fast with a clear error rather than render a half-built page.
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass, field, fields
+from typing import Any
+
+
+class InvalidEvent(ValueError):
+    """Raised by validate() when an event dict cannot be projected.
+
+    Carries event id (best-effort) and a human-readable reason that
+    site_preview surfaces as an HTTP 500 body.
+    """
+
+    def __init__(self, event_id: str, reason: str):
+        self.event_id = event_id
+        self.reason = reason
+        super().__init__(f"event {event_id!r}: {reason}")
+
+
+# ── Section variants ─────────────────────────────────────────────────
+
+@dataclass
+class SectionPair:
+    label: str
+    text: str
+
+
+@dataclass
+class Section:
+    title: str
+    # Inv-SEMANTIC-WHITESPACE: intro/text accept str OR list[str]. List preserves
+    # admin's `\n\n` paragraph breaks (md source) — renderer iterates and emits
+    # one <p> per element. Single string still works (back-compat).
+    intro: "str | list[str]" = ""
+    text: "str | list[str]" = ""
+    pairs: list[SectionPair] = field(default_factory=list)
+    items: list[str] = field(default_factory=list)
+
+
+@dataclass
+class OpenQuestion:
+    to: list[str]   # always normalized to list (single-string `to` lifted)
+    q: str
+
+
+@dataclass
+class Signup:
+    title: str = "Записаться"
+    note: str = ""
+    cta_label: str = ""    # entity-event Spec 2026-05-10: explicit button label override
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """Dict-shaped accessor. Same Spec-evolution discipline as EventModel.get."""
+        return getattr(self, key, default)
+
+
+@dataclass
+class AboutOrganizer:
+    # Inv-SEMANTIC-WHITESPACE: text accepts str OR list[str] (paragraphs).
+    text: "str | list[str]" = ""
+    link_text: str = ""
+    link_url: str = ""
+    # Хвост, ПРИНАДЛЕЖАЩИЙ СОБЫТИЮ, а не Персоне («Автор серии «Встречи»» / «Design Travels: …»).
+    # Само био организатора синтезируется из графа (people.<pid>.bio ⟵ identity.yaml) — сюда
+    # кладётся ровно то, что графу не принадлежит. identity-primacy.md §D: разделение вынуждено
+    # тем, что раньше ОДНА строка `text` несла обе половины и потому копировалась целиком.
+    gloss: "str | list[str]" = ""
+
+
+@dataclass
+class Contact:
+    """Direct-contact block, rendered after signup. Lapidary, public-side."""
+    prompt: str = ""        # «Остался вопрос?»
+    text: str = ""          # «Напишите Ольге — ответит лично.»
+    email: str = ""         # mailto: target
+
+
+# ── Event model ──────────────────────────────────────────────────────
+
+@dataclass
+class EventModel:
+    """Validated event entity.
+
+    Required: id, broadcast (list[str], may be empty for graph-only events).
+    Required for landing render: lead, sections (non-empty).
+    Anything beyond shape goes through as `extra` for back-compat.
+    """
+    id: str
+    broadcast: list[str]
+    title: str = ""
+    date: str = ""
+    t_key: str = ""
+    # Inv-SEMANTIC-WHITESPACE: str OR list[str] of paragraphs.
+    lead: "str | list[str]" = ""
+    web_addresses: list[str] = field(default_factory=list)
+    organizers: list[str] = field(default_factory=list)
+    locations: list[str] = field(default_factory=list)
+    audience: list[str] = field(default_factory=list)
+    format: list[str] = field(default_factory=list)
+    status: str = "PLANNING"
+    sections: list[Section] = field(default_factory=list)
+    open_questions: list[OpenQuestion] = field(default_factory=list)
+    # `internal_questions` carry organizer-facing gaps (admin/Lumen surface);
+    # explicitly NOT rendered on public traveler-facing landing
+    # (Inv-CONTENT-AUDIENCE: surface tracks audience, not data presence).
+    internal_questions: list[OpenQuestion] = field(default_factory=list)
+    signup: Signup | None = None
+    contact: "Contact | None" = None
+    about_organizer: AboutOrganizer | None = None
+    pricing: dict[str, Any] = field(default_factory=dict)
+    cohort: dict[str, Any] | None = None
+    duration: str = ""
+    concept: str = ""
+    top_banner: str = ""
+    type: str = ""           # entity-event sub-class dispatch (entity-event Spec, 2026-05-10)
+    parent_id: str = ""      # sub-event edge — Inv-EV-parent-resolves
+    description: str = ""    # arbitrary prose for sub-events / non-landing events
+    when: str = ""           # temporal anchor for sub-events when t_key/date insufficient
+    duration_min: int = 0    # minute-precision for sub-events (presentation/lecture/meeting)
+    url: str = ""            # online-only locus (ZOOM / livestream / webinar)
+    days: list[dict[str, Any]] = field(default_factory=list)
+    # Per-event chrome control (admin 2026-05-12 reconsider — decoupled flags
+    # for landing_terminal events: legal-footer and cookie-banner concerns orthogonal).
+    suppress_legal_footer: bool = False   # hides .legal block; legal-min privacy footer renders когда privacy_url set
+    suppress_cookie_banner: bool | None = None   # None = coupled to suppress_legal_footer (backward-compat); explicit bool decouples
+    extra: dict[str, Any] = field(default_factory=dict)
+
+    @property
+    def renders_landing(self) -> bool:
+        """True iff the event has the minimum shape to render an essay landing.
+
+        Exactly one decision point — referenced by site_generator and
+        broadcast_html so the schema, not the renderer, gates the surface.
+        """
+        return bool(self.lead and self.sections)
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """Dict-shaped accessor — bridges renderer's `obj.X if hasattr(obj, X) else obj.get(X, default)`
+        pattern when EventModel lacks the requested attribute. Falls back to `extra` dict
+        for fields that data.yaml carries but the schema hasn't yet promoted to typed attrs.
+        Spec-evolution-friendly: data.yaml may add fields ahead of schema; .get() returns
+        graceful default instead of AttributeError. Closes class «schema-debt blowback» —
+        any new yaml field renders без crash even before schema upgrade.
+        """
+        if hasattr(self, key):
+            return getattr(self, key)
+        return self.extra.get(key, default) if isinstance(self.extra, dict) else default
+
+
+def _norm_str(v: Any) -> str:
+    return str(v).strip() if v is not None else ""
+
+
+def _norm_list_str(v: Any) -> list[str]:
+    if v is None:
+        return []
+    if isinstance(v, str):
+        return [v]
+    return [str(x) for x in v if x is not None]
+
+
+def _norm_paras(v: Any) -> "str | list[str]":
+    """Normalize a prose field that may carry paragraph structure.
+
+    Inv-SEMANTIC-WHITESPACE: list[str] preserves admin's blank-line breaks;
+    single str passes through as-is. None → "". Empty list → "". Single-item
+    list collapses to its element (avoids spurious `[x]` wrapping).
+    """
+    if v is None:
+        return ""
+    if isinstance(v, list):
+        paras = [str(x).strip() for x in v if x is not None and str(x).strip()]
+        if not paras:
+            return ""
+        return paras[0] if len(paras) == 1 else paras
+    return str(v).strip()
+
+
+def _validate_section(raw: Any, ev_id: str, idx: int) -> Section:
+    if not isinstance(raw, dict):
+        raise InvalidEvent(ev_id, f"sections[{idx}] must be a mapping, got {type(raw).__name__}")
+    # title may be empty string — sentinel for «render content without <h2>
+    # heading» (admin 2026-05-14: Natalia review, paris-2026-09 «убрать
+    # заголовок Тема»). title field MUST be present (key-level), value
+    # may be "" for header-suppress.
+    if "title" not in raw:
+        raise InvalidEvent(ev_id, f"sections[{idx}] missing title key")
+    title = _norm_str(raw.get("title"))
+    sec = Section(title=title)
+    sec.intro = _norm_paras(raw.get("intro"))
+    sec.text = _norm_paras(raw.get("text"))
+    items = raw.get("items") or []
+    if items and not isinstance(items, list):
+        raise InvalidEvent(ev_id, f"sections[{idx}].items must be a list")
+    sec.items = [_norm_str(x) for x in items]
+    pairs_raw = raw.get("pairs") or []
+    if pairs_raw and not isinstance(pairs_raw, list):
+        raise InvalidEvent(ev_id, f"sections[{idx}].pairs must be a list")
+    for j, p in enumerate(pairs_raw):
+        if not isinstance(p, dict):
+            raise InvalidEvent(ev_id, f"sections[{idx}].pairs[{j}] must be a mapping")
+        label = _norm_str(p.get("label"))
+        text = _norm_str(p.get("text"))
+        if not (label and text):
+            raise InvalidEvent(ev_id, f"sections[{idx}].pairs[{j}] needs label+text")
+        sec.pairs.append(SectionPair(label=label, text=text))
+    # Empty sections are legal: title-only sentinels suppress auto-policy
+    # blocks (admin claims authorship — auto-block с тем же titlе скрывается;
+    # see scripts/site_generator.py p_event_landing _admin_section_titles).
+    return sec
+
+
+def _validate_oq(raw: Any, ev_id: str, idx: int) -> OpenQuestion:
+    if not isinstance(raw, dict):
+        raise InvalidEvent(ev_id, f"open_questions[{idx}] must be a mapping")
+    to = raw.get("to")
+    if to is None:
+        raise InvalidEvent(ev_id, f"open_questions[{idx}].to required")
+    to_list = _norm_list_str(to)
+    q = _norm_str(raw.get("q"))
+    if not q:
+        raise InvalidEvent(ev_id, f"open_questions[{idx}].q empty")
+    return OpenQuestion(to=to_list, q=q)
+
+
+def validate(ev: dict[str, Any]) -> EventModel:
+    """Coerce a raw event dict (from data.yaml) into a typed EventModel.
+
+    Fail-fast: raises InvalidEvent on shape problems with a clear `reason`.
+    Soft fields (cohort/pricing/days/etc) pass through unchanged for back-compat
+    with renderers that have not yet been migrated.
+    """
+    if not isinstance(ev, dict):
+        raise InvalidEvent("?", f"event must be a mapping, got {type(ev).__name__}")
+    ev_id = _norm_str(ev.get("id"))
+    if not ev_id:
+        raise InvalidEvent("?", "missing id")
+
+    broadcast = ev.get("broadcast") or []
+    if not isinstance(broadcast, list):
+        raise InvalidEvent(ev_id, "broadcast must be a list")
+    broadcast = [_norm_str(x) for x in broadcast if _norm_str(x)]
+
+    m = EventModel(id=ev_id, broadcast=broadcast)
+    m.title = _norm_str(ev.get("title"))
+    m.date = _norm_str(ev.get("date"))
+    m.t_key = _norm_str(ev.get("t_key"))
+    m.lead = _norm_paras(ev.get("lead"))
+    m.web_addresses = _norm_list_str(ev.get("web_addresses"))
+    m.organizers = _norm_list_str(ev.get("organizers"))
+    m.locations = _norm_list_str(ev.get("locations"))
+    m.audience = _norm_list_str(ev.get("audience"))
+    m.format = _norm_list_str(ev.get("format"))
+    m.status = _norm_str(ev.get("status")) or "PLANNING"
+    m.duration = _norm_str(ev.get("duration"))
+    m.concept = _norm_str(ev.get("concept"))
+    # entity-event Spec fields (system-layer Spec, 2026-05-10)
+    m.top_banner = _norm_str(ev.get("top_banner"))
+    m.type = _norm_str(ev.get("type"))
+    m.parent_id = _norm_str(ev.get("parent_id"))
+    m.description = _norm_str(ev.get("description"))
+    m.when = _norm_str(ev.get("when"))
+    m.duration_min = int(ev["duration_min"]) if isinstance(ev.get("duration_min"), int) else 0
+    m.url = _norm_str(ev.get("url"))
+
+    sections_raw = ev.get("sections") or []
+    if sections_raw and not isinstance(sections_raw, list):
+        raise InvalidEvent(ev_id, "sections must be a list")
+    m.sections = [_validate_section(s, ev_id, i) for i, s in enumerate(sections_raw)]
+
+    oq_raw = ev.get("open_questions") or []
+    if oq_raw and not isinstance(oq_raw, list):
+        raise InvalidEvent(ev_id, "open_questions must be a list")
+    m.open_questions = [_validate_oq(q, ev_id, i) for i, q in enumerate(oq_raw)]
+
+    iq_raw = ev.get("internal_questions") or []
+    if iq_raw and not isinstance(iq_raw, list):
+        raise InvalidEvent(ev_id, "internal_questions must be a list")
+    m.internal_questions = [_validate_oq(q, ev_id, i) for i, q in enumerate(iq_raw)]
+
+    contact = ev.get("contact")
+    if isinstance(contact, dict):
+        m.contact = Contact(
+            prompt=_norm_str(contact.get("prompt")),
+            text=_norm_str(contact.get("text")),
+            email=_norm_str(contact.get("email")),
+        )
+    elif contact not in (None, False):
+        raise InvalidEvent(ev_id, "contact must be a mapping or null")
+
+    signup = ev.get("signup")
+    if isinstance(signup, dict):
+        m.signup = Signup(
+            title=_norm_str(signup.get("title")) or "Записаться",
+            note=_norm_str(signup.get("note")),
+            cta_label=_norm_str(signup.get("cta_label")),
+        )
+    elif signup not in (None, False):
+        raise InvalidEvent(ev_id, f"signup must be a mapping or null, got {type(signup).__name__}")
+
+    about = ev.get("about_organizer")
+    if isinstance(about, dict):
+        m.about_organizer = AboutOrganizer(
+            text=_norm_paras(about.get("text")),
+            link_text=_norm_str(about.get("link_text")),
+            link_url=_norm_str(about.get("link_url")),
+            gloss=_norm_paras(about.get("gloss")),
+        )
+    elif about not in (None, False):
+        raise InvalidEvent(ev_id, f"about_organizer must be a mapping or null")
+
+    pricing = ev.get("pricing")
+    if pricing is None or pricing is False:
+        m.pricing = {}
+    elif isinstance(pricing, dict):
+        m.pricing = pricing
+    else:
+        raise InvalidEvent(ev_id, "pricing must be a mapping or null")
+
+    cohort = ev.get("cohort")
+    if cohort is None or cohort is False:
+        m.cohort = None
+    elif isinstance(cohort, dict):
+        m.cohort = cohort
+    else:
+        raise InvalidEvent(ev_id, "cohort must be a mapping or null")
+
+    days = ev.get("days") or []
+    if days and not isinstance(days, list):
+        raise InvalidEvent(ev_id, "days must be a list")
+    m.days = list(days)
+
+    # Per-event chrome control (Inv-LDG-design-* terminal-block + privacy compliance).
+    m.suppress_legal_footer = bool(ev.get("suppress_legal_footer", False))
+    _scb = ev.get("suppress_cookie_banner")
+    m.suppress_cookie_banner = bool(_scb) if isinstance(_scb, bool) else None
+
+    # extra passthrough — MAKE THE DOCSTRING TRUE (Inv-EVENT-extra-total). Every raw
+    # key NOT promoted to a typed attribute survives here, so EventModel.get() (which
+    # falls back to extra) resolves data.yaml fields the schema hasn't typed yet
+    # (lead_capture, headings, registration, landing_h1, …). Before this, extra was
+    # declared+default-{} but NEVER populated ⇒ every untyped field silently vanished
+    # at validate() — the renderer saw None and fell to defaults (the lead_capture-
+    # provider drop, Σ nascent 2026-07-06; also every label/consent_text loss). Derived
+    # set-difference: zero per-field enumeration, total by construction. Schema-evolution
+    # law: a data.yaml field renders via .get() BEFORE it earns a typed attr; promoting
+    # it later to a real field just shadows the extra entry (get() prefers the attr).
+    _typed = {f.name for f in fields(m)}   # every promoted attr (incl. 'extra' itself)
+    m.extra = {k: v for k, v in ev.items() if k not in _typed}
+
+    # Landing-render gate: if broadcast surface includes 'site' or web_addresses
+    # is non-empty, the event will be rendered as a landing — must have lead+sections.
+    will_render_landing = ("site" in broadcast) or bool(m.web_addresses)
+    if will_render_landing and not m.renders_landing:
+        raise InvalidEvent(
+            ev_id,
+            "broadcasts to site / has web_addresses but lacks lead+sections "
+            "(modern landing schema). Add `lead:` (single sentence, frame-setter) "
+            "and at least one entry in `sections:`.",
+        )
+
+    return m
+
+
+__all__ = ["EventModel", "Section", "SectionPair", "OpenQuestion", "Signup",
+           "Contact", "AboutOrganizer", "InvalidEvent", "validate"]
