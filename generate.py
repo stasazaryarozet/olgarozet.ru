@@ -1279,22 +1279,50 @@ def _owner_sheets_from_extra(extra: str) -> "tuple[str, list[str]]":
 
 def _styles_layers(d: dict[str, Any], *, _bust: str,
                    owner_more: "list[str] | None" = None) -> str:
-    """Owner sheet in @layer owner; compiled tokens in @layer law (law wins over manual rules).
+    """Owner sheet in cascade.author; compiled tokens imported bare so inner @layer
+    blocks join the names declared here (floor < author < form).
 
-    Per-page stylesheets extracted from extra_head join the same owner layer: unlayered
-    `<link>` would beat law regardless of specificity."""
+    Measured 2026-09-15: `@import url(...) layer(law)` of a file containing
+    `@layer floor` yields `law.floor` (above owner). Bare import: `@layer floor`
+    yields to owner. Token catalogue is unlayered inside the file (not a display
+    rule). Per-page stylesheets extracted from extra_head join the author layer:
+    unlayered `<link>` would beat every layer regardless of specificity."""
+    import css_compile as _cc
+    cas = _cc.cascade_of()
+    order, author = cas["order"], cas["author"]
     _owner = str(d.get("_owner") or "")
     _tb = (_tokens_cache_bust(_owner) if _owner else None) or ""
     _tq = f"?v={_tb}" if _tb else ""
     _sq = f"?v={_bust}" if _bust else ""
-    parts = [f'@import url("/styles.css{_sq}") layer(owner);']
-    for href in owner_more or ():
-        if not href:
-            continue
-        url = href.replace("\\", "\\\\").replace('"', '\\"')
-        parts.append(f'@import url("{url}") layer(owner);')
-    parts.append(f'@import url("/_tokens.generated.css{_tq}") layer(law);')
-    return f'<style>@layer owner, law; {" ".join(parts)}</style>'
+    # ПОРЯДОК ИМПОРТА НЕСУЩИЙ, А НЕ КОСМЕТИЧЕСКИЙ. Токены идут ПЕРВЫМИ: отношение ⊲
+    # (`yields_on_refinement`) размещает правило закона в слое АВТОРА, и спор решают
+    # специфичность и ПОРЯДОК ИСТОЧНИКА. Закон раньше ⇒ при равной точности побеждает
+    # автор (он позже), то есть намеренное правило о предмете закона; при меньшей точности
+    # авторское правило проигрывает — оно о предмете закона не говорило. Поставь токены
+    # после таблиц — и равная точность достанется закону, а «намеренное» станет
+    # неотличимо от нечаянного.
+    # РОЛИ ОБЪЯВЛЯЕТ КОД (он один знает, что вообще эмитирует), ПОРЯДОК — СПЕКА.
+    def _author_imports() -> "list[str]":
+        out = [f'@import url("/styles.css{_sq}") layer({author});']
+        for href in owner_more or ():
+            if not href:
+                continue
+            url = href.replace("\\", "\\\\").replace('"', '\\"')
+            out.append(f'@import url("{url}") layer({author});')
+        return out
+
+    emitters = {"law": lambda: [f'@import url("/_tokens.generated.css{_tq}");'],
+                "author": _author_imports}
+    want = list(cas["shared_layer_order"])
+    unknown = [r for r in want if r not in emitters]
+    missing = [r for r in emitters if r not in want]
+    if unknown or missing:
+        raise RuntimeError(
+            f"site_generator: cascade.shared_layer_order {want} не совпадает с ролями "
+            f"показа {sorted(emitters)} — лишние {unknown}, неупомянутые {missing}; "
+            "порядок источников в общем слое несущий и обязан быть полным")
+    parts = [stmt for role in want for stmt in emitters[role]()]
+    return f'<style>@layer {", ".join(order)}; {" ".join(parts)}</style>'
 
 
 def _media_ergonomics(has_body: bool) -> str:
