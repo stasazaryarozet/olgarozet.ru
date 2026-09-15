@@ -59,7 +59,7 @@
    "deck": "../../_raw/stili-trendy-part1-order-8-10-9.pdf",
    "rasters": "../../site-sources/styles-past-opens-future/img",
    "recording": {
-    "oid": "35309e2b84cb74b5",
+    "oid": "873a9cc434f73d2a",
     "at": []
    }
   },
@@ -139,7 +139,11 @@
     "title-leaf",
     "laura-gonzalez-library",
     "humbert-poyet-salon"
-   ]
+   ],
+   "cite": {
+    "act": "quote",
+    "text": "Речь пойдет не об этом. Речь пойдет о, наверное, самом важном, о философии, через которую можно сегодня создавать нечто оригинальное."
+   }
   },
   {
    "id": "apparatus",
@@ -152,7 +156,11 @@
     "grand-styles",
     "interior-styles",
     "atmosphere"
-   ]
+   ],
+   "cite": {
+    "act": "quote",
+    "text": "Мы создаем атмосферу."
+   }
   },
   {
    "id": "antiquity",
@@ -164,7 +172,11 @@
     "antiquity-cosmos",
     "villa-kerylos",
     "lagerfeld-columns"
-   ]
+   ],
+   "cite": {
+    "act": "quote",
+    "text": "Главное в античности – человек."
+   }
   },
   {
    "id": "romanesque",
@@ -177,7 +189,11 @@
     "vervoordt-gravenwezel",
     "vervoordt-threshold",
     "hidden-hills-house"
-   ]
+   ],
+   "cite": {
+    "act": "quote",
+    "text": "Ничего лишнего в такой системе ценностей в жилище не должно быть."
+   }
   },
   {
    "id": "gothic",
@@ -191,7 +207,11 @@
     "farnsworth-lasers",
     "farnsworth-interior",
     "farnsworth-exterior"
-   ]
+   ],
+   "cite": {
+    "act": "quote",
+    "text": "Солнечный свет выглядит как тень Бога."
+   }
   },
   {
    "id": "renaissance",
@@ -208,19 +228,27 @@
     "van-duysen-antwerp",
     "aesop-guadagnino",
     "guadagnino-wood"
-   ]
+   ],
+   "cite": {
+    "act": "quote",
+    "text": "Круг – это ощущение гармонии."
+   }
   },
   {
    "id": "baroque",
    "layout": "grid",
    "title": "Барокко",
    "lead": "Барокко отказывается от статичного мира: динамика, иллюзия и масштаб ради статуса.",
-   "text": "Интерьер как инструмент впечатления и даже подавления через театрализацию — рекламная кампания эпохи. Сегодня это Mondrian Doha Марселя Вандерса: витражный купол, спиральная лестница, люстры в белых дисках.",
+   "text": "Театрализация и иллюзия работают на статус заказчика. Сегодня это Mondrian Doha Марселя Вандерса: витражный купол, спиральная лестница, люстры в белых дисках.",
    "members": [
     "baroque-theatre",
     "mondrian-doha-pool",
     "mondrian-doha-ballroom"
-   ]
+   ],
+   "cite": {
+    "act": "quote",
+    "text": "Интерьер как рекламная кампания."
+   }
   },
   {
    "id": "classicism-empire",
@@ -235,7 +263,11 @@
     "deniot-salon",
     "ralph-lauren-dining",
     "ralph-lauren-bedroom"
-   ]
+   ],
+   "cite": {
+    "act": "quote",
+    "text": "Мир – это не театр, обратная сторона, как барокко, а идеально работающие часы, порядок."
+   }
   },
   {
    "id": "contextual-modernism",
@@ -247,7 +279,11 @@
     "cour-des-vosges-room",
     "cour-des-vosges-salon",
     "cour-des-vosges-bedroom"
-   ]
+   ],
+   "cite": {
+    "act": "quote",
+    "text": "Я предлагаю, и не только я, предлагаю вот такую дефиницию, такое определение, как контекстуальный модернизм."
+   }
   },
   {
    "id": "exercise",
@@ -256,7 +292,11 @@
    "lead": "Прочитайте свой интерьер так, как в лекции прочитаны Керилос и Гравенвезел.",
    "members": [
     "exercise-steps"
-   ]
+   ],
+   "cite": {
+    "act": "quote",
+    "text": "Вот сделать какой-то девиз всему брифу"
+   }
   },
   {
    "id": "self-check",
@@ -403,7 +443,8 @@
     "philosophy"
    ],
    "page": 1,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 0
   },
   {
    "id": "laura-gonzalez-library",
@@ -420,7 +461,8 @@
     "materials"
    ],
    "page": 2,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 131
   },
   {
    "id": "humbert-poyet-salon",
@@ -437,7 +479,8 @@
     "materials"
    ],
    "page": 3,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 336
   },
   {
    "id": "what-is-style",
@@ -453,7 +496,8 @@
     "style",
     "grand-style"
    ],
-   "page": 4
+   "page": 4,
+   "seconds": 510
   },
   {
    "id": "grand-styles",
@@ -466,7 +510,8 @@
    "terms": [
     "grand-style"
    ],
-   "page": 5
+   "page": 5,
+   "seconds": 829
   },
   {
    "id": "interior-styles",
@@ -482,7 +527,8 @@
    "terms": [
     "interior-style"
    ],
-   "page": 6
+   "page": 6,
+   "seconds": 1029
   },
   {
    "id": "atmosphere",
@@ -499,7 +545,8 @@
    "terms": [
     "atmosphere"
    ],
-   "page": 7
+   "page": 7,
+   "seconds": 1360
   },
   {
    "id": "antiquity-cosmos",
@@ -514,7 +561,8 @@
     "cosmocentrism",
     "human-as-module"
    ],
-   "page": 8
+   "page": 8,
+   "seconds": 1407
   },
   {
    "id": "villa-kerylos",
@@ -531,7 +579,8 @@
     "morphology"
    ],
    "page": 9,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 1669
   },
   {
    "id": "lagerfeld-columns",
@@ -547,7 +596,8 @@
     "materials"
    ],
    "page": 10,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 2031
   },
   {
    "id": "romanesque-refuge",
@@ -562,7 +612,8 @@
     "theocentrism",
     "eschatology"
    ],
-   "page": 11
+   "page": 11,
+   "seconds": 2141
   },
   {
    "id": "vervoordt-gravenwezel",
@@ -579,7 +630,8 @@
     "colors"
    ],
    "page": 12,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 2394
   },
   {
    "id": "vervoordt-threshold",
@@ -595,7 +647,8 @@
     "textures"
    ],
    "page": 13,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 2497
   },
   {
    "id": "hidden-hills-house",
@@ -610,7 +663,8 @@
    "terms": [
     "wabi-sabi"
    ],
-   "page": 14
+   "page": 14,
+   "seconds": 2688
   },
   {
    "id": "gothic-light",
@@ -626,7 +680,8 @@
     "scholasticism",
     "lux-nova"
    ],
-   "page": 15
+   "page": 15,
+   "seconds": 2806
   },
   {
    "id": "oculus-calatrava",
@@ -642,7 +697,8 @@
     "technologies"
    ],
    "page": 16,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 2943
   },
   {
    "id": "farnsworth-lasers",
@@ -653,7 +709,8 @@
     "technologies",
     "philosophy"
    ],
-   "page": 17
+   "page": 17,
+   "seconds": 3105
   },
   {
    "id": "farnsworth-interior",
@@ -669,7 +726,8 @@
     "morphology"
    ],
    "page": 18,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 3203
   },
   {
    "id": "farnsworth-exterior",
@@ -685,7 +743,8 @@
     "philosophy"
    ],
    "page": 19,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 3225
   },
   {
    "id": "renaissance-measure",
@@ -701,7 +760,8 @@
     "golden-ratio",
     "circle-and-dome"
    ],
-   "page": 20
+   "page": 20,
+   "seconds": 3235
   },
   {
    "id": "apple-dubai-mall",
@@ -718,7 +778,8 @@
     "materials"
    ],
    "page": 21,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 3497
   },
   {
    "id": "apple-park",
@@ -734,7 +795,8 @@
     "philosophy"
    ],
    "page": 22,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 3549
   },
   {
    "id": "dirand-restaurant",
@@ -751,7 +813,8 @@
     "ornaments"
    ],
    "page": 23,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 3579
   },
   {
    "id": "studio-peregalli",
@@ -767,7 +830,8 @@
     "colors"
    ],
    "page": 24,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 3645
   },
   {
    "id": "van-duysen-antwerp",
@@ -783,7 +847,8 @@
     "colors"
    ],
    "page": 25,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 3702
   },
   {
    "id": "aesop-guadagnino",
@@ -800,7 +865,8 @@
     "morphology"
    ],
    "page": 26,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 3786
   },
   {
    "id": "guadagnino-wood",
@@ -817,7 +883,8 @@
     "textures"
    ],
    "page": 27,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 3828
   },
   {
    "id": "baroque-theatre",
@@ -831,7 +898,8 @@
    "terms": [
     "theatricality"
    ],
-   "page": 28
+   "page": 28,
+   "seconds": 3872
   },
   {
    "id": "mondrian-doha-pool",
@@ -848,7 +916,8 @@
     "textures"
    ],
    "page": 29,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 4010
   },
   {
    "id": "mondrian-doha-ballroom",
@@ -864,7 +933,8 @@
     "morphology"
    ],
    "page": 30,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 4038
   },
   {
    "id": "classicism-clockwork",
@@ -880,7 +950,8 @@
     "old-money",
     "empire-style"
    ],
-   "page": 31
+   "page": 31,
+   "seconds": 4250
   },
   {
    "id": "pheasant-hall",
@@ -897,7 +968,8 @@
     "morphology"
    ],
    "page": 32,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 4445
   },
   {
    "id": "deniot-enfilade",
@@ -913,7 +985,8 @@
     "morphology"
    ],
    "page": 33,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 4504
   },
   {
    "id": "deniot-salon",
@@ -930,7 +1003,8 @@
     "colors"
    ],
    "page": 34,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 4540
   },
   {
    "id": "ralph-lauren-dining",
@@ -947,7 +1021,8 @@
     "ornaments"
    ],
    "page": 35,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 4596
   },
   {
    "id": "ralph-lauren-bedroom",
@@ -964,7 +1039,8 @@
     "colors"
    ],
    "page": 36,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 4632
   },
   {
    "id": "cour-des-vosges-room",
@@ -984,7 +1060,8 @@
     "contextual-modernism"
    ],
    "page": 37,
-   "basis": "figure"
+   "basis": "figure",
+   "seconds": 4664
   },
   {
    "id": "cour-des-vosges-salon",
