@@ -62,6 +62,9 @@ consultations:
   cta: Записаться
   heading: 'Включить меня в дело:'
   no_times: пока времён нет
+  no_times_hint: |
+    Напишите Ольге напрямую —
+    предложу время:
 booking:
   transport_url_ref: booking_webhook_url
 people:
