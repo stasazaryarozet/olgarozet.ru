@@ -311,7 +311,11 @@
     "check-drama",
     "check-clock",
     "check-context"
-   ]
+   ],
+   "cite": {
+    "act": "quote",
+    "text": "Что в этом интерьере важнее?"
+   }
   }
  ],
  "terms": {
@@ -432,61 +436,74 @@
  "segments": [
   {
    "id": "title-leaf",
-   "file": "slide-01.png",
    "title": "Прошлое открывает будущее",
    "tag": "Титул",
+   "page": 1,
+   "file": "slide-01.png",
+   "axis": [
+    "philosophy"
+   ],
+   "basis": "figure",
    "cite": {
     "act": "caption",
     "text": "Колонный зал с современным стеллажом"
    },
-   "axis": [
-    "philosophy"
-   ],
-   "page": 1,
-   "basis": "figure",
+   "said": {
+    "act": "quote",
+    "text": "Мы сегодня можем обратиться к стилям, возможно, не всегда останавливаясь на визуальных паттернах."
+   },
    "seconds": 0
   },
   {
    "id": "laura-gonzalez-library",
-   "file": "slide-02.png",
    "title": "Лаура Гонзалес",
    "tag": "Камертон · библиотека",
-   "cite": {
-    "act": "caption",
-    "text": "Библиотека: белый скульптурный камин и округлый белый диван"
-   },
+   "page": 2,
+   "file": "slide-02.png",
    "axis": [
     "morphology",
     "colors",
     "materials"
    ],
-   "page": 2,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Библиотека: белый скульптурный камин и округлый белый диван"
+   },
+   "said": {
+    "act": "quote",
+    "text": "Чем больше мы проваливаемся в это чтение, погружаемся в эти элементы, тем интереснее нам находиться в этом интерьере."
+   },
    "seconds": 131
   },
   {
    "id": "humbert-poyet-salon",
-   "file": "slide-03.png",
    "title": "Humbert & Poyet",
    "tag": "Камертон · салон",
-   "cite": {
-    "act": "caption",
-    "text": "Синяя ширма, шторы с паттерном, белые кресла, мрамор"
-   },
+   "page": 3,
+   "file": "slide-03.png",
    "axis": [
     "colors",
     "ornaments",
     "materials"
    ],
-   "page": 3,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Синяя ширма, шторы с паттерном, белые кресла, мрамор"
+   },
+   "said": {
+    "act": "quote",
+    "text": "Мы видим вроде бы классический элемент ширмы, но уже очищенный от излишества, и более того, здесь ширма многофункциональна."
+   },
    "seconds": 336
   },
   {
    "id": "what-is-style",
-   "file": "slide-04.png",
    "title": "Что такое стиль",
    "tag": "Понятия · определение",
+   "page": 4,
+   "file": "slide-04.png",
    "axis": [
     "morphology",
     "materials",
@@ -496,28 +513,36 @@
     "style",
     "grand-style"
    ],
-   "page": 4,
+   "said": {
+    "act": "quote",
+    "text": "Стиль – это тогда, когда устраиваются паттерны формообразования, морфология в течение довольно большого времени, иногда в течение даже столетий."
+   },
    "seconds": 510
   },
   {
    "id": "grand-styles",
-   "file": "slide-05.png",
    "title": "Большие стили",
    "tag": "Понятия · шесть систем",
+   "page": 5,
+   "file": "slide-05.png",
    "axis": [
     "philosophy"
    ],
    "terms": [
     "grand-style"
    ],
-   "page": 5,
+   "said": {
+    "act": "quote",
+    "text": "Но есть и такое мнение у историков о стиле, что рококо – это такая противоречивая фаза барокко"
+   },
    "seconds": 829
   },
   {
    "id": "interior-styles",
-   "file": "slide-06.png",
    "title": "Интерьерные стили",
    "tag": "Понятия · маркеры",
+   "page": 6,
+   "file": "slide-06.png",
    "axis": [
     "colors",
     "materials",
@@ -527,32 +552,36 @@
    "terms": [
     "interior-style"
    ],
-   "page": 6,
+   "said": {
+    "act": "quote",
+    "text": "Это то, что отделяет интерьерный стиль от стиля художественного, стиля изящных искусств, утилитарная позиция."
+   },
    "seconds": 1029
   },
   {
    "id": "atmosphere",
-   "file": "slide-07.png",
    "title": "Атмосфера",
    "tag": "Понятия · ключ лекции",
-   "cite": {
-    "act": "quote",
-    "text": "АТМОСФЕРА = ИДЕОЛОГИЯ/ФИЛОСОФИЯ/ЦЕННОСТИ ЖИЗНИ"
-   },
+   "page": 7,
+   "file": "slide-07.png",
    "axis": [
     "philosophy"
    ],
    "terms": [
     "atmosphere"
    ],
-   "page": 7,
+   "cite": {
+    "act": "quote",
+    "text": "АТМОСФЕРА = ИДЕОЛОГИЯ/ФИЛОСОФИЯ/ЦЕННОСТИ ЖИЗНИ"
+   },
    "seconds": 1360
   },
   {
    "id": "antiquity-cosmos",
-   "file": "slide-08.png",
    "title": "Мир как порядок",
    "tag": "Античность · философия",
+   "page": 8,
+   "file": "slide-08.png",
    "axis": [
     "philosophy",
     "morphology"
@@ -561,49 +590,61 @@
     "cosmocentrism",
     "human-as-module"
    ],
-   "page": 8,
+   "said": {
+    "act": "quote",
+    "text": "Каждая деталь находится на своём месте."
+   },
    "seconds": 1407
   },
   {
    "id": "villa-kerylos",
-   "file": "slide-09.png",
    "title": "Вилла Керилос",
    "tag": "Античность · Понтремоли, 1902–1908",
-   "cite": {
-    "act": "caption",
-    "text": "Колонный зал с мозаикой и меандром; спальня с красными колоннами и росписью"
-   },
+   "page": 9,
+   "file": "slide-09.png",
    "axis": [
     "ornaments",
     "materials",
     "morphology"
    ],
-   "page": 9,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Колонный зал с мозаикой и меандром; спальня с красными колоннами и росписью"
+   },
+   "said": {
+    "act": "quote",
+    "text": "Правда, просто напомню, что греческие храмы были невероятно цветными, со своей иерархией цветов, со своими орнаментами."
+   },
    "seconds": 1669
   },
   {
    "id": "lagerfeld-columns",
-   "file": "slide-10.png",
    "title": "Колонны Лагерфельда",
    "tag": "Античность · носитель",
-   "cite": {
-    "act": "caption",
-    "text": "Мебель-колонны: чёрные столы-ордеры, белые мраморные табуреты, зеркало, консоль"
-   },
+   "page": 10,
+   "file": "slide-10.png",
    "axis": [
     "morphology",
     "materials"
    ],
-   "page": 10,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Мебель-колонны: чёрные столы-ордеры, белые мраморные табуреты, зеркало, консоль"
+   },
+   "said": {
+    "act": "quote",
+    "text": "Вот такая тема очень важна для тех людей или для тех заказчиков, которые хотят определенной стабильности и, может быть, в какой-то степени неразрушимости объекта вечных ценностей."
+   },
    "seconds": 2031
   },
   {
    "id": "romanesque-refuge",
-   "file": "slide-11.png",
    "title": "Храм как убежище",
    "tag": "Романский стиль · философия",
+   "page": 11,
+   "file": "slide-11.png",
    "axis": [
     "philosophy",
     "materials"
@@ -612,49 +653,61 @@
     "theocentrism",
     "eschatology"
    ],
-   "page": 11,
+   "said": {
+    "act": "quote",
+    "text": "Внутри храма, дома тишина, порядок и Бог."
+   },
    "seconds": 2141
   },
   {
    "id": "vervoordt-gravenwezel",
-   "file": "slide-12.png",
    "title": "Замок Гравенвезел",
    "tag": "Романский стиль · Аксель Вервордт",
-   "cite": {
-    "act": "caption",
-    "text": "Белые чехлы, балки, камин; хозяева с собакой"
-   },
+   "page": 12,
+   "file": "slide-12.png",
    "axis": [
     "materials",
     "textures",
     "colors"
    ],
-   "page": 12,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Белые чехлы, балки, камин; хозяева с собакой"
+   },
+   "said": {
+    "act": "quote",
+    "text": "внутри и снаружи это выглядит как замок, то есть это западная ценность, это личный мир, мой дом, моя крепость"
+   },
    "seconds": 2394
   },
   {
    "id": "vervoordt-threshold",
-   "file": "slide-13.png",
    "title": "Проём и камень",
    "tag": "Романский стиль · разворот книги",
-   "cite": {
-    "act": "caption",
-    "text": "Дверной проём с занавесью; каменный пол"
-   },
+   "page": 13,
+   "file": "slide-13.png",
    "axis": [
     "materials",
     "textures"
    ],
-   "page": 13,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Дверной проём с занавесью; каменный пол"
+   },
+   "said": {
+    "act": "quote",
+    "text": "И он очень тщательно ищет текстиль с моментами бытования, не имитацией, а как раз вот тот самый настоящий."
+   },
    "seconds": 2497
   },
   {
    "id": "hidden-hills-house",
-   "file": "slide-14.png",
    "title": "Hidden Hills House",
    "tag": "Романский стиль · ваби-саби",
+   "page": 14,
+   "file": "slide-14.png",
    "axis": [
     "philosophy",
     "colors",
@@ -663,14 +716,18 @@
    "terms": [
     "wabi-sabi"
    ],
-   "page": 14,
+   "said": {
+    "act": "quote",
+    "text": "Этот интерьер, который вдохновлен не другим дворцом, как демонстрация статуса, а древней кельей монаха, переосмысленный для жизни в 21 веке."
+   },
    "seconds": 2688
   },
   {
    "id": "gothic-light",
-   "file": "slide-15.png",
    "title": "Метафизика света",
    "tag": "Готика · философия",
+   "page": 15,
+   "file": "slide-15.png",
    "axis": [
     "philosophy",
     "technologies",
@@ -680,77 +737,93 @@
     "scholasticism",
     "lux-nova"
    ],
-   "page": 15,
+   "said": {
+    "act": "quote",
+    "text": "Метафора готической архитектуры состоит в том, как показать рай, как устроен рай."
+   },
    "seconds": 2806
   },
   {
    "id": "oculus-calatrava",
-   "file": "slide-16.png",
    "title": "Oculus",
    "tag": "Готика · Сантьяго Калатрава",
-   "cite": {
-    "act": "caption",
-    "text": "Неф-рёбра изнутри; белая галерея-аркада"
-   },
+   "page": 16,
+   "file": "slide-16.png",
    "axis": [
     "morphology",
     "technologies"
    ],
-   "page": 16,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Неф-рёбра изнутри; белая галерея-аркада"
+   },
+   "said": {
+    "act": "quote",
+    "text": "Калатрава говорил о том, что источником вдохновения для него и были птицы, которые здесь на площади все время взлетают."
+   },
    "seconds": 2943
   },
   {
    "id": "farnsworth-lasers",
-   "file": "slide-17.png",
    "title": "Фарнсуорт в лазерах",
    "tag": "Готика · Мис ван дер Роэ, 1945–1951",
+   "page": 17,
+   "file": "slide-17.png",
    "axis": [
     "technologies",
     "philosophy"
    ],
-   "page": 17,
+   "said": {
+    "act": "quote",
+    "text": "Давайте будем помнить, что вообще-то все те авторы, которые я называю, они очень хорошо погружались в историю стилей."
+   },
    "seconds": 3105
   },
   {
    "id": "farnsworth-interior",
-   "file": "slide-18.png",
    "title": "Интерьер Фарнсуорт",
    "tag": "Готика · носитель",
-   "cite": {
-    "act": "caption",
-    "text": "Кожаная мебель Barcelona, стеклянные стены"
-   },
+   "page": 18,
+   "file": "slide-18.png",
    "axis": [
     "materials",
     "morphology"
    ],
-   "page": 18,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Кожаная мебель Barcelona, стеклянные стены"
+   },
+   "said": {
+    "act": "quote",
+    "text": "Дом полный света, прозрачные стены."
+   },
    "seconds": 3203
   },
   {
    "id": "farnsworth-exterior",
-   "file": "slide-19.png",
    "title": "Дом в лесу",
    "tag": "Готика · носитель",
-   "cite": {
-    "act": "caption",
-    "text": "Стеклянный дом в осеннем лесу"
-   },
+   "page": 19,
+   "file": "slide-19.png",
    "axis": [
     "materials",
     "philosophy"
    ],
-   "page": 19,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Стеклянный дом в осеннем лесу"
+   },
    "seconds": 3225
   },
   {
    "id": "renaissance-measure",
-   "file": "slide-20.png",
    "title": "Человек как мера",
    "tag": "Ренессанс · философия",
+   "page": 20,
+   "file": "slide-20.png",
    "axis": [
     "philosophy",
     "morphology"
@@ -760,137 +833,161 @@
     "golden-ratio",
     "circle-and-dome"
    ],
-   "page": 20,
+   "said": {
+    "act": "quote",
+    "text": "Ну, если Бог создал человека по своему образу и подобию, почему бы человека и не взять как меру всех вещей?"
+   },
    "seconds": 3235
   },
   {
    "id": "apple-dubai-mall",
-   "file": "slide-21.png",
    "title": "Apple Dubai Mall",
    "tag": "Ренессанс · Норман Фостер",
-   "cite": {
-    "act": "caption",
-    "text": "Цилиндрический стеклянный фасад с решёткой, ночь"
-   },
+   "page": 21,
+   "file": "slide-21.png",
    "axis": [
     "morphology",
     "technologies",
     "materials"
    ],
-   "page": 21,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Цилиндрический стеклянный фасад с решёткой, ночь"
+   },
+   "said": {
+    "act": "quote",
+    "text": "это очень осознанная тема, когда Apple и Фостер выбирают тему круга"
+   },
    "seconds": 3497
   },
   {
    "id": "apple-park",
-   "file": "slide-22.png",
    "title": "Apple Park",
    "tag": "Ренессанс · Норман Фостер",
-   "cite": {
-    "act": "caption",
-    "text": "Кольцо кампуса с воздуха"
-   },
+   "page": 22,
+   "file": "slide-22.png",
    "axis": [
     "morphology",
     "philosophy"
    ],
-   "page": 22,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Кольцо кампуса с воздуха"
+   },
    "seconds": 3549
   },
   {
    "id": "dirand-restaurant",
-   "file": "slide-23.png",
    "title": "Ресторан Дирана",
    "tag": "Ренессанс · Жозеф Диран",
-   "cite": {
-    "act": "caption",
-    "text": "Зелёные диваны и кресла, гигантские светильники-фонари, кессонный потолок"
-   },
+   "page": 23,
+   "file": "slide-23.png",
    "axis": [
     "colors",
     "morphology",
     "ornaments"
    ],
-   "page": 23,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Зелёные диваны и кресла, гигантские светильники-фонари, кессонный потолок"
+   },
+   "said": {
+    "act": "quote",
+    "text": "хорошо нарушать тогда, когда вы знаете этот фундамент"
+   },
    "seconds": 3579
   },
   {
    "id": "studio-peregalli",
-   "file": "slide-24.png",
    "title": "Studio Peregalli",
    "tag": "Ренессанс · Перегалли и Сартори Римини",
-   "cite": {
-    "act": "caption",
-    "text": "Зелёные расписные стены, кессонный потолок, полосатый диван"
-   },
+   "page": 24,
+   "file": "slide-24.png",
    "axis": [
     "ornaments",
     "colors"
    ],
-   "page": 24,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Зелёные расписные стены, кессонный потолок, полосатый диван"
+   },
+   "said": {
+    "act": "quote",
+    "text": "это обращение к ренессансу, это обращение к той же самой симметрии, и это большое уважение в том числе к колористике"
+   },
    "seconds": 3645
   },
   {
    "id": "van-duysen-antwerp",
-   "file": "slide-25.png",
    "title": "Ван Дуйсен",
    "tag": "Ренессанс · Антверпен",
-   "cite": {
-    "act": "caption",
-    "text": "Белый зал с арочными окнами, чёрный балкон-антресоль"
-   },
+   "page": 25,
+   "file": "slide-25.png",
    "axis": [
     "morphology",
     "colors"
    ],
-   "page": 25,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Белый зал с арочными окнами, чёрный балкон-антресоль"
+   },
+   "said": {
+    "act": "quote",
+    "text": "И даже если этой симметрии внутри здания не существует по каким-то параметрам, что-то утрачено, что-то еще, он тянется к этому."
+   },
    "seconds": 3702
   },
   {
    "id": "aesop-guadagnino",
-   "file": "slide-26.png",
    "title": "Магазин Aesop",
    "tag": "Ренессанс · Лука Гуаданьино",
-   "cite": {
-    "act": "caption",
-    "text": "Каменный остров-умывальник, лучевой пол"
-   },
+   "page": 26,
+   "file": "slide-26.png",
    "axis": [
     "materials",
     "ornaments",
     "morphology"
    ],
-   "page": 26,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Каменный остров-умывальник, лучевой пол"
+   },
    "seconds": 3786
   },
   {
    "id": "guadagnino-wood",
-   "file": "slide-27.png",
    "title": "Дерево Гуаданьино",
    "tag": "Ренессанс · Лука Гуаданьино",
-   "cite": {
-    "act": "caption",
-    "text": "Деревянная геометрическая обшивка, камины, ковры с орнаментом"
-   },
+   "page": 27,
+   "file": "slide-27.png",
    "axis": [
     "materials",
     "ornaments",
     "textures"
    ],
-   "page": 27,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Деревянная геометрическая обшивка, камины, ковры с орнаментом"
+   },
+   "said": {
+    "act": "quote",
+    "text": "не будем забывать, что и стиль арт-деко – это стиль композитный, который забирает в себе очень-очень много"
+   },
    "seconds": 3828
   },
   {
    "id": "baroque-theatre",
-   "file": "slide-28.png",
    "title": "Театр статуса",
    "tag": "Барокко · философия",
+   "page": 28,
+   "file": "slide-28.png",
    "axis": [
     "philosophy",
     "morphology"
@@ -898,49 +995,57 @@
    "terms": [
     "theatricality"
    ],
-   "page": 28,
+   "said": {
+    "act": "quote",
+    "text": "У вас не оставалось шансов не поверить в то, что эти люди невероятно могущественны и вообще им подвластно абсолютно всё."
+   },
    "seconds": 3872
   },
   {
    "id": "mondrian-doha-pool",
-   "file": "slide-29.png",
    "title": "Бассейн",
    "tag": "Барокко · Mondrian Doha, Марсель Вандерс",
-   "cite": {
-    "act": "caption",
-    "text": "Витражный купол, чёрно-белые полосатые стены, люстры"
-   },
+   "page": 29,
+   "file": "slide-29.png",
    "axis": [
     "ornaments",
     "colors",
     "textures"
    ],
-   "page": 29,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Витражный купол, чёрно-белые полосатые стены, люстры"
+   },
    "seconds": 4010
   },
   {
    "id": "mondrian-doha-ballroom",
-   "file": "slide-30.png",
    "title": "Бальный зал",
    "tag": "Барокко · Mondrian Doha, Марсель Вандерс",
-   "cite": {
-    "act": "caption",
-    "text": "Люстры в белых дисках, колонны-балясины, ковёр-орнамент"
-   },
+   "page": 30,
+   "file": "slide-30.png",
    "axis": [
     "ornaments",
     "morphology"
    ],
-   "page": 30,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Люстры в белых дисках, колонны-балясины, ковёр-орнамент"
+   },
+   "said": {
+    "act": "quote",
+    "text": "Мы находимся в иллюзиях, которые создаёт и масштаб, и цвет, и ритм."
+   },
    "seconds": 4038
   },
   {
    "id": "classicism-clockwork",
-   "file": "slide-31.png",
    "title": "Мир как часы",
    "tag": "Классицизм и Ампир · философия",
+   "page": 31,
+   "file": "slide-31.png",
    "axis": [
     "philosophy",
     "morphology"
@@ -950,107 +1055,119 @@
     "old-money",
     "empire-style"
    ],
-   "page": 31,
+   "said": {
+    "act": "quote",
+    "text": "Это стиль old money, то есть ничего не может быть нарушено."
+   },
    "seconds": 4250
   },
   {
    "id": "pheasant-hall",
-   "file": "slide-32.png",
    "title": "Томас Фезант",
    "tag": "Классицизм · носитель",
-   "cite": {
-    "act": "caption",
-    "text": "Арочное зеркало, шахматный мраморный пол, кушетка"
-   },
+   "page": 32,
+   "file": "slide-32.png",
    "axis": [
     "ornaments",
     "materials",
     "morphology"
    ],
-   "page": 32,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Арочное зеркало, шахматный мраморный пол, кушетка"
+   },
+   "said": {
+    "act": "quote",
+    "text": "Вообще этот пол стал тоже таким паттерном устойчивого, стабильного, убедительного, богатого интерьера."
+   },
    "seconds": 4445
   },
   {
    "id": "deniot-enfilade",
-   "file": "slide-33.png",
    "title": "Анфилада Деньо",
    "tag": "Классицизм · Жан-Луи Деньо",
-   "cite": {
-    "act": "caption",
-    "text": "Зеркало-солнце, полосатые обои, зеркальная консоль"
-   },
+   "page": 33,
+   "file": "slide-33.png",
    "axis": [
     "ornaments",
     "morphology"
    ],
-   "page": 33,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Зеркало-солнце, полосатые обои, зеркальная консоль"
+   },
+   "said": {
+    "act": "quote",
+    "text": "Найдите слово, которое будет говорить не столько о строгости, сколько может быть об искрящейся радости."
+   },
    "seconds": 4504
   },
   {
    "id": "deniot-salon",
-   "file": "slide-34.png",
    "title": "Золотая гостиная",
    "tag": "Ампир · Жан-Луи Деньо",
-   "cite": {
-    "act": "caption",
-    "text": "Буазери с позолотой, ампирные кресла, табуреты-курули"
-   },
+   "page": 34,
+   "file": "slide-34.png",
    "axis": [
     "materials",
     "ornaments",
     "colors"
    ],
-   "page": 34,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Буазери с позолотой, ампирные кресла, табуреты-курули"
+   },
+   "said": {
+    "act": "quote",
+    "text": "То есть это сразу показ совершенно абсолютно высокого статуса, ну, конечно же, уже переосмысленного."
+   },
    "seconds": 4540
   },
   {
    "id": "ralph-lauren-dining",
-   "file": "slide-35.png",
    "title": "Столовая-библиотека",
    "tag": "Ампир · Ralph Lauren Home, «Уютная Империя»",
-   "cite": {
-    "act": "caption",
-    "text": "Чёрная столовая-библиотека, портрет военного, красные розы"
-   },
+   "page": 35,
+   "file": "slide-35.png",
    "axis": [
     "colors",
     "philosophy",
     "ornaments"
    ],
-   "page": 35,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Чёрная столовая-библиотека, портрет военного, красные розы"
+   },
    "seconds": 4596
   },
   {
    "id": "ralph-lauren-bedroom",
-   "file": "slide-36.png",
    "title": "Спальня Империи",
    "tag": "Ампир · Ralph Lauren Home, «Уютная Империя»",
-   "cite": {
-    "act": "caption",
-    "text": "Чёрно-золотые панели, шотландский плед, кожаное изголовье"
-   },
+   "page": 36,
+   "file": "slide-36.png",
    "axis": [
     "ornaments",
     "textures",
     "colors"
    ],
-   "page": 36,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Чёрно-золотые панели, шотландский плед, кожаное изголовье"
+   },
    "seconds": 4632
   },
   {
    "id": "cour-des-vosges-room",
-   "file": "slide-37.png",
    "title": "Номер",
    "tag": "Контекстуальный модернизм · Cour des Vosges, Lecoadic-Scotto",
-   "cite": {
-    "act": "caption",
-    "text": "Балки, замша, сталь, круглый экран"
-   },
+   "page": 37,
+   "file": "slide-37.png",
    "axis": [
     "materials",
     "textures",
@@ -1059,41 +1176,48 @@
    "terms": [
     "contextual-modernism"
    ],
-   "page": 37,
    "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Балки, замша, сталь, круглый экран"
+   },
+   "said": {
+    "act": "quote",
+    "text": "Не какой вы хотите квартиру, глядя на референсы, ну как на уже состоявшийся и кем-то сделанный интерьер, а поговорить о философии."
+   },
    "seconds": 4664
   },
   {
    "id": "cour-des-vosges-salon",
-   "file": "slide-38.png",
    "title": "Гостиная",
    "tag": "Контекстуальный модернизм · Cour des Vosges",
-   "cite": {
-    "act": "caption",
-    "text": "Грибовидная латунная лампа, розовый диван, голубые кресла"
-   },
+   "page": 38,
+   "file": "slide-38.png",
    "axis": [
     "colors",
     "morphology"
    ],
-   "page": 38,
-   "basis": "figure"
+   "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Грибовидная латунная лампа, розовый диван, голубые кресла"
+   }
   },
   {
    "id": "cour-des-vosges-bedroom",
-   "file": "slide-39.png",
    "title": "Спальня",
    "tag": "Контекстуальный модернизм · Cour des Vosges",
-   "cite": {
-    "act": "caption",
-    "text": "Розовая штора, синяя ниша с картиной, стопка книг"
-   },
+   "page": 39,
+   "file": "slide-39.png",
    "axis": [
     "colors",
     "philosophy"
    ],
-   "page": 39,
-   "basis": "figure"
+   "basis": "figure",
+   "cite": {
+    "act": "caption",
+    "text": "Розовая штора, синяя ниша с картиной, стопка книг"
+   }
   },
   {
    "id": "exercise-steps",
@@ -1112,101 +1236,101 @@
   },
   {
    "id": "check-order",
-   "file": "slide-09.png",
    "title": "Проверка 1",
    "tag": "Самопроверка",
+   "file": "slide-09.png",
+   "basis": "figure",
    "desc": "Какой порядок здесь главнее хозяина?",
    "links": [
     {
      "label": "Ответ · глава 3",
      "url": "#doc-chapters-antiquity"
     }
-   ],
-   "basis": "figure"
+   ]
   },
   {
    "id": "check-silence",
-   "file": "slide-13.png",
    "title": "Проверка 2",
    "tag": "Самопроверка",
+   "file": "slide-13.png",
+   "basis": "figure",
    "desc": "Во что верит эта тишина?",
    "links": [
     {
      "label": "Ответ · глава 4",
      "url": "#doc-chapters-romanesque"
     }
-   ],
-   "basis": "figure"
+   ]
   },
   {
    "id": "check-light",
-   "file": "slide-16.png",
    "title": "Проверка 3",
    "tag": "Самопроверка",
+   "file": "slide-16.png",
+   "basis": "figure",
    "desc": "Откуда здесь свет и зачем?",
    "links": [
     {
      "label": "Ответ · глава 5",
      "url": "#doc-chapters-gothic"
     }
-   ],
-   "basis": "figure"
+   ]
   },
   {
    "id": "check-measure",
-   "file": "slide-22.png",
    "title": "Проверка 4",
    "tag": "Самопроверка",
+   "file": "slide-22.png",
+   "basis": "figure",
    "desc": "Чем измерена эта форма?",
    "links": [
     {
      "label": "Ответ · глава 6",
      "url": "#doc-chapters-renaissance"
     }
-   ],
-   "basis": "figure"
+   ]
   },
   {
    "id": "check-drama",
-   "file": "slide-29.png",
    "title": "Проверка 5",
    "tag": "Самопроверка",
+   "file": "slide-29.png",
+   "basis": "figure",
    "desc": "Кого и чем впечатляет это пространство?",
    "links": [
     {
      "label": "Ответ · глава 7",
      "url": "#doc-chapters-baroque"
     }
-   ],
-   "basis": "figure"
+   ]
   },
   {
    "id": "check-clock",
-   "file": "slide-34.png",
    "title": "Проверка 6",
    "tag": "Самопроверка",
+   "file": "slide-34.png",
+   "basis": "figure",
    "desc": "Что здесь закон: движение или симметрия?",
    "links": [
     {
      "label": "Ответ · глава 8",
      "url": "#doc-chapters-classicism-empire"
     }
-   ],
-   "basis": "figure"
+   ]
   },
   {
    "id": "check-context",
-   "file": "slide-39.png",
    "title": "Проверка 7",
    "tag": "Самопроверка",
+   "file": "slide-39.png",
+   "basis": "figure",
    "desc": "Какие слои сложены в этой комнате?",
    "links": [
     {
      "label": "Ответ · глава 9",
      "url": "#doc-chapters-contextual-modernism"
     }
-   ],
-   "basis": "figure"
+   ]
   }
  ]
 }
