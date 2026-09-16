@@ -115,16 +115,16 @@
       ]
     },
     "entities": {
+      "paris": {
+        "name": "Париж",
+        "name_accusative": "Париж",
+        "name_prepositional": "Париже"
+      },
       "bhsad": {
         "name": "Британская Высшая Школа Дизайна",
         "name_genitive": "Британской Высшей Школы Дизайна",
         "name_prepositional": "Британской Высшей Школе Дизайна",
         "url": "https://britishdesign.ru"
-      },
-      "paris": {
-        "name": "Париж",
-        "name_accusative": "Париж",
-        "name_prepositional": "Париже"
       }
     },
     "context": [
@@ -382,7 +382,7 @@
         "bhsad-decorating",
         "paris-september"
       ],
-      "num": "Глава 6 · 1:14:11 – 1:20:51",
+      "num": "Глава 6 · 1:14:11 – 1:20:52",
       "fragment": {
         "t0": 4454,
         "t1": 4851,
