@@ -1,27 +1,13 @@
 {
-  "generated": "2026-09-15T15:01:59.101652+00:00",
+  "generated": "2026-09-16T14:00:49.909497+00:00",
   "user": "olgarozet",
   "slots": [
     {
-      "id": "es_84505a2edff9",
-      "start": "2026-09-16T10:00:00+02:00",
+      "id": "es_4fcf7a11d2ef",
+      "start": "2026-09-16T17:00:00+02:00",
       "duration": 40,
       "tz": "Europe/Belgrade",
-      "event_id": "upust4e0i5lo6qjisdfs16iovo"
-    },
-    {
-      "id": "es_210e512eaf3c",
-      "start": "2026-09-16T12:00:00+02:00",
-      "duration": 40,
-      "tz": "Europe/Belgrade",
-      "event_id": "sac53g7321d362fk69pbvghils"
-    },
-    {
-      "id": "es_d6bde7e1e613",
-      "start": "2026-09-16T15:00:00+02:00",
-      "duration": 40,
-      "tz": "Europe/Belgrade",
-      "event_id": "t7375tnrijgrcadlpcj6kr80qo"
+      "event_id": "ro1sul51sfovb3a6i7sdg4e4e4"
     },
     {
       "id": "es_a3ddd4d74046",
@@ -148,6 +134,27 @@
       "duration": 40,
       "tz": "Europe/Belgrade",
       "event_id": "r464gnqmfd25ehfmd7uekjla9c"
+    },
+    {
+      "id": "es_d73988e2c1f3",
+      "start": "2026-09-29T10:00:00+02:00",
+      "duration": 40,
+      "tz": "Europe/Belgrade",
+      "event_id": "d5fkk6u9mtph1ttcjvn1gudnps"
+    },
+    {
+      "id": "es_7d9f1bac89f6",
+      "start": "2026-09-29T12:00:00+02:00",
+      "duration": 40,
+      "tz": "Europe/Belgrade",
+      "event_id": "qdb97hpues6taaj8759e9cskkk"
+    },
+    {
+      "id": "es_99b15c6c2456",
+      "start": "2026-09-29T15:00:00+02:00",
+      "duration": 40,
+      "tz": "Europe/Belgrade",
+      "event_id": "f7c5deiadha1o3gvqt828113kg"
     }
   ],
   "transport_url_ref": "booking_webhook_url"
