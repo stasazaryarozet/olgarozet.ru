@@ -173,6 +173,7 @@ legal:
     ogrn: ''
     address: ''
   payment:
+    provider: yookassa
     methods:
     - card
     - sbp
@@ -183,6 +184,17 @@ legal:
   cookie_consent:
     required: true
     banner_placement: bottom
+# Paid offers (access-grant checkout). Lumen edits price/copy; what = Filter.
+offers:
+- id: styles-past-opens-future
+  title: "Понятия: прошлое открывает будущее"
+  what: "id:styles-past-opens-future"
+  price:
+    value: "5000.00"
+    currency: RUB
+  delivery:
+    surface: message
+    note: "skeleton — Lumen fills commercial copy"
 languages:
   host: ru
   countries:
