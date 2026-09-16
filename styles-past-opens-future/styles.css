@@ -737,6 +737,88 @@ dialog[data-role="zoom"] img {
 #doc [data-role="by"] { display: block; margin-top: 0.4rem; font-size: var(--fs-xs); color: var(--muted); }
 #doc figcaption [data-role="prose"] { margin-top: 0.5rem; }
 #doc figcaption [data-role="strophe"] { display: flex; flex-wrap: wrap; gap: 0.25rem 0.75rem; margin-top: 0.5rem; color: var(--muted); }
+/* ЦЕЛЬ НАЖАТИЯ ЕСТЬ ПАЛЕЦ, А НЕ КЕГЛЬ. Ссылки возврата и ссылки-понятия набраны
+   мелким (`--fs-xs`), и высота строки давала цель около 18 px при пороге 44 px
+   (`--touch-min`, text/site.md): на телефоне читатель промахивался по единственному
+   пути назад к разбору. Кегль остаётся мелким — растёт ОБЛАСТЬ, а не буква. */
+#doc figcaption [data-role="links"] a,
+#doc figcaption [data-role="links"] {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-min);
+}
+
+/* ── ПРОВЕРКА: ОБЯЗАТЕЛЬСТВО И ОТВЕТ ───────────────────────────────────────
+   Раскрытие есть ГЛАВНЫЙ ЖЕСТ самопроверки, и до сих пор оно рисовалось
+   умолчанием браузера: треугольник-маркер, кегль прозы, цель нажатия около
+   17 px высотой. Аффорданс, который не выглядит нажимаемым, не нажимают — а
+   вся педагогика главы держится ровно на том, что читатель СНАЧАЛА назовёт
+   свой ответ и лишь потом увидит чужой. Форма взята у токенов (`--touch-min`
+   — палец, `--radius-card` — карточка), поэтому живёт в обеих темах.
+   ------------------------------------------------------------------------ */
+#doc details > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: var(--touch-min);
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-card);
+  background: var(--surface-deep);
+  color: var(--ink);
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  list-style: none;              /* маркер рисуем сами: он есть часть аффорданса */
+}
+#doc details > summary::-webkit-details-marker { display: none; }
+#doc details > summary::before {
+  content: "+";
+  font-family: var(--mono);
+  font-size: var(--fs-s);
+  line-height: var(--lh-flush);
+  color: var(--accent);
+}
+#doc details[open] > summary::before { content: "\2212"; }
+#doc details[open] > summary { border-color: var(--accent); }
+#doc details > summary:focus-visible {
+  outline: var(--focus-outline-min) solid var(--accent);
+  outline-offset: 2px;
+}
+/* РАЗБОР — НЕ ТРЕТИЙ ВАРИАНТ. Раскрытие ответа и вариант выбора рисовались одинаково,
+   и ряд читался как «выберите одно из трёх»: обязательство и его снятие суть разные
+   акты. Вариант занимает строку (ряд обязательств), разбор — обнимает свои слова. */
+#doc [data-role="reveal"] > summary { display: inline-flex; }
+#doc [data-role="reveal"] > p { margin-top: var(--sp-2); }
+
+/* ПОДПИСЬ, НЕСУЩАЯ ПРОВЕРКУ, ЕСТЬ НЕ ПОДПИСЬ, А ЗАДАЧА. Кегль подписи (`--fs-xs`,
+   14,8 px замером в браузере) верен для метки под фотографией и мал для вопроса,
+   варианта и разбора: их читают минутами, а не взглядом. Условие берётся у САМОГО
+   узла (`:has`), а не у имени главы: новая глава с проверками получит то же по
+   построению, и ни одна из них не перечислена в коде. */
+#doc figcaption:has([data-role="reveal"]) [data-role="prose"],
+#doc figcaption [data-role="reveal"] > p,
+#doc figcaption [data-role="choice"] summary,
+#doc figcaption [data-role="choice"] p {
+  font-size: var(--fs-s);
+}
+
+/* ВЫБОР — РЯД ОБЯЗАТЕЛЬСТВ: пункты стоят столбцом, чтобы палец не промахивался,
+   и без маркера списка: маркер спорил бы со знаком раскрытия. */
+#doc [data-role="choice"] {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  padding: 0;
+}
+#doc [data-role="choice"] > li { margin: 0; max-width: 100%; }
+#doc [data-role="choice"] details > p {
+  margin-top: 0.4rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--rule);
+  color: var(--ink-soft);
+}
 
 /* Единица БЕЗ носителя — закрывающая карточка */
 #doc div[data-kind="segment"] { padding: 1.5rem; }
@@ -980,6 +1062,10 @@ dialog[data-role="zoom"] img {
   #doc [data-kind="segment"] { background: transparent !important; }
   #doc [data-kind="segment"] { border: 1px solid #999; break-inside: avoid; }
   #doc a[data-role="zoom"] { break-inside: avoid; }
+  /* Закрытое раскрытие печатается ПУСТЫМ: на бумаге читатель потерял бы и разбор,
+     и варианты. Обязательство есть жест экрана; лист несёт всё. */
+  #doc details > *:not(summary) { display: block; }
+  #doc details > summary::before { content: ""; }
 }
 
 
