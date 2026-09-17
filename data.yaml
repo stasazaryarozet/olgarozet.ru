@@ -201,8 +201,8 @@ offers:
     value: "5000.00"
     currency: RUB
   delivery:
-    surface: message
-    note: "skeleton — Lumen fills commercial copy"
+    surface: page
+    note: "cabinet projection — world carrier of document(buyer); copy still owed"
 languages:
   host: ru
   countries:
