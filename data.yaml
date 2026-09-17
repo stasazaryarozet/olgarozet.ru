@@ -60,6 +60,7 @@ consultations:
   redirect_from:
   - booking
   cta: Записаться
+  settlement: оплата после подтверждения времени — счетом ЮKassa
   heading: 'Включить меня в дело:'
   no_times: пока времён нет
   no_times_hint: |
@@ -162,15 +163,23 @@ locations:
     name_accusative: Москву
     name_prepositional: Москве
     country: RU
+# Публичная правосубъектность: числа — join из finance/entities.yaml (граф linked_to).
+# Здесь — оверлей публикации: имя на оферте, какие поля колофона, какие URL.
+# Пустой адрес = не выдумывать. colophon — какие поля нести на витрине (без ОГРНИП:
+# анкета ЮKassa «самозанятые» просит ФИО+ИНН; полный ряд — на /legal/).
 legal:
-  privacy_url: https://parisinseptember.ru/privacy/
-  oferta_url: null
+  entity_ref: olga_ip
+  privacy_url: /privacy/
+  oferta_url: /legal/
+  colophon: [name, inn, tax]
   rkn_crossborder_notified: false
   rkn_processing_notified: false
   entity:
-    name: ''
+    name: Розет Ольга Григорьевна
     inn: ''
     ogrn: ''
+    ogrnip: ''
+    tax: ''
     address: ''
   payment:
     provider: yookassa
@@ -180,7 +189,6 @@ legal:
     - bank_transfer
     accepts_currency:
     - RUB
-    - EUR
   cookie_consent:
     required: true
     banner_placement: bottom
@@ -3456,7 +3464,7 @@ site_chrome:
 # это ГОВОРИТ, а не изображает работающую дверь.
 getbusy:
   label: Доступ для учеников
-  note: Раздел откроется вместе с первым продуктом. Вход будет по одному из способов ниже.
+  note: Раздел для тех, кто уже купил материалы Ольги. Пока покупки нет — входа нет.
   auth_heading: 'Войти можно будет:'
   auth:
   - {id: email, label: Электронная почта}
