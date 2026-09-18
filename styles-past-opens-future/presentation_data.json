@@ -65,7 +65,14 @@
       "rasters": "../../site-sources/styles-past-opens-future/img",
       "recording": {
         "oid": "873a9cc434f73d2a",
-        "at": []
+        "at": [
+          {
+            "type": "video",
+            "url": "./record",
+            "reach": "buyer",
+            "interval": "#t={t0},{t1}"
+          }
+        ]
       }
     },
     "provenance": {
