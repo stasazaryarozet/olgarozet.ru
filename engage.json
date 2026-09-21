@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-18T15:15:27.720631+00:00",
+  "generated": "2026-09-21T22:00:21.349920+00:00",
   "user": "olgarozet",
   "slots": [
     {
@@ -148,6 +148,27 @@
       "duration": 40,
       "tz": "Europe/Moscow",
       "event_id": "j06tskm00t26aojg6b0fqpa3h4"
+    },
+    {
+      "id": "es_ff428b38ecea",
+      "start": "2026-10-05T10:00:00+03:00",
+      "duration": 40,
+      "tz": "Europe/Moscow",
+      "event_id": "jpp5miufehhllr0o3mpaomjmug"
+    },
+    {
+      "id": "es_791d79249bdb",
+      "start": "2026-10-05T12:00:00+03:00",
+      "duration": 40,
+      "tz": "Europe/Moscow",
+      "event_id": "6shaketvbhj44is312eikbnepk"
+    },
+    {
+      "id": "es_5aeaceb08472",
+      "start": "2026-10-05T15:00:00+03:00",
+      "duration": 40,
+      "tz": "Europe/Moscow",
+      "event_id": "irun1jcp8jr4htsh69b3c7stfc"
     }
   ],
   "transport_url_ref": "booking_webhook_url"
