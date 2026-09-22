@@ -83,7 +83,7 @@ redirects:
   to: styles-past-opens-future
   title: Стили и Тренды
 - from: serbia_2027
-  to: ''
+  to: action/soon
   title: Сербия
 - from: art/zametki-na-kartonkakh
   to: art/cardboards
