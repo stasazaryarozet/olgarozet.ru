@@ -36,7 +36,8 @@
       },
       "head": "{title} — {author}",
       "tag": "{name} · {issue}",
-      "description": "{subtitle}"
+      "description": "{subtitle}",
+      "card": "card.jpg"
     },
     "sections": {
       "contents": "Оглавление",

@@ -413,11 +413,15 @@ body {
   display: block;
   text-wrap: balance;
 }
+/* РАЗРЯДКА ПРОПИСНЫХ НА СТРОЧНЫХ — ЗАПРЕЩЕНА ЗАКОНОМ, А НЕ ВКУСОМ. Штамп главы
+   («Глава 1 · 00:00–08:30») набран строчными в моноширинном, и `--tracking-caps` разносил
+   его в ярлык: `Inv-TYPO-consistent-tracking-caps` на mobile_375/day — «слово распадается
+   на буквы» — и вся витрина удерживалась гейтом из-за одной строки оформления. Моноширинный
+   уже несёт свою ширину знака; добавлять к ней разрядку прописных нечем и незачем. */
 #doc section > h2 [data-role="stamp"] {
   display: block;
   font-family: var(--mono);
   font-size: var(--fs-xs);
-  letter-spacing: var(--tracking-caps);
   color: var(--accent);
   margin-bottom: 0.35rem;
 }
