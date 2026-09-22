@@ -69,46 +69,46 @@
 <style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=dde389c2a8"); @import url("/styles.css?v=dfc8929acb") layer(owner);</style>
 <style>
 .booking{max-width:420px;margin:0 auto;padding:2.5rem 1.5rem 2rem}
-.booking h2{font-size:clamp(1.1rem,1rem + 0.3vw,1.3rem);text-align:center;font-weight:600;margin-bottom:.15rem}
-.sub{text-align:center;color:var(--muted,#666);font-size:.95rem}
-.tz{text-align:center;color:#aaa;font-size:.8rem;margin-bottom:1rem}
+.booking h2{font-size:var(--fs-m);text-align:center;font-weight:600;margin-bottom:.15rem}
+.sub{text-align:center;color:var(--muted,#666);font-size:var(--fs-xs)}
+.tz{text-align:center;color:var(--muted,#666);font-size:var(--fs-xs);margin-bottom:1rem}
 .day{margin-bottom:.8rem}
-.day-label{font-size:.85rem;color:var(--muted,#666);margin-bottom:.3rem;font-weight:500}
+.day-label{font-size:var(--fs-xs);color:var(--muted,#666);margin-bottom:.3rem;font-weight:500}
 .slots-grid{display:flex;flex-wrap:wrap;gap:.3rem}
-.t{display:inline-flex;align-items:center;justify-content:center;min-width:3.5rem;min-height:3rem;padding:.5rem 1rem;border:1px solid var(--rule,#ddd);border-radius:2rem;cursor:pointer;font-size:.95rem;transition:border-color .15s,background .15s,color .15s,transform .1s;user-select:none;-webkit-tap-highlight-color:transparent}
+.t{display:inline-flex;align-items:center;justify-content:center;min-width:3.5rem;min-height:3rem;padding:.5rem 1rem;border:1px solid var(--rule,#ddd);border-radius:2rem;cursor:pointer;font-size:var(--fs-xs);transition:border-color .15s,background .15s,color .15s,transform .1s;user-select:none;-webkit-tap-highlight-color:transparent}
 .t:hover{border-color:var(--ink,#1a1a1a)}
 .t:focus-visible{outline:2px solid var(--ink,#1a1a1a);outline-offset:2px}
 .t:active{transform:scale(.95)}
 .t.on{background:var(--ink,#1a1a1a);color:#fff;border-color:var(--ink,#1a1a1a)}
 .more{text-align:center;margin:.6rem 0}
-.more button{background:none;border:none;color:var(--muted,#666);font-size:.85rem;cursor:pointer;font-family:inherit;padding:.5rem 1rem}
+.more button{background:none;border:none;color:var(--muted,#666);font-size:var(--fs-xs);cursor:pointer;font-family:inherit;padding:.5rem 1rem}
 .bk-form{overflow:hidden;max-height:0;opacity:0;transition:max-height .35s ease,opacity .3s ease;margin-top:0}
 .bk-form.open{max-height:20rem;opacity:1;margin-top:1rem}
-.bk-label{display:block;font-size:.8rem;color:var(--muted,#666);margin-bottom:.15rem;margin-top:.4rem}
-.bk-input{display:block;width:100%;padding:.75rem .9rem;border:1px solid var(--rule,#ddd);border-radius:.5rem;font-size:.95rem;font-family:inherit;transition:border-color .15s}
+.bk-label{display:block;font-size:var(--fs-xs);color:var(--muted,#666);margin-bottom:.15rem;margin-top:.4rem}
+.bk-input{display:block;width:100%;padding:.75rem .9rem;border:1px solid var(--rule,#ddd);border-radius:.5rem;font-size:var(--fs-xs);font-family:inherit;transition:border-color .15s}
 .bk-input:focus{border-color:var(--ink,#1a1a1a);outline:none}
 .bk-input.ok{border-color:#2a7a2a}
 .bk-input.err{border-color:#c00;animation:shake .3s}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-.bk-btn{display:block;width:100%;padding:.9rem;margin-top:.6rem;background:var(--ink,#1a1a1a);color:#fff;border:none;border-radius:.5rem;font-size:.95rem;font-weight:500;cursor:pointer;font-family:inherit;min-height:3rem;letter-spacing:.03em;transition:background .15s,opacity .15s}
+.bk-btn{display:block;width:100%;padding:.9rem;margin-top:.6rem;background:var(--ink,#1a1a1a);color:#fff;border:none;border-radius:.5rem;font-size:var(--fs-xs);font-weight:500;cursor:pointer;font-family:inherit;min-height:3rem;letter-spacing:.03em;transition:background .15s,opacity .15s}
 .bk-btn:hover:not(:disabled){background:#333}
 .bk-btn:focus-visible{outline:2px solid var(--ink,#1a1a1a);outline-offset:2px}
 .bk-btn:disabled{background:#d0d0d0;cursor:default;pointer-events:none}
 .bk-btn.sending{opacity:.7}
 .result{text-align:center;padding:2rem 0;line-height:1.6}
-.result b{display:block;font-size:1.1rem;margin-bottom:.5rem}
-.result .next{color:var(--muted,#666);font-size:.9rem;margin-top:.5rem}
-.msg{text-align:center;padding:.6rem;line-height:1.5;font-size:.9rem}
+.result b{display:block;font-size:var(--fs-s);margin-bottom:.5rem}
+.result .next{color:var(--muted,#666);font-size:var(--fs-xs);margin-top:.5rem}
+.msg{text-align:center;padding:.6rem;line-height:1.5;font-size:var(--fs-xs)}
 .msg.error{color:#c00}
 .back{text-align:center;margin-top:1.5rem}
-.back a{color:#aaa;font-size:.85rem;text-decoration:none;border:none}
+.back a{color:var(--muted,#666);font-size:var(--fs-xs);text-decoration:none;border:none}
 .no-slots{text-align:center;color:var(--muted,#666);padding:1.5rem 0;line-height:1.6}
 .no-slots a{color:var(--ink,#1a1a1a)}
 .booking-empty{max-width:520px;margin:3rem auto 4rem;padding:clamp(2rem,1.5rem + 1.5vw,3.5rem) clamp(1.5rem,1rem + 1vw,2.5rem);text-align:center;border:1px solid var(--rule);border-radius:.5rem;background:var(--surface)}
-.empty-eyebrow{text-transform:uppercase;letter-spacing:var(--tracking-caps);font-size:clamp(.95rem,.85rem + .4vw,1.15rem);font-weight:500;margin:0 0 1.6em;color:var(--ink)}
+.empty-eyebrow{text-transform:uppercase;letter-spacing:var(--tracking-caps);font-size:var(--fs-s);font-weight:500;margin:0 0 1.6em;color:var(--ink)}
 .empty-eyebrow .rule{display:block;width:2.5rem;height:1px;background:var(--rule);margin:1.2em auto 0}
-.empty-hint{color:var(--muted);font-size:.95rem;margin:0 0 .8em;line-height:1.5}
-.empty-contact{margin:0;font-size:.95rem;line-height:1.7}
+.empty-hint{color:var(--muted);font-size:var(--fs-xs);margin:0 0 .8em;line-height:1.5}
+.empty-contact{margin:0;font-size:var(--fs-xs);line-height:1.7}
 .empty-contact a{color:var(--ink);border-bottom:1px solid var(--rule);text-decoration:none;padding-bottom:.05em;transition:border-color .15s}
 .empty-contact a:hover{border-bottom-color:var(--ink)}
 .empty-divider{color:var(--muted);margin:0 .5rem}
@@ -147,7 +147,7 @@
 </div>
 <script>
 var API="https://script.google.com/macros/s/AKfycbzeulk8nVhROOmrnysLKRLGqM_naMEgVhtPl50ch_GCilibJ7MXv2rWlGlq1hz1SWc/exec";
-var SLOTS=[{"id": "es_b797c0a1ce3c", "start": "2026-09-24T10:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "v1rt0n65ggdk988q9r7mvjd09s"}, {"id": "es_282a47d5be5f", "start": "2026-09-24T12:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "sg8u6dlkl603nhc71qgl3nn86c"}, {"id": "es_007c9d2fd643", "start": "2026-09-24T15:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "7mh9cbetfuj6e6snc4p94bmifo"}, {"id": "es_e0953c5af7cc", "start": "2026-09-25T10:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "evje70fkdjornrmjj8jl4uno18"}, {"id": "es_46acee562fd2", "start": "2026-09-25T12:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "6um18u0uabiamv2kv5h0ql95ok"}, {"id": "es_01247a9490b9", "start": "2026-09-25T15:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "t0g5iten1p4aavfa6q39bvq1bk"}, {"id": "es_703c031b2d86", "start": "2026-09-30T10:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "atmpd33nkhcl9fv1un093l5ki8"}, {"id": "es_75c4ebdbbdce", "start": "2026-09-30T12:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "cp3gsulhvv6t8ergq1l423d7is"}, {"id": "es_b8ec621b04a8", "start": "2026-09-30T15:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "rqbulv0ceb9e3b63rjumvflc98"}, {"id": "es_04e5b58b5d66", "start": "2026-10-01T10:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "rsjetli8tg6c7jub48sipt2k9s"}, {"id": "es_6cfde72542b9", "start": "2026-10-01T12:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "tlk2gorapu19ilqotga05jddi4"}, {"id": "es_69201d6c6cee", "start": "2026-10-01T15:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "j06tskm00t26aojg6b0fqpa3h4"}, {"id": "es_ff428b38ecea", "start": "2026-10-05T10:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "jpp5miufehhllr0o3mpaomjmug"}, {"id": "es_791d79249bdb", "start": "2026-10-05T12:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "6shaketvbhj44is312eikbnepk"}, {"id": "es_5aeaceb08472", "start": "2026-10-05T15:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "irun1jcp8jr4htsh69b3c7stfc"}];
+var SLOTS=[{"id": "es_b797c0a1ce3c", "start": "2026-09-24T10:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "v1rt0n65ggdk988q9r7mvjd09s"}, {"id": "es_282a47d5be5f", "start": "2026-09-24T12:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "sg8u6dlkl603nhc71qgl3nn86c"}, {"id": "es_007c9d2fd643", "start": "2026-09-24T15:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "7mh9cbetfuj6e6snc4p94bmifo"}, {"id": "es_e0953c5af7cc", "start": "2026-09-25T10:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "evje70fkdjornrmjj8jl4uno18"}, {"id": "es_46acee562fd2", "start": "2026-09-25T12:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "6um18u0uabiamv2kv5h0ql95ok"}, {"id": "es_01247a9490b9", "start": "2026-09-25T15:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "t0g5iten1p4aavfa6q39bvq1bk"}, {"id": "es_703c031b2d86", "start": "2026-09-30T10:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "atmpd33nkhcl9fv1un093l5ki8"}, {"id": "es_75c4ebdbbdce", "start": "2026-09-30T12:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "cp3gsulhvv6t8ergq1l423d7is"}, {"id": "es_b8ec621b04a8", "start": "2026-09-30T15:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "rqbulv0ceb9e3b63rjumvflc98"}, {"id": "es_04e5b58b5d66", "start": "2026-10-01T10:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "rsjetli8tg6c7jub48sipt2k9s"}, {"id": "es_6cfde72542b9", "start": "2026-10-01T12:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "tlk2gorapu19ilqotga05jddi4"}, {"id": "es_69201d6c6cee", "start": "2026-10-01T15:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "j06tskm00t26aojg6b0fqpa3h4"}, {"id": "es_ff428b38ecea", "start": "2026-10-05T10:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "jpp5miufehhllr0o3mpaomjmug"}, {"id": "es_791d79249bdb", "start": "2026-10-05T12:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "6shaketvbhj44is312eikbnepk"}, {"id": "es_5aeaceb08472", "start": "2026-10-05T15:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "irun1jcp8jr4htsh69b3c7stfc"}, {"id": "es_f6ec58f6b12c", "start": "2026-10-06T10:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "fqhkkk2jn2evtdt8e935paheo0"}, {"id": "es_2c0cf44a6421", "start": "2026-10-06T12:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "5s7rbj5k92qclcmrn78f5ov7r8"}, {"id": "es_7fc6053987d2", "start": "2026-10-06T15:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "epjl0gcf9qc2nsjjihb1mcap8c"}];
 var slot=null,allDays=[],submitted=false;
 
 (function(){
