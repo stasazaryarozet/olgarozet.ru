@@ -67,7 +67,6 @@
 })();
 </script>
 <style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=f1eaabad2d"); @import url("/styles.css?v=dfc8929acb") layer(owner);</style>
-<style>:root[data-stf="pending"] [data-visible-from],:root[data-stf="pending"] [data-visible-until]{display:none}</style><script>(function(){var r=document.documentElement;r.setAttribute("data-stf","pending");setTimeout(function(){if(r.getAttribute("data-stf")==="pending")r.removeAttribute("data-stf");},2000);})();</script>
 <style>
 .booking{max-width:420px;margin:0 auto;padding:2.5rem 1.5rem 2rem}
 .booking h2{font-size:clamp(1.1rem,1rem + 0.3vw,1.3rem);text-align:center;font-weight:600;margin-bottom:.15rem}
@@ -265,9 +264,7 @@ if(d.ok){submitted=true;
       nodes[i].style.display = vis ? '' : 'none';
     }
   }
-  try { _applyWindows(); } finally {
-    document.documentElement.removeAttribute('data-stf');
-  }
+  _applyWindows();
   setInterval(_applyWindows, 30000);
 })();
 
