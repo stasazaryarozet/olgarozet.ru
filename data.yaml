@@ -66,6 +66,32 @@ consultations:
   no_times_hint: |
     Напишите Ольге напрямую —
     предложу время:
+# ПОДТВЕРЖДЕНИЯ ВЛАДЕНИЯ ДОМЕНОМ — по одной строке на площадку. Метка живет здесь,
+# потому что она есть датум ВЛАДЕЛЬЦА и МОМЕНТА, а не свойство шаблона страниц.
+# ПЕРЕЕЗДЫ АДРЕСОВ — РЕБРА, а не атрибуты страниц: у цели может не быть своей md-шапки
+# (страница-программа, корень), и тогда переезд невыразим иначе. Каждая строка рождает
+# указатель по адресу `from`, ведущий на `to`; пустое `to` — корень.
+# Принципал 2026-09-22: «Про адреса — как сказал» — перенаправить, а не снимать.
+redirects:
+- from: lecture_styles_trends_part1
+  to: styles-past-opens-future
+  title: Стили и Тренды
+- from: lecture_styles_trends_part2
+  to: styles-past-opens-future
+  title: Стили и Тренды
+- from: lecture_styles_trends_diptych
+  to: styles-past-opens-future
+  title: Стили и Тренды
+- from: serbia_2027
+  to: ''
+  title: Сербия
+- from: art/zametki-na-kartonkakh
+  to: art/cardboards
+  title: Карт|инки на карт|оне
+verifications:
+- name: mailru-domain
+  content: u5gNvIFSmtyOxQqC
+  why: VK WorkSpace — почта на домене, выдано 2026-09-22
 booking:
   transport_url_ref: booking_webhook_url
 people:
@@ -153,6 +179,21 @@ locations:
     name_accusative: Бухару
     name_prepositional: Бухаре
     country: UZ
+  tashkent:
+    name: Ташкент
+    name_accusative: Ташкент
+    name_prepositional: Ташкенте
+    country: UZ
+  navoi:
+    name: Навои
+    name_accusative: Навои
+    name_prepositional: Навои
+    country: UZ
+  karshi:
+    name: Карши
+    name_accusative: Карши
+    name_prepositional: Карши
+    country: UZ
   uzbekistan:
     name: Узбекистан
     name_accusative: Узбекистан
@@ -197,12 +238,38 @@ offers:
 - id: styles-past-opens-future
   title: "Понятия: прошлое открывает будущее"
   what: "id:styles-past-opens-future"
+  # Цена назначена принципалом 2026-09-22 (была заготовка 5000).
   price:
-    value: "5000.00"
+    value: "2500.00"
     currency: RUB
+  # СКИДКИ АДДИТИВНЫ (Inv-AG-discounts-additive; принципал 2026-09-22, дословно:
+  # «Здесь и везде — скидки суммируются»). Новая скидка есть СТРОКА, а не ветка кода;
+  # нижняя цена нигде не набрана — она ВЫЧИСЛЯЕТСЯ витриной из этого ряда.
+  discounts:
+  - id: launch
+    amount: "500.00"
+    label: "первые сутки в связи с запуском"
+    window:
+      kind: since_publish
+      hours: 24
+  - id: legacy-2000
+    amount: "500.00"
+    label: "всем, кто сотрудничал с Ольгой с 2000 года в любом качестве"
+    claim:
+      via: email
+      address: o.g.rozet@gmail.com
+      note: "напомнив о себе — ученик, заказчик, путешественник, участник прогулок
+        или встреч, коллега, соучастник по проектной деятельности, подключивший к своему
+        делу в качестве аутсорс-специалиста, представитель бизнеса, с которым сотрудничала"
   delivery:
     surface: page
     note: "cabinet projection — world carrier of document(buyer); copy still owed"
+  # МОСТ РУЧНОЙ ОПЛАТЫ на время модерации ЮKassa (принципал 2026-09-22, п.6 «Да»).
+  # mode есть ПАРАМЕТР выдачи, а не ветка: `provider` включается сменой одного слова,
+  # когда ключи кассы откроет принципал.
+  checkout:
+    mode: email
+    address: o.g.rozet@gmail.com
 languages:
   host: ru
   countries:
@@ -1631,8 +1698,10 @@ events:
         inbound:
           leg: msk_bhk_night
           run: SU 1876
-          decided: false           # ПРЕДЛОЖЕНИЕ, не решение: принципал 2026-09-02 —
-                                   # «Зафиксируй предлагаемый рейс. В текст не вноси, я сам»
+          decided: true            # УТВЕРЖДЁН принципалом 2026-09-22 («Прилётный рейс
+                                   # утверждён»); предложен 2026-09-02, в тексте общего
+                                   # документа стоит с ревизии 7
+          decided_on: 2026-09-22
           proposed: 2026-09-02
           why: >-
             Из трёх субботних посадок (HY 9908 03:30, UT 807 04:15, SU 1876 06:10; C6 414
@@ -1644,7 +1713,26 @@ events:
             (min_overnight_gap_hours) — около шести с половиной часов до позднего обеда
             против девяти с половиной у HY 9908; перекрывается сном в полёте и тем, что
             суббота объявлена днём отдыха без учебной нагрузки.
-        outbound: null             # ⊥ — не зафиксирован; письмо называет вылет 05:45 четверга
+        outbound:
+          leg: bhk_msk_morning
+          run: UT 808
+          decided: true            # РЕШЕНИЕ принципала 2026-09-22, ВТОРОЕ за день:
+          decided_on: 2026-09-22   # «остаёмся на самолёте из Бухары»
+          why: >-
+            Дневной вариант (поезд 769 + вечерний вылет из Самарканда) был решён тем же днём и
+            СНЯТ, когда второй замер не подтвердил самаркандский прогон: `UT 824` у него есть
+            Баку→Сургут, а Самарканд→Внуково — UT 810 ~17:00 без четвергов (спор записан у
+            прогона UT 824 в `skd_msk`, поле `disputed`). Двадцать билетов на неподтверждённый
+            рейс не покупают, и ПОЭТОМУ выбор вернулся к единственному измеренному четверговому
+            вылету из самой Бухары. Цена известна и принята: выезд из отеля 03:25 наутро после
+            гала-ужина и разворот борта в 90 минут (см. `rotation` прогона) — риск лежит не в
+            часе вылета, а в вечернем вылете входящего борта из Внуково накануне, откуда и
+            ночное дежурство в среду.
+          alternative_dropped:
+            leg: skd_msk
+            run: UT 824
+            ground: {leg: bukhara_skd_rail, run: "769"}
+            why: часы рейса не подтверждены вторым источником; см. `disputed` у прогона
       note: Авиабилеты на заданные рейсы. Самостоятельно или через нашего менеджера
         (наценка уточняется).
     arrival_protocol:
@@ -2955,7 +3043,7 @@ art_series:
 # ИМЯ — принципал 2026-09-02, дословно: «Пусть название — "Карт|инки на карт|оне", при этом в
 # текстах о них может быть "Заметки на картоне", но не заголовком». Поэтому слаг и заголовок
 # сменены, а заголовочная строфа «Из серии "Заметки на картонках"» снята из intro: она была
-# ровно заголовком. Прежний адрес /art/zametki-na-kartonkakh мертв и никуда не ведет.
+# ровно заголовком. Прежний адрес — ОТСТАВКА УЗЛА: `retired_from` ниже (site-world.md address_relations).
 # ИСТОЧНИК СЛОВ — САМА ОЛЬГА, не пересказ. Сверено побуквенно с наблюдениями:
 #   intro   ← olgarozet@telegram/Даша_Гаглоева/14384 (2026-08-01)
 #   closing ← olgarozet@telegram/Оксана/14316        (2026-07-30)
@@ -2965,6 +3053,8 @@ art_series:
 # только если оно другое (entity-artwork::work_spec.inherit).
 - id: cardboards   # принципал 2026-09-08: английское имя серии в Системе — файлы, ссылки, всё прочее
   redirect_from: [kartinki-na-kartone]   # прежний транслит-адрес /art/… — отставка адреса с носителем (p_redirect)
+  # Прежний адрес серии переехал РЕБРОМ (`redirects` ниже): сохраненная ссылка ведет на
+  # новый адрес, а не в 404. Отставка узла была верна, пока переезд был невыразим.
   # ШОВ ЕСТЬ ЧАСТЬ ИМЕНИ, А НЕ УКРАШЕНИЕ ПОКАЗА (принципал 2026-09-09: «"Картинки на
   # картоне" по-русски везде должны содержать "|"»; форма подтверждена им же — шов стоит на
   # ОБЩЕМ корне «карт» обоих слов, потому приём и читается). Здесь имя живёт ОДНО: страница
@@ -3341,6 +3431,8 @@ transport_legs:
   msk_bhk_night:
     name: Москва → Бухара, ночной прямой
     kind: flight
+    from: moscow                       # КОНЦЫ СТРУКТУРНО, а не в имени: пока они стояли
+    to: bukhara                        # прозой, связь прилёта с вылетом была невыразима
     indexed_by: arrival_weekday        # `days` рейсов — дни ПРИЛЕТА: плечо есть то, чем
                                        # день 1 начинается, и мерить его надо в его сутках
     availability:
@@ -3379,9 +3471,189 @@ transport_legs:
       Прилет возможен ЛЮБЫМ днем недели — объединение четырех перевозчиков покрывает все
       семь. Выведенная огибающая по дням: пн 02:10-04:15, вт 03:30-04:15, ср 02:10-06:10,
       чт 03:30-04:15, пт 02:10-06:10, сб 03:30-06:10, вс 02:10-06:10.
+  bukhara_skd_rail:
+    name: Бухара → Самарканд, «Афросиаб»
+    kind: rail
+    from: bukhara
+    to: samarkand
+    indexed_by: departure_weekday
+    access_min:                        # ДВЕРЬ ДО ДВЕРИ: поезд везёт вокзал-в-вокзал, а
+      origin: 65                       # отель → Каган 20–25 мин + досмотр/посадка 35–45
+      destination: 20                  # вокзал Самарканда → аэропорт, 8.5 км
+    runs:
+    - {id: "771", at: "03:15", arrives: {at: "04:58"}}
+    - {id: "769", at: "14:58", arrives: {at: "16:41"}}
+    - {id: "767", at: "16:11", arrives: {at: "18:00"}}
+    source: peter pet_e8fdd339 §3.2 (замер 2026-09-22) — заменил мой замер 09-22, расходился до 24 мин
+    note: >-
+      РАСПИСАНИЕМ, А НЕ ДЛИТЕЛЬНОСТЬЮ: дневной вылет из Самарканда годится ровно
+      настолько, насколько есть поезд, успевающий к нему. НЕ ВНЕСЕНЫ СОЗНАТЕЛЬНО: № 10
+      «Шарк» (08:35→11:05) — дни курсирования ⊥, а отсутствие `days` читается как
+      «ежедневно», то есть было бы ЗАЯВЛЕНИЕМ; № 777 — курсирует только пт/сб/вс, часы
+      не замерены. БИЛЕТЫ НА ГРУППУ — ОТДЕЛЬНЫЙ РИСК, а не деталь: продажи открываются
+      строго за 45 суток, физлицу не более 4–5 мест в заказе, от 10 человек — заявка
+      через юрлицо (Матлуба/Насуллобек) за 45–30 дней с паспортами; спрос на № 769
+      предельный, выкупить 20 мест спустя 2–3 дня после открытия невозможно ⇒ вариант
+      валиден ТОЛЬКО при централизованной покупке в день открытия брони
+  bukhara_tas_rail:
+    name: Бухара → Ташкент, «Афросиаб»
+    kind: rail
+    from: bukhara
+    to: tashkent
+    indexed_by: departure_weekday
+    access_min: {origin: 65, destination: 40}
+    runs:
+    - {id: "771", at: "03:15", arrives: {at: "07:35"}}
+    - {id: "769", at: "14:58", arrives: {at: "19:17"}}
+    - {id: "767", at: "16:11", arrives: {at: "20:31"}}
+    source: peter pet_e8fdd339 §3.4 (замер 2026-09-22), вокзал Ташкент-Северный
+  skd_msk:
+    name: Самарканд → Москва
+    kind: flight
+    from: samarkand
+    to: moscow
+    indexed_by: departure_weekday
+    availability:
+    - {from: 2026-10-25, to: 2027-03-27, label: зимнее расписание 2026/27}
+    lead:
+    - {stage: аэропорт до вылета, minutes: 120}
+    runs:
+    - id: SU 1875
+      carrier: Аэрофлот
+      at: "18:25"
+      days: [mon, tue, wed, thu, fri, sat, sun]
+      arrives: {airport: Шереметьево, at: "20:50"}
+      rotation: {inbound: {leg: msk_skd, run: SU 1874}}
+    - id: UT 824
+      carrier: Utair
+      at: "19:10"
+      days: [tue, thu, sat]
+      arrives: {airport: Внуково, at: "21:30"}
+      disputed:                        # ДВА ЗАМЕРА РАСХОДЯТСЯ, И РЕШЕНИЕ СТОИТ НА ЭТОЙ СТРОКЕ
+        since: 2026-09-22
+        claims:
+        - {by: peter, source: pet_e8fdd339 §3.2, says: "UT 824 Самарканд 19:10 → Внуково 21:30"}
+        - {by: agy/gemini-3.1-pro-high, source: "airportia · trip.com · flightradar24 · utair.ru",
+           says: "UT 824 есть Баку → Сургут; Самарканд → Внуково это UT 810 ~17:00, и по
+             четвергам он не летает; в четверг из Самарканда — HY ~21:15 → Внуково ~23:30
+             (номер не назван) и U6 2772 ~03:00 → Домодедово ~05:25"}
+        asked: [peter lum_d7aaba43, "agy 20260922T154539 — табло аэропорта Самарканда"]
+        why_not_flipped: >-
+          ни один из двух не первичен: оба суть агрегаторы, и второй сам помечает часы «~».
+          Перевернуть решение по одному спорному замеру значило бы заменить одну недоказанную
+          строку другой. Пока спор открыт, прогон НЕ считается подтверждённым, и текст общего
+          документа не трогается: он называет рейс, а называть неверный номер хуже, чем
+          назвать спорный — поэтому спор объявлен ЗДЕСЬ, в доме факта
+      rotation: {inbound: {leg: msk_skd, run: UT 823}}
+    - id: DP 714
+      carrier: Победа
+      at: "16:35"
+      days: [wed, fri, sun]
+      arrives: {airport: Внуково, at: "18:55"}
+      rotation: {inbound: {leg: msk_skd, run: DP 713}}
+      note: дни у источника помечены «уточняется»
+    - id: HY 605
+      carrier: Uzbekistan Airways
+      at: "08:35"
+      days: [tue, thu, sun]
+      arrives: {airport: Внуково, at: "10:50"}
+    - id: DP 998
+      carrier: Победа
+      at: "05:45"
+      days: [mon, tue, wed, thu, fri, sat, sun]
+      arrives: {airport: Внуково, at: "08:05"}
+      rotation: {inbound: {leg: msk_skd, run: DP 997}}
+    - id: U6 2488
+      carrier: Уральские авиалинии
+      at: "06:10"
+      days: [mon, wed, fri, sun]
+      arrives: {airport: Домодедово, at: "08:35"}
+    source: отчёт peter 2026-09-22 (aeroflot.ru · utair.ru · pobeda.aero · uzairways.com)
+  msk_skd:
+    name: Москва → Самарканд
+    kind: flight
+    from: moscow
+    to: samarkand
+    indexed_by: arrival_weekday
+    lead:
+    - {stage: аэропорт до вылета, minutes: 120}
+    runs:
+    - {id: SU 1874, carrier: Аэрофлот, at: "17:15", arrives: {at: "17:15"}}
+    - {id: UT 823, carrier: Utair, at: "17:50", arrives: {at: "17:50"}}
+    - {id: DP 713, carrier: Победа, at: "15:45", arrives: {at: "15:45"}}
+    - {id: DP 997, carrier: Победа, at: "04:55", arrives: {at: "04:55"}}
+    note: >-
+      ВХОДЯЩИЕ ПЛЕЧИ РАЗВОРОТОВ, а не предложения прилёта группы: часы суть посадки в
+      Самарканде, дни НЕ объявлены (⊥) — их у источника не спрашивали, и закон о развороте
+      дней не требует. Прилёт группы объявлен по Бухаре
+  tas_msk:
+    name: Ташкент → Москва
+    kind: flight
+    from: tashkent
+    to: moscow
+    indexed_by: departure_weekday
+    lead:
+    - {stage: аэропорт до вылета, minutes: 120}
+    runs:
+    - {id: SU 1873, carrier: Аэрофлот, at: "16:30", days: [mon, tue, wed, thu, fri, sat, sun],
+       arrives: {airport: Шереметьево, at: "18:55"}}
+    - {id: HY 601, carrier: Uzbekistan Airways, at: "19:05",
+       days: [mon, tue, wed, thu, fri, sat, sun], arrives: {airport: Внуково, at: "21:20"},
+       rotation: {independent: true, why: "базовый хаб перевозчика — борт из парка TAS"}}
+    - {id: HY 603, carrier: Uzbekistan Airways, at: "08:00",
+       days: [mon, tue, wed, thu, fri, sat, sun], arrives: {airport: Внуково, at: "10:15"},
+       rotation: {independent: true, why: "базовый хаб перевозчика — борт из парка TAS"}}
+    - {id: SU 1871, carrier: Аэрофлот, at: "03:20", days: [mon, tue, wed, thu, fri, sat, sun],
+       arrives: {airport: Шереметьево, at: "05:45"}}
+    - {id: UT 806, carrier: Utair, at: "04:30", days: [mon, tue, wed, thu, fri, sat, sun],
+       arrives: {airport: Внуково, at: "06:45"}}
+    source: отчёт peter 2026-09-22 (aeroflot.ru · uzairways.com · utair.ru)
+    note: годен ТОЛЬКО через «Афросиаб» (авто >7.5 ч); часы поезда — ⊥
+  nvi_msk:
+    name: Навои → Москва
+    kind: flight
+    from: navoi
+    to: moscow
+    indexed_by: departure_weekday
+    lead:
+    - {stage: аэропорт до вылета, minutes: 120}
+    runs:
+    - {id: HY 9617, carrier: Uzbekistan Airways, at: "05:50", days: [wed],
+       arrives: {airport: Внуково, at: "08:00"}}
+    source: отчёт peter 2026-09-22 (uzairways.com · rasp.yandex)
+  bukhara_nvi_road:
+    name: Бухара → Навои, автодорога M37
+    kind: road
+    from: bukhara
+    to: navoi
+    duration_min: 95
+    source: отчёт peter 2026-09-22
+  ksq_msk:
+    name: Карши → Москва
+    kind: flight
+    from: karshi
+    to: moscow
+    indexed_by: departure_weekday
+    lead:
+    - {stage: аэропорт до вылета, minutes: 120}
+    runs:
+    - {id: U6 2128, carrier: Уральские авиалинии, at: "06:10", days: [tue, thu, sun],
+       arrives: {airport: Домодедово, at: "08:35"}}
+    - {id: HY 9623, carrier: Uzbekistan Airways, at: "05:40", days: [fri],
+       arrives: {airport: Внуково, at: "08:00"}}
+    source: отчёт peter 2026-09-22 (uralairlines.ru · uzairways.com)
+  bukhara_ksq_road:
+    name: Бухара → Карши, автодорога A380/R160
+    kind: road
+    from: bukhara
+    to: karshi
+    duration_min: 165
+    source: отчёт peter 2026-09-22
   oldtown_bhk_ground:
     name: Старый город ↔ аэропорт Бухары
     kind: ground
+    from: bukhara                      # один город на оба конца: плечо внутригородское
+    to: bukhara
     duration_min: 20                   # 5-6 км, 10-15 минут ходом; 20 — с запасом
     source: kupibilet.ru/gid · orexca.com · rome2rio (замер 2026-09-02)
     note: >-
@@ -3390,6 +3662,8 @@ transport_legs:
   bhk_msk_morning:
     name: Бухара → Москва
     kind: flight
+    from: bukhara
+    to: moscow
     indexed_by: departure_weekday
     availability:
     - {from: 2026-09-30, to: 2027-03-25, label: зимнее расписание 2026/27}
@@ -3403,19 +3677,44 @@ transport_legs:
     - id: UT 808
       carrier: Utair
       at: "05:45"
-      days: [tue, thu, sat, sun]
+      days: [mon, tue, wed, thu, sat, sun]
       arrives: {airport: Внуково, at: "07:55"}
+      rotation:                        # ЧЕМ обусловлен вылет: борт в Бухаре не ночует
+        inbound: {leg: msk_bhk_night, run: UT 807}
+        measured_late:
+        - {date: 2026-09-10, landed: "06:29", note: посадка ПОСЛЕ планового вылета}
+        - {date: 2026-09-17, departed: "10:01", note: вылет с опозданием 4 ч 16 мин}
+        source: >-
+          РАЗВОРОТ выводится из этой же таблицы без внешних данных: UT 807 садится в
+          Бухаре в 04:15 того же четверга, UT 808 уходит в 05:45 — полтора часа, поэтому
+          вечерняя задержка вылета из Внуково транслируется в утренний вылет из Бухары.
+          ТОЖДЕСТВО БОРТА и два опоздания — отчёт peter 2026-09-22 (ADS-B, борт RA-73091),
+          ОДИН источник, независимо не подтверждён: flightera отдаёт 403, страница
+          расписания истории не держит. Его же арифметика разошлась с этой таблицей
+          (считал от 05:55 и дал 4 ч 06 мин; от объявленных 05:45 выходит 4 ч 16 мин)
       note: >-
-        Дни СПОРНЫ: rasp.yandex и avia.tutu дают четверг
-        (сентябрьские вылеты 3, 10, 17, 24), третий источник дает вт-пт-вс на зиму. Взяты
-        два согласных против одного; на ответ «последний вылет в четверг» спор не влияет —
-        без этого рейса остается HY 9907 в 05:25, те же полшестого утра
+        Дни ПЕРЕМЕРЕНЫ 2026-09-22 на том же источнике: летает ШЕСТЬ раз в неделю, пятница —
+        единственный пропуск (09-02 тот же источник давал четыре дня). Четверг согласен у
+        трёх каналов: расписание 09-02 и 09-22 плюс фактические четверговые вылеты 10 и
+        17 сентября. Окно 26 НОЯБРЯ (зимнее расписание) остаётся ⊥: открытые источники
+        показывают только ближайшие дни, а третий источник давал на зиму вт-пт-вс —
+        отвечает лишь расписание самого перевозчика. Запасной на то же утро — HY 9907
+        в 05:25: ДРУГОЙ перевозчик, поэтому задержка утэйровского борта его не касается;
+        собственная же его обусловленность НЕ ЗАМЕРЕНА — HY 9908 садится в 03:30 того же
+        утра, и разворот в 115 минут остаётся кандидатом до ответа перевозчика
     - id: SU 1877
       carrier: Аэрофлот
       at: "07:30"
       days: [wed, fri, sat, sun]
       arrives: {airport: Шереметьево, at: "09:50"}
       note: четверга НЕТ — согласны два источника
+    - id: C6 413
+      carrier: Centrum Air
+      at: "03:40"
+      days: [tue, thu, sat, sun]
+      arrives: {airport: Домодедово, at: "06:05"}
+      rotation: {inbound: {leg: msk_bhk_night, run: C6 414}}
+      note: замер peter 2026-09-22 — прогона не было в графе
     - id: HH 709
       carrier: Qanot Sharq
       at: "10:00"
@@ -3430,7 +3729,8 @@ transport_legs:
         закрытие регистрации за 40 минут до вылета — общее правило; два часа взяты как
         срок ДЛЯ ГРУППЫ 18 человек с багажом на международном вылете, с запасом на один
         автобус и одну стойку
-    source: rasp.yandex.ru · avia.tutu.ru · aviasales.ru · uniticket (замер 2026-09-02)
+    source: rasp.yandex.ru · avia.tutu.ru · aviasales.ru · uniticket (замер 2026-09-02;
+      дни UT 808 перемерены на avia.tutu.ru 2026-09-22)
     note: >-
       ВЕЧЕРНЕГО прямого нет НИ В ОДИН день недели — вылеты укладываются в 05:25-10:00, и в
       этом согласны все четыре источника. Вечерний отъезд возможен только с пересадкой в
