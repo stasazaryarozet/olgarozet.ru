@@ -1943,6 +1943,14 @@ article figcaption { margin-top: .6rem; font-size: var(--fs-body-min, .875rem);
     color: var(--ink);
 }
 .offer-price .currency { letter-spacing: var(--tracking-zero); }
+/* БАЗА РЯДОМ С ДЕЙСТВУЮЩЕЙ ЦЕНОЙ: зачеркивание есть ФОРМА разности, а не текст
+   (Inv-SITE-presentation-not-in-page — знак зачеркивания в разметке был бы прозой). */
+.offer-was {
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+    color: var(--muted);
+    margin-right: var(--sp-2);
+}
 .offer-discounts {
     display: grid;
     gap: var(--sp-2);
@@ -1972,6 +1980,27 @@ article figcaption { margin-top: .6rem; font-size: var(--fs-body-min, .875rem);
 .offer-cta { margin: var(--sp-5) 0 0; }
 /* ПРЕДМЕТ СТОИТ ПЕРЕД ЦЕНОЙ и набран прозой документа: цена без предмета не есть
    предложение (замер 2026-09-22 — карточка называла «2 500 ₽», не называя за что). */
+/* ОТРЫВОК — ПЕРВЫЙ ЭЛЕМЕНТ РЕШЕНИЯ, и он занимает всю меру карточки. */
+.offer-preview { margin: 0 0 var(--sp-5); }
+.offer-preview video, .offer-preview img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-card);
+    background: var(--ink);
+}
+.offer-preview audio { display: block; width: 100%; margin: var(--sp-3) 0 0; }
+.offer-preview figcaption {
+    margin: var(--sp-2) 0 0;
+    font-size: var(--fs-xs);
+    line-height: var(--lh-body);
+    color: var(--muted);
+}
+.offer-voice {
+    margin: var(--sp-5) 0 0;
+    font-size: var(--fs-s);
+    color: var(--muted);
+}
 .offer-object {
     margin: 0 0 var(--sp-2);
     font-size: var(--fs-m);
