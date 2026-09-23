@@ -2122,10 +2122,16 @@ article figcaption { margin-top: .6rem; font-size: var(--fs-body-min, .875rem);
         -webkit-overflow-scrolling: touch;
     }
 }
+/* ПЛЕЕР ГОВОРИТ СЛОВАРЁМ СПЕКИ (Σ 2026-09-23). Здесь стояли `--surface-alt` и `--ink-muted` —
+   имена, которых нет ни в объявлении токенов, ни в листе: css_audit (Inv-CSS-tokens-from-Spec)
+   сутки звал это висящими ссылками, и у фона под видео, у плашки «продолжить» и у заголовка
+   оглавления глав цвета не было вовсе. Новых цветов в обход Спеки не заводим: объявленные
+   `--surface-deep` (глубокая поверхность) и `--muted` (приглушённый текст — им же пишет полоса
+   оферты) несут ровно этот смысл. */
 .player-wrapper video {
     width: 100%;
     display: block;
-    background: var(--surface-alt);
+    background: var(--surface-deep);
     border-radius: var(--radius-control);
 }
 .player-chapters {
@@ -2137,7 +2143,7 @@ article figcaption { margin-top: .6rem; font-size: var(--fs-body-min, .875rem);
 .player-chapters h3 {
     font-size: var(--fs-body-min);
     margin-bottom: var(--sp-1);
-    color: var(--ink-muted);
+    color: var(--muted);
 }
 .player-chapters ul {
     list-style: none;
@@ -2166,7 +2172,7 @@ article figcaption { margin-top: .6rem; font-size: var(--fs-body-min, .875rem);
 }
 .player-resume {
     margin-top: var(--sp-2);
-    background: var(--surface-alt);
+    background: var(--surface-deep);
     padding: var(--sp-2);
     border-radius: var(--radius-control);
     font-size: var(--fs-body-min);
