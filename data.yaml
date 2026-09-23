@@ -63,8 +63,10 @@ consultations:
     here: или приехать ко мне {place}
     next: или {place} с {date}
   link: /init
+  title: Консультация
   redirect_from:
   - booking
+  - book
   cta: Записаться
   settlement: оплата после подтверждения времени — счетом ЮKassa
   heading: 'Включить меня в дело:'
@@ -279,6 +281,7 @@ offers:
     kind: audio
     url: fragment.m4a
     poster: fragment-poster.webp
+    alt: "Слайд лекции: Аксель Верборд, дом Кардашьян и Уэста, ваби-саби"
     label: "Как это звучит — отрывок 1:27 с 44:23: Аксель Верборд, дом Кардашьян и Уэста, ваби-саби"
   # Цена назначена принципалом 2026-09-22 (была заготовка 5000).
   price:

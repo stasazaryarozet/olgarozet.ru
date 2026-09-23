@@ -66,10 +66,10 @@
   setInterval(window.__applyTheme, 300000);
 })();
 </script>
-<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=dde389c2a8"); @import url("/styles.css?v=a25c08adb3") layer(owner);</style>
+<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=dde389c2a8"); @import url("/styles.css?v=b133105862") layer(owner);</style>
 <style>
 .booking{max-width:420px;margin:0 auto;padding:2.5rem 1.5rem 2rem}
-.booking h2{font-size:var(--fs-m);text-align:center;font-weight:600;margin-bottom:.15rem}
+.booking h1,.booking h2{font-size:var(--fs-m);text-align:center;font-weight:600;margin-bottom:.15rem}
 .sub{text-align:center;color:var(--muted,#666);font-size:var(--fs-xs)}
 .tz{text-align:center;color:var(--muted,#666);font-size:var(--fs-xs);margin-bottom:1rem}
 .day{margin-bottom:.8rem}
@@ -120,8 +120,8 @@
 <nav class="nav-fade"><span class="nav-left"><a aria-label="На главную" href="/">← olgarozet.ru</a></span><span class="nav-right"><a href="https://olgarozet.ru/getbusy/">Доступ для учеников</a></span></nav>
 <button aria-label="Тема: авто (по солнцу) — переключить" class="theme-toggle" data-theme-toggle="" type="button">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="dela.theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить",CYCLE=["day", "night"],MODE_ATTR="data-theme";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());function rendered(){var a=null;try{a=document.documentElement.getAttribute(MODE_ATTR);}catch(e){}return (CYCLE.indexOf(a)!==-1)?a:null;}btn.addEventListener("click",function(){var seen=rendered();var i=CYCLE.indexOf(seen);var next=CYCLE[(i+1)%CYCLE.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
 <main id="main" role="main">
-<div class="booking" role="main">
-<h2 data-case="upper">Консультация</h2>
+<div class="booking">
+<h1 data-case="upper">Консультация</h1>
 <p class="sub">40 мин · 15 000 ₽ · Онлайн</p>
 <p class="tz" id="tz-note">выберите удобное время</p>
 <noscript>

@@ -8,6 +8,22 @@
    Root-absolute "/_tokens.generated.css" works в production но 404'es в
    path-based preview (admin observation 2026-05-11 «не открывается»). */
 @import url("_tokens.generated.css");
+/* СЛОЙ АВТОРА ОБЪЯВЛЕН, А НЕ ПОДРАЗУМЕВАЕТСЯ (Σ 2026-09-23) ─────────────────────────
+   Каскад CSS решает ПРОИСХОЖДЕНИЕ РАНЬШЕ СПЕЦИФИЧНОСТИ: обычное объявление ВНЕ слоёв
+   побеждает ЛЮБОЕ объявление внутри слоя — при любой специфичности, при любом порядке.
+   Компилятор кладёт правила законов в слои (`cascade.order` = floor · owner · form,
+   где `form` объявлен связью `yields_never` — «закон не уступает»), а этот лист лежал
+   вне слоёв ЦЕЛИКОМ. Значит `yields_never` уступал ВСЕГДА, и объявленный порядок был
+   ложным по построению: не «автор уточняет закон», а «автор отменяет закон молча».
+   ЗАМЕР: `.article-wrapper section.contact h2 { text-transform: none }` отменяла
+   `[data-case="upper"] { text-transform: uppercase }` — директиву принципала от
+   2026-08-25 о прописных заголовках, — и ни один закон этого не видел, ибо правило
+   СУЩЕСТВУЕТ и значения верны (`effect-witness::W4`: закон зелен, эффекта нет).
+   ОБЁРНУТЫ ТОЛЬКО СОБСТВЕННЫЕ ПРАВИЛА: `@import` остаётся выше, иначе слои законов
+   вложились бы в авторский (owner.floor) и объявленный порядок рухнул бы вторым
+   способом. Имя слоя берётся у `cascade.author`, а не набирается здесь. */
+@layer owner {
+
 
 /* Inv-TYPO-font-metric-override (text/typography.md, 2026-05-12): «Inter Fallback»
    = local Arial с metric-override declarations matching Inter's box-metrics.
@@ -884,11 +900,21 @@ body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto;
      Mobile (<880px) collapses to single column; numerals inline. */
   max-width: var(--page);
   margin: 0 auto;
+  /* ПОЛЕ УСТУПАЕТ МЕРЕ, А НЕ НАОБОРОТ (Inv-TYPO-measure-reading-width, Σ 2026-09-23).
+     Закон объявляет ПОЛОСУ [45 … 75] знаков, а показ реализовывал только ПОТОЛОК
+     (`max-width: var(--measure)`); пол не был выражен нигде, и колонка свободно падала
+     под него — замер у читателя: 44.8 и 44.4 знака при 753 px, то есть поле в 5vw
+     оказывалось на полтора пиксела шире допустимого. Число здесь не выбрано: токен
+     `--measure-min` компилируется из `typography.md::measure_min` тем же датумом,
+     которым судья судит (один дом). Отступ берётся МЕНЬШИМ из желаемого и того, что
+     остаётся после удовлетворения пола, — поэтому поле схлопывается ДО того, как
+     строка станет нечитаемо узкой, и ни один брейкпоинт для этого не нужен. */
   padding: clamp(var(--sp-6), 10vh, var(--sp-8))
-           clamp(var(--sp-3), 5vw, var(--sp-6))
+           min(clamp(var(--sp-3), 5vw, var(--sp-6)),
+               max(0px, (100% - var(--measure-min)) / 2))
            var(--sp-8);
   display: grid;
-  grid-template-columns: var(--rail) minmax(0, var(--measure));
+  grid-template-columns: var(--rail) minmax(min(100%, var(--measure-min)), var(--measure));
   column-gap: var(--gutter);
   align-content: start;
 }
@@ -1662,8 +1688,15 @@ body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto;
   font-size: var(--fs-m);
   line-height: var(--lh-tight);
   font-family: var(--sans-display);   /* medium — Inv-TYPO-headings-weight-bound */
-  text-transform: none;
-  letter-spacing: var(--tracking-tight);
+  /* РЕГИСТР И РАЗРЯДКА СНЯТЫ ОТСЮДА (Σ 2026-09-23): это был ВТОРОЙ ДОМ решения,
+     которое принимает `Inv-TYPO-heading-case-by-depth` — регистр ВЫВОДИТСЯ из глубины
+     заголовка, а разрядка едет с регистром тем же правилом
+     (`Inv-TYPO-consistent-tracking-caps`). Пока лист лежал вне слоёв, эти две строки
+     молча отменяли оба закона; попав в слой, они стали бы спорить со слоем `form`
+     («закон не уступает») — то есть заведомо проигрывать. Спор, исход которого
+     предрешён, есть не правило, а мусор. `--tracking-tight` здесь была вдвойне неверна:
+     прописные требуют БОЛЬШЕ просвета, а не меньше (Bringhurst §3.2.5), и судья
+     `caps_tracking` замерял ровно её: tracking_em=-0.012 при поле [0.05 … 0.158]. */
   color: var(--ink);
   margin: 0 0 var(--sp-1);
 }
@@ -2218,3 +2251,5 @@ nav [data-reach="out"] > a {
 @media (max-width: 768px) {
     .article-wrapper .lead { font-size: var(--fs-s); }
 }
+
+} /* @layer owner — конец авторского листа */
