@@ -123,123 +123,17 @@
 <div class="booking">
 <h1 data-case="upper">Консультация</h1>
 <p class="sub">40 мин · 15 000 ₽ · Онлайн</p>
-<p class="tz" id="tz-note">выберите удобное время</p>
-<noscript>
-<div class="no-slots">
-<p>Подключить к вашему делу на 40 минут</p>
-<p>Напишите для записи:</p>
-<p><a href="https://t.me/olgaroset" rel="noopener">@olgaroset</a> · <a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a></p>
-</div>
-</noscript>
-<div aria-label="Выберите время" id="step-slots" role="listbox"></div>
-<div class="more" id="more" style="display:none">
-<button onclick="showAll()" type="button">ещё даты →</button>
-</div>
-<form aria-label="Контактные данные" class="bk-form" id="bk-form" novalidate="" onsubmit="return false">
-<label class="bk-label" for="bk-name">Имя</label>
-<input aria-required="true" autocomplete="name" class="bk-input" id="bk-name" minlength="2" name="name" required=""/>
-<label class="bk-label" for="bk-contact">Телефон, Telegram или Email</label>
-<input aria-required="true" class="bk-input" id="bk-contact" minlength="3" name="contact" required=""/>
-<button aria-disabled="true" class="bk-btn" disabled="" id="bk-btn" type="submit">Выберите время</button>
-</form>
-<div aria-live="polite" class="msg" id="bk-msg" role="status"></div>
+<aside aria-live="polite" class="booking-empty" role="status">
+<p class="empty-eyebrow">пока времён нет<span aria-hidden="true" class="rule"></span></p>
+<p class="empty-hint">Напишите Ольге напрямую —<br/>предложу время:</p>
+<p class="empty-contact">
+<a href="https://t.me/olgaroset" rel="noopener">@olgaroset</a>
+<span aria-hidden="true" class="empty-divider">·</span>
+<a href="mailto:o.g.rozet@gmail.com">o.g.rozet@gmail.com</a>
+</p>
+</aside>
 <p class="back"><a href="/">← назад</a></p>
 </div>
-<script>
-var API="https://script.google.com/macros/s/AKfycbzeulk8nVhROOmrnysLKRLGqM_naMEgVhtPl50ch_GCilibJ7MXv2rWlGlq1hz1SWc/exec";
-var SLOTS=[{"id": "es_b797c0a1ce3c", "start": "2026-09-24T10:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "v1rt0n65ggdk988q9r7mvjd09s"}, {"id": "es_282a47d5be5f", "start": "2026-09-24T12:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "sg8u6dlkl603nhc71qgl3nn86c"}, {"id": "es_007c9d2fd643", "start": "2026-09-24T15:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "7mh9cbetfuj6e6snc4p94bmifo"}, {"id": "es_e0953c5af7cc", "start": "2026-09-25T10:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "evje70fkdjornrmjj8jl4uno18"}, {"id": "es_46acee562fd2", "start": "2026-09-25T12:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "6um18u0uabiamv2kv5h0ql95ok"}, {"id": "es_01247a9490b9", "start": "2026-09-25T15:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "t0g5iten1p4aavfa6q39bvq1bk"}, {"id": "es_703c031b2d86", "start": "2026-09-30T10:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "atmpd33nkhcl9fv1un093l5ki8"}, {"id": "es_75c4ebdbbdce", "start": "2026-09-30T12:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "cp3gsulhvv6t8ergq1l423d7is"}, {"id": "es_b8ec621b04a8", "start": "2026-09-30T15:00:00+02:00", "duration": 40, "tz": "Europe/Belgrade", "event_id": "rqbulv0ceb9e3b63rjumvflc98"}, {"id": "es_04e5b58b5d66", "start": "2026-10-01T10:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "rsjetli8tg6c7jub48sipt2k9s"}, {"id": "es_6cfde72542b9", "start": "2026-10-01T12:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "tlk2gorapu19ilqotga05jddi4"}, {"id": "es_69201d6c6cee", "start": "2026-10-01T15:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "j06tskm00t26aojg6b0fqpa3h4"}, {"id": "es_ff428b38ecea", "start": "2026-10-05T10:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "jpp5miufehhllr0o3mpaomjmug"}, {"id": "es_791d79249bdb", "start": "2026-10-05T12:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "6shaketvbhj44is312eikbnepk"}, {"id": "es_5aeaceb08472", "start": "2026-10-05T15:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "irun1jcp8jr4htsh69b3c7stfc"}, {"id": "es_f6ec58f6b12c", "start": "2026-10-06T10:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "fqhkkk2jn2evtdt8e935paheo0"}, {"id": "es_2c0cf44a6421", "start": "2026-10-06T12:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "5s7rbj5k92qclcmrn78f5ov7r8"}, {"id": "es_7fc6053987d2", "start": "2026-10-06T15:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "epjl0gcf9qc2nsjjihb1mcap8c"}];
-var slot=null,allDays=[],submitted=false;
-
-(function(){
-var days={};
-SLOTS.forEach(function(s){
-  var dt=new Date(s.start);
-  var key=dt.toISOString().slice(0,10);
-  if(!days[key])days[key]=[];
-  days[key].push({date:key,time:dt.toLocaleTimeString("ru",{hour:"2-digit",minute:"2-digit",hour12:false}),
-    id:s.id,label:dt.toLocaleDateString("ru",{weekday:"short",day:"numeric",month:"short"})});
-});
-allDays=Object.keys(days).map(function(k){return{key:k,slots:days[k]}});
-if(allDays.length===0){
-  document.getElementById("step-slots").innerHTML="<div class='no-slots'>\u0421\u0432\u043e\u0431\u043e\u0434\u043d\u043e\u0433\u043e \u0432\u0440\u0435\u043c\u0435\u043d\u0438 \u043d\u0435\u0442.<br>\u041d\u0430\u043f\u0438\u0448\u0438\u0442\u0435 \u041e\u043b\u044c\u0433\u0435 \u043d\u0430\u043f\u0440\u044f\u043c\u0443\u044e \u2014 \u043f\u0440\u0435\u0434\u043b\u043e\u0436\u0443 \u0432\u0440\u0435\u043c\u044f:<br><a href='https://t.me/olgaroset'>@olgaroset</a></div>";
-}else{
-  render(allDays.length);
-}
-})();
-
-function render(n){
-var el=document.getElementById("step-slots");var h="";
-allDays.slice(0,n).forEach(function(d,i){
-  h+="<div class='day' role='group' aria-label='"+d.slots[0].label+"'>";
-  h+="<div class='day-label'>"+d.slots[0].label+"</div><div class='slots-grid'>";
-  d.slots.forEach(function(s){
-    h+="<button type='button' class='t' role='option' aria-selected='false' ";
-    h+="data-d='"+s.date+"' data-t='"+s.time+"' data-id='"+s.id+"'";
-    h+=" aria-label='"+s.time+", "+d.slots[0].label+"'>"+s.time+"</button>";
-  });
-  h+="</div></div>";
-});
-el.innerHTML=h;
-el.querySelectorAll(".t").forEach(function(b){b.addEventListener("click",function(){pick(this)});});
-}
-function showAll(){render(allDays.length);document.getElementById("more").style.display="none"}
-function pick(el){
-document.querySelectorAll(".t").forEach(function(s){s.classList.remove("on");s.setAttribute("aria-selected","false")});
-el.classList.add("on");el.setAttribute("aria-selected","true");
-slot={date:el.dataset.d,time:el.dataset.t,id:el.dataset.id};
-var btn=document.getElementById("bk-btn");
-btn.disabled=false;btn.setAttribute("aria-disabled","false");
-btn.textContent=slot.time+" — записаться";
-var form=document.getElementById("bk-form");
-if(!form.classList.contains("open")){
-  form.classList.add("open");
-  setTimeout(function(){document.getElementById("bk-name").focus()},350);
-}
-}
-
-document.getElementById("bk-name").addEventListener("input",function(){
-  this.classList.toggle("ok",this.value.trim().length>=2);
-  this.classList.remove("err");
-});
-document.getElementById("bk-contact").addEventListener("input",function(){
-  var v=this.value.trim();
-  this.classList.toggle("ok",v.length>=3&&/[\d@.]/.test(v));
-  this.classList.remove("err");
-});
-
-document.getElementById("bk-form").addEventListener("submit",function(e){e.preventDefault();book()});
-function book(){
-if(submitted)return;
-var nameEl=document.getElementById("bk-name");
-var contactEl=document.getElementById("bk-contact");
-var msgEl=document.getElementById("bk-msg");
-nameEl.classList.remove("err");contactEl.classList.remove("err");msgEl.textContent="";msgEl.className="msg";
-if(!slot)return;
-var n=nameEl.value.trim(),c=contactEl.value.trim();
-if(n.length<2){nameEl.classList.add("err");nameEl.focus();return}
-if(c.length<3||!/[\d@.]/.test(c)){contactEl.classList.add("err");contactEl.focus();return}
-var btn=document.getElementById("bk-btn");
-btn.disabled=true;btn.classList.add("sending");btn.textContent="отправка...";
-fetch(API+"?name="+encodeURIComponent(n)+"&contact="+encodeURIComponent(c)+"&date="+slot.date+"&time="+slot.time+"&id="+slot.id)
-.then(function(r){return r.json()}).then(function(d){
-btn.classList.remove("sending");
-if(d.ok){submitted=true;
-  document.getElementById("step-slots").style.display="none";
-  document.getElementById("more").style.display="none";
-  document.getElementById("bk-form").style.display="none";
-  msgEl.className="msg";
-  msgEl.innerHTML="<div class='result'><span class='result-headline'>Заявка принята</span> "+slot.time+" · "+
-    new Date(slot.date).toLocaleDateString("ru",{day:"numeric",month:"long"})+
-    "<div class='next'>Ольга свяжется с вами для подтверждения</div></div>";
-}else{
-  var m={"name_required":"Введите имя","contact_required":"Введите контакт",
-    "contact_invalid":"Некорректный контакт","slot_taken":"Это время уже занято — выберите другое"};
-  msgEl.className="msg error";msgEl.textContent=m[d.error]||"Ошибка. Попробуйте позже.";
-  btn.disabled=false;btn.textContent=slot.time+" — записаться"}
-}).catch(function(){btn.classList.remove("sending");msgEl.className="msg error";
-  msgEl.textContent="Ошибка сети";btn.disabled=false;btn.textContent=slot.time+" — записаться"});
-}
-</script>
 </main>
 <link href="/media.css" rel="stylesheet"/><script defer="" src="/media.js"></script>
 <script>
