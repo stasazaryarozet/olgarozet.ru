@@ -5,19 +5,19 @@
 <meta charset="utf-8"/>
 <meta content="u5gNvIFSmtyOxQqC" name="mailru-domain"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
-<title>Политика обработки персональных данных</title>
+<title>Политика обработки персональных данных — Ольга Розет</title>
 <meta content="Кто обрабатывает персональные данные, зачем, на каком основании и как долго" name="description"/>
 <link href="https://olgarozet.ru/privacy/" rel="canonical"/>
 <link href="https://olgarozet.ru/journal/feed.xml" rel="alternate" title="Journal" type="application/rss+xml"/>
 <link href="https://olgarozet.ru/audiobroadcast/feed.xml" rel="alternate" title="Ольга Розет" type="application/rss+xml"/>
 <meta content="website" property="og:type"/>
-<meta content="Политика обработки персональных данных" property="og:title"/>
+<meta content="Политика обработки персональных данных — Ольга Розет" property="og:title"/>
 <meta content="Кто обрабатывает персональные данные, зачем, на каком основании и как долго" property="og:description"/>
 <meta content="https://olgarozet.ru/privacy/" property="og:url"/>
 <meta content="https://olgarozet.ru/olga_footer.png" property="og:image"/>
 <meta content="ru_RU" property="og:locale"/>
 <meta content="summary_large_image" name="twitter:card"/>
-<meta content="Политика обработки персональных данных" name="twitter:title"/>
+<meta content="Политика обработки персональных данных — Ольга Розет" name="twitter:title"/>
 <meta content="Кто обрабатывает персональные данные, зачем, на каком основании и как долго" name="twitter:description"/>
 <meta content="https://olgarozet.ru/olga_footer.png" name="twitter:image"/>
 <link href="/favicon.png" rel="icon" type="image/png"/>
@@ -100,7 +100,7 @@
 <h2 data-case="plain" id="fayly-v-brauzere">Файлы в браузере</h2>
 <p>Сайт сохраняет в браузере выбор темы оформления и отметку о согласии с этой политикой, чтобы выбор не сбрасывался при следующем визите. Счет посещений ведется собственными средствами сайта, без систем веб-аналитики третьих лиц. Посетитель вправе удалить сохраненные записи средствами браузера.</p>
 <h2 data-case="plain" id="izmeneniya-politiki">Изменения политики</h2>
-<p>Оператор вправе изменить политику; действующая редакция всегда доступна по адресу /privacy/. Политика действует с публикации на этой странице.</p><footer aria-label="Реквизиты и юридическая информация" class="legal"><p class="legal-entity">Розет Ольга Григорьевна · <abbr>ИНН</abbr> 500403820698 · применяет <abbr>НПД</abbr></p><p class="legal-docs"><a href="/privacy/">Политика конфиденциальности</a> · <a href="/legal/">Договор-оферта</a></p><p class="legal-payment">Оплата: <abbr>СБП</abbr></p></footer></article>
+<p>Оператор вправе изменить политику; действующая редакция всегда доступна по адресу /privacy/. Политика действует с публикации на этой странице.</p><footer aria-label="Реквизиты и юридическая информация" class="legal"><p class="legal-entity">Розет Ольга Григорьевна · <abbr>ИНН</abbr> 500403820698 · применяет <abbr>НПД</abbr></p><p class="legal-docs"><a href="/privacy/">Политика конфиденциальности</a> · <a href="/legal/">Договор-оферта</a></p><p class="legal-payment">Оплата: <abbr>СБП</abbr> · SberPay · T-Pay · карта · карта (международная)</p></footer></article>
 </main>
 <link href="/media.css" rel="stylesheet"/><script defer="" src="/media.js"></script>
 <script>
@@ -142,7 +142,8 @@
        (Date.now() + '-' + Math.random().toString(36).slice(2)),
     ref: document.referrer || ''
   });
-  var url = 'https://dela-edge.azaryarozet.workers.dev/pv';
+  var url = "https://dela-edge.azaryarozet.workers.dev/pv";
+  if (!url) return;
   try {
     var blob = new Blob([payload], { type: 'application/json' });
     if (!navigator.sendBeacon || !navigator.sendBeacon(url, blob)) {

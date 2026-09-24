@@ -5,19 +5,19 @@
 <meta charset="utf-8"/>
 <meta content="u5gNvIFSmtyOxQqC" name="mailru-domain"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
-<title>Договор-оферта</title>
+<title>Договор-оферта — Ольга Розет</title>
 <meta content="Публичная оферта услуг и цифровых продуктов, реквизиты исполнителя" name="description"/>
 <link href="https://olgarozet.ru/legal/" rel="canonical"/>
 <link href="https://olgarozet.ru/journal/feed.xml" rel="alternate" title="Journal" type="application/rss+xml"/>
 <link href="https://olgarozet.ru/audiobroadcast/feed.xml" rel="alternate" title="Ольга Розет" type="application/rss+xml"/>
 <meta content="website" property="og:type"/>
-<meta content="Договор-оферта" property="og:title"/>
+<meta content="Договор-оферта — Ольга Розет" property="og:title"/>
 <meta content="Публичная оферта услуг и цифровых продуктов, реквизиты исполнителя" property="og:description"/>
 <meta content="https://olgarozet.ru/legal/" property="og:url"/>
 <meta content="https://olgarozet.ru/olga_footer.png" property="og:image"/>
 <meta content="ru_RU" property="og:locale"/>
 <meta content="summary_large_image" name="twitter:card"/>
-<meta content="Договор-оферта" name="twitter:title"/>
+<meta content="Договор-оферта — Ольга Розет" name="twitter:title"/>
 <meta content="Публичная оферта услуг и цифровых продуктов, реквизиты исполнителя" name="twitter:description"/>
 <meta content="https://olgarozet.ru/olga_footer.png" name="twitter:image"/>
 <link href="/favicon.png" rel="icon" type="image/png"/>
@@ -98,7 +98,7 @@
 <h2 data-case="plain" id="spory">Споры</h2>
 <p>До обращения в суд сторона направляет претензию на адрес электронной почты другой стороны; срок ответа — тридцать дней. Спор, не урегулированный претензией, разрешается по законодательству Российской Федерации, включая законодательство о защите прав потребителей.</p>
 <h2 data-case="plain" id="izmeneniya-oferty">Изменения оферты</h2>
-<p>Исполнитель вправе изменить настоящую оферту. К заключенному договору применяется редакция, действовавшая на дату оплаты.</p><footer aria-label="Реквизиты и юридическая информация" class="legal"><p class="legal-entity">Розет Ольга Григорьевна · <abbr>ИНН</abbr> 500403820698 · <abbr>ОГРНИП</abbr> 325774600886216 · применяет <abbr>НПД</abbr></p><p class="legal-docs"><a href="/privacy/">Политика конфиденциальности</a> · <a href="/legal/">Договор-оферта</a></p><p class="legal-payment">Оплата: <abbr>СБП</abbr></p></footer></article>
+<p>Исполнитель вправе изменить настоящую оферту. К заключенному договору применяется редакция, действовавшая на дату оплаты.</p><footer aria-label="Реквизиты и юридическая информация" class="legal"><p class="legal-entity">Розет Ольга Григорьевна · <abbr>ИНН</abbr> 500403820698 · <abbr>ОГРНИП</abbr> 325774600886216 · применяет <abbr>НПД</abbr></p><p class="legal-docs"><a href="/privacy/">Политика конфиденциальности</a> · <a href="/legal/">Договор-оферта</a></p><p class="legal-payment">Оплата: <abbr>СБП</abbr> · SberPay · T-Pay · карта · карта (международная)</p></footer></article>
 </main>
 <link href="/media.css" rel="stylesheet"/><script defer="" src="/media.js"></script>
 <script>
@@ -140,7 +140,8 @@
        (Date.now() + '-' + Math.random().toString(36).slice(2)),
     ref: document.referrer || ''
   });
-  var url = 'https://dela-edge.azaryarozet.workers.dev/pv';
+  var url = "https://dela-edge.azaryarozet.workers.dev/pv";
+  if (!url) return;
   try {
     var blob = new Blob([payload], { type: 'application/json' });
     if (!navigator.sendBeacon || !navigator.sendBeacon(url, blob)) {
