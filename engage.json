@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-25T22:00:22.702976+00:00",
+  "generated": "2026-09-28T11:30:34.623150+00:00",
   "user": "olgarozet",
   "slots": [
     {
@@ -22,27 +22,6 @@
       "duration": 40,
       "tz": "Europe/Belgrade",
       "event_id": "rqbulv0ceb9e3b63rjumvflc98"
-    },
-    {
-      "id": "es_04e5b58b5d66",
-      "start": "2026-10-01T10:00:00+03:00",
-      "duration": 40,
-      "tz": "Europe/Moscow",
-      "event_id": "rsjetli8tg6c7jub48sipt2k9s"
-    },
-    {
-      "id": "es_6cfde72542b9",
-      "start": "2026-10-01T12:00:00+03:00",
-      "duration": 40,
-      "tz": "Europe/Moscow",
-      "event_id": "tlk2gorapu19ilqotga05jddi4"
-    },
-    {
-      "id": "es_69201d6c6cee",
-      "start": "2026-10-01T15:00:00+03:00",
-      "duration": 40,
-      "tz": "Europe/Moscow",
-      "event_id": "j06tskm00t26aojg6b0fqpa3h4"
     },
     {
       "id": "es_ff428b38ecea",
@@ -85,27 +64,6 @@
       "duration": 40,
       "tz": "Europe/Moscow",
       "event_id": "epjl0gcf9qc2nsjjihb1mcap8c"
-    },
-    {
-      "id": "es_9cba19eded2b",
-      "start": "2026-10-07T10:00:00+03:00",
-      "duration": 40,
-      "tz": "Europe/Moscow",
-      "event_id": "33uks75b1gfmftodto5cn165qg"
-    },
-    {
-      "id": "es_b0f951f4aeed",
-      "start": "2026-10-07T12:00:00+03:00",
-      "duration": 40,
-      "tz": "Europe/Moscow",
-      "event_id": "cc4nef5bc0coiqnhcsi3ohdq2g"
-    },
-    {
-      "id": "es_ac03d69eee71",
-      "start": "2026-10-07T15:00:00+03:00",
-      "duration": 40,
-      "tz": "Europe/Moscow",
-      "event_id": "j0710a1vkho2g3i3a6ng7jb5f8"
     },
     {
       "id": "es_283c1da0df13",
