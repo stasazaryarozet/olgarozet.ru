@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-28T15:30:28.860825+00:00",
+  "generated": "2026-09-29T10:00:41.186241+00:00",
   "user": "olgarozet",
   "slots": [
     {
@@ -22,6 +22,13 @@
       "duration": 40,
       "tz": "Europe/Belgrade",
       "event_id": "rqbulv0ceb9e3b63rjumvflc98"
+    },
+    {
+      "id": "es_791d79249bdb",
+      "start": "2026-10-05T12:00:00+03:00",
+      "duration": 40,
+      "tz": "Europe/Moscow",
+      "event_id": "dc1spvmfdrgn615efo388m3uec"
     },
     {
       "id": "es_283c1da0df13",
