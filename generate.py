@@ -335,7 +335,9 @@ def _typo(s: str, lang: str = "ru") -> str:
     # загрузчика YAML не заводится. Предикат выведен (morphology.yo_warranted); списка нет.
     if rules.get("selective_yo"):
         import morphology
-        out = morphology.set_by_norm(out)
+        raw_g = rules.get("yo_keep_grammemes")
+        gset = frozenset(str(x) for x in raw_g) if raw_g is not None else None
+        out = morphology.set_by_norm(out, keep_grammemes=gset)
     return out
 
 
