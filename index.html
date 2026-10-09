@@ -115,7 +115,7 @@
 <p class="price">15 000 ₽</p>
 <a class="cta" href="/init">Записаться</a>
 <p>оплата после подтверждения времени — счетом <abbr>ЮK</abbr>assa</p>
-<p class="availability">Онлайн<br/>или приехать ко мне в Москву</p>
+<p class="availability">Онлайн</p>
 </section>
 <section aria-labelledby="recent-heading" class="board" id="recent">
 <h2 data-case="upper" id="recent-heading">НЕДАВНО</h2>
@@ -226,7 +226,7 @@ observer.observe(footer);
        (Date.now() + '-' + Math.random().toString(36).slice(2)),
     ref: document.referrer || ''
   });
-  var url = null;
+  var url = "https://dela-edge.azaryarozet.workers.dev/pv";
   if (!url) return;
   try {
     var blob = new Blob([payload], { type: 'application/json' });
