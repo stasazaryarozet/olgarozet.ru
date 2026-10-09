@@ -1,14 +1,7 @@
 {
-  "generated": "2026-10-09T13:11:09.062239+00:00",
+  "generated": "2026-10-09T14:10:38.705779+00:00",
   "user": "olgarozet",
   "slots": [
-    {
-      "duration": 40,
-      "event_id": "qp1j72tusaup8jbrh0t8cn5p78",
-      "id": "es_b5f92ffcf403",
-      "start": "2026-10-09T17:00:00+03:00",
-      "tz": "Europe/Moscow"
-    },
     {
       "duration": 40,
       "event_id": "avhev8vu3g2s7mete1i1dnhdvg",
