@@ -638,6 +638,12 @@ html[data-theme="day"] #doc audio { color-scheme: light; }
 
 /* ── ЕДИНИЦА ──────────────────────────────────────────────────────────── */
 #doc [data-kind="segment"] {
+  /* ЛЕВАЯ ЛИНИЯ КАРТОЧКИ — ОДНА, И ОНА ТОКЕН ПРИ КАРТОЧКЕ. Замер 2026-10-11 (olgarozet.ru, 1440 и 390):
+     надпись листа (`figure > [data-role="inscription"]`) стояла на левой границе карточки (отступ 0),
+     тогда как подпись `figcaption` — на 13 px (3.5 px при 390), а кадры — на своей третьей линии
+     (0.6rem): три числа для одного края, и тот род блока, у которого числа не нашлось, касался рамки
+     (56 надписей одной страницы). Отступ — свойство КАРТОЧКИ, а не каждого её потомка; потомок берёт токен. */
+  --card-inset: min(0.85rem, 0.9vw);
   /* РЕГИСТР ОБЪЯВЛЯЕТСЯ ПРИ КАРТОЧКЕ — ЭТО ЕЁ СЛОЙ, А НЕ СЛОЙ ЕЁ АБЗАЦЕВ.
      Замер 2026-08-26 (последние 10 находок меры): подпись рисунка свой регистр имела
      (`figcaption { --fs-xs }`), а проза атомарного разворота и текст карточки-без-
@@ -775,7 +781,7 @@ dialog[data-role="zoom"] img {
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 0.6rem;
-  padding: 0.6rem 0.6rem 0;
+  padding: 0.6rem var(--card-inset) 0;
 }
 #doc [data-form="atomic"] [data-role="figure"] > a[data-role="zoom"] {
   min-width: 0;
@@ -1031,5 +1037,6 @@ dialog[data-role="zoom"] img {
    показе («не вешать союз») записано в ЗНАЧЕНИЕ символом NBSP и потому не умеет
    уступить, когда не умещается (text/site.md::Inv-SITE-form-at-reader, ось ширин). */
 #doc { padding-inline: min(var(--space-padding), 3vw); }
-#doc figcaption { padding-inline: min(0.85rem, 0.9vw); }
-#doc [data-form="atomic"] [data-role="figure"] { padding-inline: min(0.6rem, 0.8vw); }
+#doc figcaption { padding-inline: var(--card-inset); }
+#doc [data-form="atomic"] [data-role="figure"] { padding-inline: var(--card-inset); }
+#doc figure[data-kind="segment"] > [data-role="inscription"] { padding-inline: var(--card-inset); }
