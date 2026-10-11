@@ -24,6 +24,8 @@
 <link href="/favicon.png" rel="icon" type="image/png"/>
 <link href="/apple-touch-icon.png" rel="apple-touch-icon"/>
 <link href="/manifest.json" rel="manifest"/>
+<link as="font" crossorigin="" href="/fonts/inter-cyrillic-400-normal.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="" href="/fonts/inter-cyrillic-700-normal.woff2" rel="preload" type="font/woff2"/>
 <meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
 <meta content="#111111" media="(prefers-color-scheme: dark)" name="theme-color"/>
 <script>
@@ -63,14 +65,14 @@
   setInterval(window.__applyTheme, 300000);
 })();
 </script>
-<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=dde389c2a8"); @import url("/styles.css?v=1171316f8f");</style>
+<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=4cdadee726"); @import url("/styles.css?v=1171316f8f");</style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Ольга Розет", "url": "https://olgarozet.ru", "image": "https://olgarozet.ru/olga_footer.png", "email": "o.g.rozet@gmail.com", "sameAs": ["https://instagram.com/olga_rozet", "https://t.me/olga_rozet", "https://www.youtube.com/@olga_rozet"], "alternateName": "Olga Rozet", "jobTitle": ["Художник", "Искусствовед", "Дизайнер"]}
   <\/script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ItemList", "itemListElement": [{"@type": "ListItem", "position": 1, "item": {"@type": "Event", "name": "Конструктивизм: Подход и решения", "startDate": "2026-10", "eventStatus": "https://schema.org/EventPlanning", "organizer": [{"@type": "Person", "name": "Ольга Розет"}]}}, {"@type": "ListItem", "position": 2, "item": {"@type": "Event", "name": "Человек и Ремесло", "startDate": "2026-10", "eventStatus": "https://schema.org/EventPlanning", "organizer": [{"@type": "Person", "name": "Ольга Розет"}]}}, {"@type": "ListItem", "position": 3, "item": {"@type": "Event", "name": "Цена и Ценность", "startDate": "2026-11", "eventStatus": "https://schema.org/EventPlanning", "organizer": [{"@type": "Person", "name": "Ольга Розет"}]}}, {"@type": "ListItem", "position": 4, "item": {"@type": "Event", "name": "Бухара", "startDate": "2026-11-20", "eventStatus": "https://schema.org/EventPlanning", "location": [{"@type": "Place", "name": "Бухара", "address": {"@type": "PostalAddress", "addressCountry": "UZ"}}], "organizer": [{"@type": "Person", "name": "Ольга Розет"}], "audience": {"@type": "Audience", "audienceType": "специалисты, дизайнеры, архитекторы"}}}, {"@type": "ListItem", "position": 5, "item": {"@type": "Event", "name": "Встреча с Ольгой", "startDate": "2026-12", "eventStatus": "https://schema.org/EventPlanning", "organizer": [{"@type": "Person", "name": "Ольга Розет"}]}}]}</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
-<nav class="nav-fade"><span class="nav-left"></span><span class="nav-right"><a href="https://olgarozet.ru/getbusy/">Доступ для учеников</a></span></nav>
+<nav class="nav-fade"><span class="nav-left"></span><span class="nav-right"><a href="https://olgarozet.ru/getbusy/">Доступ для учеников</a></span></nav>
 <button aria-label="Тема: авто (по солнцу) — переключить" class="theme-toggle" data-theme-toggle="" type="button">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="dela.theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить",CYCLE=["day", "night"],MODE_ATTR="data-theme";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());function rendered(){var a=null;try{a=document.documentElement.getAttribute(MODE_ATTR);}catch(e){}return (CYCLE.indexOf(a)!==-1)?a:null;}btn.addEventListener("click",function(){var seen=rendered();var i=CYCLE.indexOf(seen);var next=CYCLE[(i+1)%CYCLE.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
 <main id="main" role="main">
 <div class="content-wrapper">
@@ -92,7 +94,7 @@
 <li><a href="/journal/">Journal</a></li>
 <li><a href="/action/">Действие — все События</a></li>
 <li><a href="/travels/">Дизайн-Путешествия</a></li>
-<li><a href="/getbusy/">Доступ для учеников</a></li>
+<li><a href="/getbusy/">Доступ для учеников</a></li>
 <li><a href="/init/">Запись</a></li>
 <li><a href="/legal/">Оферта и реквизиты</a></li>
 <li><a href="/audiobroadcast/">Подкаст</a></li>
@@ -101,10 +103,13 @@
 </ul>
 </nav>
 <section aria-labelledby="offers-heading" id="offers">
-<h2 data-case="upper" id="offers-heading">Купить:</h2>
-<ul class="offers">
-<li><a href="/styles-past-opens-future/">Стили и тренды: прошлое открывает будущее</a></li>
-</ul>
+<h2 data-case="upper" id="offers-heading">Рассказы-показы</h2>
+<div class="offers">
+<article class="offer-entry">
+<a aria-hidden="true" class="offer-entry-face" href="/styles-past-opens-future/" tabindex="-1"><img alt="" decoding="async" height="630" loading="lazy" src="/styles-past-opens-future/card.jpg" width="1200"/></a>
+<h3 data-case="plain"><a href="/styles-past-opens-future/">Стили и тренды: прошлое открывает будущее</a></h3>
+</article>
+</div>
 </section>
 <section aria-labelledby="consultations-heading" id="consultations">
 <h2 data-case="upper" id="consultations-heading">Включить меня в дело:</h2>
@@ -112,7 +117,7 @@
 <p class="price">15 000 ₽</p>
 <a class="cta" href="/init">Записаться</a>
 <p>оплата после подтверждения времени — счетом <abbr>ЮK</abbr>assa</p>
-<p class="availability">Онлайн<br/>или приехать ко мне в Москву</p>
+<p class="availability">Онлайн</p>
 </section>
 <section aria-labelledby="recent-heading" class="board" id="recent">
 <h2 data-case="upper" id="recent-heading">НЕДАВНО</h2>
@@ -151,7 +156,7 @@
 <article class="event ev-concrete">
 <p class="type as-is">Дизайн-Путешествие</p>
 <p class="concept caps seam-line">в Бухару</p>
-<p class="audience as-is">для дизайнеров интерьера<br/>и декораторов</p>
+<p class="audience as-is">для дизайнеров интерьера<br/>и декораторов</p>
 </article>
 <p aria-hidden="true" class="rank rank-tier">◑</p>
 <h3 class="tier" data-case="plain">в Декабре:</h3>
