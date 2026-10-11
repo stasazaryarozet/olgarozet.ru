@@ -681,11 +681,11 @@ html[data-theme="day"] #doc audio { color-scheme: light; }
    ярус: кегль подписи, чернила вспомогательные. Разрядка — только там, где регистр
    ИЗМЕРЕН прописным (`data-case`): капс без разрядки слипается (Мильчин §3.2.4), а
    строчной надписи разрядка не нужна. Ни одного числа — только токены модели. */
-#doc [data-role="inscription"] {
+#doc :is([data-role="inscription"], [data-role="inscription_list"], [data-role="inscription_ordered_list"]) {
   font-size: var(--fs-xs);
   color: var(--ink-soft);
 }
-#doc [data-role="inscription"][data-case="upper"] {
+#doc :is([data-role="inscription"], [data-role="inscription_list"], [data-role="inscription_ordered_list"])[data-case="upper"] {
   letter-spacing: var(--tracking-caps);
 }
 
@@ -1041,4 +1041,7 @@ dialog[data-role="zoom"] img {
 #doc { padding-inline: min(var(--space-padding), 3vw); }
 #doc figcaption { padding-inline: var(--card-inset); }
 #doc [data-form="atomic"] [data-role="figure"] { padding-inline: var(--card-inset); }
-#doc figure[data-kind="segment"] > [data-role="inscription"] { padding-inline: var(--card-inset); }
+#doc figure[data-kind="segment"] > :is([data-role="inscription"], [data-role="inscription_list"], [data-role="inscription_ordered_list"]) { padding-inline: var(--card-inset); }
+#doc figure[data-kind="segment"] > :is([data-role="inscription_list"], [data-role="inscription_ordered_list"]) { margin: 0; list-style-position: inside; }
+#doc figure[data-kind="segment"] > [data-role="inscription_list"] { list-style-type: disc; }
+#doc figure[data-kind="segment"] > [data-role="inscription_ordered_list"] { list-style-type: decimal; }
