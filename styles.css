@@ -126,6 +126,12 @@ html {
 /* Night-theme portrait swap: dedicated regenerated asset (`portrait_night`),
    not CSS inversion. Day img hidden in night mode and vice-versa. Both stack
    in the same grid cell so layout is identical regardless of theme. */
+/* РАСТВОРЕНИЕ В ФОНЕ ТЕМЫ (холст ограничен натуральной шириной, §raster-natural-cap, и его шов не
+   должен читаться): фон растра — не цвет, а ОТСУТСТВИЕ чернил. Ночной растр на чёрном — `lighten`
+   (чёрное уступает фону темы), дневной на белом — `multiply` (белое уступает фону). Смешение идёт
+   против фона .footer-content (var(--surface), явный — см. выше); маска по краям сглаживает остаток. */
+.footer-portrait.day { mix-blend-mode: multiply; }
+.footer-portrait.night { mix-blend-mode: lighten; }
 .footer-portrait.night { display: none; }
 :root[data-theme="night"] .footer-portrait.day { display: none; }
 :root[data-theme="night"] .footer-portrait.night { display: block; }
