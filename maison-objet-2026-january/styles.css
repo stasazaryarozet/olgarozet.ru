@@ -1042,6 +1042,11 @@ dialog[data-role="zoom"] img {
 #doc figcaption { padding-inline: var(--card-inset); }
 #doc [data-form="atomic"] [data-role="figure"] { padding-inline: var(--card-inset); }
 #doc figure[data-kind="segment"] > :is([data-role="inscription"], [data-role="inscription_list"], [data-role="inscription_ordered_list"]) { padding-inline: var(--card-inset); }
-#doc figure[data-kind="segment"] > :is([data-role="inscription_list"], [data-role="inscription_ordered_list"]) { margin: 0; list-style-position: inside; }
+#doc figure[data-kind="segment"] > :is([data-role="inscription_list"], [data-role="inscription_ordered_list"]) {
+  margin: 0; list-style-position: outside;
+  padding-inline: calc(var(--card-inset) + 1.6em) var(--card-inset);   /* маркер висит в левом поле, строки пункта — под текстом */
+}
+#doc :is([data-role="inscription_list"], [data-role="inscription_ordered_list"]) > li + li { margin-top: var(--sp-2); }   /* интервал между пунктами — из шкалы --sp */
+#doc [data-role="inscription_continuation"] { display: block; color: var(--muted); }   /* вторая строка того же пункта: вторичный тон, токен темы */
 #doc figure[data-kind="segment"] > [data-role="inscription_list"] { list-style-type: disc; }
 #doc figure[data-kind="segment"] > [data-role="inscription_ordered_list"] { list-style-type: decimal; }
