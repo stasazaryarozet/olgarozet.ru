@@ -1887,7 +1887,11 @@ figure svg { display: block; width: 100%; height: auto; }
    картинка отрисовывалась дефолтом <img> (300×150) — сплющенный огрышек, который админ и не
    увидел. Ширина по колонке, подпись — тихая мета в регистре шапки статьи. */
 article figure { margin: var(--space-l, 2rem) 0; }
-article figure img { width: 100%; height: auto; display: block; }
+/* ШИРИНА ПО КОЛОНКЕ — ЗАКОН СТАТИК-ТЕКСТА, НЕ РАССКАЗА-ПОКАЗА: внутри `#doc` кадр не растёт выше своей
+   величины (`#doc img { max-width: 100% }` при атрибутах width/height настоящего размера). Без `:not(#doc)`
+   это правило перебивало натуральную величину: замер 2026-10-13 (1440, закрытая сборка) — кадр 925 px
+   выводился в 1265 css px (×1.37, на DPR 2 — 2530 device px из 925). */
+article:not(#doc) figure img { width: 100%; height: auto; display: block; }
 /* Подпись отделена КЕГЛЕМ и ГРАДАЦИЕЙ ЧЕРНИЛ, не наклоном: курсивного начертания
    у гротеска нет, и `font-style: italic` дал бы синтезированный сдвиг кириллицы
    (Inv-TYPO-italic-real-cut, принципал 2026-08-20). */
@@ -2224,6 +2228,7 @@ article figure img { width: 100%; height: auto; display: block; }
 }
 .player-resume button {
     padding: var(--sp-1) var(--sp-2);
+    color: var(--ink);   /* кнопка не наследует чернила: UA-цвет кнопки на тёмной поверхности ночи — axe color-contrast serious ×2 */
     background: var(--surface);
     border: 1px solid var(--rule);
     border-radius: var(--radius-control);
