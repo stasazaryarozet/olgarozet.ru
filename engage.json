@@ -1,27 +1,27 @@
 {
-  "generated": "2026-10-16T21:04:22.249444+00:00",
+  "generated": "2026-10-19T09:13:41.462598+00:00",
   "user": "olgarozet",
   "slots": [
     {
-      "id": "es_d337e51859e3",
-      "start": "2026-10-19T10:00:00+03:00",
+      "id": "es_f7d1a674a8a0",
+      "start": "2026-10-19T14:00:00+03:00",
       "duration": 40,
       "tz": "Europe/Moscow",
-      "event_id": "9g128r2t2skn9gjggikf9j8c20"
-    },
-    {
-      "id": "es_cb3ff256b85c",
-      "start": "2026-10-19T12:00:00+03:00",
-      "duration": 40,
-      "tz": "Europe/Moscow",
-      "event_id": "k3cbq1tam8hqh21tkdap7jdoi0"
+      "event_id": "96iraf3041f2hm5mo7irr6hf0k"
     },
     {
       "id": "es_3e33bbc43708",
       "start": "2026-10-19T15:00:00+03:00",
       "duration": 40,
       "tz": "Europe/Moscow",
-      "event_id": "plit8enbr93b0d4bdagpi9vgj4"
+      "event_id": "14gekc9qd23p16iqodkissq0f4"
+    },
+    {
+      "id": "es_2aa26fb80920",
+      "start": "2026-10-19T16:00:00+03:00",
+      "duration": 40,
+      "tz": "Europe/Moscow",
+      "event_id": "prv7hjdjgf14klbhblg9jdvio0"
     },
     {
       "id": "es_921c09092124",
