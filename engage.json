@@ -1,0 +1,154 @@
+{
+  "generated": "2026-10-21T21:00:47.618812+00:00",
+  "user": "olgarozet",
+  "slots": [
+    {
+      "duration": 40,
+      "event_id": "b6bsfna1ci1e5b54leh8lp0dsk",
+      "id": "es_921c09092124",
+      "start": "2026-10-23T10:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "k4cmjtavf9qtofonb212bih8bo",
+      "id": "es_2550e9a31b20",
+      "start": "2026-10-23T12:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "qpicknldlv2qpmjc6gru4p253s",
+      "id": "es_8f66559ff1c0",
+      "start": "2026-10-23T15:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "8t62lct9v55pb3f695ias7cphk",
+      "id": "es_aa038573dd72",
+      "start": "2026-10-27T10:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "je99m43u5s96bqlscrggos1788",
+      "id": "es_9c15247216cc",
+      "start": "2026-10-27T12:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "t0il3c41uf1dsqm3bdho7jh4ko",
+      "id": "es_fda7a5bb825d",
+      "start": "2026-10-27T15:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "nbrcsm57f8bceqa69n4ge8lr64",
+      "id": "es_b70ea0acc523",
+      "start": "2026-10-29T10:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "3tea6g37hf86qa5l7op3l9d1ls",
+      "id": "es_261fce322a13",
+      "start": "2026-10-29T12:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "8cbuj10erkd71827lvrvlqpabc",
+      "id": "es_32ef0bb3d5bf",
+      "start": "2026-10-29T15:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "cgaf989qakm5c0nsv3hp2ttb9k",
+      "id": "es_e7f1938c3019",
+      "start": "2026-10-30T10:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "vkh9ttcfdrm9g8t2si55t9u6vk",
+      "id": "es_dd72fa40e6c4",
+      "start": "2026-10-30T12:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "8ksvq11hvl77kia2n7j9pk79hk",
+      "id": "es_12312f7cbb5a",
+      "start": "2026-10-30T15:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "79pid1dpkih1qdja0dis0qktn4",
+      "id": "es_6afc7e3e1f6a",
+      "start": "2026-11-02T10:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "9fvknj765m51feroahjtg6urr4",
+      "id": "es_a6cd050972e8",
+      "start": "2026-11-02T12:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "8915anmmg2e5185su0rv2vv3i4",
+      "id": "es_1ed58404d509",
+      "start": "2026-11-02T15:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "n04bsar4gn11imgefnv1rl4t98",
+      "id": "es_e97cdac6472c",
+      "start": "2026-11-03T10:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "rb8mtdkrgq0ufit40kjrr5qa08",
+      "id": "es_f8092f8e11e5",
+      "start": "2026-11-03T12:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "q0f2b7fbkf4a4ctob7c8roccmg",
+      "id": "es_733dc61ccf14",
+      "start": "2026-11-03T15:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "fq1kbndmsgvh927s0mu4bokf94",
+      "id": "es_8881a8961d28",
+      "start": "2026-11-04T10:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "9le0ub40h4vprjp80mbre09gpk",
+      "id": "es_50cd02d109de",
+      "start": "2026-11-04T12:00:00+03:00",
+      "tz": "Europe/Moscow"
+    },
+    {
+      "duration": 40,
+      "event_id": "qoo8kupslvocgg7hka08b0s13g",
+      "id": "es_a5a551413250",
+      "start": "2026-11-04T15:00:00+03:00",
+      "tz": "Europe/Moscow"
+    }
+  ],
+  "transport_url_ref": "booking_webhook_url"
+}
