@@ -1145,7 +1145,9 @@ dialog[data-role="zoom"] img {
    его съест, лечить надо будет НЕ поле, а корень, Системой уже названный: решение о
    показе («не вешать союз») записано в ЗНАЧЕНИЕ символом NBSP и потому не умеет
    уступить, когда не умещается (text/site.md::Inv-SITE-form-at-reader, ось ширин). */
-#doc { padding-inline: min(var(--space-padding), 3vw); }
+/* ПОЛЕ — ОДИН ДОМ: колонка документа и оферта (она стоит вне `#doc`) берут одно поле. */
+:root { --doc-gutter: min(var(--space-padding), 3vw); }
+#doc { padding-inline: var(--doc-gutter); }
 #doc figcaption { padding-inline: var(--card-inset); }
 #doc [data-form="atomic"] [data-role="figure"] { padding-inline: var(--card-inset); }
 #doc figure[data-kind="segment"] > :is([data-role="inscription"], [data-role="inscription_list"], [data-role="inscription_ordered_list"]) { padding-inline: var(--card-inset); }
