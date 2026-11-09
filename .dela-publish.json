@@ -1,5 +1,5 @@
 {
- "at": "2026-11-09T15:42:20+00:00",
+ "at": "2026-11-09T16:00:39+00:00",
  "domain": [
   ".state/engage/olgarozet/slots.json",
   "knowledge/finance/entities.yaml",
@@ -296,6 +296,6 @@
   "scripts/typography.py",
   "scripts/utils/git_publish.py"
  ],
- "rev": "8ae40d46e3b462c786f4b905d574f116b0d7bcda",
- "src_oid": "dd8a0e69699a8708"
+ "rev": "ddee016fb4b1f0047b05875e178b0c6fc51dee72",
+ "src_oid": "3278d35c74a727d0"
 }
