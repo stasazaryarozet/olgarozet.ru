@@ -7,20 +7,20 @@
 <meta content="u5gNvIFSmtyOxQqC" name="mailru-domain"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <title>Записаться — Ольга Розет</title>
-<meta content="Подключить к вашему делу на 40 минут — 15 000 ₽" name="description"/>
+<meta content="Подключить к вашему делу на 40 минут — 15 000 ₽" name="description"/>
 <link href="https://olgarozet.ru/init/" rel="canonical"/>
 <link href="https://olgarozet.ru/journal/feed.xml" rel="alternate" title="Journal" type="application/rss+xml"/>
 <link href="https://olgarozet.ru/audiobroadcast/feed.xml" rel="alternate" title="Ольга Розет" type="application/rss+xml"/>
 <meta content="website" property="og:type"/>
 <meta content="Записаться — Ольга Розет" property="og:title"/>
-<meta content="Подключить к вашему делу на 40 минут — 15 000 ₽" property="og:description"/>
+<meta content="Подключить к вашему делу на 40 минут — 15 000 ₽" property="og:description"/>
 <meta content="Ольга Розет" property="og:site_name"/>
 <meta content="https://olgarozet.ru/init/" property="og:url"/>
 <meta content="https://olgarozet.ru/olga_footer.png" property="og:image"/>
 <meta content="ru_RU" property="og:locale"/>
 <meta content="summary_large_image" name="twitter:card"/>
 <meta content="Записаться — Ольга Розет" name="twitter:title"/>
-<meta content="Подключить к вашему делу на 40 минут — 15 000 ₽" name="twitter:description"/>
+<meta content="Подключить к вашему делу на 40 минут — 15 000 ₽" name="twitter:description"/>
 <meta content="https://olgarozet.ru/olga_footer.png" name="twitter:image"/>
 <link href="/favicon.png" rel="icon" type="image/png"/>
 <link href="/apple-touch-icon.png" rel="apple-touch-icon"/>
@@ -147,7 +147,7 @@
 </div>
 <script>
 var API="https://script.google.com/macros/s/AKfycbzeulk8nVhROOmrnysLKRLGqM_naMEgVhtPl50ch_GCilibJ7MXv2rWlGlq1hz1SWc/exec";
-var SLOTS=[{"id": "es_f56da08ef516", "start": "2026-11-17T10:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "a0soc5i3fai407pb5is502rdb8"}, {"id": "es_a057e5a8eba1", "start": "2026-11-17T12:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "a4316r4mqqm6u69p0id0c8ifb8"}, {"id": "es_88d74dbf95ff", "start": "2026-11-17T15:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "qg21q0oo077j5sk8us9410u898"}, {"id": "es_d016eb7a346f", "start": "2026-11-27T10:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "s6pgi2v13ba4g421crmnaker9o"}, {"id": "es_e33b66257f9c", "start": "2026-11-27T12:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "onug8jvt5dkbl8p648kv7fu7i8"}, {"id": "es_e9dfa5a3aa1a", "start": "2026-11-27T15:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "bk6ua7m95g6iumsphnp8jharl8"}];
+var SLOTS=[{"id": "es_f56da08ef516", "start": "2026-11-17T10:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "a0soc5i3fai407pb5is502rdb8"}, {"id": "es_a057e5a8eba1", "start": "2026-11-17T12:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "a4316r4mqqm6u69p0id0c8ifb8"}, {"id": "es_88d74dbf95ff", "start": "2026-11-17T15:00:00+03:00", "duration": 40, "tz": "Europe/Moscow", "event_id": "qg21q0oo077j5sk8us9410u898"}];
 var slot=null,allDays=[],submitted=false;
 
 (function(){
@@ -262,6 +262,7 @@ if(d.ok){submitted=true;
       var until = Date.parse(nodes[i].getAttribute('data-visible-until') || '');
       var vis = (isNaN(from) || now >= from) && (isNaN(until) || now < until);
       nodes[i].style.display = vis ? '' : 'none';
+      nodes[i].hidden = !vis;  // окно, закрытое при сборке (атрибут `hidden`), открывается тем же индикатором
     }
   }
   _applyWindows();
