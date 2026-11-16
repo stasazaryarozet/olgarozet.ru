@@ -66,7 +66,7 @@
   setInterval(window.__applyTheme, 300000);
 })();
 </script>
-<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=2007d22f07"); @import url("/styles.css?v=97a8cee19c");</style>
+<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=2007d22f07"); @import url("/styles.css?v=105c3d844a");</style>
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
@@ -89,14 +89,14 @@
 <article class="event ev-concrete">
 <p class="when proper-case">в Ноябре</p>
 <p class="type as-is">Дизайн-Путешествие</p>
-<p class="concept caps seam-line">в Бухару</p>
+<p class="concept caps seam-line"><a href="https://bukharainnovember.ru">в Бухару</a></p>
 <p class="audience as-is">для дизайнеров интерьера<br/>и декораторов</p>
 </article>
 <p aria-hidden="true" class="rank rank-row">▰</p>
 <article class="event ev-concrete">
 <p class="when proper-case">8–11<br/>сентября</p>
 <p class="type as-is">Дизайн-Путешествие</p>
-<p class="concept caps seam-line">в Париж:</p>
+<p class="concept caps seam-line"><a href="https://parisinseptember.ru">в Париж</a>:</p>
 <p class="concept caps"><span class="quoted">Сто лет обещаний</span></p>
 <p class="organizer as-is">вместе с<br/>Натальей Логиновой</p>
 </article>
@@ -142,7 +142,6 @@ observer.observe(footer);
       var until = Date.parse(nodes[i].getAttribute('data-visible-until') || '');
       var vis = (isNaN(from) || now >= from) && (isNaN(until) || now < until);
       nodes[i].style.display = vis ? '' : 'none';
-      nodes[i].hidden = !vis;  // окно, закрытое при сборке (атрибут `hidden`), открывается тем же индикатором
     }
   }
   _applyWindows();
