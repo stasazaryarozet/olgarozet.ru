@@ -1,27 +1,27 @@
 {
-  "generated": "2026-11-16T14:59:30.969744+00:00",
+  "generated": "2026-11-17T21:13:36.130965+00:00",
   "user": "olgarozet",
   "slots": [
     {
-      "id": "es_f56da08ef516",
-      "start": "2026-11-17T10:00:00+03:00",
+      "id": "es_e30c24e1c969",
+      "start": "2026-12-01T10:00:00+03:00",
       "duration": 40,
       "tz": "Europe/Moscow",
-      "event_id": "a0soc5i3fai407pb5is502rdb8"
+      "event_id": "rdu2ualktkl99a0cte3543o3q0"
     },
     {
-      "id": "es_a057e5a8eba1",
-      "start": "2026-11-17T12:00:00+03:00",
+      "id": "es_c71da31361fd",
+      "start": "2026-12-01T12:00:00+03:00",
       "duration": 40,
       "tz": "Europe/Moscow",
-      "event_id": "a4316r4mqqm6u69p0id0c8ifb8"
+      "event_id": "0h3j32rek9863q9pn1gfjmlcs8"
     },
     {
-      "id": "es_88d74dbf95ff",
-      "start": "2026-11-17T15:00:00+03:00",
+      "id": "es_fd50fea89c2a",
+      "start": "2026-12-01T15:00:00+03:00",
       "duration": 40,
       "tz": "Europe/Moscow",
-      "event_id": "qg21q0oo077j5sk8us9410u898"
+      "event_id": "hfav4h12j5lbelc9lnfc6pratc"
     }
   ],
   "transport_url_ref": "booking_webhook_url"
