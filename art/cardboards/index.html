@@ -66,7 +66,7 @@
   setInterval(window.__applyTheme, 300000);
 })();
 </script>
-<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=2007d22f07"); @import url("/styles.css?v=105c3d844a");</style>
+<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=2891c435a1"); @import url("/styles.css?v=e2cfc79967");</style>
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
@@ -102,6 +102,7 @@
       var until = Date.parse(nodes[i].getAttribute('data-visible-until') || '');
       var vis = (isNaN(from) || now >= from) && (isNaN(until) || now < until);
       nodes[i].style.display = vis ? '' : 'none';
+      nodes[i].hidden = !vis;  // окно, закрытое при сборке (атрибут `hidden`), открывается тем же индикатором
     }
   }
   _applyWindows();
