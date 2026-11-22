@@ -44,6 +44,7 @@
   --measure: 60ch;  /* length · knowledge/system/specifications/text/typography.md */
   --measure-max: 75ch;  /* length · knowledge/system/specifications/text/typography.md */
   --measure-min: 45ch;  /* length · knowledge/system/specifications/text/typography.md */
+  --mono: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;  /* font-stack · knowledge/system/specifications/text/typography.md */
   --muted: #666;  /* color · knowledge/people/olgarozet/site/_design.yaml */
   --overlay: rgba(255, 255, 255, 0.95);  /* color · knowledge/people/olgarozet/site/_design.yaml */
   --overlay-solid: rgba(255, 255, 255, 0.98);  /* color · knowledge/people/olgarozet/site/_design.yaml */
@@ -164,12 +165,38 @@
     hyphens: auto;  /* law · @floor · Inv-TYPO-hyphenation-per-language */
     text-wrap: pretty;  /* law · @floor · Inv-TYPO-text-wrap-pretty */
   }
+  :root .image-credits .credit-site {
+    -webkit-hyphens: none;  /* law · :root .image-credits .credit-site · @floor · Inv-TYPO-hyphenation-per-language */
+    hyphens: none;  /* law · :root .image-credits .credit-site · @floor · Inv-TYPO-hyphenation-per-language */
+  }
+  :root .legal {
+    -webkit-hyphens: manual;  /* law · :root .legal · @floor · Inv-TYPO-hyphenation-per-language */
+    hyphens: manual;  /* law · :root .legal · @floor · Inv-TYPO-hyphenation-per-language */
+  }
+  :root .media-rate {
+    font-variant-numeric: lining-nums tabular-nums;  /* law · :root .media-rate · @floor · Inv-TYPO-figures-context-aware */
+  }
   :root .pricing-amount {
     font-variant-numeric: lining-nums tabular-nums;  /* law · :root .pricing-amount · @floor · Inv-TYPO-figures-context-aware */
+  }
+  :root .value :is(td, thead th + th) {
+    font-variant-numeric: lining-nums tabular-nums;  /* law · :root .value :is(td, thead th + th) · @floor · Inv-TYPO-figures-context-aware */
+  }
+  :root .value th {
+    -webkit-hyphens: manual;  /* law · :root .value th · @floor · Inv-TYPO-hyphenation-per-language */
+    hyphens: manual;  /* law · :root .value th · @floor · Inv-TYPO-hyphenation-per-language */
   }
   :root :is(#doc > header, [data-role='strophe']) {
     -webkit-hyphens: manual;  /* law · :root :is(#doc > header, [data-role='strophe']) · @floor · Inv-TYPO-hyphenation-per-language */
     hyphens: manual;  /* law · :root :is(#doc > header, [data-role='strophe']) · @floor · Inv-TYPO-hyphenation-per-language */
+  }
+  :root :is(.checkout-launch, .checkout-line, .checkout-rules, .checkout--closed .checkout-state) {
+    -webkit-hyphens: manual;  /* law · :root :is(.checkout-launch, .checkout-line, .checkout-rules, .checkout--closed .checkout-state) · @floor · Inv-TYPO-hyphenation-per-language */
+    hyphens: manual;  /* law · :root :is(.checkout-launch, .checkout-line, .checkout-rules, .checkout--closed .checkout-state) · @floor · Inv-TYPO-hyphenation-per-language */
+  }
+  :root :is([data-role='inscription'], [data-role='inscription_list'], [data-role='inscription_ordered_list'])[data-case='upper'] {
+    -webkit-hyphens: manual;  /* law · :root :is([data-role='inscription'], [data-role='inscription_list'], [data-role='inscription_ordered_list'])[data-case='upper'] · @floor · Inv-TYPO-hyphenation-per-language */
+    hyphens: manual;  /* law · :root :is([data-role='inscription'], [data-role='inscription_list'], [data-role='inscription_ordered_list'])[data-case='upper'] · @floor · Inv-TYPO-hyphenation-per-language */
   }
   :root :is(h1,h2,h3,h4,h5,h6) {
     -webkit-hyphens: auto;  /* law · :root :is(h1,h2,h3,h4,h5,h6) · @floor · Inv-TYPO-hyphenation-per-language */
@@ -179,6 +206,9 @@
   :root :is(p, li) > .l {
     -webkit-hyphens: manual;  /* law · :root :is(p, li) > .l · @floor · Inv-TYPO-hyphenation-per-language */
     hyphens: manual;  /* law · :root :is(p, li) > .l · @floor · Inv-TYPO-hyphenation-per-language */
+  }
+  :root a.claim-qual-mark > sup {
+    font-variant-numeric: lining-nums;  /* law · :root a.claim-qual-mark > sup · @floor · Inv-TYPO-figures-context-aware */
   }
 }
 @layer owner {

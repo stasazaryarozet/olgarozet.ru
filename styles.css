@@ -37,10 +37,35 @@
        величина с иным основанием: высота есть геометрия носителя, зазор есть
        решение о наборе. Слить их значило бы потерять второе при правке первого. */
     --chrome-pad: 16px;
-    --chrome-h: calc(var(--touch-min) + var(--chrome-pad) * 2);
+    /* ВЫРЕЗ ЭКРАНА — ЧЛЕН ГЕОМЕТРИИ РАМКИ (замер 2026-11-20, ergo B: viewport-fit=cover на всех
+       страницах, env(safe-area-inset-*) не читал никто ⇒ на телефоне с вырезом органы рамки под
+       ним). Вставки читаются ОДИН раз здесь; высота плашки, резерв `--chrome-clear`, отбивка
+       плашки и место тумблера выводятся из них — отдельного литерала у органа нет. */
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --chrome-h: calc(var(--touch-min) + var(--chrome-pad) * 2 + var(--safe-top));
     --chrome-air: var(--sp-3);
     --chrome-clear: calc(var(--chrome-h) + var(--chrome-air));
+    /* РЕЖИМ РАМКИ — ОДНА ВЕЛИЧИНА НА ВСЕ ЕЁ ОРГАНЫ (замер 2026-11-20, акт ergonomics-frame,
+       web-cycle 0e11ca92abfd157e0bbc). Плашка и тумблер темы объявляли своё `position`
+       порознь, и мобильное `.theme-toggle { position: absolute }` стояло в листе ВЫШЕ
+       базового `.theme-toggle { position: fixed }` при равной специфичности — мёртвое
+       правило: тумблер оставался fixed на всех ширинах и садился на текст (390, «читаете☀»;
+       прибор frame_probe: 412 пересечений с чернилами текста на 320). Органы рамки читают
+       режим отсюда; переключает его один медиа-блок ниже — разойтись они не могут. */
+    --frame-position: fixed;
   }
+
+  /* `hidden` ЗНАЧИТ «НЕ ОТРИСОВАНО» — НА ВСЕЙ ОБОЛОЧКЕ, А НЕ ПОШТУЧНО (замер 2026-11-20, акт ergonomics,
+     S3 390/1280: подсказка «продолжить с …» `.player-resume[hidden]` стояла на экране, потому что
+     авторское `display:flex` ниже перебивает UA-правило `[hidden]{display:none}` — UA-слой уступает
+     всякому авторскому). Класс, а не случай: любое авторское `display` у элемента, которому дверь
+     ставит `hidden`, молча отменяет атрибут; поштучные заплаты (`.now-playing[hidden]`,
+     `.money[hidden]`) — по одной на каждую встречу. `!important` здесь — не сила, а СЕМАНТИКА:
+     важное объявление выигрывает у всякого обычного на любом слое и вне слоёв, и это ровно смысл
+     атрибута. `until-found` изъят: его отображение — `content-visibility`, не `display`. */
+  [hidden]:not([hidden="until-found"]) { display: none !important; }
 
 
 /* Inv-TYPO-font-metric-override (text/typography.md, 2026-05-12): «Inter Fallback»
@@ -556,11 +581,29 @@ footer {
         left: -1.15em;
     }
 
+    /* ВЫПУСК — КАДРИРОВАНИЕМ, А НЕ ВЫХОДОМ ЗА КРАЙ (замер 2026-11-20, ergo B: правый край
+       img.footer-portrait на 384/468 px при вьюпорте 320/390, обрезка держалась на `clip`
+       предка). Прежний кадр — растр шириной bleed·W, отцентрованный, видимая середина W — есть
+       ровно `object-fit: cover` в коробке W × bleed·W·r (r = h/w растра, `--natural-r` от
+       эмиттера); при W > N/bleed коробку держит натуральная высота N·r, масштаб 1 — как и было.
+       Коробка не шире своего блока ни на одной ширине; обрез тот же. */
     .footer-portrait {
-        width: min(140%, var(--natural-w, 140%));
-        margin-left: max(-20%, calc((100% - var(--natural-w, 140%)) / 2));
+        --portrait-bleed: 1.4;
+        width: 100%;
+        max-width: var(--natural-w, none);
+        margin-inline: auto;
+        aspect-ratio: calc(1 / (var(--portrait-bleed) * var(--natural-r, 1)));
+        max-height: calc(var(--natural-w, 10000px) * var(--natural-r, 1));
         object-fit: cover;
     }
+    /* ВЫПУСК И ЕГО ОБРЕЗ — ОДНО ОБЪЯВЛЕНИЕ (замер 2026-11-20, web-cycle cdca20a4fa848270d934:
+       full_dom_overflow_x 64 @320 / 78 @390 = 0.2·vw на каждой странице с подвалом). Портрет
+       намеренно шире кадра на 40 % и отцентрован полем −20 %; обрезал его не собственный кадр, а
+       `html, body { overflow-x: hidden }` — и body, ставший скролл-контейнером, нёс 120 % ширины
+       (body.scrollWidth 384 при вьюпорте 320). Обрез у кадра выпуска: `clip` не создаёт
+       скролл-контейнера, выпуск перестаёт быть переполнением страницы, а НЕобъявленный выход
+       за край по-прежнему виден замеру. Без поддержки `clip` — прежнее поведение. */
+    .footer-content { overflow-x: clip; }
 
     .social-icon:first-of-type {
         left: 12%;
@@ -582,6 +625,11 @@ footer {
     *::after {
         transition-duration: 0.01ms !important;
     }
+
+    /* ПОЯВЛЕНИЕ ПОДВАЛА — НЕ ДВИЖЕНИЕ ПРИ reduce (review/cap7 E7): сжатая длительность оставляла
+       исходное `opacity:0` в зависимости от IntersectionObserver (нет скрипта/IO — подвал невидим).
+       При reduce подвал стоит в покое сразу: состояние покоя = состоянию `.visible`. */
+    .footer-content { opacity: 1; transform: none; }
 }
 /* ── Day/night theme: solar-driven via data-theme attribute (set by inline JS) ──
    The night-mode colour palette (pure black canvas; whiteness hierarchy for
@@ -645,7 +693,18 @@ figure svg { display: block; width: 100%; height: auto; }
 
 .progress-bar { position: fixed; top: 0; left: 0; height: 2px; width: 100%; background: rgba(0,0,0,0.1); transform-origin: left; transform: scaleX(0); z-index: 101; }
 
-.nav-fade { position: fixed; top: 0; left: 0; right: 0; padding: var(--chrome-pad) 20px; display: flex; justify-content: space-between; align-items: center; opacity: 1; transition: opacity 0.3s ease; background: linear-gradient(to bottom, var(--overlay), transparent); pointer-events: auto; z-index: 100; }
+.nav-fade { position: var(--frame-position, fixed); top: 0; left: 0; right: 0; padding: calc(var(--chrome-pad) + var(--safe-top)) calc(20px + var(--safe-right)) var(--chrome-pad) calc(20px + var(--safe-left)); display: flex; justify-content: space-between; align-items: center; opacity: 1; transition: opacity 0.3s ease; background: none; pointer-events: auto; z-index: 100; }
+/* ОРГАН РАМКИ НЕ СТОИТ НАД СОДЕРЖАНИЕМ — ЗАКОН, А НЕ ПОПРАВКА СТРАНИЦЫ (замер 2026-11-20, акт
+   ergonomics-frame, web-cycle 0e11ca92abfd157e0bbc, 1440: «← olgarozet.ru» поверх постера, без
+   земли; прибор frame_probe: 648–680 пересечений с колонной рассказа на 960–1920). Фиксированный
+   орган при прокрутке заметает полосу [его прямоугольник] × [0, scrollHeight] — колонна, какой бы
+   ширины её ни объявила страница, в эту полосу входит. Поэтому у фиксированной рамки есть СВОЯ
+   ПОЛОСА: непрозрачная земля высотой `--chrome-h` во всю ширину, под органами (z 99 < 100/101) и
+   над содержанием; содержание проходит ПОД ней, а не под органами. В покое полоса пуста: верх
+   потока уже резервирован `--chrome-clear` (`.offer-strip`, `scroll-padding-top`). Земля одна —
+   градиент плашки снят. Условие — наличие самой рамки, а не имя страницы; на ≤768 рамка в потоке
+   и полоса снята тем же медиа-блоком, что переключает `--frame-position`. */
+:root:has(.nav-fade, .theme-toggle) body::before { content: ""; position: fixed; inset: 0 0 auto 0; height: var(--chrome-h); background: var(--surface); z-index: 99; pointer-events: none; }
 /* ПРЯТАТЬ МОЖНО ТОЛЬКО ТАМ, ГДЕ ЕСТЬ ЧЕМ ПОКАЗАТЬ (2026-09-25): затухание до наведения — лишь у
    указателя с наведением. На сенсорном экране шире 768 px наведения нет, и ссылка на корень
    («сверху должна быть ссылка на корень olgarozet.ru» — принципал) была невидима. */
@@ -653,17 +712,33 @@ figure svg { display: block; width: 100%; height: auto; }
   .nav-fade { opacity: 0; pointer-events: none; }
   body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto; }
 }
-.nav-fade a { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: var(--fs-body-min); color: var(--muted); text-decoration: none; transition: color 0.2s; display: inline-flex; align-items: center; min-height: var(--touch-min); padding: 0 0.5em; }
+.nav-fade a { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: var(--fs-body-min); color: var(--muted); text-decoration: none; transition: color 0.2s; display: inline-flex; align-items: center; min-height: var(--touch-min); padding: 0 0.5em;
+  /* Нижняя линейка общего `a` (выше) — знак ссылки В ПРОЗЕ; у органа высотой в цель касания она
+     ложится на дно цели, в 14 px от подписи, и на 390 упирается в строку «Ольга Розет» (замер
+     2026-11-20, web-cycle 0e11ca92abfd157e0bbc). Орган рамки назван стрелкой и адресом. */
+  border-bottom: 0; }
 .nav-fade a:hover { color: var(--ink); }
-@media (max-width: 768px) {
+/* ЯКОРЬ НЕ ПОД ФИКСИРОВАННЫМ ХРОМОМ (замер 2026-11-20, акт ergonomics, S1 1280: переход по
+   оглавлению ставил «Глава 3 · Античность» в y=0, под плашку высотой 76 px). Резерв — ТА ЖЕ
+   величина, что у `.offer-strip` (`--chrome-clear`), а не новый литерал; условие — наличие
+   самой плашки, а не имя страницы. */
+:root:has(.nav-fade) { scroll-padding-top: var(--chrome-clear); }
+/* Короткий вьюпорт — тот же режим, что узкий (text/interface.md::Inv-IFACE-frame-viewport-share):
+   fixed-рамка допустима, пока chrome_h / innerHeight ≤ max_viewport_share; 506 = ⌈76 / 0.15⌉ − 1 —
+   ВЫВЕДЕННОЕ значение, сверяемое тестом рамки (test_short_viewport_threshold_is_derived). */
+@media (max-width: 768px), (max-height: 506px) {
+  /* Плашка здесь в потоке (`position:absolute` ниже) и при прокрутке уходит: резерв был бы ложным. */
+  :root:has(.nav-fade) { scroll-padding-top: 0; }
   /* Мобильный хром — В ПОТОКЕ документа, не поверх текста (Σ 2026-07-11,
      конспект mobile_375: постоянная fixed-плашка с blur замывала верхнюю
      строку КАЖДОГО экрана скролла, а H1 стартовал под ней — «КОНСПЕКТ»
      прочитывался как «НЕКОТОРЫХ ФРАГМЕНТОВ…». Desktop не страдал: там
      opacity:0 до hover. Класс: на узком вьюпорте fixed-хром без резерва
      высоты = замывание; поток снимает класс для ВСЕХ страниц разом). */
-  .nav-fade { opacity: 1; pointer-events: auto; position: absolute; background: none; }
-  .theme-toggle { position: absolute; }
+  .nav-fade { opacity: 1; pointer-events: auto; }
+  /* Режим рамки переключается ЗДЕСЬ и только здесь: органы в потоке, полоса фиксированной рамки снята. */
+  :root { --frame-position: absolute; }
+  :root:has(.nav-fade, .theme-toggle) body::before { content: none; }
   /* Резерв высоты хром-зоны — в @media 600 (каскадный победитель на телефонах);
      здесь дублировать нельзя: две точки правды уже дали слепую правку (Σ 2026-07-11). */
 }
@@ -677,9 +752,9 @@ figure svg { display: block; width: 100%; height: auto; }
    semantic tokens (--ink/--ink-soft/--muted/--surface/--accent/--focus-outline-min),
    which redeclare per-mode, so it works in BOTH day and night. */
 .theme-toggle {
-  position: fixed;
-  top: 12px;
-  right: 14px;
+  position: var(--frame-position, fixed);
+  top: calc(12px + var(--safe-top));
+  right: calc(14px + var(--safe-right));
   z-index: 101;
   min-width: var(--touch-min);
   min-height: var(--touch-min);
@@ -712,7 +787,11 @@ figure svg { display: block; width: 100%; height: auto; }
   left: 0;
   background: var(--ink);
   color: var(--surface);
-  padding: 0.6em 1em;
+  padding: 0 1em;
+  /* цель касания — не меньше `--touch-min` (замер 2026-11-20: 235×38 @320, 238×39 @390) */
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-min);
   font-weight: 500;
   font-size: var(--fs-s);
   line-height: var(--lh-flush);
@@ -723,7 +802,7 @@ figure svg { display: block; width: 100%; height: auto; }
   transition: top 150ms ease;
 }
 .skip-link:focus,
-.skip-link:focus-visible { top: 0; outline: var(--focus-outline-min) solid var(--accent); outline-offset: 2px; }
+.skip-link:focus-visible { top: var(--safe-top); left: var(--safe-left); outline: var(--focus-outline-min) solid var(--accent); outline-offset: 2px; }
 
 /* Handwriting accent — render-time emitted via {hand:…} shortcode (admin 2026-05-13).
    Caveat: warm cursive с reasonable cyrillic coverage; pair с Inter body works editorially. */
@@ -1108,21 +1187,35 @@ figure svg { display: block; width: 100%; height: auto; }
   border-top: 1px solid var(--rule);
   color: var(--muted);
   font-size: var(--fs-body-min);
+  /* перенос колофона (`manual`) — изъятие контракта, дом typography.md::hyphens.scopes (review A11) */
 }
 /* КОЛОФОН СТОИТ ПО ТОЙ ЖЕ МЕРЕ, ЧТО И КАРТОЧКА: он ее сиблинг, а не подвал окна.
    Замер 2026-09-22 глазами: карточка отбита по мере и центрирована, реквизиты шли от
    левого края вьюпорта — два разных начала строки в одном узле документа. */
 .article-wrapper .legal, .legal { max-width: var(--measure); margin-left: auto; margin-right: auto; }
 .legal p { margin: 0 0 var(--sp-1); }
+/* СТРОКА ПОДВАЛА — СПИСОК ЧЛЕНОВ, ШОВ — ЗАЗОР (Q8 story-form, 2026-11-21): генератор
+   (`site_generator._legal_footer`) больше не клеит члены литералом « · », который при переносе
+   повисал на краю строки; разрыв возможен лишь между членами, и шов строки есть `column-gap`. */
+.legal :is(.legal-entity, .legal-docs, .legal-payment) {
+  display: flex; flex-wrap: wrap; column-gap: var(--sp-3);
+  margin: 0 0 var(--sp-1); padding: 0; list-style: none;
+}
 .legal a { color: var(--muted); }
 /* ЦЕЛЬ КАСАНИЯ — НЕ МЕНЬШЕ `--touch-min` ВЕЗДЕ В ОБОЛОЧКЕ (аудит D14, WCAG 2.5.8: 11 целей высотой 21 px).
    Строчная ссылка `display:inline` не принимает `min-height`; токен читали лишь навигация и вкладки, а ссылки
    полосы оферты, реквизитов, замка и условий — нет. Один признак на четыре места: поле вокруг текста —
-   ЦЕЛЬ, а не отступ. */
-.legal a, .offer-strip a, .locked-cta > a, .offer-terms a, nav.sections a {
-  display: inline-flex;
-  align-items: center;
+   ЦЕЛЬ, а не отступ.
+   ЦЕЛЬ — СВОЙСТВО КОРОБКИ, А НЕ РЕЖИМ РАСКЛАДКИ (B-3, замер 2026-11-10): здесь стоял `inline-flex`, а
+   flex-контейнер блокифицирует строчных детей — текст ссылки и `span.currency` становились ДВУМЯ
+   flex-элементами, и на 390 px знак «₽» уходил отдельным блоком от числа (x=350, w=12), хотя NBSP
+   между ними в разметке есть. Ссылка в строке есть ТЕКСТ: `inline-block` держит содержимое строчным
+   (переносится как текст, NBSP связывает), `min-height` — пол цели, а поле по блоку центрирует одну
+   строку в цели. Без единицы `lh` поле отбрасывается целиком, пол цели остаётся (прогрессивно). */
+.legal a, .offer-strip a, .closed-cta > a, .offer-terms a, nav.sections a {
+  display: inline-block;
   min-height: var(--touch-min);
+  padding-block: max(0px, (var(--touch-min) - 1lh) / 2);
 }
 .legal a:hover, .legal a:focus-visible { color: var(--ink); }
 
@@ -2013,6 +2106,8 @@ figure svg { display: block; width: 100%; height: auto; }
   body { background: #fff; color: #000; }
   .nav-fade, .theme-toggle, .progress-bar, .scroll-top, .signup-wrap, .signup-form,
   footer { display: none !important; }
+  /* полоса рамки уходит вместе с органами рамки */
+  :root:has(.nav-fade, .theme-toggle) body::before { content: none; }
   .article-wrapper {
     max-width: 100%;
     font-size: 11pt;
@@ -2028,16 +2123,20 @@ figure svg { display: block; width: 100%; height: auto; }
 
 /* ── 18. Reduced-motion / reduced-data ──────────────────────────────── */
 
+/* ОБЛАСТЬ — ДОКУМЕНТ, А НЕ ОБЁРТКА СТАТЬИ (замер 2026-11-20, ergo B: страница покупки под
+   reduce вела 2 анимации; гашение стояло на `.article-wrapper` и — сплошным `*` — под
+   prefers-reduced-data, то есть движение гасилось по запросу о ТРАФИКЕ). Движение гасится
+   по запросу о движении, на всём документе; трафик — только то, что стоит байтов. */
 @media (prefers-reduced-motion: reduce) {
-  .article-wrapper .signup-btn,
-  .article-wrapper .signup-input,
-  .article-wrapper a { transition: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 @media (prefers-reduced-data: reduce) {
   .footer-portrait { display: none; }
-  .article-wrapper *,
-  .article-wrapper *::before,
-  .article-wrapper *::after { transition: none !important; animation: none !important; }
 }
 
 /* ── 19. CLS-prevention — explicit aspect-ratio for inline images ───── */
@@ -2087,7 +2186,10 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
 /* Уточнение имени собрания («все События» под «Действие —»): второй ярус заголовка,
    кеглем и градацией чернил, без нового цвета (см. p_collection). */
 .collection .qualifier { margin: 0 0 var(--sp-4); font-size: var(--fs-s); line-height: var(--lh-tight); color: var(--muted); }
-.collection .tabs { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin: var(--sp-3) 0 var(--sp-5); }
+.collection .tabs,
+.journal .tabs { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin: var(--sp-3) 0 var(--sp-5); }
+.collection .tabs[data-bf-mode="ico"] .tab,
+.tabs[data-bf-mode="ico"] .order-toggle { padding: 0 var(--sp-2); }
 .collection .tab {
     display: inline-flex;
     align-items: center;
@@ -2163,7 +2265,9 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
 .order-toggle {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     min-height: var(--touch-min);
+    min-width: var(--touch-min);
     padding: 0 var(--sp-3);
     border: 1px solid var(--rule);
     border-radius: var(--radius-control);
@@ -2190,7 +2294,13 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
 .offer {
     max-width: var(--measure);
     margin: var(--space-section) auto 0;
-    padding: var(--sp-6) var(--sp-5);
+    /* ПОЛЕ КАРТОЧКИ — ПОЛЕ ХОЛСТА (review D1): по строке — тот же текучий `--space-padding`, что
+       у страницы; постоянные 40.5 px съедали четверть строки на 320–390 px. */
+    /* КРЮК ПОЛЯ (story-form, решение demiurge N1; review b17 P1): страница, объявившая поле своих
+       карточек `--card-inset`, даёт его оферте СО ВСЕХ сторон — одно поле, а не sp-5 сверху/снизу
+       при ≈14 px по бокам (замер 390: 41 px над шапкой таблицы). Без объявления — прежние
+       `--sp-5` по блоку и `--space-padding` по строке. */
+    padding: var(--card-inset, var(--sp-5)) var(--card-inset, var(--space-padding));
     border: 1px solid var(--rule);
     border-radius: var(--radius-card);
     background: var(--surface);
@@ -2248,7 +2358,10 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
     width: 100%;
     height: auto;
     border-radius: var(--radius-card);
-    background: var(--ink);
+    /* ПОДЛОЖКА КАДРА — ПОВЕРХНОСТЬ, А НЕ ЧЕРНИЛА (замер M2 2026-11-21): `--ink` ночью = 240, и пока
+       кадр грузится или там, где у него альфа, стоял белый прямоугольник на тёмной странице. Тот же
+       токен, что у прочих фигур страницы (`--surface-deep`). */
+    background: var(--surface-deep);
 }
 .offer-preview audio { display: block; width: 100%; margin: var(--sp-3) 0 0; }
 .offer-preview figcaption {
@@ -2261,6 +2374,12 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
     margin: var(--sp-5) 0 0;
     font-size: var(--fs-s);
     color: var(--muted);
+}
+/* ССЫЛКИ ГОЛОСА — ПЕРЕЧЕНЬ С ПОЛЕМ, БЕЗ ГЛИФА-СТЫКА (закон E2, review D3). */
+.offer-voice-links {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0 var(--sp-3);
 }
 .offer-object {
     margin: 0 0 var(--sp-2);
@@ -2422,30 +2541,6 @@ button[data-play-t0]:hover {
     }
 }
 
-/* ЗАГЛУШКА УЗЛА ВНЕ КРУГА ЧИТАТЕЛЯ (`narrative_showcase._withheld_node`).
-   Не «пустое место» и не тревога: глава названа, её протяжённость измерена, дверь рядом.
-   Токены — только объявленные этим листом; новых числовых литералов здесь нет. */
-.locked {
-    max-width: var(--measure);
-    margin: var(--sp-6) auto;
-    padding: var(--sp-5);
-    border: 1px solid var(--rule);
-}
-.locked-title {
-    margin: 0;
-    font-family: var(--sans-display);
-    font-size: var(--fs-m);
-    line-height: var(--lh-tight);
-}
-.locked-extent {
-    margin: var(--sp-2) 0 0;
-    color: var(--muted);
-    font-size: var(--fs-s);
-    line-height: var(--lh-body);
-}
-.locked-cta { margin: var(--sp-3) 0 0; }
-.locked-cta > a { font-size: var(--fs-s); }
-
 /* НОМЕР И ОТРЕЗОК — ПРИ ИМЕНИ, А НЕ ВМЕСТО НЕГО. Список глав есть карта записи;
    карта называет места, а «Глава 4 · 35:41 – 46:46» места не называет. */
 .player-stamp {
@@ -2477,11 +2572,9 @@ button[data-play-t0]:hover {
     margin: var(--sp-2) 0 0;
     font-size: var(--fs-s);
 }
-/* ЗАКРЫТОЕ В ОГЛАВЛЕНИИ — помечено, но не выключено: карта продукта остаётся целой. */
-nav [data-reach="out"] > a::after {
-    content: " ·";
-    color: var(--muted);
-}
+/* ЗАКРЫТОЕ В ОГЛАВЛЕНИИ — помечено, но не выключено: карта продукта остаётся целой.
+   Знак закрытого — замок, который генератор ставит в саму ссылку; хвостовой « ·» был вторым
+   знаком того же факта и висел стыком без пары (review D3). Разделитель — сам перечень. */
 nav [data-reach="out"] > a {
     color: var(--muted);
 }
