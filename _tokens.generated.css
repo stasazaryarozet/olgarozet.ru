@@ -198,6 +198,10 @@
     -webkit-hyphens: manual;  /* law · :root :is([data-role='inscription'], [data-role='inscription_list'], [data-role='inscription_ordered_list'])[data-case='upper'] · @floor · Inv-TYPO-hyphenation-per-language */
     hyphens: manual;  /* law · :root :is([data-role='inscription'], [data-role='inscription_list'], [data-role='inscription_ordered_list'])[data-case='upper'] · @floor · Inv-TYPO-hyphenation-per-language */
   }
+  :root :is(a[href], button, summary, label, [role=button], [role=link], [role=tab], [role=menuitem]) {
+    -webkit-hyphens: manual;  /* law · :root :is(a[href], button, summary, label, [role=button], [role=link], [role=tab], [role=menuitem]) · @floor · Inv-TYPO-hyphenation-per-language */
+    hyphens: manual;  /* law · :root :is(a[href], button, summary, label, [role=button], [role=link], [role=tab], [role=menuitem]) · @floor · Inv-TYPO-hyphenation-per-language */
+  }
   :root :is(h1,h2,h3,h4,h5,h6) {
     -webkit-hyphens: auto;  /* law · :root :is(h1,h2,h3,h4,h5,h6) · @floor · Inv-TYPO-hyphenation-per-language */
     hyphenate-limit-chars: 10 4 4;  /* law · :root :is(h1,h2,h3,h4,h5,h6) · @floor · Inv-TYPO-hyphenation-per-language */
