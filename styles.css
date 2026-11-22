@@ -1,100 +1,38 @@
-/* @import block — MUST precede all rule sets per CSS Spec §3.
-   1. Fonts (Inter, Inter Tight — Bauhaus successor display + body).
-   2. Design tokens compiled из Spec layers (Inv-CSS-tokens-from-Spec).
-   Регенерация tokens: python3 scripts/css_compile.py --owner olgarozet */
-@import url("fonts/fonts.css");
-/* Relative path resolves correctly in BOTH production (site root) AND
-   path-based preview (/<fqdn>/styles.css → /<fqdn>/_tokens.generated.css).
-   Root-absolute "/_tokens.generated.css" works в production но 404'es в
-   path-based preview (admin observation 2026-05-11 «не открывается»). */
-@import url("_tokens.generated.css");
-/* СЛОЙ АВТОРА ОБЪЯВЛЕН, А НЕ ПОДРАЗУМЕВАЕТСЯ (Σ 2026-09-23) ─────────────────────────
-   Каскад CSS решает ПРОИСХОЖДЕНИЕ РАНЬШЕ СПЕЦИФИЧНОСТИ: обычное объявление ВНЕ слоёв
-   побеждает ЛЮБОЕ объявление внутри слоя — при любой специфичности, при любом порядке.
-   Компилятор кладёт правила законов в слои (`cascade.order` = floor · owner · form,
-   где `form` объявлен связью `yields_never` — «закон не уступает»), а этот лист лежал
-   вне слоёв ЦЕЛИКОМ. Значит `yields_never` уступал ВСЕГДА, и объявленный порядок был
-   ложным по построению: не «автор уточняет закон», а «автор отменяет закон молча».
-   ЗАМЕР: `.article-wrapper section.contact h2 { text-transform: none }` отменяла
-   `[data-case="upper"] { text-transform: uppercase }` — директиву принципала от
-   2026-08-25 о прописных заголовках, — и ни один закон этого не видел, ибо правило
-   СУЩЕСТВУЕТ и значения верны (`effect-witness::W4`: закон зелен, эффекта нет).
-   ОБЁРНУТЫ ТОЛЬКО СОБСТВЕННЫЕ ПРАВИЛА: `@import` остаётся выше, иначе слои законов
-   вложились бы в авторский (owner.floor) и объявленный порядок рухнул бы вторым
-   способом. Имя слоя берётся у `cascade.author`, а не набирается здесь. */
+
+@import url("fonts/fonts.css?v=c2bebc6e5c");
+
+@import url("_tokens.generated.css?v=2be4422fcf");
+
 @layer owner {
   :root {
-    /* ХРОМ-ЗОНА: ОДНА ВЕЛИЧИНА, ВЫВЕДЕННАЯ ИЗ СВОИХ ЧАСТЕЙ (Σ 2026-09-23 demiurge).
-       До этого высота плашки была набрана ТРИЖДЫ и РАЗНЫМИ единицами: сырые `16px` в
-       padding'е самой `.nav-fade`, `var(--touch-min)` у её ссылки, и два независимых
-       резерва под неё — `calc(--touch-min + --sp-4*2)` у `.offer-strip` и
-       `calc(--touch-min + 48px)` у `.article-wrapper` в @media 600. Комментарий у
-       первого утверждал «резерв выражен ТОЙ ЖЕ геометрией» — ложное свидетельство:
-       --sp-4 = 1.69rem ≈ 27px, а отбивка плашки 16px. Три дома одной величины.
-       ЗАЗОР ОБЪЯВЛЕН ОТДЕЛЬНЫМ ЧЛЕНОМ, А НЕ СЛИТ С ВЫСОТОЙ. Прежние 48px несли
-       32px отбивки плюс 16px ВОЗДУХА (так и сказано в @media 600: «+ воздух»).
-       Сведение резерва к голой высоте плашки сняло бы воздух молча — а это иная
-       величина с иным основанием: высота есть геометрия носителя, зазор есть
-       решение о наборе. Слить их значило бы потерять второе при правке первого. */
+    
     --chrome-pad: 16px;
-    /* ВЫРЕЗ ЭКРАНА — ЧЛЕН ГЕОМЕТРИИ РАМКИ (замер 2026-11-20, ergo B: viewport-fit=cover на всех
-       страницах, env(safe-area-inset-*) не читал никто ⇒ на телефоне с вырезом органы рамки под
-       ним). Вставки читаются ОДИН раз здесь; высота плашки, резерв `--chrome-clear`, отбивка
-       плашки и место тумблера выводятся из них — отдельного литерала у органа нет. */
+    
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-right: env(safe-area-inset-right, 0px);
     --safe-left: env(safe-area-inset-left, 0px);
     --chrome-h: calc(var(--touch-min) + var(--chrome-pad) * 2 + var(--safe-top));
     --chrome-air: var(--sp-3);
     --chrome-clear: calc(var(--chrome-h) + var(--chrome-air));
-    /* РЕЖИМ РАМКИ — ОДНА ВЕЛИЧИНА НА ВСЕ ЕЁ ОРГАНЫ (замер 2026-11-20, акт ergonomics-frame,
-       web-cycle 0e11ca92abfd157e0bbc). Плашка и тумблер темы объявляли своё `position`
-       порознь, и мобильное `.theme-toggle { position: absolute }` стояло в листе ВЫШЕ
-       базового `.theme-toggle { position: fixed }` при равной специфичности — мёртвое
-       правило: тумблер оставался fixed на всех ширинах и садился на текст (390, «читаете☀»;
-       прибор frame_probe: 412 пересечений с чернилами текста на 320). Органы рамки читают
-       режим отсюда; переключает его один медиа-блок ниже — разойтись они не могут. */
+    
     --frame-position: fixed;
   }
 
-  /* `hidden` ЗНАЧИТ «НЕ ОТРИСОВАНО» — НА ВСЕЙ ОБОЛОЧКЕ, А НЕ ПОШТУЧНО (замер 2026-11-20, акт ergonomics,
-     S3 390/1280: подсказка «продолжить с …» `.player-resume[hidden]` стояла на экране, потому что
-     авторское `display:flex` ниже перебивает UA-правило `[hidden]{display:none}` — UA-слой уступает
-     всякому авторскому). Класс, а не случай: любое авторское `display` у элемента, которому дверь
-     ставит `hidden`, молча отменяет атрибут; поштучные заплаты (`.now-playing[hidden]`,
-     `.money[hidden]`) — по одной на каждую встречу. `!important` здесь — не сила, а СЕМАНТИКА:
-     важное объявление выигрывает у всякого обычного на любом слое и вне слоёв, и это ровно смысл
-     атрибута. `until-found` изъят: его отображение — `content-visibility`, не `display`. */
+  
   [hidden]:not([hidden="until-found"]) { display: none !important; }
 
 
-/* Inv-TYPO-font-metric-override (text/typography.md, 2026-05-12): «Inter Fallback»
-   = local Arial с metric-override declarations matching Inter's box-metrics.
-   Effect: while Inter loads (FOIT/FOUT window), text occupies the EXACT same
-   pixel-box as final Inter → CLS = 0 при font-swap (web.dev «Reduce web font CLS»).
-   Values: широко-цитируемые approximate metrics для Inter→Arial fallback (Brian
-   Loubris adjust-tool / Malte Ubl / Capsize seek-oss). Calibrate per-font if
-   precision matters. font-family stack chains: Inter → Inter Fallback → system. */
+
 @font-face {
-  font-family: 'Inter Fallback';
-  src: local('Arial');
+  font-family: "Inter Fallback";
+  src: local("Arial");
   size-adjust: 107.4%;
   ascent-override: 90%;
   descent-override: 22.5%;
   line-gap-override: 0%;
 }
 
-/* No hand-rolled :root here — every custom property is Spec-derived and lives in
-   _tokens.generated.css (Inv-CSS-tokens-from-Spec; «no hardcode»):
-     · hub fluid scale (--font-size-*, --space-*, --max-width) ← text/site.md
-     · fixed type/spacing ladders (--fs-*, --sp-*), --breakpoint, --touch-min ← text/site.md
-     · typography rhythm (--baseline, --measure, --rail, --lh-*, --tracking-caps) ← text/typography.md
-     · semantic colour palette (--surface*, --ink*, --muted, --rule*, --accent,
-       --emphasis, --cta-*, --overlay*) across hub-day / hub-night / editorial,
-       plus editorial --paris-* — ← knowledge/people/olgarozet/site/_design.yaml +
-       text/site.md / text/event-*.md. Both surface/theme modes redeclare the SAME
-       tokens — no parallel namespaces; WCAG-AA verified per pair.
-   Edit the Spec layer, regenerate: python3 scripts/css_compile.py --owner olgarozet --event paris-2026-09 */
+
 
 * {
     margin: 0;
@@ -112,49 +50,24 @@ body {
 html {
     font-weight: 400;
     font-size: var(--font-size-base);
-    /* ── ИНТЕРЛИНЬЯЖ КОРНЯ ЕСТЬ ИНТЕРЛИНЬЯЖ ПРОЗЫ, И ДОМ У НЕГО ОДИН ──────────
-       Здесь стоял литерал `1.8` — ВТОРОЙ носитель факта, у которого уже был токен
-       (`--lh-body: 1.55`, Брингхерст §3.3). Закон видел его и держал в долге
-       (`Inv-TYPO-leading-from-token`, храповик обходов модели). Выбор между двумя
-       числами решается не вкусом: 1.8 лежит ВНЕ ВСЕЙ объявленной шкалы интерлиньяжа
-       (0.95 · 1.0 · 1.2 · 1.5 · 1.55) — то есть никогда не был выбран ИЗ модели,
-       а надуло его дрейфом. Замер у читателя 2026-08-26: на рассказе-показе 1.8 не
-       достигал НИ ОДНОГО из 645 узлов (все накрыты правилами), а на главной получал
-       15 узлов из 63 — и модельные 1.55 не получал там НИКТО. Корень строки задаёт
-       прозу всему, что не накрыто правилом; поэтому он обязан быть прозой модели. */
+    
     line-height: var(--lh-body);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    /* СОДЕРЖИМОЕ НЕ ВЫХОДИТ ЗА КОНТЕЙНЕР — СТРУКТУРНЫЙ ПОЛ, а не приём вёрстки.
-       `break-word` вступает ТОЛЬКО тогда, когда слово не помещается ЦЕЛИКОМ ни при
-       каком переносе по пробелам: в русском наборе на узком экране это регулярно
-       (замер 2026-08-20: «псевдоискусства» — 320px в колонке 291px). Альтернативой
-       был не «красивый перенос», а ВЫХОД ЗА ЭКРАН, который `overflow-x: hidden`
-       ниже молча обрезал — симптом гасился, текст пропадал. Слоговой перенос здесь
-       не годится: заголовки в Системе объявлены НЕ переносимыми по слогам (норма
-       набора, Мильчин), и это решение остаётся. Один разрыв у самого края — цена
-       за то, что закон о крае держится ПО ПОСТРОЕНИЮ, а не по счастливой арифметике
-       кегля (Inv-SITE-form-at-reader). */
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    
     overflow-wrap: break-word;
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     scroll-behavior: smooth;
     overscroll-behavior: none;
-    /* Root canvas bg — catches UA default #fff leakage in mask-fade zones
-       and any uncovered body area. */
+    
     background: var(--surface);
 }
 
-/* .footer-content was transparent — mask-fade on .footer-portrait could
-   expose html bg through it. Explicit bg closes the gap. */
+
 .footer-content { background: var(--surface); }
 
-/* Night-theme portrait swap: dedicated regenerated asset (`portrait_night`),
-   not CSS inversion. Day img hidden in night mode and vice-versa. Both stack
-   in the same grid cell so layout is identical regardless of theme. */
-/* РАСТВОРЕНИЕ В ФОНЕ ТЕМЫ (холст ограничен натуральной шириной, §raster-natural-cap, и его шов не
-   должен читаться): фон растра — не цвет, а ОТСУТСТВИЕ чернил. Ночной растр на чёрном — `lighten`
-   (чёрное уступает фону темы), дневной на белом — `multiply` (белое уступает фону). Смешение идёт
-   против фона .footer-content (var(--surface), явный — см. выше); маска по краям сглаживает остаток. */
+
+
 .footer-portrait.day { mix-blend-mode: multiply; }
 .footer-portrait.night { mix-blend-mode: lighten; }
 .footer-portrait.night { display: none; }
@@ -185,7 +98,7 @@ h1 {
 }
 
 h1::after {
-    content: ' —';
+    content: " —";
     color: var(--ink);
     font-weight: 100;
     font-size: 0.6em;
@@ -193,8 +106,8 @@ h1::after {
 
 .artist-highlight {
     color: var(--emphasis);
-    text-transform: uppercase;   /* Inv-TYPO-case-is-form-not-text: прописные — форма, не данные */
-    letter-spacing: var(--tracking-caps-emphasis);   /* объявленный токен in-flow прописных (typography.md::tracking-caps-emphasis) */
+    text-transform: uppercase;   
+    letter-spacing: var(--tracking-caps-emphasis);   
     font-weight: 600;
 }
 
@@ -250,20 +163,14 @@ a:hover {
 }
 
 .price {
-    /* Hub-site consultations pricing («15 000 ₽» в p_site). admin 2026-05-12
-       ergonomic re-audit: clamp 0.85rem-1.15rem рендеры 13.6-18.4px — нижняя
-       граница ниже body floor 14px на min viewport. Fix: max() с --fs-body-min
-       (14px floor per text/site.md::design_tokens.fs-body-min). Через token,
-       не literal — Spec-driven floor cascade. */
+    
     font-size: max(clamp(0.85rem, 0.8rem + 0.2vw, 1.15rem), var(--fs-body-min));
     color: var(--muted);
 }
 
 .cta,
 .offer-cta > a {
-    /* Inv-LDG-design-touch44 — interactive ≥ 44px (WCAG 2.5.5 AAA + Apple HIG).
-       admin 2026-05-12 ergonomic audit: padding alone yielded ~30px height; explicit
-       min-height ensures touch-target regardless of padding clamp at min viewport. */
+    
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -279,9 +186,7 @@ a:hover {
     transition: opacity 0.2s;
 }
 
-/* admin 2026-05-15: «Пока времён нет — это на Главную; конгруэтной табличкой».
-   Standalone card в Консультации section while substrate-chain к Календарю
-   не восстановлен. Theme-agnostic via design tokens. */
+
 .booking-empty {
     max-width: 520px;
     margin: 1.5rem auto;
@@ -329,11 +234,7 @@ a:hover {
     margin-top: 0.3em;
 }
 
-/* ── Скоро section — role-tagged semantic structure ──
-   Per /tmp/skoro-proposal/skoro-site-proposal.md (admin'ская approval 2026-05-15).
-   `caps` / `proper-case` are role-driven register classes; specific roles
-   (when, type, concept, organizer, detail, audience, partner, link,
-   conjunction, multi-component) provide structural hooks. */
+
 
 .event .caps {
     text-transform: uppercase;
@@ -377,7 +278,7 @@ a:hover {
     content: "+";
     display: block;
     margin: 0.5em 0;
-    color: color-mix(in srgb, currentColor 66%, transparent);   /* 66% от surrounding text (admin 2026-05-15 refinement) */
+    color: color-mix(in srgb, currentColor 66%, transparent);   
 }
 .event .conjunction {
     margin: 0.5em 0;
@@ -388,28 +289,12 @@ a:hover {
     text-decoration: underline;
 }
 .event .audience { color: var(--muted); }
-.event .partner.proper-case { /* same styling as detail */ }
-/* Hierarchy law (Σ 2026-07-06, admin «ПРО ПАРИЖ снова полужирным, т.к. заголовок не
-   закончился»): the title `h3.type` is the ONE full-strength element per entry; EVERY
-   detail is SUBORDINATE (muted) regardless of register. Prior rule muted only
-   `.detail.proper-case`, so a `.detail.caps` rendered full-colour uppercase — visually
-   indistinguishable from the caps title, «заголовок не заканчивался». Muting all details
-   (caps or proper-case) makes the title's end unambiguous BY CONSTRUCTION — register is
-   for STYLE (caps/sentence), hierarchy is for EMPHASIS; the two are now decoupled. */
+.event .partner.proper-case {  }
+
 .event .detail { color: var(--muted); }
 
-/* ── Ранги доски «Скоро» (принципал 2026-09-04) ──────────────────────────────────
-   Доска перестала быть плоским списком карточек: у неё ЧЕТЫРЕ шва, и каждый несёт свой
-   знак — ◑ между ярусами, ▰ между рядами яруса, «и» между рядами одного рода, 𖤓 перед
-   завершением. Знаки объявлены у поверхности (channel.md::skoro_digest_render
-   .site.rank_separators) и приезжают элементами; здесь им дано только начертание.
-   Декоративные знаки скрыты от диктора в самой разметке (aria-hidden) — структуру
-   странице сообщают заголовки ярусов, а не орнамент. */
-/* ДОСКА, А НЕ ЕЁ ЭКЗЕМПЛЯР. Правила ниже стояли на `#events` — на ОДНОМ разделе, — и
-   вторая доска той же страницы («НЕДАВНО»: то, что уже вышло в мир; принципал 2026-09-09)
-   получила бы её набор только копией этих десяти правил, которая разошлась бы молча.
-   Носителем стал класс `.board`: у набора один дом, а сколько досок у страницы — не его
-   дело. Третья доска не потребует ни строки CSS. */
+
+
 .board .rank {
     text-align: center;
     color: color-mix(in srgb, currentColor 40%, transparent);
@@ -424,9 +309,7 @@ a:hover {
     margin: 1.1em 0;
 }
 
-/* ЯРУС И РОД — ЗАГОЛОВКИ, А НЕ СТРОКИ КАРТОЧКИ. Время произносится ЯРУСОМ и только им
-   (published_time: partition): у ряда своего «когда» больше нет, и потому ярлык яруса
-   обязан читаться как заголовок группы, а не как реплика первой карточки. */
+
 .board h3.tier {
     font-size: var(--fs-s);
     font-weight: 500;
@@ -439,9 +322,7 @@ a:hover {
     margin: 0 0 1.2em 0;
 }
 
-/* ИМЯ РЯДА ПОЛНОЙ СИЛОЙ, РОД — ПОДВОДКА. Прежде «полной силой» был `h3.type`, потому что
-   род и имя стояли в одном такте; принципал 2026-09-04 их развёл: род идёт словом автора
-   («Дизайн-Путешествие»), имя — прописными («В ПАРИЖ»). Сила следует за ИМЕНЕМ. */
+
 .board .event .type {
     font-weight: 500;
     color: var(--muted);
@@ -453,8 +334,7 @@ a:hover {
     color: inherit;
 }
 
-/* ШОВ ТАКТА В ОДНО ДЫХАНИЕ: такт, объявивший `seam: line`, примыкает к предыдущему —
-   в тексте это перевод строки без пустой, в разметке — снятый вертикальный зазор. */
+
 .board .event .seam-line { margin-top: -0.45em; }
 
 .board .skoro-closing {
@@ -465,7 +345,7 @@ a:hover {
 }
 
 
-/* Footer - Full Width (outside content-wrapper) */
+
 footer {
     width: 100%;
     margin-top: calc(var(--space-section) * 2.5);
@@ -474,16 +354,14 @@ footer {
     background: var(--surface);
 }
 
-/* Закон «растр не шире натурального» (Spec text/site.md §raster-natural-cap): холст подвала
-   ограничен измеренной шириной портрета (--natural-w, ставит генератор), по центру; поле вокруг —
-   фон подвала (--surface). Значки каналов позиционируются от холста, а не от окна. */
+
 .footer-content {
     position: relative;
     display: block;
     margin: 0 auto;
     max-width: var(--natural-w, none);
     padding: 0;
-    /* Fade in animation */
+    
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 1s ease-out,
@@ -499,8 +377,7 @@ footer {
     display: block;
     width: 100%;
     height: auto;
-    /* Soft edges: сверху/снизу (как было) и по бокам — холст ограничен натуральной шириной
-       (§raster-natural-cap), его край не должен читаться прямоугольником на фоне темы. */
+    
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%),
             linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
     -webkit-mask-composite: source-in;
@@ -544,8 +421,7 @@ footer {
 }
 
 .scroll-top {
-    /* Inv-LDG-design-touch44 — scroll-to-top tappable ≥ 44px guarantee.
-       Padding 2em ≈ 32px at root; min-height enforces ergonomic floor regardless. */
+    
     display: block;
     min-height: var(--touch-min);
     text-align: center;
@@ -561,7 +437,7 @@ footer {
     border: none;
 }
 
-/* Icons positioning on mobile */
+
 @media (max-width: 767px) {
     .content-wrapper {
         padding-left: calc(var(--space-padding) + 0.5em);
@@ -581,12 +457,7 @@ footer {
         left: -1.15em;
     }
 
-    /* ВЫПУСК — КАДРИРОВАНИЕМ, А НЕ ВЫХОДОМ ЗА КРАЙ (замер 2026-11-20, ergo B: правый край
-       img.footer-portrait на 384/468 px при вьюпорте 320/390, обрезка держалась на `clip`
-       предка). Прежний кадр — растр шириной bleed·W, отцентрованный, видимая середина W — есть
-       ровно `object-fit: cover` в коробке W × bleed·W·r (r = h/w растра, `--natural-r` от
-       эмиттера); при W > N/bleed коробку держит натуральная высота N·r, масштаб 1 — как и было.
-       Коробка не шире своего блока ни на одной ширине; обрез тот же. */
+    
     .footer-portrait {
         --portrait-bleed: 1.4;
         width: 100%;
@@ -596,13 +467,7 @@ footer {
         max-height: calc(var(--natural-w, 10000px) * var(--natural-r, 1));
         object-fit: cover;
     }
-    /* ВЫПУСК И ЕГО ОБРЕЗ — ОДНО ОБЪЯВЛЕНИЕ (замер 2026-11-20, web-cycle cdca20a4fa848270d934:
-       full_dom_overflow_x 64 @320 / 78 @390 = 0.2·vw на каждой странице с подвалом). Портрет
-       намеренно шире кадра на 40 % и отцентрован полем −20 %; обрезал его не собственный кадр, а
-       `html, body { overflow-x: hidden }` — и body, ставший скролл-контейнером, нёс 120 % ширины
-       (body.scrollWidth 384 при вьюпорте 320). Обрез у кадра выпуска: `clip` не создаёт
-       скролл-контейнера, выпуск перестаёт быть переполнением страницы, а НЕобъявленный выход
-       за край по-прежнему виден замеру. Без поддержки `clip` — прежнее поведение. */
+    
     .footer-content { overflow-x: clip; }
 
     .social-icon:first-of-type {
@@ -614,7 +479,7 @@ footer {
     }
 }
 
-/* Accessibility */
+
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
@@ -626,28 +491,14 @@ footer {
         transition-duration: 0.01ms !important;
     }
 
-    /* ПОЯВЛЕНИЕ ПОДВАЛА — НЕ ДВИЖЕНИЕ ПРИ reduce (review/cap7 E7): сжатая длительность оставляла
-       исходное `opacity:0` в зависимости от IntersectionObserver (нет скрипта/IO — подвал невидим).
-       При reduce подвал стоит в покое сразу: состояние покоя = состоянию `.visible`. */
+    
     .footer-content { opacity: 1; transform: none; }
 }
-/* ── Day/night theme: solar-driven via data-theme attribute (set by inline JS) ──
-   The night-mode colour palette (pure black canvas; whiteness hierarchy for
-   text emphasis; red reserved for buttons only — admin spec 2026-04-25) is
-   compiled из _design.yaml (theme: night) into :root[data-theme="night"] в
-   _tokens.generated.css. Only the *transition* rules and the portrait swap
-   selectors live here. */
+
 html, body { transition: background-color 600ms ease; }
 body, a, p, h1, h2, h3, footer, .scroll-top { transition: color 600ms ease, background-color 600ms ease; }
 
-/* ── Хлебная крошка слоя (/art/<серия>/) ───────────────────────────────────────
-   ЕДИНСТВЕННЫЙ ВЫХОД ИЗ СЛОЯ ОБЯЗАН БЫТЬ ДОСТИЖИМ. Разметка крошки была, набора у неё
-   не было вовсе: строка тем же кеглем, прижатая к верхнему краю под фиксированной
-   полосой прогресса, — и прибор читателя мерил ссылку «Искусство» НЕДОСТИЖИМОЙ на всех
-   трёх ширинах (Inv-SITE-form-at-reader: control_reachable=0.0 при 375 · 768 · 1366),
-   отчего страница слоя удерживалась гейтом и не могла обновиться в мире вовсе.
-   Лента /art по построению без слов (принципал 2026-09-02) — крошка есть исключение,
-   объявленное здесь: она не подпись работе, а ОРГАН УПРАВЛЕНИЯ, и меряется как орган. */
+
 .art-series {
     display: flex;
     align-items: baseline;
@@ -657,12 +508,7 @@ body, a, p, h1, h2, h3, footer, .scroll-top { transition: color 600ms ease, back
     color: var(--muted);
 }
 .art-series a {
-    /* СЛОЙ ПОДНИМАЕТ ОРГАН, А НЕ ЕГО СТРОКУ. Хром страницы («←» на главную) лежит в том
-       же верхнем углу и на телефоне становится `position: absolute` с `pointer-events:
-       auto`: указатель в центре ссылки попадал В НЕГО (замер `elementFromPoint`). Поднята
-       САМА ССЫЛКА (у хрома 100, у полосы прогресса 101) — полоса крошки во всю ширину,
-       поднятая целиком, накрыла бы переключатель темы в правом углу, что гейт и намерил
-       следующим ходом. Орган поднимается ровно на свою площадь. */
+    
     position: relative;
     z-index: 102;
     display: inline-flex;
@@ -676,81 +522,46 @@ body, a, p, h1, h2, h3, footer, .scroll-top { transition: color 600ms ease, back
 .art-series a:hover { color: var(--ink); }
 .art-series b { font-weight: 600; color: var(--ink); }
 
-/* ── Gallery (/art/) & fade-nav for subpages ── */
+
 .gallery { display: flex; flex-direction: column; }
 .artwork { width: 100%; display: flex; justify-content: center; align-items: center; }
-/* Закон «растр не шире натурального» (Spec text/site.md §raster-natural-cap): растр без измеренного
-   размера — width:auto (натуральная ширина), потолок — контейнер; НЕ width:100%. */
+
 .artwork img { width: auto; max-width: 100%; height: auto; display: block; object-fit: contain; }
 
-/* ПОВЕРХНОСТЬ ОБЪЯВЛЯЕТ РАЗМЕР. Векторная фигура вставлена В ДОКУМЕНТ (иначе она не видит
-   ни токенов, ни рантайм-темы) и держит только viewBox — ФОРМУ. Размер — не её дело: жёсткие
-   width/height в SVG были оправданы прежним носителем <img> и, пережив его, распирали
-   мобильный вьюпорт (Σ 2026-07-13). Тот же закон, что и с цветом: артефакт объявляет
-   геометрию, поверхность — чернила и размер. */
+
 figure svg { display: block; width: 100%; height: auto; }
 .artwork + .artwork { border-top: 1px solid rgba(0,0,0,0.03); }
 
 .progress-bar { position: fixed; top: 0; left: 0; height: 2px; width: 100%; background: rgba(0,0,0,0.1); transform-origin: left; transform: scaleX(0); z-index: 101; }
 
 .nav-fade { position: var(--frame-position, fixed); top: 0; left: 0; right: 0; padding: calc(var(--chrome-pad) + var(--safe-top)) calc(20px + var(--safe-right)) var(--chrome-pad) calc(20px + var(--safe-left)); display: flex; justify-content: space-between; align-items: center; opacity: 1; transition: opacity 0.3s ease; background: none; pointer-events: auto; z-index: 100; }
-/* ОРГАН РАМКИ НЕ СТОИТ НАД СОДЕРЖАНИЕМ — ЗАКОН, А НЕ ПОПРАВКА СТРАНИЦЫ (замер 2026-11-20, акт
-   ergonomics-frame, web-cycle 0e11ca92abfd157e0bbc, 1440: «← olgarozet.ru» поверх постера, без
-   земли; прибор frame_probe: 648–680 пересечений с колонной рассказа на 960–1920). Фиксированный
-   орган при прокрутке заметает полосу [его прямоугольник] × [0, scrollHeight] — колонна, какой бы
-   ширины её ни объявила страница, в эту полосу входит. Поэтому у фиксированной рамки есть СВОЯ
-   ПОЛОСА: непрозрачная земля высотой `--chrome-h` во всю ширину, под органами (z 99 < 100/101) и
-   над содержанием; содержание проходит ПОД ней, а не под органами. В покое полоса пуста: верх
-   потока уже резервирован `--chrome-clear` (`.offer-strip`, `scroll-padding-top`). Земля одна —
-   градиент плашки снят. Условие — наличие самой рамки, а не имя страницы; на ≤768 рамка в потоке
-   и полоса снята тем же медиа-блоком, что переключает `--frame-position`. */
+
 :root:has(.nav-fade, .theme-toggle) body::before { content: ""; position: fixed; inset: 0 0 auto 0; height: var(--chrome-h); background: var(--surface); z-index: 99; pointer-events: none; }
-/* ПРЯТАТЬ МОЖНО ТОЛЬКО ТАМ, ГДЕ ЕСТЬ ЧЕМ ПОКАЗАТЬ (2026-09-25): затухание до наведения — лишь у
-   указателя с наведением. На сенсорном экране шире 768 px наведения нет, и ссылка на корень
-   («сверху должна быть ссылка на корень olgarozet.ru» — принципал) была невидима. */
+
 @media (hover: hover) and (pointer: fine) {
   .nav-fade { opacity: 0; pointer-events: none; }
   body:hover .nav-fade, .nav-fade:focus-within { opacity: 1; pointer-events: auto; }
 }
-.nav-fade a { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: var(--fs-body-min); color: var(--muted); text-decoration: none; transition: color 0.2s; display: inline-flex; align-items: center; min-height: var(--touch-min); padding: 0 0.5em;
-  /* Нижняя линейка общего `a` (выше) — знак ссылки В ПРОЗЕ; у органа высотой в цель касания она
-     ложится на дно цели, в 14 px от подписи, и на 390 упирается в строку «Ольга Розет» (замер
-     2026-11-20, web-cycle 0e11ca92abfd157e0bbc). Орган рамки назван стрелкой и адресом. */
+.nav-fade a { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; font-size: var(--fs-body-min); color: var(--muted); text-decoration: none; transition: color 0.2s; display: inline-flex; align-items: center; min-height: var(--touch-min); padding: 0 0.5em;
+  
   border-bottom: 0; }
 .nav-fade a:hover { color: var(--ink); }
-/* ЯКОРЬ НЕ ПОД ФИКСИРОВАННЫМ ХРОМОМ (замер 2026-11-20, акт ergonomics, S1 1280: переход по
-   оглавлению ставил «Глава 3 · Античность» в y=0, под плашку высотой 76 px). Резерв — ТА ЖЕ
-   величина, что у `.offer-strip` (`--chrome-clear`), а не новый литерал; условие — наличие
-   самой плашки, а не имя страницы. */
+
 :root:has(.nav-fade) { scroll-padding-top: var(--chrome-clear); }
-/* Короткий вьюпорт — тот же режим, что узкий (text/interface.md::Inv-IFACE-frame-viewport-share):
-   fixed-рамка допустима, пока chrome_h / innerHeight ≤ max_viewport_share; 506 = ⌈76 / 0.15⌉ − 1 —
-   ВЫВЕДЕННОЕ значение, сверяемое тестом рамки (test_short_viewport_threshold_is_derived). */
+
 @media (max-width: 768px), (max-height: 506px) {
-  /* Плашка здесь в потоке (`position:absolute` ниже) и при прокрутке уходит: резерв был бы ложным. */
+  
   :root:has(.nav-fade) { scroll-padding-top: 0; }
-  /* Мобильный хром — В ПОТОКЕ документа, не поверх текста (Σ 2026-07-11,
-     конспект mobile_375: постоянная fixed-плашка с blur замывала верхнюю
-     строку КАЖДОГО экрана скролла, а H1 стартовал под ней — «КОНСПЕКТ»
-     прочитывался как «НЕКОТОРЫХ ФРАГМЕНТОВ…». Desktop не страдал: там
-     opacity:0 до hover. Класс: на узком вьюпорте fixed-хром без резерва
-     высоты = замывание; поток снимает класс для ВСЕХ страниц разом). */
+  
   .nav-fade { opacity: 1; pointer-events: auto; }
-  /* Режим рамки переключается ЗДЕСЬ и только здесь: органы в потоке, полоса фиксированной рамки снята. */
+  
   :root { --frame-position: absolute; }
   :root:has(.nav-fade, .theme-toggle) body::before { content: none; }
-  /* Резерв высоты хром-зоны — в @media 600 (каскадный победитель на телефонах);
-     здесь дублировать нельзя: две точки правды уже дали слепую правку (Σ 2026-07-11). */
+  
 }
 @media (prefers-reduced-motion: reduce) { .nav-fade { transition: none; } }
 
-/* ── Day/night toggle (Inv-IFACE-day-night-mode) — chrome on every page ──────
-   Fixed top-right (the .nav-fade back-arrow is top-left when present — no
-   overlap; on FQDN landings .nav-fade is absent so top-right is clear). The
-   glyph (◐ auto / ☀ day / ☾ night) is swapped by the inline handler in
-   _layout. Low-emphasis until hover/focus — like .nav-fade a. Uses only the
-   semantic tokens (--ink/--ink-soft/--muted/--surface/--accent/--focus-outline-min),
-   which redeclare per-mode, so it works in BOTH day and night. */
+
 .theme-toggle {
   position: var(--frame-position, fixed);
   top: calc(12px + var(--safe-top));
@@ -765,7 +576,7 @@ figure svg { display: block; width: 100%; height: auto; }
   font-weight: 400;
   font-size: var(--fs-m);
   line-height: var(--lh-flush);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   color: var(--muted);
   background: var(--surface);
   border: 1px solid transparent;
@@ -780,7 +591,7 @@ figure svg { display: block; width: 100%; height: auto; }
 .theme-toggle:focus-visible { outline: var(--focus-outline-min) solid var(--accent); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .theme-toggle { transition: none; } }
 
-/* ── Skip-link (WCAG 2.4.1 «Bypass Blocks») — visually hidden until focus ── */
+
 .skip-link {
   position: absolute;
   top: -100px;
@@ -788,14 +599,14 @@ figure svg { display: block; width: 100%; height: auto; }
   background: var(--ink);
   color: var(--surface);
   padding: 0 1em;
-  /* цель касания — не меньше `--touch-min` (замер 2026-11-20: 235×38 @320, 238×39 @390) */
+  
   display: inline-flex;
   align-items: center;
   min-height: var(--touch-min);
   font-weight: 500;
   font-size: var(--fs-s);
   line-height: var(--lh-flush);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   text-decoration: none;
   z-index: 1000;
   border-radius: 0 0 4px 0;
@@ -804,18 +615,12 @@ figure svg { display: block; width: 100%; height: auto; }
 .skip-link:focus,
 .skip-link:focus-visible { top: var(--safe-top); left: var(--safe-left); outline: var(--focus-outline-min) solid var(--accent); outline-offset: 2px; }
 
-/* Handwriting accent — render-time emitted via {hand:…} shortcode (admin 2026-05-13).
-   Caveat: warm cursive с reasonable cyrillic coverage; pair с Inter body works editorially. */
-/* Per Spec text/typography.md::Inv-TYPO-handwriting-high-calligraphy —
-   handwriting accent = HIGH calligraphy (formal pen-script). Admin 2026-05-13:
-   Marck Script «пока слабо» → escalated к Bad Script (Roman Shchyukin, Cyrillic
-   + Latin formal pen-handwriting, более pronounced stroke contrast). Size
-   bumped 1.55→1.85em + slight italic transform via skew (Bad Script ships
-   upright; visual slant 8° matches copperplate convention). */
+
+
 .handwriting {
-  font-family: 'Bad Script', 'Marck Script', cursive;
+  font-family: "Bad Script", "Marck Script", cursive;
   font-weight: 400;
-  font-size: 1.4em;            /* admin 2026-05-13 «слишком крупна, -25% точно» (1.85→1.4) */
+  font-size: 1.4em;            
   line-height: var(--lh-flush);
   letter-spacing: 0.01em;
   vertical-align: -0.08em;
@@ -825,13 +630,7 @@ figure svg { display: block; width: 100%; height: auto; }
   transform-origin: 50% 60%;
 }
 
-/* ── Landing art — изображения Посадочной по МЕСТАМ ───────────────────────
-   `figure.landing-art[data-art=<слот>]` (site_generator._render_art_slot): какая картинка стоит в
-   месте — данные события (`landing_art`), как она стоит — правила слота ниже. Прежний
-   `.landing-footer-image` (admin 2026-05-13 «в самый низ Посадочной» + «футер ночной темы») —
-   слот `footer`. Два растра (`img.theme-day`/`img.theme-night`) — показ решает `[data-theme]`
-   корня, без JS и перерисовки: по умолчанию день, ночью меняются местами. Один растр + метка
-   `data-night-adapt` — слот сам адаптирует его к ночи (фильтр в правиле слота). */
+
 .landing-art { margin: 0; }
 .landing-art img { display: block; }
 .landing-art img.theme-night { display: none; }
@@ -841,10 +640,7 @@ figure svg { display: block; width: 100%; height: auto; }
 .landing-art[data-art="footer"] { margin: var(--sp-7) auto var(--sp-5); max-width: min(var(--measure), var(--natural-w, 100%), 100%); text-align: center; }
 .landing-art[data-art="footer"] img { width: 100%; height: auto; }
 
-/* Полоса шапки: на всю ширину окна и за текстом (на узком экране — часть растра, уходящая к полям:
-   min-width больше окна, object-position по центру; на широком — далеко за пределы колонки).
-   Принципал 2026-10-14: «тонкий горизонтальный эффектный баннер», не «негатив фото» ночью — для
-   этого у слота ночной растр, а не фильтр. */
+
 .landing-art[data-art="hero_banner"] {
   width: 100vw;
   max-width: 100vw;
@@ -866,8 +662,7 @@ figure svg { display: block; width: 100%; height: auto; }
   opacity: 0.95;
 }
 
-/* Фриз-разделитель глав (Спека рода: landing.dividers.kinds.frieze): тонкая полоса в колонке
-   между двумя волосяными линиями. */
+
 .landing-art[data-art="frieze"] {
   width: 100%;
   max-width: var(--measure);
@@ -886,8 +681,7 @@ figure svg { display: block; width: 100%; height: auto; }
 }
 [data-theme="night"] .landing-art[data-art="frieze"][data-night-adapt] img { filter: invert(1) hue-rotate(180deg) brightness(0.9); }
 
-/* Разделители заявки — вертикальные ремесленные мотивы сверху и снизу (разные: принципал
-   2026-10-14), пропорция 9:16. */
+
 .landing-art[data-art="signup_top"],
 .landing-art[data-art="signup_bottom"] {
   display: flex;
@@ -910,7 +704,7 @@ figure svg { display: block; width: 100%; height: auto; }
   opacity: 0.88;
 }
 
-/* Смысловой разделитель-линия со знаком (Спека рода: landing.dividers.kinds.rule; знак — её данные). */
+
 .arch-rule {
   display: flex;
   align-items: center;
@@ -922,134 +716,55 @@ figure svg { display: block; width: 100%; height: auto; }
 .arch-rule .rule-line { flex: 1; height: 1px; background: var(--rule); }
 .arch-rule .rule-glyph { font-size: calc(var(--fs-xs) / var(--fs-ratio)); color: var(--accent); line-height: var(--lh-solid); }
 
-/* ══════════════════════════════════════════════════════════════════════
-   EDITORIAL SURFACE · SWISS-MODERNIST · ARCHITECTURAL
-   ──────────────────────────────────────────────────────────────────────
-   Activated by `<html data-surface="editorial">` (emitted by _layout for
-   event-landing pages and static-pages — kind-detected, no per-page CSS
-   parallelism). Same semantic token vocabulary as the hub (--surface,
-   --ink, --ink-soft, --muted, --rule, --accent…) — only the values change.
-   No parallel `--paper`/`--ink` namespace, no `:has()` cascade-promote.
 
-   Neo-grotesque single family (Inter Tight + Inter). Major-third type
-   scale (μ = 1.25). Hard rectilinear grid. Hairlines as ornament.
-   Single accent — Corbusier Outremer. Concrete-paper substrate.
-   Reference: Akzidenz-Grotesk catalogues, Müller-Brockmann grids,
-   Le Corbusier «Polychromie architecturale» (1931), Maison Domino.
 
-   Mathematical scaffold (single source of truth — change here, propagate):
-     fs base   17.5px · μ = 1.250 · scale: 0.64, 0.80, 1.00, 1.25, 1.56,
-                                          1.95, 2.44, 3.05, 3.81 rem
-     space     0.5rem × 1.5 geom : 0.50, 0.75, 1.13, 1.69, 2.53, 3.80,
-                                   5.70, 8.54 rem
-     measure   34em × 1.55 leading (≈ 66 char Inter RU)
-     contrast  ink/surface 16.1:1 AAA · muted/surface 4.78:1 AA body
-                                       accent/surface 9.12:1 AAA
 
-   Owner-agnostic: no event-specific selectors, no paris-* hardcode.
-   ══════════════════════════════════════════════════════════════════════ */
 
-/* @import блок выше moved-к-top — CSS Spec §3 требует @import precede rules. */
 
-/* ── 1. Editorial palette override — same semantic tokens, different values.
-   Concrete-paper substrate, graphite ink (NOT black — softens to read as
-   drawn-on-paper, not printed-by-laser). Single Outremer accent (Corbu
-   Polychromie 31). Accent discipline: only on price + signup-btn + day-
-   numeral. Anywhere else = ink/ink-soft/muted gradation.
 
-   These editorial colour tokens are OWNER-specific → compiled из _design.yaml
-   (surface: editorial) into :root[data-surface="editorial"] в
-   _tokens.generated.css; --accent (Corbu Outremer) и --paris-* come из
-   text/site.md / text/event-paris-2026-09.md. Verified contrast (on #F4F1EB):
-       ink/surface       11.15:1  AAA
-       ink-soft/surface   7.32:1  AAA
-       muted/surface      4.52:1  AA  body
-       accent/surface     ~9:1    AAA  (focal use only)
-       rule/surface       1.62:1  hairline (decorative, non-text — carve-out) */
 
-/* ── 2. Article-wrapper — type/space scale + grid scaffolding.
-   Color comes from the surface tokens (cascade from :root / the data-surface
-   block в _tokens.generated.css). These tokens are SCALE (μ=1.25 fs, 1.5ⁿ
-   space) — orthogonal to palette, so they remain scoped to .article-wrapper. */
 .article-wrapper {
-  /* Type scale — major-third (μ = 1.250). Single SoT; reuse below. */
+  
 
-  /* Spacing — 0.5rem × 1.5ⁿ geometric. Eight steps cover entire page. */
+  
 
-  /* Measure — 34em ≈ 66 char Inter RU. 1.55 leading on Inter at 17.5px.
-     --page / --gutter — Spec text/site.md (Inv-CSS-tokens-from-Spec); локальные
-     52em/2em были вторым носителем того же решения. */
+  
 
-  /* Type stacks — Swiss neo-grotesque discipline. Inter Tight for
-     display (tighter optical sizing), Inter for body. Single family
-     across the page — owner-agnostic, RU/EN coverage.
-     «Inter Fallback» — local Arial с metric overrides (Inv-TYPO-font-metric-
-     override, text/typography.md, 2026-05-12); matches Inter's box metrics
-     so the swap from system fallback → loaded Inter triggers CLS = 0.
-     Source: Brian Loubris / Malte Ubl adjust-tool / Capsize seek-oss
-     widely-published values для Inter; calibrate if precision needed. */
-  /* --sans-display / --sans / --script БОЛЬШЕ ЗДЕСЬ НЕ ЖИВУТ (Σ 2026-07-19):
-     типографские РОЛИ объявлены токенами в text/typography.md::design_tokens
-     (kind: font-stack) и приезжают через @import _tokens.generated.css выше —
-     тот же compile-контур, что несёт остальные токены (Inv-CSS-tokens-from-Spec).
-     Корень: гарнитуры были ЕДИНСТВЕННОЙ типографской осью вне компиляции —
-     жили руками здесь И отдельно в анкерах кампании ⇒ конгруэтность держалась
-     совпадением, а не выводом. Значения при переносе байт-идентичны (round-trip
-     проверен), так что мир не изменился — изменился ИСТОЧНИК.
-     --mono пока здесь: роль mono не имеет потребителей вне сайта (объявить
-     токеном при первом — Rule-of-Three не набран). */
-  --mono:         'IBM Plex Mono', 'JetBrains Mono', ui-monospace,
+  
+  
+  --mono:         "IBM Plex Mono", "JetBrains Mono", ui-monospace,
                   SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* --tracking-caps now compiled из Spec text/typography.md::design_tokens
-     (Inv-CSS-tokens-from-Spec). See _tokens.generated.css. */
+  
 }
 
-/* ─────────────────────────────────────────────────────────────────
-   Inv-TYPO-caps-tracked — SINGLE typeclass instance.
-   Spec: knowledge/system/specifications/text/typography.md.
-   ALL caps containers join via:
-     (a) selector listed in :is() below — structural members
-     (b) `.is-caps` utility class — content-driven опт-in
-   Per-element CSS rules hold ONLY font/weight/size/color/margin specifics.
-   Tracking + uppercase universal через ONE assertion — no drift.
-   ───────────────────────────────────────────────────────────────── */
+
 :is(
-  /* Hero zone — landing three-level header */
+  
   .article-wrapper h1,
   .article-wrapper .locus-h2,
-  /* Display register — pricing rhymes h1 */
+  
   .article-wrapper .pricing-display .pricing-amount,
   .article-wrapper .pricing-display .pricing-label,
-  /* ЗАГОЛОВКИ ИЗ ЭТОГО ПЕРЕЧНЯ УБРАНЫ (2026-08-25). Решение админа 2026-05-12
-     («конгруэнтное использование прописных») никуда не делось — оно ВЫВОДИТСЯ:
-     `Inv-TYPO-heading-case-by-depth` даёт регистр как функцию глубины заголовка в
-     РЕАЛИЗОВАННОМ оглавлении, и потому `.article-wrapper > section > h2` и
-     `.article-wrapper > h2` здесь были ВТОРЫМ написанием того же решения — причём
-     написанием, которое оглавления не знает: на странице, где h2 есть САМЫЙ ПОДРОБНЫЙ
-     уровень, перечень требовал прописных, а закон — строчных, и замер 2026-08-25 отдал
-     этот конфликт шестью находками на лендинге. Перечень не спорит с законом; он снят. */
-  /* Catalogue eyebrows + credit-lines */
+  
+  
   .article-wrapper .organizers,
   .article-wrapper .with,
   .article-wrapper .top-banner.is-caps,
-  /* (day-numerals dropped from the Caps typeclass — Roman numerals are already
-     uppercase letterforms; their leading/tracking is set per-element below, so
-     keeping them here would force a per-element letter-spacing override — the
-     exact drift the typeclass forbids. admin-typo audit 2026-05-11.) */
-  /* Form CTA register */
+  
+  
   .article-wrapper .signup-btn,
-  /* About-Organizer section header + name-stamp */
+  
   .article-wrapper .about-organizer h2,
   .article-wrapper .about-organizer .org-name,
   .article-wrapper .about-organizer p strong,
-  /* Publications channel meta */
+  
   .article-wrapper .pub-channel,
-  /* Default global heading (pre-article context) */
+  
   body > h2,
-  /* CTA button (legacy non-article) */
+  
   .cta,
-  /* Universal opt-in utility: any element gains caps register through class */
+  
   .article-wrapper .is-caps,
   .is-caps
 ) {
@@ -1057,56 +772,28 @@ figure svg { display: block; width: 100%; height: auto; }
   letter-spacing: var(--tracking-caps);
 }
 
-/* spacer → end of typeclass; resume .article-wrapper scope (body defaults +
-   page grid). Earlier edit incorrectly placed body/layout props в :root —
-   admin diagnostic 2026-05-11 «узкая колонка слева» revealed it (display: grid
-   applied к html instead of article-wrapper). */
+
 .article-wrapper {
-  /* sentinel — typeclass instance assertion above must match owner CSS contract */
+  
   --_inv-typo-caps-tracked: enforced;
 
-  /* ── Body defaults ─────────────────────────────────────────── */
+  
   font-family: var(--sans);
-  font-size: clamp(1rem, 0.93rem + 0.28vw, 1.0625rem);   /* 17→17.5px fluid */
-  line-height: var(--lh-body);   /* Inv-TYPO-vertical-rhythm-baseline */
+  font-size: clamp(1rem, 0.93rem + 0.28vw, 1.0625rem);   
+  line-height: var(--lh-body);   
   color: var(--ink);
   background: var(--surface);
-  /* font-feature-settings explicitly includes "onum" + "pnum" — без них
-     браузер игнорирует font-variant-numeric: oldstyle-nums (low-level features
-     overrride high-level). admin 2026-05-13 «висячие цифры» — «20-е» в body
-     должна рендериться текстовыми (oldstyle) цифрами, не titling/lining. */
-  /* КОНТРАКТ НАБОРА ВЫВЕДЕН ИЗ ЗАКОНА и живёт при `:root` в _tokens.generated.css
-     (text/typography.md::reader_witness.address; text/site.md §generative direction).
-     Переписывать его здесь НЕЛЬЗЯ — условие (b) drift-закона: единый дом. Все члены
-     контракта НАСЛЕДУЕМЫ, поэтому одна декларация при корне достигает КАЖДОГО
-     потомка, и перечень селекторов был избыточен ПО ПОСТРОЕНИЮ, а не по вкусу:
-     он повторял то, что каскад уже сделал. Замер 2026-08-25: контракт, адресованный
-     ИМЕНЕМ `.article-wrapper`, не достался второму носителю документа (`#doc`) ни
-     одной строкой — 1691 узел из 1691 без переносов и без объявленного рода цифр,
-     при полностью существующих правилах (effect-witness::W4). */
-  /* Body — oldstyle (text figures), warmer rhythm в editorial register.
-     Pricing-amount + day-numeral re-declare lining/tabular per Bringhurst
-     §3.2.3 (titling figures only when there is no alternative — i.e.
-     when oldstyle figures break alignment). */
+  
+  
+  
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Page-level asymmetric grid (Müller-Brockmann): rail | body.
-     Rail holds margin-numerals/dates; body holds prose. The grid
-     applies to ALL top-level children — header, sections, footer.
-     Mobile (<880px) collapses to single column; numerals inline. */
+  
   max-width: var(--page);
   margin: 0 auto;
-  /* ПОЛЕ УСТУПАЕТ МЕРЕ, А НЕ НАОБОРОТ (Inv-TYPO-measure-reading-width, Σ 2026-09-23).
-     Закон объявляет ПОЛОСУ [45 … 75] знаков, а показ реализовывал только ПОТОЛОК
-     (`max-width: var(--measure)`); пол не был выражен нигде, и колонка свободно падала
-     под него — замер у читателя: 44.8 и 44.4 знака при 753 px, то есть поле в 5vw
-     оказывалось на полтора пиксела шире допустимого. Число здесь не выбрано: токен
-     `--measure-min` компилируется из `typography.md::measure_min` тем же датумом,
-     которым судья судит (один дом). Отступ берётся МЕНЬШИМ из желаемого и того, что
-     остаётся после удовлетворения пола, — поэтому поле схлопывается ДО того, как
-     строка станет нечитаемо узкой, и ни один брейкпоинт для этого не нужен. */
+  
   padding: clamp(var(--sp-6), 10vh, var(--sp-8))
            min(clamp(var(--sp-3), 5vw, var(--sp-6)),
                max(0px, ((var(--page) - (var(--measure-min) + var(--sp-6) + var(--gutter)))) / 2))
@@ -1118,7 +805,7 @@ figure svg { display: block; width: 100%; height: auto; }
 }
 
 .article-wrapper > * {
-  grid-column: 2;             /* default: body column */
+  grid-column: 2;             
 }
 @media (max-width: 880px) {
   .article-wrapper {
@@ -1128,26 +815,13 @@ figure svg { display: block; width: 100%; height: auto; }
   .article-wrapper > * { grid-column: 1; }
 }
 
-/* ── Фрагмент эфира: ПЕРВОИСТОЧНИК НА ПОЛЯХ (Inv-CONSP-fragment-at-source) ──────
-   Конспект есть ВЫВОД; фрагмент — то, из чего он выведен. Свидетельство стоит ПРИ
-   высказывании, а не в шапке (тот же закон, что у иллюстрации).
 
-   Плеер садится в РЕЛЬС — ту самую колонку Мюллер-Брокманновской сетки, что объявлена
-   выше (`grid-template-columns: var(--rail) …`) и до сих пор держала только маргиналии.
-   Поля УЖЕ БЫЛИ; в них просто никто ничего не клал.
-
-   БРЕЙКПОИНТОВ ЗДЕСЬ НЕТ, И ЭТО СУТЬ. На узком экране сетка сама схлопывается в одну
-   колонку (@media 880px выше), и плеер падает В ПОТОК — не потому, что я это написал, а
-   потому, что он ЖИВЁТ В СЕТКЕ. Свойство, не несущее своей причины, переживает её и рвёт
-   вёрстку (Σ 2026-07-13: width=720 пережил носитель <img>); здесь причина одна — рельс. */
 .article-wrapper .fragment {
-  grid-column: 1;                   /* НА ПОЛЯХ. На мобильном рельса нет — правило выше
-                                       переводит ВСЕ дети в колонку 1, и плеер втекает в поток */
+  grid-column: 1;                   
   align-self: start;
   margin-block: var(--sp-2) var(--sp-4);
 }
-/* Ширину диктует ПОВЕРХНОСТЬ, не артефакт: в HTML у <audio> нет ни width, ни цвета.
-   Артефакт объявляет ЧТО он есть; поверхность — где он и какого размера. */
+
 .article-wrapper .fragment audio { display: block; width: 100%; }
 
 .article-wrapper p,
@@ -1160,16 +834,8 @@ figure svg { display: block; width: 100%; height: auto; }
 .article-wrapper h3,
 .article-wrapper .lead { text-wrap: balance; }
 
-/* ── Авторская строка (verse register) — static/konspekt class ─────────
-   Построчно утверждённый текст: рендерер (site_generator._md_static_to_html)
-   эмитит каждую авторскую строку как span.l (блок). Перенос ВНУТРИ авторской
-   строки на узкой мере — висячий отступ (verse-overflow, Bringhurst §2.4):
-   глаз отличает продолжение строки от новой авторской. Замер 2026-07-11,
-   mobile_375: 82 авторские строки → +45 рваных обрывков без регистра.
-   Токен --verse-hang — Spec design_tokens (fallback здесь — belt: var-default). */
-/* ── Шапка статьи (article-meta) — структурный регистр static-страниц:
-   абзацы между h1 и первым h2 (дата, байлайн) — тихая мета, не body-голос.
-   Правило СТРУКТУРНОЕ (позиция в дереве), не контентное. */
+
+
 .article-wrapper p.article-meta {
   color: var(--muted);
   font-size: var(--fs-body-min);
@@ -1177,41 +843,25 @@ figure svg { display: block; width: 100%; height: auto; }
 }
 .article-wrapper p.article-meta + :is(h2, h3) { margin-top: var(--sp-5); }
 
-/* ── Legal-footer регистр (trust-base колофон, ВСЕ страницы) ──────────
-   Стилей у .legal не было НИКОГДА (Σ 2026-07-11, увидено глазами на
-   mobile_375: default-поток, дыра перед блоком, ссылка body-кеглем).
-   Meta-регистр: hairline сверху, muted, fs-body-min, компактный ритм. */
+
 .article-wrapper .legal, .legal {
   margin-top: var(--sp-5);
   padding-top: var(--sp-3);
   border-top: 1px solid var(--rule);
   color: var(--muted);
   font-size: var(--fs-body-min);
-  /* перенос колофона (`manual`) — изъятие контракта, дом typography.md::hyphens.scopes (review A11) */
+  
 }
-/* КОЛОФОН СТОИТ ПО ТОЙ ЖЕ МЕРЕ, ЧТО И КАРТОЧКА: он ее сиблинг, а не подвал окна.
-   Замер 2026-09-22 глазами: карточка отбита по мере и центрирована, реквизиты шли от
-   левого края вьюпорта — два разных начала строки в одном узле документа. */
+
 .article-wrapper .legal, .legal { max-width: var(--measure); margin-left: auto; margin-right: auto; }
 .legal p { margin: 0 0 var(--sp-1); }
-/* СТРОКА ПОДВАЛА — СПИСОК ЧЛЕНОВ, ШОВ — ЗАЗОР (Q8 story-form, 2026-11-21): генератор
-   (`site_generator._legal_footer`) больше не клеит члены литералом « · », который при переносе
-   повисал на краю строки; разрыв возможен лишь между членами, и шов строки есть `column-gap`. */
+
 .legal :is(.legal-entity, .legal-docs, .legal-payment) {
   display: flex; flex-wrap: wrap; column-gap: var(--sp-3);
   margin: 0 0 var(--sp-1); padding: 0; list-style: none;
 }
 .legal a { color: var(--muted); }
-/* ЦЕЛЬ КАСАНИЯ — НЕ МЕНЬШЕ `--touch-min` ВЕЗДЕ В ОБОЛОЧКЕ (аудит D14, WCAG 2.5.8: 11 целей высотой 21 px).
-   Строчная ссылка `display:inline` не принимает `min-height`; токен читали лишь навигация и вкладки, а ссылки
-   полосы оферты, реквизитов, замка и условий — нет. Один признак на четыре места: поле вокруг текста —
-   ЦЕЛЬ, а не отступ.
-   ЦЕЛЬ — СВОЙСТВО КОРОБКИ, А НЕ РЕЖИМ РАСКЛАДКИ (B-3, замер 2026-11-10): здесь стоял `inline-flex`, а
-   flex-контейнер блокифицирует строчных детей — текст ссылки и `span.currency` становились ДВУМЯ
-   flex-элементами, и на 390 px знак «₽» уходил отдельным блоком от числа (x=350, w=12), хотя NBSP
-   между ними в разметке есть. Ссылка в строке есть ТЕКСТ: `inline-block` держит содержимое строчным
-   (переносится как текст, NBSP связывает), `min-height` — пол цели, а поле по блоку центрирует одну
-   строку в цели. Без единицы `lh` поле отбрасывается целиком, пол цели остаётся (прогрессивно). */
+
 .legal a, .offer-strip a, .closed-cta > a, .offer-terms a, nav.sections a {
   display: inline-block;
   min-height: var(--touch-min);
@@ -1219,10 +869,7 @@ figure svg { display: block; width: 100%; height: auto; }
 }
 .legal a:hover, .legal a:focus-visible { color: var(--ink); }
 
-/* ── Cookie-consent регистр (Σ 2026-07-11: баннер шёл browser-default —
-   голые кнопки, текст в край экрана; класса в CSS не существовало).
-   Карточка внизу, house-токены, touch-min кнопки; без transition
-   (нет пары для prefers-reduced-motion — и не нужна). */
+
 .cookie-banner {
   position: fixed;
   left: 12px; right: 12px; bottom: 12px;
@@ -1250,26 +897,18 @@ figure svg { display: block; width: 100%; height: auto; }
 .cookie-accept { background: var(--accent); color: var(--surface); border: 1px solid var(--accent); }
 .cookie-decline { background: transparent; color: var(--ink); border: 1px solid var(--rule); }
 .cookie-accept:hover, .cookie-accept:focus-visible { filter: brightness(1.12); }
-/* Inline-вариант — У signup-формы, в потоке (admin 2026-07-11: сообщение
-   о персональных данных только у формы регистрации; overlay нигде). */
+
 .cookie-banner--inline { position: static; left: auto; right: auto; bottom: auto;
   max-width: none; margin: var(--sp-3) 0 0; }
 .cookie-decline:hover, .cookie-decline:focus-visible { border-color: var(--ink); }
 
-/* Конечная пунктуация caps-заголовков: letter-spacing раздвигает и зазор
-   перед знаком («Т Е З И С .», Σ 2026-07-11) — компенсация ТЕМ ЖЕ токеном
-   трекинга (математично: сдвиг ≡ −tracking; смена токена — нулевая правка). */
+
 .article-wrapper :is(h1, h2, h3) .h-punct { margin-left: calc(-1 * var(--tracking-caps)); }
 
-/* Строки пункта списка: та же блочность (иначе спаны сливаются в поток
-   и слова склеиваются на стыках — Σ 2026-07-11 выверка №2: «приведётнас»),
-   но ОДНА левая ось — без висячего отступа (2nd-opinion п.3). */
+
 .article-wrapper li > .l { display: block; }
-/* Заголовки НЕ переносятся по слогам — норма набора (Мильчин §…; живьём:
-   «ЗАЧЕМ ЕХАТЬ, ЕС-/ЛИ», «ВСЁ-ТА-/КИ ПАРИЖ» — Gecko/WebKit рвут ru, Chromium
-   молчит: перцептивный профиль их и скрывал). Правило — для ВСЕХ страниц. */
-/* Dual-render: разметочный <br> между авторскими строками — для reader-режимов
-   (CSS-less); в styled-слое блочность даёт span.l, br гасится. */
+
+
 .article-wrapper :is(p, li) > .l + br { display: none; }
 
 .article-wrapper p > .l {
@@ -1281,13 +920,10 @@ figure svg { display: block; width: 100%; height: auto; }
   .article-wrapper :is(p, li) > .l { overflow-wrap: break-word; }
 }
 
-/* Kicker-абзац: первая авторская строка целиком курсивная («Ремесло»,
-   «Связка старого-нового») — микро-подзаголовок; отбивается сверху (2nd-opinion:
-   точки опоры при сканировании). Структурный признак, не контентный. */
+
 .article-wrapper p:has(> .l:first-child > em:only-child) { margin-top: var(--sp-5); }
 
-/* Static-list регистр (ul без класса — konspekt/manifesto): тире-маркер дома,
-   геометрия согласована с .l (маркер в поле, авторские строки — одной осью). */
+
 .article-wrapper ul:not([class]) {
   list-style: none;
   margin: 0 0 var(--sp-3);
@@ -1303,51 +939,28 @@ figure svg { display: block; width: 100%; height: auto; }
   left: -1.4em;
 }
 
-/* time: род цифр приходит контрактом набора (typography.md::reader_witness) и здесь не переобъявляется — частичное переобъявление стирало proportional-nums (css_audit: Inv-TYPO-shorthand-preserves-contract) */
 
-/* ── 3. Header — masthead, thesis-first ─────────────────────────────── */
+
+
 
 .article-wrapper > header {
-  /* admin 2026-05-13: header border-bottom удалён — дублировал .pricing-display
-     top-rule, две параллельные линии в пустоте читались как избыточность.
-     Header заканчивается визуальной массой самого hero-блока; ticket-rule
-     ниже остаётся единственным горизонтальным маркером (single ticket frame). */
+  
   margin: 0 0 var(--sp-6);
   padding: 0 0 var(--sp-4);
   display: grid;
   gap: var(--sp-2);
-  /* ЯЧЕЙКА ОБЯЗАНА УМЕТЬ СЖАТЬСЯ. Шапка есть элемент сетки `.article-wrapper`, а у
-     элемента grid/flex `min-width` по умолчанию `auto` — НЕ УЖЕ своего максимального
-     содержимого. Замер по цепи (Inv-SITE-form-at-reader, 2026-08-20, serbia_2027):
-     `.article-wrapper` 360 ✓ → HEADER 442 при `min-width: auto` ✗ → UL → LI. И
-     `max-width` этого не удерживает: процент считается от области, которую та же
-     шапка и растянула. Тот же закон записан в таблице страницы-рассказа — здесь был
-     пропущен. */
+  
   min-width: 0;
-  /* МЕРА ЧТЕНИЯ ЕСТЬ ПОТОЛОК, А НЕ ШИРИНА. `--measure` = 34em ≈ 66 знаков — величина
-     ТИПОГРАФИЧЕСКАЯ, выведенная из кегля и ничего не знающая о ширине экрана: на
-     вьюпорте 360px она даёт 443px, и шапка выходила за правый край, обрезаемая
-     `overflow-x: hidden` (замер Inv-SITE-form-at-reader 2026-08-20, serbia_2027).
-     `min(100%, …)` соединяет ДВЕ РАЗНЫЕ величины — потолок меры и связь с
-     контейнером, — которые `max-width` в одиночку соединить не может. Применено ко
-     ВСЕМ пяти носителям меры разом: свойство одно, и исключений у него нет. */
+  
   max-width: min(100%, var(--measure));
 }
 
-/* СЖИМАЕМОСТЬ ЕСТЬ СВОЙСТВО СЕМЕЙСТВА, А НЕ ОТДЕЛЬНОЙ ЯЧЕЙКИ. `min-width: auto` —
-   умолчание КАЖДОГО элемента grid/flex, поэтому чинить его поячеечно значит гнаться
-   за уровнями: снял у шапки — вылезла её `ul`, снимешь у `ul` — вылезет `li`
-   (замер Inv-SITE-form-at-reader 2026-08-20, три страницы подряд). Обе сетки статьи
-   объявляют это свойство ОДИН РАЗ за всех своих детей. */
+
 .article-wrapper > *,
 .article-wrapper > header > * { min-width: 0; }
 
 .article-wrapper h1 {
-  /* Display monumental — Inter 900 (Black). 0.95 leading; two-line stack reads
-     as architectural signage. Tracking: var(--tracking-caps) per Inv-TYPO-
-     consistent-tracking-caps (admin 2026-05-11: «прописные — разряженно»);
-     uppercase content gets positive tracking уvе-везде, including hero display.
-     Весы display — токен издания (`--display-weight`), умолчание сайта 900. */
+  
   font-weight: var(--display-weight, 900);
   font-size: clamp(var(--fs-2xl), 1.6rem + 3.6vw, var(--fs-3xl));
   line-height: var(--lh-display);
@@ -1359,9 +972,7 @@ figure svg { display: block; width: 100%; height: auto; }
 .article-wrapper h1::after { content: none; }
 
 .article-wrapper .lead {
-  /* Thesis line — Inter 500, slight optical scale up.
-     No italic (italic is serif convention; in Swiss register lead
-     declares its weight by structure, not style). */
+  
   font-weight: 500;
   font-size: var(--fs-m);
   line-height: var(--lh-tight);
@@ -1374,8 +985,7 @@ figure svg { display: block; width: 100%; height: auto; }
 
 .article-wrapper .organizers,
 .article-wrapper .with {
-  /* ALL-CAPS letter-spaced authorship — Swiss credit-line register.
-     Reads as masthead, not paragraph. */
+  
   font-weight: 500;
   font-size: var(--fs-2xs);
   line-height: var(--lh-tight);
@@ -1384,7 +994,7 @@ figure svg { display: block; width: 100%; height: auto; }
   margin: var(--sp-2) 0 0;
 }
 
-/* Status banner — quiet aside in tabular figures, no panel chrome. */
+
 .article-wrapper .status-banner {
   font-weight: 400;
   font-size: var(--fs-xs);
@@ -1399,27 +1009,17 @@ figure svg { display: block; width: 100%; height: auto; }
 }
 .article-wrapper .status-banner::before { content: none; }
 
-/* ── 4. Pricing colophon — masthead-bottom, NOT a hero panel.
-   Single-line catalogue colophon. The thesis is the hero, not the
-   price. Renders as «1 550 € · с участника». */
+
 
 .article-wrapper .pricing-display {
-  /* Re-think 2026-05-13 (admin): «вокруг ценника чуть побольше поля он не
-     напоминает билет. При этом очень аккуратно-конгруэтно». Dashed bottom
-     perforation removed (ticket cue retired); generous vertical breathing
-     replaces the tear-edge as the «отдельный блок» signal. Top-rule kept —
-     it's the universal section-rhythm separator, congruent с rest. Result:
-     ценник = quietly-set display block, не bordered ticket.
-     History: 2026-05-12 first iteration had 4-side ink-border (too tight);
-     reconsider дal top-rule + bottom dashed (still ticket); now: top-rule
-     only + larger field. Swiss-modernist: hairline + space, no enclosure. */
+  
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: end;
   gap: var(--sp-2) var(--sp-3);
   margin: var(--sp-6) 0;
   padding: var(--sp-6) 0 var(--sp-6);
-  border-top: 1px solid var(--rule);          /* section-rhythm separator above (congruent) */
+  border-top: 1px solid var(--rule);          
   text-align: left;
 }
 .article-wrapper .pricing-display .pricing-label {
@@ -1431,33 +1031,24 @@ figure svg { display: block; width: 100%; height: auto; }
   order: 2;
 }
 .article-wrapper .pricing-display .pricing-amount {
-  /* admin 2026-05-10: «Цену крупно, и как-либо ещё в рифму основному заголовку».
-     Match h1 register: same weight (900), same display family, comparable scale,
-     same tracking-caps token (positive — per Inv-TYPO-caps-tracked).
-     Outremer accent сохранён — single-accent rule. */
+  
   font-weight: var(--price-weight, 900);
   font-size: clamp(var(--fs-2xl), 1.6rem + 3.6vw, var(--fs-3xl));
   line-height: var(--lh-display);
   font-family: var(--sans-display);
-  color: var(--accent);                      /* Outremer — single accent */
+  color: var(--accent);                      
   font-variant-numeric: lining-nums tabular-nums;
   order: 1;
 }
 .article-wrapper .pricing-display .pricing-amount .currency {
-  /* зазор — неразрывный пробел в содержании, не поле */
+  
   font-weight: 700;
   color: var(--accent);
   font-size: 0.72em;
   letter-spacing: var(--tracking-zero);
 }
 
-/* Inv-TYPO-math-rel-aligned (text/typography.md, 2026-05-12) — relation glyphs
-   (↔ ⇔ ↑ ↓ → ← ≤ ≥ < > = ≠ ≈ ≡ ⊆ ⊇ ∈ ∉ ∀ ∃ ⇒ ⇐ …) wrapped at render-time в
-   <span class="math-rel">. Vertical-align tweak corrects per-font baseline drift
-   (Inter ↔ sits below text-center; Cyrillic body baseline is higher).
-   Token --math-rel-shift declared в text/site.md design_tokens (single SoT;
-   per-font calibration без code change). display: inline-block + line-height: 1
-   ensures the vertical-align reference is the box itself, not the inline baseline. */
+
 .math-rel,
 .article-wrapper .math-rel {
   display: inline-block;
@@ -1465,9 +1056,7 @@ figure svg { display: block; width: 100%; height: auto; }
   line-height: var(--lh-flush);
 }
 
-/* H2/H3 in three-level header (admin 2026-05-10):
-   landing_h1 (концепт) → ALL-CAPS .locus-h2 (locus + дата, tracking caps,
-   smaller scale than h1) → .organizers-h3 (sentence-case credit-line, sans). */
+
 .article-wrapper .locus-h2 {
   font-weight: var(--locus-weight, 700);
   font-size: clamp(var(--fs-l), 1.1rem + 1.6vw, var(--fs-xl));
@@ -1498,17 +1087,14 @@ figure svg { display: block; width: 100%; height: auto; }
   max-width: 32em;
   order: 3;
 }
-/* ЦЕНОВОЙ РЯД СОБЫТИЯ (цена — функция времени; по блоку на интервал постоянства). Интервал —
-   вся ширина сетки: сумма, срок словами, итоговые цены заявительных категорий. Неактивный на
-   сборке интервал скрыт inline `display:none`, и штатный индикатор окна страницы его снимает. */
+
 .article-wrapper .pricing-display .pricing-span {
   grid-column: 1 / -1;
   display: grid;
   gap: var(--sp-2);
   order: 1;
 }
-/* Внутри интервала порядок чтения — порядок разметки: цена, срок, категории, пояснение, будущая цена.
-   `order` самой цены (hero, 1) в сетке интервала не нужен и поднимал срок над ценой. */
+
 .article-wrapper .pricing-display .pricing-span .pricing-amount { order: 0; }
 .article-wrapper .pricing-display .pricing-amount .pricing-term {
   display: block;
@@ -1535,17 +1121,12 @@ figure svg { display: block; width: 100%; height: auto; }
 }
 
 
-/* ── 5. Sections — Swiss grid rhythm, hairline boundaries ─────────── */
+
 
 .article-wrapper { counter-reset: secctr dayctr; }
 
 .article-wrapper > section {
-  /* counter-increment retained for back-compat (некоторые legacy templates ссылаются);
-     visual rendering numeral отвергнут — admin 2026-05-13 «убери нумерацию 1 ТЕМА,
-     2 ПРОГРАММА». Section-rhythm теперь только через padding + margin air;
-     horizontal hairlines удалены как избыточные — единственный «билет» (ticket
-     metaphor) принадлежит .pricing-display (top-rule + dashed bottom = perforation).
-     Остальные section-breaks — silent. */
+  
   counter-increment: secctr;
   margin: var(--sp-5) 0 0;
   padding-top: 0;
@@ -1561,24 +1142,14 @@ figure svg { display: block; width: 100%; height: auto; }
   font-weight: var(--section-heading-weight, 500);
   font-size: var(--fs-l);
   line-height: var(--lh-tight);
-  font-family: var(--sans-display);   /* μ² Inter Medium —
-     Inv-TYPO-headings-weight-bound: body-context headings ≤ 500 (admin 2026-05-11
-     «полужирный в body»). Hero display (.concept-h1 / .locus-h2 / .pricing-amount)
-     carry heavier weight; section subheadings — medium register, no bold-in-body. */
-  /* proximity (2nd-opinion): над заголовком 2–3× больше, чем под. В ШОРТКАТЕ —
-     longhand margin-top ПЕРЕД этой строкой молча обнулялся ею (Σ 2026-07-11:
-     правка не действовала ни дня; класс закрыт css_audit:longhand-shorthand). */
+  font-family: var(--sans-display);   
+  
   margin: var(--sp-6) 0 var(--sp-3);
   color: var(--ink);
-  /* Регистр и разрядка ПРИХОДЯТ ОТ ЗАКОНА: `[data-case]` в _tokens.generated.css несёт
-     `text-transform` и `letter-spacing: var(--tracking-caps)` ОДНИМ правилом, поэтому
-     `Inv-TYPO-consistent-tracking-caps` выполняется по построению. Прежде оба ехали из
-     перечня-typeclass выше (admin 2026-05-12); перечень снят — см. довод там. */
+  
 }
 .article-wrapper > section > h2::before {
-  /* Section numerals (1, 2, 3…) удалены — admin 2026-05-13 «убери нумерацию
-     1 ТЕМА, 2 ПРОГРАММА». Catalogue-figure register не нужен; section identity
-     несут сами h2-заголовки в tracking-caps. */
+  
   content: none;
 }
 
@@ -1599,22 +1170,19 @@ figure svg { display: block; width: 100%; height: auto; }
 }
 .article-wrapper section p:last-child { margin-bottom: 0; }
 
-/* Opening-section first paragraph — small optical lift, no drop cap.
-   In Swiss register, the GRID is the ornament; letterforms stay calm. */
+
 .article-wrapper > section:first-of-type > p:first-of-type {
   font-size: var(--fs-m);
   line-height: var(--lh-body);
   color: var(--ink);
 }
 
-/* ── 7. Programme — chart of days. Hairline-divided entries, lining
-   figure in rail, ALL-CAPS date label, neo-grotesque theme, calm body.
-   Each day reads as a floor in a section drawing. */
+
 
 .article-wrapper > section.programme {
   margin-top: var(--sp-6);
   padding-top: var(--sp-5);
-  max-width: var(--page);   /* programme breaks the measure-narrow */
+  max-width: var(--page);   
 }
 
 .article-wrapper .days {
@@ -1642,13 +1210,9 @@ figure svg { display: block; width: 100%; height: auto; }
 }
 .article-wrapper .days > li:last-child  { border-bottom: 1px solid var(--rule); }
 
-/* Day numeral — Inter Tight 700, lining/tabular. Catalogue figure
-   in rail; weight signals primary; per-day accent reflects program arc
-   (Inv-PARIS-design-arc-per-day): Day 1 warm-gray / Day 2 Outremer / Day 3
-   Aalto-wood / Day 4 gallery-white. Tokens compiled из text/event-paris-2026-09.md
-   design_tokens (Inv-CSS-tokens-from-Spec). */
+
 .article-wrapper .days > li::before {
-  content: counter(dayctr, upper-roman);   /* «I II III IV» — admin 2026-05-11 «нумерация дней — латинскими цифрами»; classical register, congruent with the «100 лет» framing */
+  content: counter(dayctr, upper-roman);   
   font-weight: 700;
   font-size: var(--fs-m);
   line-height: var(--lh-flush);
@@ -1658,14 +1222,7 @@ figure svg { display: block; width: 100%; height: auto; }
   align-self: start;
   padding-top: 0.18em;
 }
-/* Inv-PARIS-design-arc-per-day:
-   Per-day accent (color) — четыре равноценных голоса контрапункта.
-   Single uniform rule-weight (1px). Прежняя 1/3/2/1 progression отвергнута:
-   она конструирует иерархию (Day 2 peak), что противоречит самой концепции
-   программы — «counterpoint of modernism variants», где Le Corbusier /
-   Aalto / Zadkine / Парижский ритейл = равные голоса диалектики, не
-   pyramid с центром. Арку выражает horizontal arc-band у footer
-   (4 equal-width полосы), не volume hierarchy в днях. */
+
 .article-wrapper .days > li[data-day="1"]::before { color: var(--paris-day-1-accent, var(--accent)); }
 .article-wrapper .days > li[data-day="1"]        { border-top: 1px solid var(--paris-day-1-accent, var(--rule)); }
 .article-wrapper .days > li[data-day="2"]::before { color: var(--paris-day-2-accent, var(--accent)); }
@@ -1675,16 +1232,10 @@ figure svg { display: block; width: 100%; height: auto; }
 .article-wrapper .days > li[data-day="4"]::before { color: var(--paris-day-4-accent, var(--accent)); }
 .article-wrapper .days > li[data-day="4"]        { border-top: 1px solid var(--paris-day-4-accent, var(--rule)); }
 
-/* arc-band footer-legend retired 2026-05-13. Filled colour-bars recreated
-   Day-2 peak через Outremer's natural saturation, contradicting
-   Inv-LDG-PARIS-days-equipotent. Polychromie-31 reference остаётся в
-   event-paris-2026-09.md::references (Spec), не на rendered page. */
+
 
 .article-wrapper .days .day-date {
-  /* admin 2026-05-13: «даты мелко — нарушает спецификацию эргономики».
-     fs-2xs (0.719rem) — это --fs-caps-min, для tracked-caps registers
-     (organizers credit-line, metadata strips). Lowercase «8 сентября» —
-     body register, должна быть ≥ --fs-body-min (fs-xs = 0.875rem). */
+  
   font-weight: 500;
   font-size: var(--fs-xs);
   line-height: var(--lh-tight);
@@ -1697,7 +1248,7 @@ figure svg { display: block; width: 100%; height: auto; }
   font-weight: 500;
   font-size: var(--fs-m);
   line-height: var(--lh-tight);
-  font-family: var(--sans-display);   /* medium — Inv-TYPO-headings-weight-bound */
+  font-family: var(--sans-display);   
   color: var(--ink);
   margin: 0 0 var(--sp-2);
   letter-spacing: var(--tracking-display-soft);
@@ -1713,12 +1264,7 @@ figure svg { display: block; width: 100%; height: auto; }
 }
 .article-wrapper .days .day-notes:last-child { margin-bottom: 0; }
 
-/* Evening-recur tile — повторяющийся «Вечер — вернисажи Paris Design Week»
-   (admin 2026-05-13). Структурно отделён от day-notes (data-yaml::evenings_recurring
-   registry + per-day evening: <key> reference); визуально — «вечерняя плашка»,
-   конгруэнтная содержанию: Outremer-tint background (Polychromie 31 ~5%) +
-   accent left-bar = late-day register, без shouting. Same body-size,
-   no italic (Swiss editorial register бескомпромиссно). */
+
 .article-wrapper .days .evening-recur {
   margin: var(--sp-3) 0 0;
   padding: var(--sp-2) var(--sp-3);
@@ -1753,7 +1299,7 @@ figure svg { display: block; width: 100%; height: auto; }
   .article-wrapper .days .evening-recur { grid-column: 1; }
 }
 
-/* ── 8. Definition list (concept pairs) — Swiss term/definition ── */
+
 
 .article-wrapper dl.pairs {
   margin: var(--sp-3) 0;
@@ -1764,7 +1310,7 @@ figure svg { display: block; width: 100%; height: auto; }
   font-weight: 500;
   font-size: var(--fs-m);
   line-height: var(--lh-tight);
-  font-family: var(--sans-display);   /* medium — Inv-TYPO-headings-weight-bound */
+  font-family: var(--sans-display);   
   color: var(--ink);
   margin: 0 0 var(--sp-1);
   letter-spacing: var(--tracking-tight);
@@ -1783,7 +1329,7 @@ figure svg { display: block; width: 100%; height: auto; }
   max-width: min(100%, var(--measure));
 }
 
-/* ── 9. Lists — chart bullets, parallel rhythm ─────────────────────── */
+
 
 .article-wrapper section ul {
   list-style: none;
@@ -1798,11 +1344,7 @@ figure svg { display: block; width: 100%; height: auto; }
   color: var(--ink-soft);
 }
 .article-wrapper section ul li::before {
-  /* Interpunct «·» aligned к first line's optical baseline (admin 2026-05-13:
-     «буллиты не выровнены относительно текста и не пропорциональны»).
-     font-size 1.05em (subtle, proportional к body) + line-height
-     matching body's lh-body so the dot sits на the same baseline rhythm as
-     the «о/н/а» x-height in text. */
+  
   content: "·";
   position: absolute;
   left: 0.45em;
@@ -1820,7 +1362,7 @@ figure svg { display: block; width: 100%; height: auto; }
   font-weight: 500;
   font-size: inherit;
 }
-/* Оптическое выравнивание знака пункта по строке (знак — свойство роли; поправка — свойство глифа). */
+
 .article-wrapper section ul li[data-marker]::before {
   position: absolute;
   top: 0;
@@ -1850,7 +1392,7 @@ figure svg { display: block; width: 100%; height: auto; }
 
 
 
-/* ── 10. Links — under-rule, focus-detected, accent on hover ────────── */
+
 
 .article-wrapper a {
   color: var(--ink);
@@ -1872,11 +1414,9 @@ figure svg { display: block; width: 100%; height: auto; }
   border-radius: 1px;
 }
 
-/* ── 11. Signup — editorial offer, Swiss form rigor ─────────────────── */
 
-/* Подложка заявки — ТОКЕНЫ издания (`--signup-backing*`, Спека text/event-<id>.md): не объявлены —
-   прежняя Swiss-линия сверху; объявлены — тонированный блок с каймой (не чисто-белый и не
-   чисто-чёрный, сдвиг с темой — принципал 2026-10-14). Форма читает токены, события не знает. */
+
+
 .article-wrapper section.signup-wrap {
   margin-top: var(--sp-6);
   padding-top: var(--signup-backing-inset, var(--sp-5));
@@ -1890,8 +1430,7 @@ figure svg { display: block; width: 100%; height: auto; }
   border-radius: var(--signup-backing-radius, 0);
   box-shadow: 0 4px 20px -4px var(--signup-backing-shadow, transparent);
 }
-/* Внутренний отступ подложки — ЕДИНСТВЕННОЕ поле у её краёв: поля крайних детей
-   складывались с ним (замер 2026-10-15: «ЗАЯВКА» на ~125px ниже края, пустота под кнопкой). */
+
 .article-wrapper section.signup-wrap > :first-child { margin-top: 0; }
 .article-wrapper section.signup-wrap > :last-child { margin-bottom: 0; }
 .article-wrapper section.signup-wrap > p {
@@ -1916,8 +1455,7 @@ figure svg { display: block; width: 100%; height: auto; }
   color: var(--muted);
 }
 .article-wrapper .signup-hint { color: var(--ink-soft); }
-/* Was opacity:0.75 — failed Inv-SITE-a11y-six: 0.75×#6E6E6E on #F4F1EB
-   computes to 2.86 contrast ratio (<4.5). Solid --ink-soft yields 7+. */
+
 .article-wrapper .signup-input {
   width: 100%;
   padding: 0.55em 0;
@@ -1930,7 +1468,7 @@ figure svg { display: block; width: 100%; height: auto; }
   border: none;
   border-bottom: 1px solid var(--signup-field-edge, var(--ink-soft));
   border-radius: 0;
-  min-height: var(--touch-min);   /* WCAG 2.5.8: цель касания поля не меньше --touch-min */
+  min-height: var(--touch-min);   
   transition: border-color 180ms ease;
 }
 .article-wrapper .signup-input:focus { outline: none; }
@@ -1988,23 +1526,15 @@ figure svg { display: block; width: 100%; height: auto; }
   color: var(--muted);
 }
 
-/* ── 12. Contact section — quiet post-signup ────────────────────────── */
+
 
 .article-wrapper section.contact { margin-top: var(--sp-5); padding-top: 0; border-top: none; }
 .article-wrapper section.contact h2 {
   font-weight: 500;
   font-size: var(--fs-m);
   line-height: var(--lh-tight);
-  font-family: var(--sans-display);   /* medium — Inv-TYPO-headings-weight-bound */
-  /* РЕГИСТР И РАЗРЯДКА СНЯТЫ ОТСЮДА (Σ 2026-09-23): это был ВТОРОЙ ДОМ решения,
-     которое принимает `Inv-TYPO-heading-case-by-depth` — регистр ВЫВОДИТСЯ из глубины
-     заголовка, а разрядка едет с регистром тем же правилом
-     (`Inv-TYPO-consistent-tracking-caps`). Пока лист лежал вне слоёв, эти две строки
-     молча отменяли оба закона; попав в слой, они стали бы спорить со слоем `form`
-     («закон не уступает») — то есть заведомо проигрывать. Спор, исход которого
-     предрешён, есть не правило, а мусор. `--tracking-tight` здесь была вдвойне неверна:
-     прописные требуют БОЛЬШЕ просвета, а не меньше (Bringhurst §3.2.5), и судья
-     `caps_tracking` замерял ровно её: tracking_em=-0.012 при поле [0.05 … 0.158]. */
+  font-family: var(--sans-display);   
+  
   color: var(--ink);
   margin: 0 0 var(--sp-1);
 }
@@ -2021,7 +1551,7 @@ figure svg { display: block; width: 100%; height: auto; }
   font-feature-settings: "tnum";
 }
 
-/* ── 13. About-organizers — colophon, end of article ────────────────── */
+
 
 .article-wrapper .about-organizer {
   border-top: 1px solid var(--ink);
@@ -2030,9 +1560,7 @@ figure svg { display: block; width: 100%; height: auto; }
   font-size: var(--fs-s);
   color: var(--ink-soft);
   max-width: min(100%, var(--measure));
-  /* Editorial surface paints `footer { background: var(--surface) }` (≈line
-     199) which would push hub-canvas through nested footer.about-organizer.
-     `transparent` lets the editorial substrate flow through continuously. */
+  
   background: transparent;
 }
 .article-wrapper .about-organizer h2 {
@@ -2048,9 +1576,7 @@ figure svg { display: block; width: 100%; height: auto; }
   margin: 0 0 var(--sp-2);
   line-height: var(--lh-body);
 }
-/* Inv-TYPO-no-bold-in-body: <strong> в body normalised — weight 500 (sans body
-   register), not bold. Inline emphasis preserved через caps + tracking, не weight
-   (admin 2026-05-10: «полужирный внутри body — AI-writing»). */
+
 .article-wrapper .about-organizer p strong {
   font-weight: 500;
   font-style: normal;
@@ -2059,19 +1585,17 @@ figure svg { display: block; width: 100%; height: auto; }
 }
 .article-wrapper .about-organizer .org-link {
   margin-top: var(--sp-3);
-  /* admin 2026-05-12 ergonomic audit — org-link = sentence-case body register,
-     not Caps typeclass member. Migrated --fs-2xs (caps-register, ≥11.5px)
-     → --fs-xs (body-register, ≥14px floor via --fs-body-min). */
+  
   font-weight: 500;
   font-size: var(--fs-xs);
   line-height: var(--lh-tight);
   font-family: var(--sans);
 }
 
-/* ── 14. Open-questions — internal block, hidden on public landing ──── */
+
 .article-wrapper .open-questions { display: none; }
 
-/* ── 15. Visually-hidden utility ────────────────────────────────────── */
+
 .visually-hidden,
 .article-wrapper .visually-hidden {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
@@ -2079,14 +1603,11 @@ figure svg { display: block; width: 100%; height: auto; }
   white-space: nowrap; border: 0;
 }
 
-/* ── 16. Mobile reading rhythm ──────────────────────────────────────── */
+
 
 @media (max-width: 600px) {
   .article-wrapper {
-    /* padding-top: резерв под потоковый хром (стрелка/тумблер = 16px +
-       touch-min) + воздух. Прежние правки резерва жили в @media 768 и
-       ПЕРЕКРЫВАЛИСЬ этим блоком ниже по каскаду (Σ 2026-07-11: «←» резала
-       «К» при любом значении там; подтверждено вторым мнением Gemini). */
+    
     padding: var(--chrome-clear) var(--sp-3) var(--sp-6);
     font-size: 1rem;
   }
@@ -2100,13 +1621,13 @@ figure svg { display: block; width: 100%; height: auto; }
   }
 }
 
-/* ── 17. Print — clean essay handoff ────────────────────────────────── */
+
 
 @media print {
   body { background: #fff; color: #000; }
   .nav-fade, .theme-toggle, .progress-bar, .scroll-top, .signup-wrap, .signup-form,
   footer { display: none !important; }
-  /* полоса рамки уходит вместе с органами рамки */
+  
   :root:has(.nav-fade, .theme-toggle) body::before { content: none; }
   .article-wrapper {
     max-width: 100%;
@@ -2121,12 +1642,9 @@ figure svg { display: block; width: 100%; height: auto; }
   .status-banner { display: none; }
 }
 
-/* ── 18. Reduced-motion / reduced-data ──────────────────────────────── */
 
-/* ОБЛАСТЬ — ДОКУМЕНТ, А НЕ ОБЁРТКА СТАТЬИ (замер 2026-11-20, ergo B: страница покупки под
-   reduce вела 2 анимации; гашение стояло на `.article-wrapper` и — сплошным `*` — под
-   prefers-reduced-data, то есть движение гасилось по запросу о ТРАФИКЕ). Движение гасится
-   по запросу о движении, на всём документе; трафик — только то, что стоит байтов. */
+
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -2139,7 +1657,7 @@ figure svg { display: block; width: 100%; height: auto; }
   .footer-portrait { display: none; }
 }
 
-/* ── 19. CLS-prevention — explicit aspect-ratio for inline images ───── */
+
 .article-wrapper img {
   max-width: 100%;
   height: auto;
@@ -2147,44 +1665,22 @@ figure svg { display: block; width: 100%; height: auto; }
 }
 
 
-/* Иллюстрация в статик-тексте (Σ 2026-07-12). Правил для <figure>/<img> не было НИ ОДНОГО:
-   картинка отрисовывалась дефолтом <img> (300×150) — сплющенный огрышек, который админ и не
-   увидел. Ширина по колонке, подпись — тихая мета в регистре шапки статьи. */
+
 article figure { margin: var(--space-l, 2rem) 0; }
-/* ШИРИНА ПО КОЛОНКЕ — ЗАКОН СТАТИК-ТЕКСТА, НЕ РАССКАЗА-ПОКАЗА: внутри `#doc` кадр не растёт выше своей
-   величины (`#doc img { max-width: 100% }` при атрибутах width/height настоящего размера). Без `:not(#doc)`
-   это правило перебивало натуральную величину: замер 2026-10-13 (1440, закрытая сборка) — кадр 925 px
-   выводился в 1265 css px (×1.37, на DPR 2 — 2530 device px из 925). */
-/* `.landing-art` — изображения Посадочной по местам — размер и показ задают правила СЛОТА (§ Landing art);
-   общее правило фигуры их не касается (его `#doc` в :not давал специфичность (1,0,3) и гасил показ
-   дневного/ночного растра и размеры слотов). */
+
+
 article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; display: block; }
-/* Подпись отделена КЕГЛЕМ и ГРАДАЦИЕЙ ЧЕРНИЛ, не наклоном: курсивного начертания
-   у гротеска нет, и `font-style: italic` дал бы синтезированный сдвиг кириллицы
-   (Inv-TYPO-italic-real-cut, принципал 2026-08-20). */
-/* ГРАДАЦИЯ — ТОКЕНОМ ЦВЕТА, НЕ ПРОЗРАЧНОСТЬЮ, И ТОЛЬКО В СТАТИК-СТАТЬЕ (аудит D3, 2026-10-11).
-   Здесь стояло `article figcaption { opacity: .62 }`: прозрачность умножалась на чернила токена и
-   на чужую разметку — `<article id="doc">` рассказа-показа тоже `article`, и ВСЕ его подписи
-   карточек (тег, заголовок, время, цитата) проседали ниже AA (axe serious: 85 узлов днём, 45 ночью;
-   #747370 на #eceae3 = 3.93). `--muted` — токен приглушённого текста, AA в обеих темах, а
-   `.article-wrapper` — род самой статьи: слой статей отделён от слоя рассказа-показа. */
+
+
 .article-wrapper figcaption { margin-top: .6rem; font-size: var(--fs-body-min, .875rem);
                      color: var(--muted); }
 
-/* ── СТРАНИЦА-СОБРАНИЕ (site_generator.p_collection) ─────────────────────────────
-   Один набор на ВСЕ собрания Событий и все ведра их тройки: род несёт `.board`
-   (записи, ранги, ярусы), здесь — только то, чем собрание отличается от доски:
-   крошки, заголовок-собрание и вкладки ведер.
-   ЭРГОНОМИКА: вкладка есть ЦЕЛЬ (≥ --touch-min по обеим осям), её состояние читается
-   НЕ ЦВЕТОМ ОДНИМ (рамка + чернила + aria-current), фокус виден всегда, наведением
-   ничего не открывается (Inv-CSS-no-hover-only), значений мимо токенов нет
-   (Inv-CSS-tokens-from-Spec). */
+
 .collection .crumbs { font-size: var(--fs-xs); line-height: var(--lh-tight); color: var(--muted); }
 .collection .crumbs a { color: inherit; text-decoration: none; }
 .collection .crumbs a:hover, .collection .crumbs a:focus-visible { color: var(--ink); }
 .collection .crumbs b { font-weight: inherit; color: var(--ink); }
-/* Уточнение имени собрания («все События» под «Действие —»): второй ярус заголовка,
-   кеглем и градацией чернил, без нового цвета (см. p_collection). */
+
 .collection .qualifier { margin: 0 0 var(--sp-4); font-size: var(--fs-s); line-height: var(--lh-tight); color: var(--muted); }
 .collection .tabs,
 .journal .tabs { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin: var(--sp-3) 0 var(--sp-5); }
@@ -2209,12 +1705,7 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
 .collection .tab[aria-current="page"] { color: var(--ink); border-color: var(--ink); }
 .collection .collection-empty { color: var(--muted); }
 
-/* ── JOURNAL и ДОСТУП ДЛЯ УЧЕНИКОВ ───────────────────────────────────────────────
-   Издание: заголовок поста ведёт на полную версию, знак § — постоянная ссылка на сам
-   пост. Знак низкоконтрастен в покое и проявляется у своего поста при наведении И при
-   фокусе (Inv-CSS-no-hover-only: клавиатура видит то же, что мышь), цель — не меньше
-   --touch-min, ширина строки эссенции ограничена мерой чтения (Inv-TYPO-measure-
-   reading-width). Значений мимо токенов нет. */
+
 .journal .post + .post { margin-top: var(--sp-6); }
 .journal .post h2 { line-height: var(--lh-tight); }
 .journal .post-when { font-size: var(--fs-xs); color: var(--muted); line-height: var(--lh-tight); }
@@ -2226,9 +1717,7 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
     min-width: var(--touch-min);
     min-height: var(--touch-min);
     margin-inline-start: calc(-1 * var(--touch-min));
-    /* Видна всегда, малым весом чернил: «прозрачна до наведения» была управлением, которого
-       нет без мыши (Inv-CSS-no-hover-only) и контрастом 1.0 (Inv-CSS-contrast-AA — замер
-       2026-09-15, desktop/night). Наведение и фокус лишь усиливают. */
+    
     color: var(--muted);
     text-decoration: none;
 }
@@ -2251,16 +1740,9 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
     line-height: var(--lh-flush);
 }
 
-/* ── ПОРЯДОК РЯДА И ПОСТОЯННЫЕ ССЫЛКИ ────────────────────────────────────────────
-   Обратный порядок — НАБОРОМ, а не перестановкой узлов: знаки швов стоят между
-   записями и при перестановке оказались бы по краям. Кнопка есть настоящая цель
-   (≥ --touch-min), её состояние читается диктором (aria-pressed) и рамкой, а не
-   цветом одним; фокус виден всегда. */
+
 .board[data-order="oldest"] { display: flex; flex-direction: column-reverse; }
-/* Шапка (крошки · заголовок · уточнение · вкладки) — ОДИН элемент потока: при обратном
-   порядке она остаётся первой и хранит свой внутренний порядок. Прежний `order:-1` на
-   трёх узлах переворачивал их взаимно (крошки под заголовком, перекрытые им —
-   замер 2026-09-15, desktop/night). */
+
 .board[data-order="oldest"] > .head { order: -1; }
 .order-toggle {
     display: inline-flex;
@@ -2283,23 +1765,15 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
 .order-toggle:focus-visible { outline: var(--focus-outline-min) solid var(--accent); outline-offset: var(--sp-1); }
 .order-toggle[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); }
 .nav-fade .nav-left, .nav-fade .nav-right { display: inline-flex; align-items: center; gap: var(--sp-2); }
-/* ПРАВЫЙ СЛОТ ПЛАШКИ УСТУПАЕТ МЕСТО ТУМБЛЕРУ ТЕМЫ, который стоит своим fixed сверху
-   справа: без резерва ссылка легла бы ПОД него — цель, перекрытая другой целью, есть
-   отказ обеим. Резерв выражен теми же токенами, что и сама цель. */
+
 .nav-fade .nav-right { padding-inline-end: calc(var(--touch-min) + var(--sp-2)); }
 
-/* КАРТОЧКА ПРОДАЖИ — ФОРМА ВЫВЕДЕННОГО СВОЙСТВА (Inv-AG-offer-makes-commercial).
-   Страница несет предложение ⇒ несет цену, скидки и действие. Все величины — токены
-   (Inv-CSS-tokens-from-Spec); число и знак валюты скреплены уже в тексте (money_parts). */
+
 .offer {
     max-width: var(--measure);
     margin: var(--space-section) auto 0;
-    /* ПОЛЕ КАРТОЧКИ — ПОЛЕ ХОЛСТА (review D1): по строке — тот же текучий `--space-padding`, что
-       у страницы; постоянные 40.5 px съедали четверть строки на 320–390 px. */
-    /* КРЮК ПОЛЯ (story-form, решение demiurge N1; review b17 P1): страница, объявившая поле своих
-       карточек `--card-inset`, даёт его оферте СО ВСЕХ сторон — одно поле, а не sp-5 сверху/снизу
-       при ≈14 px по бокам (замер 390: 41 px над шапкой таблицы). Без объявления — прежние
-       `--sp-5` по блоку и `--space-padding` по строке. */
+    
+    
     padding: var(--card-inset, var(--sp-5)) var(--card-inset, var(--space-padding));
     border: 1px solid var(--rule);
     border-radius: var(--radius-card);
@@ -2314,8 +1788,7 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
     color: var(--ink);
 }
 .offer-price .currency { letter-spacing: var(--tracking-zero); }
-/* БАЗА РЯДОМ С ДЕЙСТВУЮЩЕЙ ЦЕНОЙ: зачеркивание есть ФОРМА разности, а не текст
-   (Inv-SITE-presentation-not-in-page — знак зачеркивания в разметке был бы прозой). */
+
 .offer-was {
     text-decoration: line-through;
     text-decoration-thickness: 1px;
@@ -2332,12 +1805,8 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
     line-height: var(--lh-body);
     color: var(--muted);
 }
-/* ВЕЛИЧИНА СКИДКИ НЕ РВЕТСЯ И НЕ ТЕРЯЕТСЯ в сером: условие скидки — проза,
-   сама скидка — величина, и читатель сканирует величины столбиком. */
-/* КОНТРАКТ НАБОРА НАСЛЕДУЕТСЯ, и частичное его переобъявление его ТЕРЯЕТ:
-   `font-variant-numeric: tabular-nums` стерло бы oldstyle/proportional на всем
-   поддереве (Inv-TYPO-shorthand-preserves-contract, снято Π 2026-09-22). Скидки
-   стоят столбиком и без табуляции — у каждой своя строка списка. */
+
+
 .offer-cut {
     color: var(--ink);
     white-space: nowrap;
@@ -2349,18 +1818,15 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
     color: var(--ink);
 }
 .offer-cta { margin: var(--sp-5) 0 0; }
-/* ПРЕДМЕТ СТОИТ ПЕРЕД ЦЕНОЙ и набран прозой документа: цена без предмета не есть
-   предложение (замер 2026-09-22 — карточка называла «2 500 ₽», не называя за что). */
-/* ОТРЫВОК — ПЕРВЫЙ ЭЛЕМЕНТ РЕШЕНИЯ, и он занимает всю меру карточки. */
+
+
 .offer-preview { margin: 0 0 var(--sp-5); }
 .offer-preview video, .offer-preview img {
     display: block;
     width: 100%;
     height: auto;
     border-radius: var(--radius-card);
-    /* ПОДЛОЖКА КАДРА — ПОВЕРХНОСТЬ, А НЕ ЧЕРНИЛА (замер M2 2026-11-21): `--ink` ночью = 240, и пока
-       кадр грузится или там, где у него альфа, стоял белый прямоугольник на тёмной странице. Тот же
-       токен, что у прочих фигур страницы (`--surface-deep`). */
+    
     background: var(--surface-deep);
 }
 .offer-preview audio { display: block; width: 100%; margin: var(--sp-3) 0 0; }
@@ -2375,7 +1841,7 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
     font-size: var(--fs-s);
     color: var(--muted);
 }
-/* ССЫЛКИ ГОЛОСА — ПЕРЕЧЕНЬ С ПОЛЕМ, БЕЗ ГЛИФА-СТЫКА (закон E2, review D3). */
+
 .offer-voice-links {
     display: inline-flex;
     flex-wrap: wrap;
@@ -2399,20 +1865,10 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
 }
 .offer-what li { padding-left: var(--sp-3); text-indent: calc(-1 * var(--sp-3)); }
 .offer-what li::before { content: "— "; color: var(--muted); }
-/* ПОЛОСА ОРИЕНТИРА — ориентир, а не содержание: живет в слоте `banner` ВНЕ `<main>`,
-   поэтому меру и поля берет себе сама. */
+
 .offer-strip {
     max-width: var(--measure);
-    /* РЕЗЕРВ ПОД ПЛАШКОЙ ХРОМА. `.nav-fade` стоит своим fixed/absolute и высоты в
-       потоке НЕ ЗАНИМАЕТ, поэтому первый блок потока ложится ПОД ссылку «Доступ для
-       учеников» — замер 2026-09-22 глазами и прибором на 390 и 1280 px: полоса
-       y=28..70 внутри полосы хрома 0..76, два текста один поверх другого.
-       РЕЗЕРВ ЕСТЬ PADDING, А НЕ MARGIN, И ЭТО НЕСУЩЕЕ. При @media 768 плашка встаёт
-       `position:absolute` и выходит из потока; тогда `.offer-strip` оказывается первым
-       потоковым ребёнком body, и верхний МАРГИН схлопывается СКВОЗЬ родителя — отступ
-       применяется снаружи body, а сам элемент садится под плашку. Маргин структурно
-       непригоден для резерва под внепотоковый хром. Величина — `--chrome-clear`, один
-       дом на весь лист. */
+    
     margin: 0 auto;
     padding: var(--chrome-clear) var(--sp-4) 0;
     font-size: var(--fs-s);
@@ -2421,11 +1877,8 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
 }
 .offer + .legal { margin-top: var(--sp-6); }
 
-/* --- Buyer Player --- */
-/* ПЛЕЕР СТОИТ В КОЛОНКЕ ДОКУМЕНТА И НЕ ПОД ХРОМОМ (замер закрытой сборки 2026-10-11, 1440): плашка липла
-   к левому краю окна (x=0, вне поля `#doc`) и садилась на полосу хрома (`top: --sp-4` < высоты хрома).
-   Верх липкой плашки — `--chrome-clear` (тот же дом, что у `.offer`), боковое поле — не меньше поля
-   документа и центрирует плашку в мере. */
+
+
 .player-wrapper {
     position: sticky;
     top: var(--chrome-clear);
@@ -2446,21 +1899,14 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
         border-right: none;
         padding: var(--sp-1);
     }
-    /* ГЛАВЫ НА ТЕЛЕФОНЕ НЕ ИСЧЕЗАЮТ. `display: none` снимал с покупателя ровно то, за
-       что заплачено: на 375 px оставалось 81-минутное видео без единой точки входа.
-       Тесноту лечит ВЫСОТА со своей прокруткой, а не отсутствие. */
+    
     .player-chapters {
         max-height: 8.5rem;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
 }
-/* ПЛЕЕР ГОВОРИТ СЛОВАРЁМ СПЕКИ (Σ 2026-09-23). Здесь стояли `--surface-alt` и `--ink-muted` —
-   имена, которых нет ни в объявлении токенов, ни в листе: css_audit (Inv-CSS-tokens-from-Spec)
-   сутки звал это висящими ссылками, и у фона под видео, у плашки «продолжить» и у заголовка
-   оглавления глав цвета не было вовсе. Новых цветов в обход Спеки не заводим: объявленные
-   `--surface-deep` (глубокая поверхность) и `--muted` (приглушённый текст — им же пишет полоса
-   оферты) несут ровно этот смысл. */
+
 .player-wrapper video {
     width: 100%;
     display: block;
@@ -2515,7 +1961,7 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
 }
 .player-resume button {
     padding: var(--sp-1) var(--sp-2);
-    color: var(--ink);   /* кнопка не наследует чернила: UA-цвет кнопки на тёмной поверхности ночи — axe color-contrast serious ×2 */
+    color: var(--ink);   
     background: var(--surface);
     border: 1px solid var(--rule);
     border-radius: var(--radius-control);
@@ -2541,8 +1987,7 @@ button[data-play-t0]:hover {
     }
 }
 
-/* НОМЕР И ОТРЕЗОК — ПРИ ИМЕНИ, А НЕ ВМЕСТО НЕГО. Список глав есть карта записи;
-   карта называет места, а «Глава 4 · 35:41 – 46:46» места не называет. */
+
 .player-stamp {
     display: block;
     color: var(--muted);
@@ -2550,49 +1995,38 @@ button[data-play-t0]:hover {
     line-height: var(--lh-tight);
 }
 
-/* ИМЯ ЕДИНИЦЫ ВНЕ КРУГА ЧИТАТЕЛЯ. Не ссылка и не ошибка: указатель честно называет,
-   что понятие работает и там, куда этот документ не ведёт. Отличие от живой ссылки —
-   приглушённость и отсутствие подчёркивания, то есть отсутствие аффорданса двери. */
+
 [data-reach="out"] {
     color: var(--muted);
     text-decoration: none;
     cursor: default;
 }
 
-/* НОСИТЕЛИ СВЯЗКИ ПРИ ЗАПИСИ — оплаченное достижимо оттуда, где смотрят. */
+
 .player-carriers {
     margin: var(--sp-2) 0 0;
     font-size: var(--fs-s);
     color: var(--muted);
 }
 
-/* УСЛОВИЯ ПОД КНОПКОЙ. Не мелкий шрифт подвала: это ответ на главный вопрос
-   незнакомому продавцу, и он должен читаться, а не прятаться. */
+
 .offer-terms {
     margin: var(--sp-2) 0 0;
     font-size: var(--fs-s);
 }
-/* ЗАКРЫТОЕ В ОГЛАВЛЕНИИ — помечено, но не выключено: карта продукта остаётся целой.
-   Знак закрытого — замок, который генератор ставит в саму ссылку; хвостовой « ·» был вторым
-   знаком того же факта и висел стыком без пары (review D3). Разделитель — сам перечень. */
+
 nav [data-reach="out"] > a {
     color: var(--muted);
 }
 
-/* МЕРА ЧТЕНИЯ НА ПЛАНШЕТЕ. Замер гейта (`Inv-TYPO-measure-reading-width`, tablet_768):
-   тезисная строка `.lead` при кегле var(--fs-m) вмещала 43.8 знака при объявленной
-   полосе 45–75 — и удерживала три страницы сразу. Полоса есть свойство ЧТЕНИЯ, а не
-   вкуса: слишком короткая строка рвёт фразу и заставляет глаз возвращаться чаще, чем
-   он успевает удерживать смысл. Лечится кеглем — тем же объявленным токеном ступенью
-   ниже (20px → 17px даёт ≈51.5 знака), а не правкой текста автора. */
+
 @media (max-width: 768px) {
     .article-wrapper .lead { font-size: var(--fs-s); }
 }
 
-} /* @layer owner — конец авторского листа */
+} 
 
-/* Карточка предложения на входе (`_offers_section`, аудит D19): лицо страницы товара и его имя.
-   Лицо — декор ссылки заголовка (alt пуст, tabindex -1): одна цель касания на предложение. */
+
 .offers .offer-entry { max-width: 520px; margin: var(--sp-3, 1rem) 0; }
 .offer-entry-face { display: block; border: 0; }
 .offer-entry-face img { display: block; width: 100%; height: auto; border-radius: 4px; }
