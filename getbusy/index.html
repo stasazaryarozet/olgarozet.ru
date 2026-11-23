@@ -73,7 +73,7 @@
 <p class="getbusy-note">Введите e-mail, указанный при покупке — мы повторно отправим вашу ссылку доступа в кабинет.</p>
 <form class="signup-form" id="getbusy-resend" novalidate="">
 <label class="signup-label" for="getbusy-email">Отправить ссылку доступа повторно</label>
-<input autocomplete="email" class="signup-input" id="getbusy-email" inputmode="email" name="email" placeholder="you@example.com" required="" type="email"/>
+<input autocapitalize="off" autocomplete="email" autocorrect="off" class="signup-input" enterkeyhint="send" id="getbusy-email" inputmode="email" name="email" placeholder="you@example.com" required="" spellcheck="false" type="email"/>
 <button class="cta" id="getbusy-submit" type="submit">Отправить ссылку</button>
 <p aria-live="polite" class="getbusy-status" hidden="" id="getbusy-status" role="status"></p>
 </form>
@@ -92,10 +92,11 @@
           if (!v || !inp.validity.valid) { say(cfg.bad); inp.focus(); return; }
           btn.disabled = true;
           say('');
+          var body = new URLSearchParams();
+          body.set('email', v);
           fetch(cfg.url, {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({email: v})
+            body: body
           }).then(function(r){
             say(r.ok ? cfg.ok : cfg.err);
           }, function(){
