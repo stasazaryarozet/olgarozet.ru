@@ -1,9 +1,10 @@
 {
- "at": "2026-11-23T10:13:18+00:00",
+ "at": "2026-11-23T14:15:11+00:00",
  "domain": [
   ".state/engage/olgarozet/slots.json",
   "config/code_dirs.txt",
   "config/derivation_stamp.txt",
+  "config/tunnel_policy.json",
   "knowledge/claim-qualification/ledger",
   "knowledge/finance/entities.yaml",
   "knowledge/people/olgarozet/site",
@@ -595,9 +596,11 @@
   "scripts/surface_freshness.py",
   "scripts/text_invariants.py",
   "scripts/text_publish_preflight.py",
+  "scripts/tunnel/tunnels_portal.py",
+  "scripts/tunnel/tunnels_portal_view.py",
   "scripts/typography.py",
   "scripts/utils/git_publish.py"
  ],
- "rev": "ed1d4b30b44e4901eab9d2522fb1c8c96aa5e10a",
- "src_oid": "bc2705f8b1a76119"
+ "rev": "fa554fcdffa09977ff4793c746f1da8ed6140509",
+ "src_oid": "542b9bb299afe8e8"
 }

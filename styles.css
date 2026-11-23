@@ -1507,6 +1507,7 @@ nav.sections a { vertical-align: top; }
 .article-wrapper .signup-input {
   width: 100%;
   padding: 0.55em 0;
+  font-size: max(1rem, var(--font-size-doc, 1rem));
   font-weight: 400;
   font-size: var(--fs-s);
   line-height: var(--lh-tight);
@@ -1519,6 +1520,7 @@ nav.sections a { vertical-align: top; }
   min-height: var(--touch-min);   
   transition: border-color 180ms ease;
 }
+.article-wrapper .signup-input::placeholder { color: var(--muted); opacity: 1; }
 .article-wrapper .signup-input:focus { outline: none; }
 .article-wrapper .signup-input:focus-visible {
   border-bottom-color: var(--accent);

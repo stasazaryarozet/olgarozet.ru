@@ -22,6 +22,7 @@
 <meta content="Оплата: Стили и тренды: прошлое открывает будущее — Ольга Розет" name="twitter:title"/>
 <meta content="Оплата картой, через СБП или T-Pay. Доступ в личном кабинете и ссылка на e-mail." name="twitter:description"/>
 <meta content="https://olgarozet.ru/styles-past-opens-future/card.jpg" name="twitter:image"/>
+<link href="/favicon.ico" rel="icon" sizes="32x32"/>
 <link href="/favicon.png" rel="icon" type="image/png"/>
 <link href="/apple-touch-icon.png" rel="apple-touch-icon"/>
 <link href="/manifest.json" rel="manifest"/>
@@ -59,13 +60,14 @@
   setInterval(window.__applyTheme, 300000);
 })();
 </script>
-<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=8224bc63bb"); @import url("/styles.css?v=ceadf99eb7"); @import url("/narrative-showcase.css") layer(owner); @import url("/styles-past-opens-future/styles.css") layer(owner); @import url("/checkout.css") layer(owner);</style>
+<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=8224bc63bb"); @import url("/styles.css?v=4cdca25730"); @import url("/narrative-showcase.css") layer(owner); @import url("/styles-past-opens-future/styles.css") layer(owner); @import url("/checkout.css") layer(owner);</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Product", "name": "Стили и тренды: прошлое открывает будущее", "description": "Оплата картой, через СБП или T-Pay. Доступ в личном кабинете и ссылка на e-mail.", "image": "https://olgarozet.ru/styles-past-opens-future/card.jpg", "url": "https://olgarozet.ru/styles-past-opens-future/", "offers": {"@type": "Offer", "priceCurrency": "RUB", "availability": "https://schema.org/InStock", "price": "2000.00", "url": "https://olgarozet.ru/styles-past-opens-future/buy/", "seller": {"@type": "Person", "name": "Розет Ольга Григорьевна"}}}</script>
 <meta content="styles-past-opens-future/buy" name="page-slug"/>
 <style>
   [data-bf-mode="text"] [data-bf-probe], [data-bf-mode="text"][data-bf-probe], [data-bf-mode="text"] .bf, [data-bf-mode="text"] .bf * { overflow-wrap: normal !important; word-break: normal !important; hyphens: none !important; }
   .bf { position: relative; display: inline; }
   .bf > .bf-i { display: none; font-style: normal; font-weight: 500; text-decoration: none; line-height: 1; }
-  .bf-k { margin: var(--sp-1, 0.4rem) 0 var(--sp-3, 0.85rem); font-size: var(--fs-xs, 0.8rem); color: var(--muted, inherit); display: flex; flex-wrap: wrap; gap: var(--sp-1, 0.4rem) var(--sp-3, 1rem); }
+  .bf-k { grid-column: 1 / -1; margin: var(--sp-1, 0.4rem) 0 var(--sp-3, 0.85rem); font-size: var(--fs-xs, 0.8rem); color: var(--muted, inherit); display: flex; flex-wrap: wrap; gap: var(--sp-1, 0.4rem) var(--sp-3, 1rem); }
   .bf-k[hidden] { display: none; }
   [data-bf-mode="ico"] .bf > .bf-t {
     position: absolute !important; left: 0 !important; top: 0 !important;
@@ -259,21 +261,28 @@
     done.forEach(g => g.removeAttribute(S.mode_attr));
     return false;
   }
+  function sameLexeme(a, b) {
+    const x = a.toLowerCase(), y = b.toLowerCase();
+    if (x === y) return true;
+    const minLen = Math.min(x.length, y.length);
+    const stemLen = Math.min(4, minLen);
+    return stemLen >= 3 && x.slice(0, stemLen) === y.slice(0, stemLen);
+  }
   function collectKeyPairs(scope) {
-    const seen = new Set();
-    const pairs = [];
-    scope.querySelectorAll('.' + S.cls_root).forEach(bf => {
-      const modeHost = bf.closest('[' + S.mode_attr + ']');
-      if (!modeHost || modeHost.getAttribute(S.mode_attr) !== S.ico) return;
-      const ic = bf.querySelector('.' + S.cls_icon);
-      const tx = bf.querySelector('.' + S.cls_text);
-      const sym = ((ic && ic.textContent) || '').trim();
-      const word = ((tx && tx.textContent) || '').replace(/\s+/g, ' ').trim();
-      if (!sym || !word || seen.has(sym + '\t' + word)) return;
-      seen.add(sym + '\t' + word);
-      pairs.push([sym, word]);
-    });
-    return pairs;
+    return Array.from(scope.querySelectorAll('.' + S.cls_root))
+      .filter(bf => {
+        const modeHost = bf.closest('[' + S.mode_attr + ']');
+        return Boolean(modeHost && modeHost.getAttribute(S.mode_attr) === S.ico);
+      })
+      .map(bf => {
+        const ic = bf.querySelector('.' + S.cls_icon);
+        const tx = bf.querySelector('.' + S.cls_text);
+        return [((ic && ic.textContent) || '').trim(), ((tx && tx.textContent) || '').replace(/\s+/g, ' ').trim()];
+      })
+      .filter(([sym, word]) => Boolean(sym && word))
+      .reduce((acc, [sym, word]) => (
+        acc.some(([s, w]) => s === sym && sameLexeme(w, word)) ? acc : [...acc, [sym, word]]
+      ), []);
   }
   function keyAnchorOf(scope) {
     return scope.closest('table') || scope;
@@ -339,35 +348,37 @@
 <article id="doc">
 <header>
 <h1 data-case="upper" data-field="title" data-role="title"><span class="checkout-title-full">Стили и тренды: прошлое открывает будущее</span><span aria-hidden="true" class="checkout-title-act">Оплата</span></h1>
-<p class="checkout-composition" data-field="subtitle" data-role="note"><span>9 глав</span><span>19 понятий</span><span>7 стилей по осям</span><span>4 шага упражнения</span><span>11 проверок</span></p>
+<p class="checkout-composition" data-field="subtitle" data-role="note"><span>9 глав</span><span>19 понятий</span><span>7 стилей по осям</span><span>4 шага упражнения</span><span>13 проверок</span></p>
 </header>
 <section aria-label="Оплата" class="checkout checkout--server">
 <div class="checkout-decision">
 <div class="checkout-decision-price"><p class="checkout-price"><s class="checkout-base" id="checkout-base">2 500 ₽</s> <span id="checkout-price">2 000 ₽</span></p></div>
-<p class="checkout-sub checkout-launch" data-until="2026-11-24T09:07:30.325317+00:00">−500 ₽ к запуску продаж — при оплате до 24 ноября, 09:07</p>
+<p class="checkout-sub checkout-launch" data-until="2026-11-24T09:07:30.325317+00:00">−500 ₽ к запуску продаж — при оплате до 24 ноября, 09:07 <abbr>UTC</abbr></p>
 <p class="checkout-hint">Скидки суммируются</p>
 <div aria-live="polite" class="checkout-status" hidden="" id="pay-status"><p class="checkout-sub" id="pay-status-say"></p><p class="checkout-hint checkout-order" hidden="" id="pay-status-order"></p><p class="checkout-hint checkout-elapsed" hidden="" id="pay-status-elapsed"></p><p class="checkout-acts"><a class="checkout-act" hidden="" id="pay-status-open">Открыть</a><button class="checkout-act" hidden="" id="pay-status-paid" type="button">Я оплатил(а)</button></p><p class="checkout-hint checkout-receipt" hidden="" id="pay-status-receipt"><span id="pay-status-receipt-say"></span> <a class="checkout-act" hidden="" id="pay-status-receipt-link" rel="noopener" target="_blank">Открыть чек</a></p></div>
 <form class="checkout-server-form" id="checkout-server-form" novalidate="">
 <p class="checkout-sub" id="checkout-status">После оплаты доступ откроется здесь и придет на ваш e-mail.</p>
 <label class="checkout-label" for="checkout-email">E-mail для доступа</label>
 <input aria-describedby="checkout-why checkout-error" autocapitalize="off" autocomplete="email" class="checkout-input" enterkeyhint="done" id="checkout-email" inputmode="email" placeholder="you@example.com" required="" spellcheck="false" type="email"/>
+<p aria-live="polite" class="checkout-typo" hidden="" id="checkout-typo" role="status"><span id="checkout-typo-text"></span> <button class="checkout-typo-btn" id="checkout-typo-btn" type="button"></button></p>
 <p class="checkout-hint checkout-why" id="checkout-why">На этот адрес придет ссылка доступа и чек об оплате.</p>
 <details class="checkout-promo checkout-promo-fold" hidden="" id="checkout-promo"><summary>Есть промокод?</summary><label class="visually-hidden" for="checkout-promo-in">Промокод</label><input aria-describedby="checkout-promo-msg" autocapitalize="characters" autocomplete="off" class="checkout-input" id="checkout-promo-in" placeholder="Код скидки" spellcheck="false" type="text"/><p aria-live="polite" class="checkout-hint" hidden="" id="checkout-promo-msg" role="status"></p></details>
 <p class="checkout-error" hidden="" id="checkout-error" role="alert"></p>
-<button class="checkout-submit" id="checkout-submit" type="submit">Перейти к оплате</button>
+<button class="checkout-submit" id="checkout-submit" type="submit">Перейти к оплате — 2 000 ₽</button>
+<details class="checkout-more checkout-intl" id="checkout-intl"><summary>Оплата картой иностранного банка</summary><p class="checkout-hint">Онлайн-оплата на этой странице принимает карты российских банков, <abbr>СБП</abbr> и T-Pay. Если у вас карта иностранного банка, напишите на o.g.rozet@gmail.com с темой «Стили и тренды: прошлое открывает будущее» — пришлем способ оплаты и откроем доступ.</p></details>
 <p class="checkout-hint checkout-seller">Продавец — Розет Ольга Григорьевна.</p>
 <div class="checkout-consent"><p class="offer-consent">Нажимая «Перейти к оплате», вы принимаете <a href="/legal/">оферту</a> и <a href="/privacy/">политику обработки персональных данных</a></p></div>
 </form>
 </div>
 <noscript><p class="checkout-error">Для перехода к оплате нужен JavaScript — включите его и обновите страницу.</p></noscript>
-<div class="value-fit" data-bf-scope="flow"><table class="value checkout-value"><thead><tr><th scope="col"><span class="visually-hidden">Что внутри</span></th><th data-bf-rank="1" scope="col"><span class="bf" data-bf-w="7"><span class="bf-t">открыто</span><span aria-hidden="true" class="bf-i">🔓</span></span></th><th data-bf-rank="1" scope="col"><span class="bf" data-bf-w="9"><span class="bf-t">полностью</span><span aria-hidden="true" class="bf-i">🔑</span></span></th></tr></thead><tbody><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="5"><span class="bf-t">главы</span><span aria-hidden="true" class="bf-i">📚</span></span></th><td>3</td><td>9</td></tr><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="7"><span class="bf-t">понятия</span><span aria-hidden="true" class="bf-i">🔤</span></span></th><td>6</td><td>19</td></tr><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="5"><span class="bf-t">стили по осям</span><span aria-hidden="true" class="bf-i">🎨</span></span></th><td>1</td><td>7</td></tr><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="10"><span class="bf-t">шаги упражнения</span><span aria-hidden="true" class="bf-i">✍️</span></span></th><td>1</td><td>4</td></tr><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="8"><span class="bf-t">проверки</span><span aria-hidden="true" class="bf-i">✅</span></span></th><td>1</td><td>11</td></tr><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="6"><span class="bf-t">минуты записи</span><span aria-hidden="true" class="bf-i">⏳</span></span></th><td>5</td><td>81</td></tr></tbody></table></div>
-<div aria-labelledby="checkout-terms-h" class="checkout-terms" id="checkout-terms" role="group"><h2 class="checkout-label" data-case="plain" id="checkout-terms-h">Условия</h2><ul><li data-term="term">Доступ — не менее 12 месяцев с даты оплаты.</li><li data-term="receipt">Чек <abbr>НПД</abbr> придет письмом — вместе с доступом или следом, отдельно.</li><li data-term="seller">Продавец — Розет Ольга Григорьевна.</li></ul><details class="checkout-more" data-term="refund"><summary>Возврат</summary><p>До открытия доступа к цифровому продукту оплата возвращается полностью по первому требованию.</p><p>После открытия доступа возврат производится по обращению на o.g.rozet@gmail.com (с указанием номера заказа или адреса электронной почты покупки), направленному в течение четырнадцати дней с даты оплаты.</p></details><p class="offer-terms"><a href="/legal/">Когда открывается доступ, на какой срок и как вернуть деньги</a></p></div>
+<div class="value-fit" data-bf-scope="flow"><table class="value checkout-value"><thead><tr><th scope="col"><span class="visually-hidden">Что внутри</span></th><th data-bf-rank="1" scope="col"><span class="bf" data-bf-w="7"><span class="bf-t">открыто</span><span aria-hidden="true" class="bf-i">🔓</span></span></th><th data-bf-rank="1" scope="col"><span class="bf" data-bf-w="9"><span class="bf-t">полностью</span><span aria-hidden="true" class="bf-i">🔑</span></span></th></tr></thead><tbody><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="5"><span class="bf-t">главы</span><span aria-hidden="true" class="bf-i">📚</span></span></th><td>3</td><td>9</td></tr><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="7"><span class="bf-t">понятия</span><span aria-hidden="true" class="bf-i">🔤</span></span></th><td>6</td><td>19</td></tr><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="5"><span class="bf-t">стили по осям</span><span aria-hidden="true" class="bf-i">🎨</span></span></th><td>1</td><td>7</td></tr><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="10"><span class="bf-t">шаги упражнения</span><span aria-hidden="true" class="bf-i">✍️</span></span></th><td>1</td><td>4</td></tr><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="8"><span class="bf-t">проверки</span><span aria-hidden="true" class="bf-i">✅</span></span></th><td>3</td><td>13</td></tr><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="6"><span class="bf-t">минуты записи</span><span aria-hidden="true" class="bf-i">⏳</span></span></th><td>5</td><td>81</td></tr></tbody></table></div>
+<div aria-labelledby="checkout-terms-h" class="checkout-terms" id="checkout-terms" role="group"><h2 class="checkout-label" data-case="plain" id="checkout-terms-h">Условия</h2><ul><li data-term="term">Доступ — не менее 12 месяцев с даты оплаты.</li><li data-term="access">Смотреть можно с телефона, планшета и компьютера — без логина и пароля, по личной ссылке.</li><li data-term="gift">В подарок: укажите в поле выше e-mail получателя или свой адрес — и перешлите ему ссылку доступа.</li><li data-term="receipt">Чек <abbr>НПД</abbr> придет письмом — вместе с доступом или следом, отдельно.</li><li data-term="seller">Продавец — Розет Ольга Григорьевна.</li></ul><details class="checkout-more" data-term="refund"><summary>Возврат</summary><p>До открытия доступа к цифровому продукту оплата возвращается полностью по первому требованию.</p><p>После открытия доступа возврат производится по обращению на o.g.rozet@gmail.com (с указанием номера заказа или адреса электронной почты покупки), направленному в течение четырнадцати дней с даты оплаты.</p></details><p class="offer-terms"><a href="/legal/">Когда открывается доступ, на какой срок и как вернуть деньги</a></p></div>
 <div aria-labelledby="checkout-next-h" class="checkout-next" role="group"><h2 class="checkout-label" data-case="plain" id="checkout-next-h">Что дальше</h2><ol><li>Нажмите «Перейти к оплате» — откроется защищенная платежная форма банка (карта, <abbr>СБП</abbr> или T-Pay).</li><li>После подтверждения оплаты доступ откроется на этой странице, а ссылка и чек придут на указанный e-mail.</li><li>Ссылка ведет в личный кабинет <a href="https://getbusy.olgarozet.ru/">getbusy.olgarozet.ru</a>.</li></ol></div>
 <form class="checkout-recover" id="pay-status-recover" novalidate=""><label class="checkout-label" for="pay-status-ref">Уже оплатили? Введите номер заказа</label><input aria-describedby="pay-status-recover-hint pay-status-recover-say" autocapitalize="characters" autocomplete="off" class="checkout-input" id="pay-status-ref" spellcheck="false" type="text"/><p class="checkout-hint" id="pay-status-recover-hint">После подтверждения оплаты ссылка откроется здесь.</p><button class="cta" type="submit">Проверить</button><p aria-live="polite" class="checkout-hint" id="pay-status-recover-say"></p></form><ul class="checkout-help"><li>Вкладку можно закрыть после оплаты: ссылка доступа и чек придут на указанный e-mail.</li><li>Вернулись на страницу без автоматического открытия — введите номер заказа выше.</li></ul><p class="checkout-hint" id="pay-status-contact">Доступ не пришел? Напишите на o.g.rozet@gmail.com и укажите номер заказа.</p>
 <a class="checkout-back" href="/styles-past-opens-future/">← Вернуться к описанию</a>
 </section>
 <footer aria-label="Реквизиты и юридическая информация" class="legal" role="group"><ul class="legal-entity" role="list"><li>Розет Ольга Григорьевна</li><li><abbr>ИНН</abbr> 500403820698</li><li><abbr>ОГРНИП</abbr> 325774600886216</li><li>применяет <abbr>НПД</abbr></li></ul><ul class="legal-docs" role="list"><li><a href="/legal/">Договор-оферта</a></li><li><a href="/privacy/">Политика обработки персональных данных</a></li></ul><ul class="legal-payment" role="list"><li>Оплата:</li><li><abbr>СБП</abbr></li><li>T-Pay</li><li>карта</li></ul></footer>
-<script id="checkout-cfg" type="application/json">{"provider": "tbank", "mode": "provider", "init_url": "https://getbusy.olgarozet.ru/buy/styles-past-opens-future", "client_wait_ms": 10000, "glyph": "₽", "base_text": "2 500 ₽", "spans": [{"from": null, "to": "2026-11-23T09:07:30.325317+00:00", "amount": "2500.00", "kop": 250000, "price_text": "2 500", "text": "2 500 ₽", "pay_by": "До 23 ноября, 10:07 — срок этой суммы: перевод на нее позже доступ не откроет.", "until_ms": 1795428450325}, {"from": "2026-11-23T09:07:30.325317+00:00", "to": "2026-11-24T09:07:30.325317+00:00", "amount": "2000.00", "kop": 200000, "price_text": "2 000", "text": "2 000 ₽", "pay_by": "До 24 ноября, 10:07 — срок этой суммы: перевод на нее позже доступ не откроет.", "until_ms": 1795514850325}, {"from": "2026-11-24T09:07:30.325317+00:00", "to": null, "amount": "2500.00", "kop": 250000, "price_text": "2 500", "text": "2 500 ₽"}], "promo": {"server": true, "bad": "Код не найден", "form": {"charset": "A-Za-z0-9-", "trim": "\\t\\n\\v\\f\\r    -     　﻿"}}, "bad_email": "Проверьте e-mail: на него придет ссылка доступа.", "no_window": "Сейчас нет действующего интервала цены — обновите страницу позже.", "no_price": "Цена не действует", "submit_label": "Перейти к оплате", "busy_text": "Открываем страницу оплаты…", "server_error": "Не удалось открыть страницу оплаты. Попробуйте еще раз.", "promo_bad": "Промокод не найден — проверьте написание или очистите поле.", "status": {"route": "/pay/tbank-status/{h}", "params": ["h"], "url": "https://getbusy.olgarozet.ru/pay/tbank-status/{h}", "prefix": "pay-status|tbank|", "late_ms": 30000, "grace_ms": 3600000, "every_ms": {"checking": 3000, "waiting": 15000}, "key": {"ref": "SPPF", "sep": "-", "alphabet": "ABCDEFGHJKMNPQRSTVWXYZ23456789", "length": 10}, "phrases": {"waiting": "Проверяем оплату — ссылка доступа откроется на этой странице и придет на указанный e-mail.", "checking": "Подтверждаем оплату — доступ откроется на этой странице и придет на указанный e-mail.", "late": "Подтверждение от банка еще идет. Как только оно придет, доступ откроется на этой странице, а ссылка придет на указанный e-mail.", "owed": "Оплата получена, доступ еще не открыт", "ready": "Оплата получена — доступ открыт.", "ready_no_letter": "Оплата получена — доступ открыт. Сохраните эту ссылку или номер заказа: по нему доступ откроется здесь снова.", "expired": "Окно оплаты закрылось. Если деньги списались, проверьте статус заказа по его номеру ниже.", "failed": "Оплата не завершена. Попробуйте снова или проверьте данные карты.", "unreachable": "Не удается проверить статус: нет связи с сервером. Оплата не теряется — ссылка придет на указанный e-mail, а по номеру заказа доступ откроется здесь позже.", "recover_bad": "Это не похоже на номер заказа — проверьте его и попробуйте снова.", "recover_not_found": "По этому номеру заказа оплата пока не подтверждена. Когда придет подтверждение банка, доступ откроется на этой странице и придет на указанный e-mail. Напишите на o.g.rozet@gmail.com и укажите номер заказа."}, "elapsed_tpl": "Прошло: {time}", "order_tpl": "Номер заказа: {order}", "receipt": {"issued": "Чек сформирован.", "pending": "Чек формируется — ссылка появится здесь и придет в письме."}, "verdicts": {"refused": {"terminal": true, "say": {"price_not_admitted": "Оплата получена, но сумма не совпала с ценой на момент заказа. Автор решит вручную: доступ или возврат. Напишите на o.g.rozet@gmail.com и укажите номер заказа.", "grant_refused": "Оплата получена, но доступ не открылся автоматически. Автор решит вручную: доступ или возврат. Напишите на o.g.rozet@gmail.com и укажите номер заказа."}}, "review": {"terminal": false, "say": {"": "Оплата получена и проходит проверку. Автор подтвердит доступ вручную. Напишите на o.g.rozet@gmail.com и укажите номер заказа."}}}, "contact": "o.g.rozet@gmail.com"}}</script>
+<script id="checkout-cfg" type="application/json">{"provider": "tbank", "mode": "provider", "init_url": "https://getbusy.olgarozet.ru/buy/styles-past-opens-future", "client_wait_ms": 10000, "glyph": "₽", "base_text": "2 500 ₽", "spans": [{"from": null, "to": "2026-11-23T09:07:30.325317+00:00", "amount": "2500.00", "kop": 250000, "price_text": "2 500", "text": "2 500 ₽", "pay_by": "До 23 ноября, 10:07 — срок этой суммы: перевод на нее позже доступ не откроет.", "until_ms": 1795428450325}, {"from": "2026-11-23T09:07:30.325317+00:00", "to": "2026-11-24T09:07:30.325317+00:00", "amount": "2000.00", "kop": 200000, "price_text": "2 000", "text": "2 000 ₽", "pay_by": "До 24 ноября, 10:07 — срок этой суммы: перевод на нее позже доступ не откроет.", "until_ms": 1795514850325}, {"from": "2026-11-24T09:07:30.325317+00:00", "to": null, "amount": "2500.00", "kop": 250000, "price_text": "2 500", "text": "2 500 ₽"}], "promo": {"server": true, "bad": "Код не найден", "form": {"charset": "A-Za-z0-9-", "trim": "\\t\\n\\v\\f\\r    -     　﻿"}}, "bad_email": "Проверьте e-mail: на него придет ссылка доступа.", "no_window": "Сейчас нет действующего интервала цены — обновите страницу позже.", "no_price": "Цена не действует", "submit_label": "Перейти к оплате", "submit_tpl": "Перейти к оплате — {price}", "busy_text": "Открываем страницу оплаты…", "server_error": "Не удалось открыть страницу оплаты. Попробуйте еще раз.", "promo_bad": "Промокод не найден — проверьте написание или очистите поле.", "tz_local_note": "({time} по вашему времени)", "email_typo": {"hint": "Возможно, вы имели в виду {suggested}?", "apply": "Исправить", "domains": {"gamil.com": "gmail.com", "gmial.com": "gmail.com", "gnail.com": "gmail.com", "gmail.ru": "gmail.com", "gmal.com": "gmail.com", "gmai.com": "gmail.com", "yandx.ru": "yandex.ru", "yadnex.ru": "yandex.ru", "yanex.ru": "yandex.ru", "yande.ru": "yandex.ru", "mial.ru": "mail.ru", "mal.ru": "mail.ru", "maik.ru": "mail.ru", "mail.con": "mail.ru", "icloud.con": "icloud.com", "icoud.com": "icloud.com", "outlok.com": "outlook.com", "bk.con": "bk.ru", "inbox.con": "inbox.ru", "list.con": "list.ru"}}, "status": {"route": "/pay/tbank-status/{h}", "params": ["h"], "url": "https://getbusy.olgarozet.ru/pay/tbank-status/{h}", "prefix": "pay-status|tbank|", "late_ms": 30000, "grace_ms": 3600000, "every_ms": {"checking": 3000, "waiting": 15000}, "key": {"ref": "SPPF", "sep": "-", "alphabet": "ABCDEFGHJKMNPQRSTVWXYZ23456789", "length": 10}, "phrases": {"waiting": "Проверяем оплату — ссылка доступа откроется на этой странице и придет на указанный e-mail.", "checking": "Подтверждаем оплату — доступ откроется на этой странице и придет на указанный e-mail.", "late": "Подтверждение от банка еще идет. Как только оно придет, доступ откроется на этой странице, а ссылка придет на указанный e-mail.", "owed": "Оплата получена, доступ еще не открыт", "ready": "Оплата получена — доступ открыт.", "ready_no_letter": "Оплата получена — доступ открыт. Сохраните эту ссылку или номер заказа: по нему доступ откроется здесь снова.", "expired": "Окно оплаты закрылось. Если деньги списались, проверьте статус заказа по его номеру ниже.", "failed": "Оплата не завершена. Попробуйте снова или проверьте данные карты.", "unreachable": "Не удается проверить статус: нет связи с сервером. Оплата не теряется — ссылка придет на указанный e-mail, а по номеру заказа доступ откроется здесь позже.", "recover_bad": "Это не похоже на номер заказа — проверьте его и попробуйте снова.", "recover_not_found": "По этому номеру заказа оплата пока не подтверждена. Когда придет подтверждение банка, доступ откроется на этой странице и придет на указанный e-mail. Напишите на o.g.rozet@gmail.com и укажите номер заказа."}, "elapsed_tpl": "Прошло: {time}", "order_tpl": "Номер заказа: {order}", "receipt": {"issued": "Чек сформирован.", "pending": "Чек формируется — ссылка появится здесь и придет в письме."}, "verdicts": {"refused": {"terminal": true, "say": {"price_not_admitted": "Оплата получена, но сумма не совпала с ценой на момент заказа. Автор решит вручную: доступ или возврат. Напишите на o.g.rozet@gmail.com и укажите номер заказа.", "grant_refused": "Оплата получена, но доступ не открылся автоматически. Автор решит вручную: доступ или возврат. Напишите на o.g.rozet@gmail.com и укажите номер заказа."}}, "review": {"terminal": false, "say": {"": "Оплата получена и проходит проверку. Автор подтвердит доступ вручную. Напишите на o.g.rozet@gmail.com и укажите номер заказа."}}}, "contact": "o.g.rozet@gmail.com"}}</script>
 </article>
 <script data-api="PayStatus" src="/pay_status.js"></script>
 <script>
@@ -384,10 +395,66 @@
   var promoBox = document.getElementById('checkout-promo');
   var promoIn = document.getElementById('checkout-promo-in');
   var promoMsg = document.getElementById('checkout-promo-msg');
-  var promo = null, busy = false;
+  var typoBox = document.getElementById('checkout-typo');
+  var typoText = document.getElementById('checkout-typo-text');
+  var typoBtn = document.getElementById('checkout-typo-btn');
+  var promo = null, busy = false, typoSuggested = '';
+
+  function suggestEmail(raw, domains){
+    if (!domains) return '';
+    var s = String(raw || '').trim();
+    var at = s.lastIndexOf('@');
+    if (at <= 0 || at === s.length - 1) return '';
+    var local = s.slice(0, at), dom = s.slice(at + 1).toLowerCase();
+    return Object.prototype.hasOwnProperty.call(domains, dom) ? local + '@' + domains[dom] : '';
+  }
+  function syncTypo(){
+    if (!typoBox || !typoText || !typoBtn || !cfg.email_typo) return;
+    var sug = suggestEmail(email.value, cfg.email_typo.domains);
+    typoSuggested = sug;
+    if (!sug) { typoBox.hidden = true; return; }
+    typoText.textContent = String(cfg.email_typo.hint || '').replace('{suggested}', sug);
+    typoBtn.textContent = String(cfg.email_typo.apply || '');
+    typoBox.hidden = false;
+  }
+  if (typoBtn) {
+    typoBtn.addEventListener('click', function(){
+      if (!typoSuggested) return;
+      email.value = typoSuggested;
+      email.dispatchEvent(new Event('input'));
+      email.focus();
+    });
+  }
+  function annotateLocalLaunch(){
+    if (!cfg.tz_local_note) return;
+    for (var i = 0; i < launchNodes.length; i++) {
+      var el = launchNodes[i];
+      if (el.getAttribute('data-tz-done')) continue;
+      var iso = el.getAttribute('data-until') || '';
+      var m = /([+-])(\d{2}):(\d{2})$|Z$/.exec(iso);
+      var ms = Date.parse(iso);
+      if (!m || isNaN(ms)) continue;
+      var srcOffMin = iso.slice(-1) === 'Z' ? 0 : (m[1] === '+' ? 1 : -1) * (parseInt(m[2], 10) * 60 + parseInt(m[3], 10));
+      var localOffMin = -new Date(ms).getTimezoneOffset();
+      el.setAttribute('data-tz-done', '1');
+      if (srcOffMin === localOffMin) continue;
+      var d = new Date(ms);
+      var hh = String(d.getHours()).padStart(2, '0');
+      var mm = String(d.getMinutes()).padStart(2, '0');
+      el.textContent = el.textContent + ' ' + String(cfg.tz_local_note).replace('{time}', hh + ':' + mm);
+    }
+  }
+  annotateLocalLaunch();
 
   function showErr(msg){ err.hidden = false; err.textContent = msg; }
-  function clearErr(){ err.hidden = true; err.textContent = ''; }
+  function clearErr(){
+    err.hidden = true; err.textContent = '';
+    email.removeAttribute('aria-invalid');
+    if (promoIn) promoIn.removeAttribute('aria-invalid');
+  }
+  function submitText(span){
+    return span && cfg.submit_tpl ? cfg.submit_tpl.replace('{price}', span.text) : cfg.submit_label;
+  }
 
   function pickSpan(){
     var now = Date.now(), spans = promo ? promo.spans : cfg.spans;
@@ -428,7 +495,10 @@
     }
     priceNode.textContent = span.text;
     if (baseNode) baseNode.hidden = span.text === cfg.base_text;
-    if (!busy) submitBtn.disabled = false;
+    if (!busy) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = submitText(span);
+    }
   }
 
   function scheduleReprice(){
@@ -507,7 +577,12 @@
     if (!el) return;
     var key = location.pathname + '#' + el.id;
     try { var kept = sessionStorage.getItem(key); if (kept && !el.value) { el.value = kept; el.dispatchEvent(new Event('input')); } } catch (e) {}
-    el.addEventListener('input', function(){ try { if (el.value) sessionStorage.setItem(key, el.value); else sessionStorage.removeItem(key); } catch (e) {} });
+    el.addEventListener('input', function(){
+      clearErr();
+      if (el === email) syncTypo();
+      try { if (el.value) sessionStorage.setItem(key, el.value); else sessionStorage.removeItem(key); } catch (e) {}
+    });
+    if (el === email) el.addEventListener('blur', syncTypo);
   });
 
   form.addEventListener('submit', function(ev){
@@ -515,7 +590,12 @@
     if (busy) return;
     clearErr();
     var addr = (email.value || '').trim();
-    if (!addr || !email.validity.valid) { showErr(cfg.bad_email); email.focus(); return; }
+    if (!addr || !email.validity.valid) {
+      email.setAttribute('aria-invalid', 'true');
+      showErr(cfg.bad_email);
+      email.focus();
+      return;
+    }
     var span = pickSpan();
     if (!span) { showErr(cfg.no_window); return; }
     var rawPromo = promoIn ? String(promoIn.value || '').trim() : '';
@@ -547,16 +627,23 @@
         return;
       }
       var ecode = d && typeof d.error === 'string' ? d.error : '';
-      showErr(ecode === 'invalid promo' ? cfg.promo_bad : cfg.server_error);
+      if (ecode === 'invalid promo' && promoIn) {
+        if (promoBox && promoBox.tagName === 'DETAILS') promoBox.open = true;
+        promoIn.setAttribute('aria-invalid', 'true');
+        showErr(cfg.promo_bad);
+        promoIn.focus();
+      } else {
+        showErr(cfg.server_error);
+      }
       busy = false;
       submitBtn.disabled = false;
-      submitBtn.textContent = cfg.submit_label;
+      submitBtn.textContent = submitText(pickSpan());
     }).catch(function(){
       if (abortTimer) clearTimeout(abortTimer);
       showErr(cfg.server_error);
       busy = false;
       submitBtn.disabled = false;
-      submitBtn.textContent = cfg.submit_label;
+      submitBtn.textContent = submitText(pickSpan());
     });
   });
 
@@ -570,7 +657,8 @@
     if (!head || window.innerWidth === foldWidth) return;
     foldWidth = window.innerWidth;
     head.classList.remove('checkout-head--fold');
-    var below = email.getBoundingClientRect().bottom + window.scrollY > document.documentElement.clientHeight;
+    var anchor = submitBtn || email;
+    var below = anchor.getBoundingClientRect().bottom + window.scrollY > document.documentElement.clientHeight;
     head.classList.toggle('checkout-head--fold', below);
   }
   fold();
@@ -585,7 +673,7 @@
 <img alt="Ольга Розет" class="footer-portrait night" decoding="async" height="1024" loading="lazy" src="/olga_footer_night.png" width="1024"/>
 <a aria-label="Telegram" class="social-icon" href="https://t.me/olga_rozet"><svg fill="currentColor" viewbox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"></path></svg></a>
 </div>
-<a aria-label="Наверх" class="scroll-top" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" title="Наверх">
+<a aria-label="Наверх" class="scroll-top" href="#" onclick="window.scrollTo(0,0);return false;" title="Наверх">
 <svg fill="none" height="40" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" viewbox="0 0 24 24" width="40"><path d="M12 20V4M5 11l7-7 7 7"></path></svg>
 </a>
 </footer>
