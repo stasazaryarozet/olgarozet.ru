@@ -622,11 +622,45 @@
       return { title: fs.getAttribute('data-worksheet-title') || '', pairs: worksheetPairs(fs) };
     });
   }
+  /*fn:workbookFilename*/function workbookFilename(pathname) {
+    var seg = String(pathname || '').replace(/^\/+|\/+$/g, '').split('/').pop() || 'notes';
+    var clean = seg.replace(/[^a-zA-Z0-9_-]+/g, '-').replace(/^-+|-+$/g, '');
+    return (clean || 'notes') + '-notes.txt';
+  }/*/fn:workbookFilename*/
+  function downloadText(text, filename) {
+    // imperative: DOM+Blob - fallback export when clipboard API is absent or denied (in-app WebViews)
+    if (typeof Blob === 'undefined' || typeof URL === 'undefined' || !URL.createObjectURL) return false;
+    try {
+      var blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { try { URL.revokeObjectURL(url); } catch (err) {} }, 1000);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+  function exportTextWithFallback(out, onDone) {
+    if (!out) return;
+    var fname = workbookFilename(location.pathname);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(out).then(onDone, function () {
+        if (downloadText(out, fname)) onDone();
+      });
+    } else if (downloadText(out, fname)) {
+      onDone();
+    }
+  }
   function syncGlobalWorkbook() {
     var allText = formatAllWorksheets(allWorksheetGroups());
-    var canCopy = !!(navigator.clipboard && navigator.clipboard.writeText);
     document.querySelectorAll('[data-worksheet-export-all]').forEach(function (btn) {
-      btn.hidden = !canCopy;
+      btn.hidden = false;
       btn.disabled = !allText;
     });
   }
@@ -640,51 +674,41 @@
     }
     var btn = fs.querySelector('[data-worksheet-copy]');
     if (btn) {
-      var canCopy = !!(navigator.clipboard && navigator.clipboard.writeText);
-      btn.hidden = !canCopy;
+      btn.hidden = false;
       btn.disabled = !text;
     }
     syncGlobalWorkbook();
   }
   function armWorksheets() {
-    // imperative: DOM+clipboard — sync saved note indicator and 1-click brief export per worksheet + whole workbook
+    // imperative: DOM+clipboard - sync saved note indicator and 1-click brief export per worksheet + whole workbook
+    function flashDone(btn, state) {
+      var copied = btn.getAttribute('data-label-copied');
+      var orig = btn.getAttribute('data-label-default') || btn.textContent;
+      if (copied) {
+        btn.textContent = copied;
+        if (state.timer) clearTimeout(state.timer);
+        state.timer = setTimeout(function () { btn.textContent = orig; }, 2000);
+      }
+    }
     document.querySelectorAll('.exercise-worksheet').forEach(function (fs) {
       var text = formatWorksheet(worksheetPairs(fs));
       syncWorksheet(fs, !!text);
       var btn = fs.querySelector('[data-worksheet-copy]');
       if (!btn || btn.dataset.armed) return;
       btn.dataset.armed = '1';
-      var timer = null;
+      var st = { timer: null };
       btn.addEventListener('click', function () {
         var out = formatWorksheet(worksheetPairs(fs));
-        if (!out || !(navigator.clipboard && navigator.clipboard.writeText)) return;
-        navigator.clipboard.writeText(out).then(function () {
-          var copied = btn.getAttribute('data-label-copied');
-          var orig = btn.getAttribute('data-label-default') || btn.textContent;
-          if (copied) {
-            btn.textContent = copied;
-            if (timer) clearTimeout(timer);
-            timer = setTimeout(function () { btn.textContent = orig; }, 2000);
-          }
-        }, function () {});
+        exportTextWithFallback(out, function () { flashDone(btn, st); });
       });
     });
     document.querySelectorAll('[data-worksheet-export-all]').forEach(function (btn) {
       if (btn.dataset.armed) return;
       btn.dataset.armed = '1';
-      var timer = null;
+      var st = { timer: null };
       btn.addEventListener('click', function () {
         var out = formatAllWorksheets(allWorksheetGroups());
-        if (!out || !(navigator.clipboard && navigator.clipboard.writeText)) return;
-        navigator.clipboard.writeText(out).then(function () {
-          var copied = btn.getAttribute('data-label-copied');
-          var orig = btn.getAttribute('data-label-default') || btn.textContent;
-          if (copied) {
-            btn.textContent = copied;
-            if (timer) clearTimeout(timer);
-            timer = setTimeout(function () { btn.textContent = orig; }, 2000);
-          }
-        }, function () {});
+        exportTextWithFallback(out, function () { flashDone(btn, st); });
       });
     });
     document.querySelectorAll('[data-worksheet-print]').forEach(function (btn) {
@@ -765,9 +789,31 @@
       el.insertAdjacentElement('afterend', b);
     });
   }
+  /*fn:shouldHydrateAudio*/function shouldHydrateAudio(preload, readyState, isMetered) {
+    return String(preload || '') === 'none' && Number(readyState) === 0 && !isMetered;
+  }/*/fn:shouldHydrateAudio*/
+  function armLazyAudioMeta() {
+    // imperative: DOM+IO - after window.load on unmetered networks, hydrate audio duration metadata on approach
+    if (metered() || !('IntersectionObserver' in window)) return;
+    var els = document.querySelectorAll('audio[preload="none"]');
+    if (!els.length) return;
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        obs.unobserve(el);
+        if (shouldHydrateAudio(el.getAttribute('preload'), el.readyState, metered())) {
+          el.preload = 'metadata';
+        }
+      });
+    }, { rootMargin: '200px' });
+    els.forEach(function (el) { obs.observe(el); });
+  }
   function ready() {
     restore(); armWorksheets(); rateButtons(); armQuotes(); revealMetered(); armResumeLinks();
     document.querySelectorAll('video[data-recover-backoff]').forEach(recoverable);
+    if (document.readyState === 'complete') armLazyAudioMeta();
+    else window.addEventListener('load', armLazyAudioMeta, { once: true });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready);
   else ready();

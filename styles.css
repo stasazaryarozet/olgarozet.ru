@@ -2073,5 +2073,7 @@ nav [data-reach="out"] > a {
 .offer-entry-face img { display: block; width: 100%; height: auto; border-radius: 4px; }
 .offer-entry h3 { margin: var(--sp-2, .5rem) 0 0; }
 .offer-entry h3 a { display: inline-flex; align-items: center; min-height: var(--touch-min); }
+.offer-entry-desc { margin: var(--sp-1) 0 0; font-size: var(--fs-s); color: var(--ink-soft); line-height: var(--lh-body); }
+.offer-entry-cta { margin: var(--sp-2) 0 0; }
 
 } 
