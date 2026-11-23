@@ -30,15 +30,8 @@
 <meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
 <meta content="#111111" media="(prefers-color-scheme: dark)" name="theme-color"/>
 <script>
-// Day/night theme — user-override-first, then solar-automatic. FOUC-critical:
-// runs synchronously in <head> before paint. Resolution: read dela.theme.v1
-// from localStorage; if ∈ ['day', 'night'] use it (user override) else solar
-// altitude (lat 55.0° / alt-threshold -0.1 rad). Config: solar calc from
-// spec.enforcement_data.Inv-SITE-solar-theme (+ data.yaml.bio.solar_calibration
-// override); attr/key/values from spec.enforcement_data.Inv-IFACE-day-night-mode.
-// No hardcoded constants in code — both Specs are SoT, code falls back gracefully.
 (function(){
-  var MODE_ATTR="data-theme", MODE_VALUES=["day", "night"], STORAGE_KEY="dela.theme.v1";
+  var MODE_ATTR="data-theme", MODE_VALUES=["day", "night"], STORAGE_KEY="theme.v1";
   function solarTheme(){
     var r=Math.PI/180, now=new Date();
     var J=now.valueOf()/86400000 + 2440587.5 - 2451545.0;
@@ -66,25 +59,52 @@
   setInterval(window.__applyTheme, 300000);
 })();
 </script>
-<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=2891c435a1"); @import url("/styles.css?v=e2cfc79967");</style>
+<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=8224bc63bb"); @import url("/styles.css?v=ceadf99eb7");</style>
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
-<nav class="nav-fade"><span class="nav-left"><a aria-label="На главную" href="/">← olgarozet.ru</a></span><span class="nav-right"></span></nav>
-<button aria-label="Тема: авто (по солнцу) — переключить" class="theme-toggle" data-theme-toggle="" type="button">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="dela.theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить",CYCLE=["day", "night"],MODE_ATTR="data-theme";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());function rendered(){var a=null;try{a=document.documentElement.getAttribute(MODE_ATTR);}catch(e){}return (CYCLE.indexOf(a)!==-1)?a:null;}btn.addEventListener("click",function(){var seen=rendered();var i=CYCLE.indexOf(seen);var next=CYCLE[(i+1)%CYCLE.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
+<nav class="nav-fade"><span class="nav-left"><a aria-label="На главную" href="/">← olgarozet.ru</a></span><span class="nav-right"><a href="https://olgarozet.ru/getbusy/">Доступ для учеников</a></span></nav>
+<button aria-label="Тема: авто (по солнцу) — переключить" class="theme-toggle" data-theme-toggle="" type="button">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить",CYCLE=["day", "night"],MODE_ATTR="data-theme";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());function rendered(){var a=null;try{a=document.documentElement.getAttribute(MODE_ATTR);}catch(e){}return (CYCLE.indexOf(a)!==-1)?a:null;}btn.addEventListener("click",function(){var seen=rendered();var i=CYCLE.indexOf(seen);var next=CYCLE[(i+1)%CYCLE.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
 <main id="main" role="main">
+<article class="article-wrapper">
 <section aria-labelledby="getbusy-heading" class="board getbusy" id="getbusy">
 <h1 data-case="upper" id="getbusy-heading">Доступ для учеников</h1>
-<p class="getbusy-note">Раздел для тех, кто уже купил материалы Ольги. Пока покупки нет — входа нет.</p>
-<p class="ways-heading">Войти можно будет:</p>
-<ul class="ways">
-<li>Электронная почта</li>
-<li>Google</li>
-<li>Yandex</li>
-<li>Telegram</li>
-<li>Apple</li>
-</ul>
+<p class="getbusy-note">Введите e-mail, указанный при покупке — мы повторно отправим вашу ссылку доступа в кабинет.</p>
+<form class="signup-form" id="getbusy-resend" novalidate="">
+<label class="signup-label" for="getbusy-email">Отправить ссылку доступа повторно</label>
+<input autocomplete="email" class="signup-input" id="getbusy-email" inputmode="email" name="email" placeholder="you@example.com" required="" type="email"/>
+<button class="cta" id="getbusy-submit" type="submit">Отправить ссылку</button>
+<p aria-live="polite" class="getbusy-status" hidden="" id="getbusy-status" role="status"></p>
+</form>
+<script id="getbusy-cfg" type="application/json">{"url": "https://getbusy.olgarozet.ru/enter/resend", "ok": "Если покупка на этот e-mail найдена, ссылка доступа придёт на почту.", "bad": "Проверьте e-mail и попробуйте снова.", "err": "Не удалось отправить запрос. Попробуйте чуть позже."}</script>
+<script>
+      (function(){
+        var cfg = JSON.parse(document.getElementById('getbusy-cfg').textContent);
+        var form = document.getElementById('getbusy-resend');
+        var inp = document.getElementById('getbusy-email');
+        var btn = document.getElementById('getbusy-submit');
+        var out = document.getElementById('getbusy-status');
+        function say(t){ out.textContent = t; out.hidden = !t; }
+        form.addEventListener('submit', function(ev){
+          ev.preventDefault();
+          var v = (inp.value || '').trim();
+          if (!v || !inp.validity.valid) { say(cfg.bad); inp.focus(); return; }
+          btn.disabled = true;
+          say('');
+          fetch(cfg.url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({email: v})
+          }).then(function(r){
+            say(r.ok ? cfg.ok : cfg.err);
+          }, function(){
+            say(cfg.err);
+          }).finally(function(){ btn.disabled = false; });
+        });
+      })();
+      </script>
 </section>
+</article>
 </main>
 <footer>
 <div class="footer-content" style="--natural-w:1024px;--natural-r:1">
@@ -106,16 +126,6 @@ observer.observe(footer);
 </script>
 <link href="/media.css" rel="stylesheet"/><script defer="" src="/media.js"></script>
 <script>
-/* Display-window indicator 1[from ≤ now < until) per viewer clock
-   (Inv-STF-window-derived, surface-temporal-fixpoint.md). The reveal
-   (`data-visible-from`) is the exact dual of the original auto-hide
-   (`data-visible-until`, admin 2026-05-13: «пусть блок исчезнет после 20:30
-   по Москве») — one indicator covers both: a block appears at its window
-   start and disappears at its window end, so a page deployed before a
-   boundary still transitions at the precise moment without a redeploy.
-   Runs at page-load and every 30s thereafter — covers tabs left open across
-   a boundary. An unparseable/absent bound fails open on that side (a parse
-   error must never hide content). */
 (function(){
   function _applyWindows(){
     var nodes = document.querySelectorAll('[data-visible-until],[data-visible-from]');
@@ -125,19 +135,15 @@ observer.observe(footer);
       var until = Date.parse(nodes[i].getAttribute('data-visible-until') || '');
       var vis = (isNaN(from) || now >= from) && (isNaN(until) || now < until);
       nodes[i].style.display = vis ? '' : 'none';
-      nodes[i].hidden = !vis;  // окно, закрытое при сборке (атрибут `hidden`), открывается тем же индикатором
+      nodes[i].hidden = !vis;
     }
   }
   _applyWindows();
   setInterval(_applyWindows, 30000);
 })();
 
-/* Pageview pingback — entity-statistics G-Set event (admin 2026-05-13 «считает
-   статистику»). One event per page-load → CF Worker /pv → DELA_STATS KV.
-   No cookies, no client-id; idempotency via cf-ray (CF generates per request).
-   No-op gracefully if Worker unreachable (sendBeacon + fallback fetch). */
 (function(){
-  var slug = (document.querySelector('meta[name="dela:slug"]') || {}).content;
+  var slug = (document.querySelector("meta[name=\"page-slug\"]") || {}).content;
   if (!slug) return;
   var payload = JSON.stringify({
     p: slug,
@@ -145,7 +151,7 @@ observer.observe(footer);
        (Date.now() + '-' + Math.random().toString(36).slice(2)),
     ref: document.referrer || ''
   });
-  var url = "https://dela-edge.azaryarozet.workers.dev/pv";
+  var url = null;
   if (!url) return;
   try {
     var blob = new Blob([payload], { type: 'application/json' });

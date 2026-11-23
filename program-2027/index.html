@@ -8,15 +8,8 @@
 <meta content="noindex, follow" name="robots"/>
 <meta content="0; url=/travels/" http-equiv="refresh"/>
 <script>
-// Day/night theme — user-override-first, then solar-automatic. FOUC-critical:
-// runs synchronously in <head> before paint. Resolution: read dela.theme.v1
-// from localStorage; if ∈ ['day', 'night'] use it (user override) else solar
-// altitude (lat 55.0° / alt-threshold -0.1 rad). Config: solar calc from
-// spec.enforcement_data.Inv-SITE-solar-theme (+ data.yaml.bio.solar_calibration
-// override); attr/key/values from spec.enforcement_data.Inv-IFACE-day-night-mode.
-// No hardcoded constants in code — both Specs are SoT, code falls back gracefully.
 (function(){
-  var MODE_ATTR="data-theme", MODE_VALUES=["day", "night"], STORAGE_KEY="dela.theme.v1";
+  var MODE_ATTR="data-theme", MODE_VALUES=["day", "night"], STORAGE_KEY="theme.v1";
   function solarTheme(){
     var r=Math.PI/180, now=new Date();
     var J=now.valueOf()/86400000 + 2440587.5 - 2451545.0;
@@ -46,5 +39,5 @@
 </script>
 <script>location.replace("/travels/" + location.hash);</script>
 </head>
-<body><p>Страница переехала: <a href="/travels/">/travels/</a></p></body>
+<body><p>Страница переехала: <a href="/travels/">/travels/</a></p></body>
 </html>

@@ -30,15 +30,8 @@
 <meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
 <meta content="#111111" media="(prefers-color-scheme: dark)" name="theme-color"/>
 <script>
-// Day/night theme — user-override-first, then solar-automatic. FOUC-critical:
-// runs synchronously in <head> before paint. Resolution: read dela.theme.v1
-// from localStorage; if ∈ ['day', 'night'] use it (user override) else solar
-// altitude (lat 55.0° / alt-threshold -0.1 rad). Config: solar calc from
-// spec.enforcement_data.Inv-SITE-solar-theme (+ data.yaml.bio.solar_calibration
-// override); attr/key/values from spec.enforcement_data.Inv-IFACE-day-night-mode.
-// No hardcoded constants in code — both Specs are SoT, code falls back gracefully.
 (function(){
-  var MODE_ATTR="data-theme", MODE_VALUES=["day", "night"], STORAGE_KEY="dela.theme.v1";
+  var MODE_ATTR="data-theme", MODE_VALUES=["day", "night"], STORAGE_KEY="theme.v1";
   function solarTheme(){
     var r=Math.PI/180, now=new Date();
     var J=now.valueOf()/86400000 + 2440587.5 - 2451545.0;
@@ -66,13 +59,13 @@
   setInterval(window.__applyTheme, 300000);
 })();
 </script>
-<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=2891c435a1"); @import url("/styles.css?v=e2cfc79967");</style>
-<meta content="privacy" name="dela:slug"/>
+<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=8224bc63bb"); @import url("/styles.css?v=ceadf99eb7");</style>
+<meta content="privacy" name="page-slug"/>
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
-<nav class="nav-fade"><span class="nav-left"><a aria-label="На главную" href="/">← olgarozet.ru</a></span><span class="nav-right"></span></nav>
-<button aria-label="Тема: авто (по солнцу) — переключить" class="theme-toggle" data-theme-toggle="" type="button">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="dela.theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить",CYCLE=["day", "night"],MODE_ATTR="data-theme";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());function rendered(){var a=null;try{a=document.documentElement.getAttribute(MODE_ATTR);}catch(e){}return (CYCLE.indexOf(a)!==-1)?a:null;}btn.addEventListener("click",function(){var seen=rendered();var i=CYCLE.indexOf(seen);var next=CYCLE[(i+1)%CYCLE.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
+<nav class="nav-fade"><span class="nav-left"><a aria-label="На главную" href="/">← olgarozet.ru</a></span><span class="nav-right"><a href="https://olgarozet.ru/getbusy/">Доступ для учеников</a></span></nav>
+<button aria-label="Тема: авто (по солнцу) — переключить" class="theme-toggle" data-theme-toggle="" type="button">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить",CYCLE=["day", "night"],MODE_ATTR="data-theme";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());function rendered(){var a=null;try{a=document.documentElement.getAttribute(MODE_ATTR);}catch(e){}return (CYCLE.indexOf(a)!==-1)?a:null;}btn.addEventListener("click",function(){var seen=rendered();var i=CYCLE.indexOf(seen);var next=CYCLE[(i+1)%CYCLE.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
 <main id="main" role="main">
 <article class="article-wrapper"><h1 data-case="upper" id="politika-obrabotki-personalnyh-dannyh">Политика обработки персональных данных</h1>
 <p class="article-meta">Оператор: Розет Ольга Григорьевна, <abbr>ИНН</abbr> 500403820698. Запросы об обработке данных: o.g.rozet@gmail.com.</p>
@@ -87,33 +80,23 @@
 <p>Исполнение договора, стороной которого является субъект персональных данных (пункт 5 части 1 статьи 6 закона № 152-<abbr>ФЗ</abbr>). Согласие субъекта, выраженное отправкой обращения либо продолжением работы с сайтом после уведомления (пункт 1 части 1 статьи 6). Исполнение обязанностей, возложенных на оператора законодательством о налогах и сборах.</p>
 <h2 data-case="plain" id="kak-obrabatyvayutsya-dannye">Как обрабатываются данные</h2>
 <p>Сбор, запись, систематизация, хранение, уточнение, использование, передача в названных ниже случаях, удаление и уничтожение. Обработка ведется смешанным способом: переписка хранится в почтовом сервисе, прочие записи — в файлах оператора. Решения, порождающие юридические последствия, исключительно автоматизированной обработкой не принимаются. Данные не передаются третьим лицам для их собственных целей и не используются для рассылок, не связанных с обращением или покупкой.</p>
-<h2 data-case="plain" id="komu-dannye-stanovyatsya-izvestny">Кому данные становятся известны</h2>
-<p>Платежному сервису — в объеме, нужном для расчета и формирования чека. Почтовому сервису и хостингу — в объеме, нужном для переписки и работы сайта. Налоговому органу — в объеме, предусмотренном законом. Иным лицам данные не передаются.</p>
+<h2 data-case="plain" id="komu-dannye-stanovyatsya-izvestny-i-gde-oni-hranyatsya">Кому данные становятся известны и где они хранятся</h2>
+<p>Платежному сервису — <abbr>АО</abbr> «<abbr>ТБ</abbr>анк» (интернет-эквайринг, Российская Федерация) — в объеме, нужном для приема оплаты и возврата. Облачной инфраструктуре хранения и выдачи заказов — <abbr>ООО</abbr> «Яндекс.Облако» (Yandex Cloud, дата-центры на территории Российской Федерации) — где первично записываются и хранятся адрес электронной почты покупателя, номер заказа и сведения о доступе в кабинет. Почтовому сервису — в объеме, нужном для отправки письма со ссылкой доступа, чеком и переписки. Налоговому органу (<abbr>ФНС</abbr> России, сервис «Мой налог») — в объеме, предусмотренном законом для формирования чека <abbr>НПД</abbr>. Иным лицам данные не передаются.</p>
 <h2 data-case="plain" id="transgranichnaya-peredacha">Трансграничная передача</h2>
 <p>Переписка ведется через почтовый сервис Google <abbr>LLC</abbr> (<abbr>США</abbr>), поэтому адрес электронной почты и содержание письма передаются на территорию иностранного государства, обеспечивающего адекватную защиту прав субъектов персональных данных. Оператор переносит переписку на почтовый сервис, размещенный в Российской Федерации; после переноса настоящий раздел будет изменен.</p>
 <h2 data-case="plain" id="sroki">Сроки</h2>
-<p>Переписка и сведения о расчете хранятся, пока нужны для исполнения договора и обязательного учета, затем удаляются либо обезличиваются. По достижении целей обработки или по отзыву согласия данные удаляются в течение тридцати дней, если закон не требует хранить их дольше.</p>
+<p>Сведения о заказах в облачной очереди и журнале расчетов удаляются автоматически по истечении технологического срока (до 30 суток), а учетные записи о выдаче доступа и обязательная переписка хранятся, пока нужны для исполнения договора и налогового учета, затем удаляются либо обезличиваются. По достижении целей обработки или по отзыву согласия данные удаляются в течение тридцати дней, если закон не требует хранить их дольше.</p>
 <h2 data-case="plain" id="prava-subekta">Права субъекта</h2>
 <p>Можно запросить сведения об обработке, потребовать уточнения, блокирования или уничтожения данных, отозвать согласие, а также обжаловать действия оператора в Роскомнадзоре или в суде. Достаточно письма на o.g.rozet@gmail.com; ответ направляется в течение тридцати дней. Оператор вправе попросить подтвердить личность обратившегося, чтобы не раскрыть чужие данные. Отказ от обработки, без которой нельзя оказать услугу, означает отказ от этой услуги.</p>
 <h2 data-case="plain" id="bezopasnost">Безопасность</h2>
-<p>Доступ к данным имеет только оператор. Учетные записи защищены паролями и двухфакторной проверкой; сайт и переписка передаются по защищенному протоколу; резервные копии хранятся в зашифрованном виде.</p>
+<p>Доступ к персональным данным ограничен оператором и перечисленными выше уполномоченными обработчиками в объеме их технических задач. Учетные записи защищены паролями и двухфакторной проверкой; сайт, платежная форма и переписка передаются по защищенному протоколу <span data-case="glyphs">HTTPS/TLS</span>; резервные копии хранятся в зашифрованном виде.</p>
 <h2 data-case="plain" id="fayly-v-brauzere">Файлы в браузере</h2>
-<p>Сайт сохраняет в браузере выбор темы оформления и отметку о согласии с этой политикой, чтобы выбор не сбрасывался при следующем визите. Счет посещений ведется собственными средствами сайта, без систем веб-аналитики третьих лиц. Посетитель вправе удалить сохраненные записи средствами браузера.</p>
+<p>Сайт сохраняет в браузере выбор темы оформления, положение воспроизведения в кабинете, локальные заметки упражнения и отметку о согласии с этой политикой, чтобы выбор не сбрасывался при следующем визите. Сторонние системы веб-аналитики и рекламные трекеры на сайте не используются. Посетитель вправе удалить сохраненные записи средствами браузера.</p>
 <h2 data-case="plain" id="izmeneniya-politiki">Изменения политики</h2>
-<p>Оператор вправе изменить политику; действующая редакция всегда доступна по адресу /privacy/. Политика действует с публикации на этой странице.</p><p class="doc-revision">Редакция от 22 сентября 2026</p><footer aria-label="Реквизиты и юридическая информация" class="legal" role="group"><ul class="legal-entity" role="list"><li>Розет Ольга Григорьевна</li><li><abbr>ИНН</abbr> 500403820698</li><li><abbr>ОГРНИП</abbr> 325774600886216</li><li>применяет <abbr>НПД</abbr></li></ul><ul class="legal-docs" role="list"><li><a href="/legal/">Договор-оферта</a></li><li><a href="/privacy/">Политика обработки персональных данных</a></li></ul></footer></article>
+<p>Оператор вправе изменить политику; действующая редакция всегда доступна по адресу /privacy/. Политика действует с публикации на этой странице.</p><p class="doc-revision">Редакция от 23 ноября 2026</p><footer aria-label="Реквизиты и юридическая информация" class="legal" role="group"><ul class="legal-entity" role="list"><li>Розет Ольга Григорьевна</li><li><abbr>ИНН</abbr> 500403820698</li><li><abbr>ОГРНИП</abbr> 325774600886216</li><li>применяет <abbr>НПД</abbr></li></ul><ul class="legal-docs" role="list"><li><a href="/legal/">Договор-оферта</a></li><li><a href="/privacy/">Политика обработки персональных данных</a></li></ul></footer></article>
 </main>
 <link href="/media.css" rel="stylesheet"/><script defer="" src="/media.js"></script>
 <script>
-/* Display-window indicator 1[from ≤ now < until) per viewer clock
-   (Inv-STF-window-derived, surface-temporal-fixpoint.md). The reveal
-   (`data-visible-from`) is the exact dual of the original auto-hide
-   (`data-visible-until`, admin 2026-05-13: «пусть блок исчезнет после 20:30
-   по Москве») — one indicator covers both: a block appears at its window
-   start and disappears at its window end, so a page deployed before a
-   boundary still transitions at the precise moment without a redeploy.
-   Runs at page-load and every 30s thereafter — covers tabs left open across
-   a boundary. An unparseable/absent bound fails open on that side (a parse
-   error must never hide content). */
 (function(){
   function _applyWindows(){
     var nodes = document.querySelectorAll('[data-visible-until],[data-visible-from]');
@@ -123,19 +106,15 @@
       var until = Date.parse(nodes[i].getAttribute('data-visible-until') || '');
       var vis = (isNaN(from) || now >= from) && (isNaN(until) || now < until);
       nodes[i].style.display = vis ? '' : 'none';
-      nodes[i].hidden = !vis;  // окно, закрытое при сборке (атрибут `hidden`), открывается тем же индикатором
+      nodes[i].hidden = !vis;
     }
   }
   _applyWindows();
   setInterval(_applyWindows, 30000);
 })();
 
-/* Pageview pingback — entity-statistics G-Set event (admin 2026-05-13 «считает
-   статистику»). One event per page-load → CF Worker /pv → DELA_STATS KV.
-   No cookies, no client-id; idempotency via cf-ray (CF generates per request).
-   No-op gracefully if Worker unreachable (sendBeacon + fallback fetch). */
 (function(){
-  var slug = (document.querySelector('meta[name="dela:slug"]') || {}).content;
+  var slug = (document.querySelector("meta[name=\"page-slug\"]") || {}).content;
   if (!slug) return;
   var payload = JSON.stringify({
     p: slug,
@@ -143,7 +122,7 @@
        (Date.now() + '-' + Math.random().toString(36).slice(2)),
     ref: document.referrer || ''
   });
-  var url = "https://dela-edge.azaryarozet.workers.dev/pv";
+  var url = null;
   if (!url) return;
   try {
     var blob = new Blob([payload], { type: 'application/json' });

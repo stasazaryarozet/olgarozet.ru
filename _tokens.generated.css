@@ -46,9 +46,10 @@
   --rail: 7.5em;  
   --rule: #ddd;  
   --rule-soft: #ddd;  
-  --sans: "Inter", "Inter Fallback", -apple-system, BlinkMacSystemFont, "Helvetica Neue", system-ui, sans-serif;  
-  --sans-display: "Inter Tight", "Inter", "Inter Fallback", -apple-system, BlinkMacSystemFont, "Helvetica Neue", system-ui, sans-serif;  
+  --sans: "Inter", "Inter Fallback", "Noto Sans Symbols", "Noto Sans Symbols 2", "Noto Sans Math", "Noto Sans Bamum", -apple-system, BlinkMacSystemFont, "Helvetica Neue", system-ui, sans-serif;  
+  --sans-display: "Inter Tight", "Inter", "Inter Fallback", "Noto Sans Symbols", "Noto Sans Symbols 2", "Noto Sans Math", "Noto Sans Bamum", -apple-system, BlinkMacSystemFont, "Helvetica Neue", system-ui, sans-serif;  
   --script: "Bad Script", "Marck Script", cursive;  
+  --sheet-filter: none;  
   --sp-1: 0.50rem;  
   --sp-2: 0.75rem;  
   --sp-3: 1.13rem;  
@@ -133,8 +134,9 @@
   --overlay-solid: rgba(0, 0, 0, 0.98);  
   --rule: #444;  
   --rule-soft: #444;  
+  --sheet-filter: brightness(0.72) contrast(1.06);  
   --surface: #101010;  
-  --surface-deep: #101010;  
+  --surface-deep: #121212;  
   --title-accent: #7D9BFF;  
 }
 :root[data-theme="night"][data-surface="editorial"] .article-wrapper {
@@ -190,7 +192,7 @@
     -webkit-hyphens: manual;  
     hyphens: manual;  
   }
-  :root :is(a[href], button, summary, label, [role=button], [role=link], [role=tab], [role=menuitem]) {
+  :root :is(a[href], button, summary, label, [role=button], [role=link], [role=tab], [role=menuitem], input, textarea, select) {
     -webkit-hyphens: manual;  
     hyphens: manual;  
   }
@@ -210,6 +212,9 @@
 @layer owner {
   [data-case="glyphs"] {
     letter-spacing: var(--tracking-caps-emphasis);  
+  }
+  [data-case="plain"] {
+    letter-spacing: var(--tracking-zero);  
   }
   [data-case="upper"] {
     letter-spacing: var(--tracking-caps);  

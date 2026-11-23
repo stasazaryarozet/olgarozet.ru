@@ -19,65 +19,70 @@
 (function () {
   'use strict';
 
-  /* ГРАНИЦА ФРАГМЕНТА ИСПОЛНЯЕТСЯ, А НЕ ТОЛЬКО ОБЪЯВЛЯЕТСЯ.
-     Документ адресует интервал носителя стандартом (Media Fragments URI:
-     `…m4a#t=НАЧАЛО,КОНЕЦ`), но КОНЕЦ чтут не все браузеры — начало чтут все.
-     Необъявленная остановка обратила бы «обрыв не по месту» в «не
-     останавливается вовсе», поэтому конец удерживается здесь. Интервал НЕ
-     переписывается: он читается из того же адреса, что стоит в разметке —
-     второго дома у границы нет. */
-  function bindFragments() {
-    document.querySelectorAll('audio[src*="#t="]').forEach(function (a) {
-      var m = /#t=([\d.]+)(?:,([\d.]+))?/.exec(a.getAttribute('src') || '');
-      if (!m) return;
-      var t0 = parseFloat(m[1]);
-      var t1 = m[2] === undefined ? NaN : parseFloat(m[2]);
-      if (!isFinite(t1)) return;
-      a.addEventListener('timeupdate', function () {
-        if (a.currentTime >= t1) { a.pause(); a.currentTime = t1; }
-      });
-      a.addEventListener('play', function () {
-        if (a.currentTime < t0 || a.currentTime >= t1) a.currentTime = t0;
-      });
-    });
-  }
+  /* Граница фрагмента, единственность воспроизведения, переход к моменту и память
+     отметок — законы НОСИТЕЛЯ сайта, а не этой страницы: их держит общий `/media.js`
+     (D4, story-form 2026-11-20). Здесь остаётся лишь увеличение. */
 
-  /* ОДИН ПЛЕЕР НА ВИДУ (эргономика Сайта Системы, принципал 2026-08-19):
-     слушать можно только одну запись за раз — соседние <audio> встают. */
-  function bindExclusiveAudio() {
-    document.addEventListener('play', function (e) {
-      var t = e.target;
-      if (!t || t.tagName !== 'AUDIO') return;
-      document.querySelectorAll('audio').forEach(function (other) {
-        if (other !== t) other.pause();
-      });
-    }, true);
-  }
-
-  /* УВЕЛИЧЕНИЕ — НАДСТРОЙКА НАД ЯКОРЕМ ДОКУМЕНТА, а не отдельная способность.
+  /* УВЕЛИЧЕНИЕ — НАДСТРОЙКА НАД ЯКОРЕМ ДОКУМЕНТА (D-12: панорамируемый 1:1 режим + явное закрытие).
      Документ уже несёт <a data-role="zoom" href="…носитель…">: без скрипта ссылка
-     открывает изображение, со скриптом оно показывается, не уводя со страницы.
-     Один делегированный слушатель на документ. */
+     открывает изображение, со скриптом оно показывается в модальном <dialog> с
+     переключением «по экрану ↔ 1:1» (для чтения мелкого текста слайдов на телефоне). */
   function bindZoom() {
     var dlg = document.createElement('dialog');
     dlg.setAttribute('data-role', 'zoom');
+    var bar = document.createElement('div');
+    bar.className = 'zoom-bar';
+    var fitBtn = document.createElement('button');
+    fitBtn.type = 'button';
+    fitBtn.className = 'zoom-toggle';
+    fitBtn.textContent = '1:1';
+    var closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'zoom-close';
+    closeBtn.setAttribute('aria-label', 'Закрыть');
+    closeBtn.textContent = '×';
+    bar.appendChild(fitBtn);
+    bar.appendChild(closeBtn);
+    var stage = document.createElement('div');
+    stage.className = 'zoom-stage';
     var big = document.createElement('img');
-    dlg.appendChild(big);
+    stage.appendChild(big);
+    dlg.appendChild(bar);
+    dlg.appendChild(stage);
     document.body.appendChild(dlg);
     if (!dlg.showModal) return;                 // старый браузер — остаётся ссылка
-    dlg.addEventListener('click', function () { dlg.close(); });
+    var setFull = function (on) {
+      dlg.toggleAttribute('data-zoom-full', !!on);
+      fitBtn.textContent = on ? 'По экрану' : '1:1';
+    };
+    fitBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setFull(!dlg.hasAttribute('data-zoom-full'));
+    });
+    closeBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      dlg.close();
+    });
+    big.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setFull(!dlg.hasAttribute('data-zoom-full'));
+    });
+    dlg.addEventListener('click', function (e) {
+      if (e.target === dlg || e.target === stage) dlg.close();
+    });
     document.addEventListener('click', function (e) {
       var a = e.target && e.target.closest && e.target.closest('a[data-role="zoom"]');
       if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
       var inner = a.querySelector('img');
       e.preventDefault();
+      setFull(false);
       big.src = a.getAttribute('href');
       big.alt = (inner && inner.alt) || '';
       dlg.showModal();
     });
   }
 
-  function enrich() { bindFragments(); bindExclusiveAudio(); bindZoom(); }
+  function enrich() { bindZoom(); }
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', enrich);

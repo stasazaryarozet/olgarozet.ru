@@ -1,43 +1,37 @@
 <!DOCTYPE html>
+
 <!-- DELA-DERIVED: deriver=scripts/site_generator.py:_layout content=knowledge/people/olgarozet/site/data.yaml form=knowledge/people/olgarozet/site/styles.css -->
-<html lang="ru" data-surface="editorial">
+<html data-surface="editorial" lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="mailru-domain" content="u5gNvIFSmtyOxQqC">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Стили и тренды: прошлое открывает будущее — Ольга Розет</title>
-<meta name="description" content="Оплата перевода на расчетный счет. Ключ заказа и QR для банка.">
-<link rel="canonical" href="https://olgarozet.ru/styles-past-opens-future/buy/">
-<link rel="alternate" type="application/rss+xml" title="Journal" href="https://olgarozet.ru/journal/feed.xml">
-<link rel="alternate" type="application/rss+xml" title="Ольга Розет" href="https://olgarozet.ru/audiobroadcast/feed.xml">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Стили и тренды: прошлое открывает будущее — Ольга Розет">
-<meta property="og:description" content="Оплата перевода на расчетный счет. Ключ заказа и QR для банка.">
-<meta property="og:site_name" content="Ольга Розет">
-<meta property="og:url" content="https://olgarozet.ru/styles-past-opens-future/buy/">
-<meta property="og:image" content="https://olgarozet.ru/olga_footer.png">
-<meta property="og:locale" content="ru_RU">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Стили и тренды: прошлое открывает будущее — Ольга Розет">
-<meta name="twitter:description" content="Оплата перевода на расчетный счет. Ключ заказа и QR для банка.">
-<meta name="twitter:image" content="https://olgarozet.ru/olga_footer.png">
-<link rel="icon" type="image/png" href="/favicon.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="preload" href="/fonts/inter-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/inter-cyrillic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
+<meta charset="utf-8"/>
+<meta content="u5gNvIFSmtyOxQqC" name="mailru-domain"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<title>Оплата: Стили и тренды: прошлое открывает будущее — Ольга Розет</title>
+<meta content="Оплата картой, через СБП или T-Pay. Доступ в личном кабинете и ссылка на e-mail." name="description"/>
+<link href="https://olgarozet.ru/styles-past-opens-future/buy/" rel="canonical"/>
+<link href="https://olgarozet.ru/journal/feed.xml" rel="alternate" title="Journal" type="application/rss+xml"/>
+<link href="https://olgarozet.ru/audiobroadcast/feed.xml" rel="alternate" title="Ольга Розет" type="application/rss+xml"/>
+<meta content="website" property="og:type"/>
+<meta content="Оплата: Стили и тренды: прошлое открывает будущее — Ольга Розет" property="og:title"/>
+<meta content="Оплата картой, через СБП или T-Pay. Доступ в личном кабинете и ссылка на e-mail." property="og:description"/>
+<meta content="Ольга Розет" property="og:site_name"/>
+<meta content="https://olgarozet.ru/styles-past-opens-future/buy/" property="og:url"/>
+<meta content="https://olgarozet.ru/styles-past-opens-future/card.jpg" property="og:image"/>
+<meta content="ru_RU" property="og:locale"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Оплата: Стили и тренды: прошлое открывает будущее — Ольга Розет" name="twitter:title"/>
+<meta content="Оплата картой, через СБП или T-Pay. Доступ в личном кабинете и ссылка на e-mail." name="twitter:description"/>
+<meta content="https://olgarozet.ru/styles-past-opens-future/card.jpg" name="twitter:image"/>
+<link href="/favicon.png" rel="icon" type="image/png"/>
+<link href="/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="/manifest.json" rel="manifest"/>
+<link as="font" crossorigin="" href="/fonts/inter-cyrillic-400-normal.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="" href="/fonts/inter-cyrillic-700-normal.woff2" rel="preload" type="font/woff2"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#111111" media="(prefers-color-scheme: dark)" name="theme-color"/>
 <script>
-// Day/night theme — user-override-first, then solar-automatic. FOUC-critical:
-// runs synchronously in <head> before paint. Resolution: read dela.theme.v1
-// from localStorage; if ∈ ['day', 'night'] use it (user override) else solar
-// altitude (lat 55.0° / alt-threshold -0.1 rad). Config: solar calc from
-// spec.enforcement_data.Inv-SITE-solar-theme (+ data.yaml.bio.solar_calibration
-// override); attr/key/values from spec.enforcement_data.Inv-IFACE-day-night-mode.
-// No hardcoded constants in code — both Specs are SoT, code falls back gracefully.
 (function(){
-  var MODE_ATTR="data-theme", MODE_VALUES=["day", "night"], STORAGE_KEY="dela.theme.v1";
+  var MODE_ATTR="data-theme", MODE_VALUES=["day", "night"], STORAGE_KEY="theme.v1";
   function solarTheme(){
     var r=Math.PI/180, now=new Date();
     var J=now.valueOf()/86400000 + 2440587.5 - 2451545.0;
@@ -65,93 +59,347 @@
   setInterval(window.__applyTheme, 300000);
 })();
 </script>
-<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=2007d22f07"); @import url("/styles.css?v=0cc8cc1348");</style>
-<meta name="dela:slug" content="styles-past-opens-future/buy">
+<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=8224bc63bb"); @import url("/styles.css?v=ceadf99eb7"); @import url("/narrative-showcase.css") layer(owner); @import url("/styles-past-opens-future/styles.css") layer(owner); @import url("/checkout.css") layer(owner);</style>
+<meta content="styles-past-opens-future/buy" name="page-slug"/>
 <style>
-  .checkout-wrap { max-width: 560px; margin: 24px auto; padding: 28px; background: var(--surface); color: var(--ink); border: 1px solid var(--rule); border-radius: 12px; }
-  .checkout-wrap h1 { font-size: 1.4rem; line-height: 1.3; margin: 0 0 8px; }
-  .checkout-wrap h1::after { content: none; }
-  .checkout-sub { color: var(--muted); margin: 0 0 20px; }
-  .checkout-price { font-size: 1.6rem; font-weight: 700; margin: 0 0 8px; }
-  .checkout-label { display: block; font-weight: 600; margin: 18px 0 6px; }
-  .checkout-input { width: 100%; box-sizing: border-box; padding: 11px 12px; font: inherit; border: 1px solid var(--rule); border-radius: 8px; }
-  /* Белая подложка QR — требование читаемости кода банковским приложением; не токен цепи. */
-  .checkout-qr { margin: 20px 0; padding: 16px; background: #fff; border: 1px solid var(--rule); border-radius: 8px; text-align: center; }
-  .checkout-qr svg { width: 100%; max-width: 260px; height: auto; }
-  .checkout-line { white-space: pre-wrap; word-break: break-all; font: 0.85rem/1.5 ui-monospace, monospace; background: var(--surface-deep); padding: 12px; border-radius: 8px; }
-  .checkout-error { color: var(--accent); font-weight: 600; }
-  .checkout-details { font-size: 0.9rem; line-height: 1.6; }
-  .checkout-details dt { font-weight: 600; color: var(--muted); margin-top: 6px; }
-  .checkout-details dd { margin: 0; word-break: break-all; }
-  .checkout-consent { font-size: 0.85rem; color: var(--muted); margin-top: 20px; }
-  .checkout-back { display: inline-block; margin-top: 18px; }
+  [data-bf-mode="text"] [data-bf-probe], [data-bf-mode="text"][data-bf-probe], [data-bf-mode="text"] .bf, [data-bf-mode="text"] .bf * { overflow-wrap: normal !important; word-break: normal !important; hyphens: none !important; }
+  .bf { position: relative; display: inline; }
+  .bf > .bf-i { display: none; font-style: normal; font-weight: 500; text-decoration: none; line-height: 1; }
+  .bf-k { margin: var(--sp-1, 0.4rem) 0 var(--sp-3, 0.85rem); font-size: var(--fs-xs, 0.8rem); color: var(--muted, inherit); display: flex; flex-wrap: wrap; gap: var(--sp-1, 0.4rem) var(--sp-3, 1rem); }
+  .bf-k[hidden] { display: none; }
+  [data-bf-mode="ico"] .bf > .bf-t {
+    position: absolute !important; left: 0 !important; top: 0 !important;
+    width: 1px !important; height: 1px !important; padding: 0 !important; margin: 0 !important;
+    overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; clip-path: inset(50%) !important;
+    white-space: nowrap !important; border: 0 !important;
+  }
+  [data-bf-mode="ico"] .bf > .bf-i { display: inline; }
+  @media (scripting: none) and (max-width: 480px) {
+    [data-bf-scope] .bf > .bf-t {
+      position: absolute !important; left: 0 !important; top: 0 !important;
+      width: 1px !important; height: 1px !important; padding: 0 !important; margin: 0 !important;
+      overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; clip-path: inset(50%) !important;
+      white-space: nowrap !important; border: 0 !important;
+    }
+    [data-bf-scope] .bf > .bf-i { display: inline; }
+  }
 </style>
+<script>
+(function(){
+  const S = {"cls_root": "bf", "cls_text": "bf-t", "cls_icon": "bf-i", "cls_legend": "bf-k", "scope_attr": "data-bf-scope", "mode_attr": "data-bf-mode", "probe_attr": "data-bf-probe", "legend_attr": "data-bf-key", "rank_attr": "data-bf-rank", "txt": "text", "ico": "ico", "row": "row", "flow": "flow"};
+  const P = {"max_line_aspect": 1.35, "min_readable_word_ch": 9.0, "tolerance_px": 1};
+  const chCache = new Map();
+  const autoTitled = new WeakSet();
+  let measureCtx = null;
+  let sharedRange = null;
+  function chPxOf(el) {
+    const cs = getComputedStyle(el);
+    const fontKey = cs.font || (cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily);
+    const hit = chCache.get(fontKey);
+    if (hit !== undefined) return hit;
+    if (!measureCtx) {
+      const cv = document.createElement('canvas');
+      measureCtx = cv.getContext && cv.getContext('2d');
+    }
+    let w = 0;
+    if (measureCtx) {
+      measureCtx.font = fontKey;
+      w = measureCtx.measureText('0').width;
+      if (!(w > 0)) {
+        measureCtx.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+        w = measureCtx.measureText('0').width;
+      }
+    }
+    chCache.set(fontKey, w);
+    return w;
+  }
+  function rawLineRects(el) {
+    if (getComputedStyle(el).display === 'inline') {
+      return Array.from(el.getClientRects()).filter(r => r.width > 0 && r.height > 0);
+    }
+    if (!sharedRange) sharedRange = document.createRange();
+    const out = [];
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let n = walker.nextNode();
+    while (n) {
+      if (n.nodeValue && n.nodeValue.trim()) {
+        const p = n.parentElement;
+        if (p && p.offsetParent !== null) {
+          sharedRange.selectNodeContents(n);
+          for (const r of sharedRange.getClientRects()) {
+            if (r.width > 0 && r.height > 0) out.push(r);
+          }
+        }
+      }
+      n = walker.nextNode();
+    }
+    return out.length ? out : Array.from(el.getClientRects()).filter(r => r.width > 0 && r.height > 0);
+  }
+  function lineBoxCount(el) {
+    const rects = rawLineRects(el).sort((a, b) => (a.top - b.top) || (a.bottom - b.bottom));
+    return rects.length <= 1 ? rects.length : rects.slice(1).reduce(
+      (acc, r) => (r.top >= acc.bottom - P.tolerance_px
+        ? { lines: acc.lines + 1, bottom: r.bottom }
+        : { lines: acc.lines, bottom: Math.max(acc.bottom, r.bottom) }),
+      { lines: 1, bottom: rects[0].bottom }
+    ).lines;
+  }
+  function boxHostOf(t, boundary) {
+    let h = t.parentElement && t.parentElement.parentElement;
+    while (h && h !== boundary && getComputedStyle(h).display === 'inline') {
+      h = h.parentElement;
+    }
+    return h;
+  }
+  function rowNeedsIco(el) {
+    if (el.scrollWidth > el.clientWidth + P.tolerance_px) return true;
+    const p = el.parentElement;
+    if (p) {
+      const pcs = getComputedStyle(p);
+      if ((pcs.display === 'flex' || pcs.display === 'inline-flex') && pcs.flexDirection.startsWith('row') && pcs.flexWrap !== 'nowrap') {
+        const firstVis = Array.from(p.children).find(k => k.offsetParent !== null);
+        if (firstVis && firstVis !== el) {
+          const r1 = firstVis.getBoundingClientRect();
+          const r2 = el.getBoundingClientRect();
+          if (r1.height > 0 && r2.height > 0 && r2.top >= r1.bottom - P.tolerance_px && r2.width < p.clientWidth - P.tolerance_px) return true;
+        }
+      }
+    }
+    const kids = Array.from(el.children).filter(k => k.offsetParent !== null);
+    if (kids.length < 2) return false;
+    const rects = kids.map(k => k.getBoundingClientRect()).filter(r => r.width > 0 && r.height > 0);
+    if (rects.length < 2) return false;
+    const minBottom = Math.min(...rects.map(r => r.bottom));
+    return rects.some(r => r.top >= minBottom - P.tolerance_px);
+  }
+  function probeVerticalOrTorn(p) {
+    if (p.offsetParent === null) return false;
+    const minW = P.min_readable_word_ch * chPxOf(p);
+    const cw = p.clientWidth;
+    if (cw > 0 && p.scrollWidth > cw + P.tolerance_px) return true;
+    if (cw > 0 && cw < minW) return true;
+    const r = p.getBoundingClientRect();
+    if (r.width <= 0 || r.height <= 0) return false;
+    return lineBoxCount(p) > 1 && (r.height / Math.max(r.width, 1)) > P.max_line_aspect;
+  }
+  function controlSqueezed(el) {
+    const labels = Array.from(el.querySelectorAll('label'));
+    return labels.some(lb => {
+      const bf = lb.querySelector('.' + S.cls_root);
+      const ctl = lb.querySelector('select,input');
+      if (!bf || !ctl || lb.offsetParent === null) return false;
+      const bfRect = bf.getBoundingClientRect();
+      const ctlRect = ctl.getBoundingClientRect();
+      if (bfRect.height > 0 && ctlRect.height > 0 && (ctlRect.top >= bfRect.bottom - P.tolerance_px || bfRect.top >= ctlRect.bottom - P.tolerance_px)) {
+        return true;
+      }
+      const textSized = ctl.tagName === 'SELECT' || !/^(checkbox|radio)$/i.test(ctl.type || '');
+      return textSized && ctlRect.width > 0 && ctlRect.width < P.min_readable_word_ch * chPxOf(ctl);
+    });
+  }
+  function flowNeedsIco(el) {
+    if (el.scrollWidth > el.clientWidth + P.tolerance_px) return true;
+    const probes = Array.from(el.querySelectorAll('[' + S.probe_attr + ']'));
+    if (probes.some(probeVerticalOrTorn)) return true;
+    if (controlSqueezed(el)) return true;
+    const texts = Array.from(el.querySelectorAll('.' + S.cls_root + ' > .' + S.cls_text));
+    return texts.some(t => {
+      const host = boxHostOf(t, el);
+      if (!host || host.offsetParent === null) return false;
+      if (host.clientWidth > 0 && host.scrollWidth > host.clientWidth + P.tolerance_px) return true;
+      const r = t.getBoundingClientRect();
+      if (host.clientWidth > 0 && r.width > host.clientWidth + P.tolerance_px) return true;
+      if (lineBoxCount(t) <= 1) return false;
+      const minW = P.min_readable_word_ch * chPxOf(t);
+      if (host.clientWidth > 0 && host.clientWidth < minW) return true;
+      return r.width > 0 && r.height > 0 && (r.height / Math.max(r.width, 1)) > P.max_line_aspect;
+    });
+  }
+  function ensureTips(scope) {
+    scope.querySelectorAll('.' + S.cls_root).forEach(bf => {
+      const host = bf.closest('[title]') || bf;
+      if (!host.getAttribute('title')) {
+        const t = bf.querySelector('.' + S.cls_text);
+        const full = ((t && t.textContent) || '').replace(/\s+/g, ' ').trim();
+        if (full) {
+          bf.setAttribute('title', full);
+          autoTitled.add(bf);
+        }
+      }
+    });
+  }
+  function clearAutoTips(scope) {
+    scope.querySelectorAll('.' + S.cls_root).forEach(bf => {
+      if (autoTitled.has(bf)) {
+        bf.removeAttribute('title');
+        autoTitled.delete(bf);
+      }
+    });
+  }
+  function needsIco(s) {
+    return s.getAttribute(S.scope_attr) === S.row ? rowNeedsIco(s) : flowNeedsIco(s);
+  }
+  function groupsOf(s) {
+    return Array.from(s.querySelectorAll('[' + S.rank_attr + ']'))
+      .filter(g => g.closest('[' + S.scope_attr + ']') === s && Number.isFinite(parseFloat(g.getAttribute(S.rank_attr))));
+  }
+  function fitByGroups(s) {
+    // Pure order: ascending declared rank; each step is written THEN re-measured (the measurement
+    // is of the substituted layout, so this phase is sequential by its subject). First fit stops.
+    const groups = groupsOf(s);
+    const ranks = Array.from(new Set(groups.map(g => parseFloat(g.getAttribute(S.rank_attr))))).sort((a, b) => a - b);
+    const done = [];
+    for (const r of ranks) {
+      groups.filter(g => parseFloat(g.getAttribute(S.rank_attr)) === r).forEach(g => { g.setAttribute(S.mode_attr, S.ico); done.push(g); });
+      if (!needsIco(s)) {
+        done.forEach(ensureTips);
+        return true;
+      }
+    }
+    done.forEach(g => g.removeAttribute(S.mode_attr));
+    return false;
+  }
+  function collectKeyPairs(scope) {
+    const seen = new Set();
+    const pairs = [];
+    scope.querySelectorAll('.' + S.cls_root).forEach(bf => {
+      const modeHost = bf.closest('[' + S.mode_attr + ']');
+      if (!modeHost || modeHost.getAttribute(S.mode_attr) !== S.ico) return;
+      const ic = bf.querySelector('.' + S.cls_icon);
+      const tx = bf.querySelector('.' + S.cls_text);
+      const sym = ((ic && ic.textContent) || '').trim();
+      const word = ((tx && tx.textContent) || '').replace(/\s+/g, ' ').trim();
+      if (!sym || !word || seen.has(sym + '\t' + word)) return;
+      seen.add(sym + '\t' + word);
+      pairs.push([sym, word]);
+    });
+    return pairs;
+  }
+  function keyAnchorOf(scope) {
+    return scope.closest('table') || scope;
+  }
+  function syncKey(scope) {
+    const anchor = keyAnchorOf(scope);
+    const next = anchor.nextElementSibling;
+    const existing = (next && next.hasAttribute(S.legend_attr)) ? next : null;
+    const pairs = collectKeyPairs(scope);
+    if (!pairs.length) {
+      if (existing) existing.remove();
+      return;
+    }
+    const el = existing || document.createElement('p');
+    if (!existing) {
+      el.className = S.cls_legend;
+      el.setAttribute(S.legend_attr, '');
+      anchor.insertAdjacentElement('afterend', el);
+    }
+    el.textContent = '';
+    pairs.forEach(pair => {
+      const sp = document.createElement('span');
+      sp.textContent = pair[0] + '\u00a0— ' + pair[1];
+      el.appendChild(sp);
+    });
+  }
+  function evaluateBiform(root) {
+    const doc = root || document;
+    const scopes = Array.from(doc.querySelectorAll('[' + S.scope_attr + ']')).filter(s => s.isConnected && s.offsetParent !== null);
+    if (!scopes.length) return;
+    scopes.forEach(s => {
+      s.setAttribute(S.mode_attr, S.txt);
+      groupsOf(s).forEach(g => { g.removeAttribute(S.mode_attr); clearAutoTips(g); });
+    });
+    const decisions = scopes.map(s => ({s, ico: needsIco(s)}));
+    decisions.forEach(({s, ico}) => {
+      if (ico && !fitByGroups(s)) {
+        s.setAttribute(S.mode_attr, S.ico);
+        ensureTips(s);
+      } else if (!ico) {
+        s.removeAttribute(S.mode_attr);
+        clearAutoTips(s);
+      }
+      syncKey(s);
+    });
+  }
+  window["fitBiform"] = evaluateBiform;
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => evaluateBiform(document));
+  else evaluateBiform(document);
+  let raf = 0;
+  window.addEventListener('resize', () => {
+    if (!raf) raf = requestAnimationFrame(() => { raf = 0; evaluateBiform(document); });
+  }, {passive: true});
+  document.addEventListener('toggle', e => { if (e.target && e.target.open) evaluateBiform(e.target); }, true);
+})();
+</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
-<nav class="nav-fade"><span class="nav-left"><a href="/" aria-label="На главную">← olgarozet.ru</a></span><span class="nav-right"></span></nav>
-<button type="button" class="theme-toggle" data-theme-toggle aria-label="Тема: авто (по солнцу) — переключить">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="dela.theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить",CYCLE=["day", "night"],MODE_ATTR="data-theme";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());function rendered(){var a=null;try{a=document.documentElement.getAttribute(MODE_ATTR);}catch(e){}return (CYCLE.indexOf(a)!==-1)?a:null;}btn.addEventListener("click",function(){var seen=rendered();var i=CYCLE.indexOf(seen);var next=CYCLE[(i+1)%CYCLE.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
-
-
+<nav class="nav-fade"><span class="nav-left"><a aria-label="На главную" href="/">← olgarozet.ru</a></span><span class="nav-right"><a href="https://olgarozet.ru/getbusy/">Доступ для учеников</a></span></nav>
+<button aria-label="Тема: авто (по солнцу) — переключить" class="theme-toggle" data-theme-toggle="" type="button">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить",CYCLE=["day", "night"],MODE_ATTR="data-theme";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());function rendered(){var a=null;try{a=document.documentElement.getAttribute(MODE_ATTR);}catch(e){}return (CYCLE.indexOf(a)!==-1)?a:null;}btn.addEventListener("click",function(){var seen=rendered();var i=CYCLE.indexOf(seen);var next=CYCLE[(i+1)%CYCLE.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
 <main id="main" role="main">
-<div class="checkout-wrap">
-  <h1>Стили и тренды: прошлое открывает будущее</h1>
-  <p class="checkout-sub">Перевод на расчётный счёт. В назначении платежа — название лекции и ваш e-mail.</p>
-  <p class="checkout-price" id="checkout-price">2 500 ₽</p>
-  <p class="checkout-sub" id="checkout-status">Оплата переводом. После оплаты пришлите чек на o.g.rozet@gmail.com — доступ откроем после подтверждения.</p>
-  <label class="checkout-label" for="checkout-email">E-mail для доступа</label>
-  <input class="checkout-input" id="checkout-email" type="email" inputmode="email"
-         autocomplete="email" spellcheck="false" placeholder="you@example.com" required>
-  <p class="checkout-error" id="checkout-error" role="alert" hidden></p>
-  <div class="checkout-qr" id="checkout-qr" hidden></div>
-  <noscript><p class="checkout-error">QR и строка ST00012 строятся в браузере: без JavaScript их нет. Реквизиты получателя — в блоке ниже; назначение без JavaScript не выдаётся.</p></noscript>
-  <p class="checkout-label">Назначение платежа</p>
-  <p class="checkout-line" id="checkout-purpose">Введите e-mail — назначение появится здесь.</p>
-  <p class="checkout-label">Строка QR (ST00012)</p>
-  <p class="checkout-line" id="checkout-st">Введите e-mail — строка появится здесь.</p>
-  <div class="checkout-details">
-    <dl>
-      <dt>Получатель</dt><dd>ИП Розет Ольга Григорьевна</dd>
-      <dt>ИНН</dt><dd>500403820698</dd>
-      <dt>Банк</dt><dd>АО &quot;ТБанк&quot;</dd>
-      <dt>Расчётный счёт</dt><dd>40802810900009182640</dd>
-      <dt>БИК / корр. счёт</dt><dd>044525974 / 30101810145250000974</dd>
-    </dl>
-  </div>
-  <div class="checkout-consent"><p class="offer-consent">Оплачивая, вы принимаете <a href="/legal/">оферту</a> и <a href="/privacy/">политику обработки персональных данных</a></p></div>
-  <a class="checkout-back" href="/styles-past-opens-future/">← Вернуться к описанию</a>
+<article id="doc">
+<header>
+<h1 data-case="upper" data-field="title" data-role="title"><span class="checkout-title-full">Стили и тренды: прошлое открывает будущее</span><span aria-hidden="true" class="checkout-title-act">Оплата</span></h1>
+<p class="checkout-composition" data-field="subtitle" data-role="note"><span>9 глав</span><span>19 понятий</span><span>7 стилей по осям</span><span>4 шага упражнения</span><span>11 проверок</span></p>
+</header>
+<section aria-label="Оплата" class="checkout checkout--server">
+<div class="checkout-decision">
+<div class="checkout-decision-price"><p class="checkout-price"><s class="checkout-base" id="checkout-base">2 500 ₽</s> <span id="checkout-price">2 000 ₽</span></p></div>
+<p class="checkout-sub checkout-launch" data-until="2026-11-24T09:07:30.325317+00:00">−500 ₽ к запуску продаж — при оплате до 24 ноября, 09:07</p>
+<p class="checkout-hint">Скидки суммируются</p>
+<div aria-live="polite" class="checkout-status" hidden="" id="pay-status"><p class="checkout-sub" id="pay-status-say"></p><p class="checkout-hint checkout-order" hidden="" id="pay-status-order"></p><p class="checkout-hint checkout-elapsed" hidden="" id="pay-status-elapsed"></p><p class="checkout-acts"><a class="checkout-act" hidden="" id="pay-status-open">Открыть</a><button class="checkout-act" hidden="" id="pay-status-paid" type="button">Я оплатил(а)</button></p><p class="checkout-hint checkout-receipt" hidden="" id="pay-status-receipt"><span id="pay-status-receipt-say"></span> <a class="checkout-act" hidden="" id="pay-status-receipt-link" rel="noopener" target="_blank">Открыть чек</a></p></div>
+<form class="checkout-server-form" id="checkout-server-form" novalidate="">
+<p class="checkout-sub" id="checkout-status">После оплаты доступ откроется здесь и придет на ваш e-mail.</p>
+<label class="checkout-label" for="checkout-email">E-mail для доступа</label>
+<input aria-describedby="checkout-why checkout-error" autocapitalize="off" autocomplete="email" class="checkout-input" enterkeyhint="done" id="checkout-email" inputmode="email" placeholder="you@example.com" required="" spellcheck="false" type="email"/>
+<p class="checkout-hint checkout-why" id="checkout-why">На этот адрес придет ссылка доступа и чек об оплате.</p>
+<details class="checkout-promo checkout-promo-fold" hidden="" id="checkout-promo"><summary>Есть промокод?</summary><label class="visually-hidden" for="checkout-promo-in">Промокод</label><input aria-describedby="checkout-promo-msg" autocapitalize="characters" autocomplete="off" class="checkout-input" id="checkout-promo-in" placeholder="Код скидки" spellcheck="false" type="text"/><p aria-live="polite" class="checkout-hint" hidden="" id="checkout-promo-msg" role="status"></p></details>
+<p class="checkout-error" hidden="" id="checkout-error" role="alert"></p>
+<button class="checkout-submit" id="checkout-submit" type="submit">Перейти к оплате</button>
+<p class="checkout-hint checkout-seller">Продавец — Розет Ольга Григорьевна.</p>
+<div class="checkout-consent"><p class="offer-consent">Нажимая «Перейти к оплате», вы принимаете <a href="/legal/">оферту</a> и <a href="/privacy/">политику обработки персональных данных</a></p></div>
+</form>
 </div>
-<script type="application/json" id="checkout-cfg">{"provider": "email", "mode": "email", "keyed": false, "ref": "", "sep": "", "alphabet": "", "length": 0, "purpose_parts": [["Оплата: ", "title"], [". ", "contact"]], "st_sep": "|", "purpose_sources": ["title", "key", "contact"], "title": "Стили и тренды: прошлое открывает будущее", "glyph": "₽", "fields": {"Name": "ИП Розет Ольга Григорьевна", "PersonalAcc": "40802810900009182640", "BankName": "АО \"ТБанк\"", "BIC": "044525974", "CorrespAcc": "30101810145250000974", "PayeeINN": "500403820698"}, "st_keys": ["Name", "PersonalAcc", "BankName", "BIC", "CorrespAcc", "PayeeINN"], "spans": [{"from": null, "to": "2026-10-12T19:15:03.997618+00:00", "amount": "2500.00", "kop": 250000, "price_text": "2 500"}, {"from": "2026-10-12T19:15:03.997618+00:00", "to": "2026-10-13T19:15:03.997618+00:00", "amount": "2000.00", "kop": 200000, "price_text": "2 000"}, {"from": "2026-10-13T19:15:03.997618+00:00", "to": null, "amount": "2500.00", "kop": 250000, "price_text": "2 500"}], "vector": {"key": "", "contact": "buyer@example.com", "amount": "2500.00", "kop": 250000, "purpose": "Оплата: Стили и тренды: прошлое открывает будущее. buyer@example.com", "currency": "RUB", "st00012": "ST00012|Name=ИП Розет Ольга Григорьевна|PersonalAcc=40802810900009182640|BankName=АО \"ТБанк\"|BIC=044525974|CorrespAcc=30101810145250000974|PayeeINN=500403820698|Sum=250000|Purpose=Оплата: Стили и тренды: прошлое открывает будущее. buyer@example.com"}, "mismatch": "Проверка ST00012 не сошлась — QR не рисуется.", "no_window": "Сейчас нет действующего интервала цены — обновите страницу позже.", "no_price": "Цена не действует", "enter_email": "Введите e-mail — назначение и QR появятся здесь.", "bad_email": "Проверьте e-mail: на него придёт ссылка доступа.", "noscript": "QR и строка ST00012 строятся в браузере: без JavaScript их нет. Реквизиты получателя — в блоке ниже; назначение без JavaScript не выдаётся.", "key_error": "Ключ заказа не построился в браузере — строка ST00012 и QR не созданы. Обновите страницу.", "qr_error": "QR не построился — строка ST00012 ниже уже создана: её можно отсканировать в приложении банка."}</script>
-<script src="/qrcode.js"></script>
+<noscript><p class="checkout-error">Для перехода к оплате нужен JavaScript — включите его и обновите страницу.</p></noscript>
+<div class="value-fit" data-bf-scope="flow"><table class="value checkout-value"><thead><tr><th scope="col"><span class="visually-hidden">Что внутри</span></th><th data-bf-rank="1" scope="col"><span class="bf" data-bf-w="7"><span class="bf-t">открыто</span><span aria-hidden="true" class="bf-i">🔓</span></span></th><th data-bf-rank="1" scope="col"><span class="bf" data-bf-w="9"><span class="bf-t">полностью</span><span aria-hidden="true" class="bf-i">🔑</span></span></th></tr></thead><tbody><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="5"><span class="bf-t">главы</span><span aria-hidden="true" class="bf-i">📚</span></span></th><td>3</td><td>9</td></tr><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="7"><span class="bf-t">понятия</span><span aria-hidden="true" class="bf-i">🔤</span></span></th><td>6</td><td>19</td></tr><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="5"><span class="bf-t">стили по осям</span><span aria-hidden="true" class="bf-i">🎨</span></span></th><td>1</td><td>7</td></tr><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="10"><span class="bf-t">шаги упражнения</span><span aria-hidden="true" class="bf-i">✍️</span></span></th><td>1</td><td>4</td></tr><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="8"><span class="bf-t">проверки</span><span aria-hidden="true" class="bf-i">✅</span></span></th><td>1</td><td>11</td></tr><tr><th data-bf-rank="2" scope="row"><span class="bf" data-bf-w="6"><span class="bf-t">минуты записи</span><span aria-hidden="true" class="bf-i">⏳</span></span></th><td>5</td><td>81</td></tr></tbody></table></div>
+<div aria-labelledby="checkout-terms-h" class="checkout-terms" id="checkout-terms" role="group"><h2 class="checkout-label" data-case="plain" id="checkout-terms-h">Условия</h2><ul><li data-term="term">Доступ — не менее 12 месяцев с даты оплаты.</li><li data-term="receipt">Чек <abbr>НПД</abbr> придет письмом — вместе с доступом или следом, отдельно.</li><li data-term="seller">Продавец — Розет Ольга Григорьевна.</li></ul><details class="checkout-more" data-term="refund"><summary>Возврат</summary><p>До открытия доступа к цифровому продукту оплата возвращается полностью по первому требованию.</p><p>После открытия доступа возврат производится по обращению на o.g.rozet@gmail.com (с указанием номера заказа или адреса электронной почты покупки), направленному в течение четырнадцати дней с даты оплаты.</p></details><p class="offer-terms"><a href="/legal/">Когда открывается доступ, на какой срок и как вернуть деньги</a></p></div>
+<div aria-labelledby="checkout-next-h" class="checkout-next" role="group"><h2 class="checkout-label" data-case="plain" id="checkout-next-h">Что дальше</h2><ol><li>Нажмите «Перейти к оплате» — откроется защищенная платежная форма банка (карта, <abbr>СБП</abbr> или T-Pay).</li><li>После подтверждения оплаты доступ откроется на этой странице, а ссылка и чек придут на указанный e-mail.</li><li>Ссылка ведет в личный кабинет <a href="https://getbusy.olgarozet.ru/">getbusy.olgarozet.ru</a>.</li></ol></div>
+<form class="checkout-recover" id="pay-status-recover" novalidate=""><label class="checkout-label" for="pay-status-ref">Уже оплатили? Введите номер заказа</label><input aria-describedby="pay-status-recover-hint pay-status-recover-say" autocapitalize="characters" autocomplete="off" class="checkout-input" id="pay-status-ref" spellcheck="false" type="text"/><p class="checkout-hint" id="pay-status-recover-hint">После подтверждения оплаты ссылка откроется здесь.</p><button class="cta" type="submit">Проверить</button><p aria-live="polite" class="checkout-hint" id="pay-status-recover-say"></p></form><ul class="checkout-help"><li>Вкладку можно закрыть после оплаты: ссылка доступа и чек придут на указанный e-mail.</li><li>Вернулись на страницу без автоматического открытия — введите номер заказа выше.</li></ul><p class="checkout-hint" id="pay-status-contact">Доступ не пришел? Напишите на o.g.rozet@gmail.com и укажите номер заказа.</p>
+<a class="checkout-back" href="/styles-past-opens-future/">← Вернуться к описанию</a>
+</section>
+<footer aria-label="Реквизиты и юридическая информация" class="legal" role="group"><ul class="legal-entity" role="list"><li>Розет Ольга Григорьевна</li><li><abbr>ИНН</abbr> 500403820698</li><li><abbr>ОГРНИП</abbr> 325774600886216</li><li>применяет <abbr>НПД</abbr></li></ul><ul class="legal-docs" role="list"><li><a href="/legal/">Договор-оферта</a></li><li><a href="/privacy/">Политика обработки персональных данных</a></li></ul><ul class="legal-payment" role="list"><li>Оплата:</li><li><abbr>СБП</abbr></li><li>T-Pay</li><li>карта</li></ul></footer>
+<script id="checkout-cfg" type="application/json">{"provider": "tbank", "mode": "provider", "init_url": "https://getbusy.olgarozet.ru/buy/styles-past-opens-future", "client_wait_ms": 10000, "glyph": "₽", "base_text": "2 500 ₽", "spans": [{"from": null, "to": "2026-11-23T09:07:30.325317+00:00", "amount": "2500.00", "kop": 250000, "price_text": "2 500", "text": "2 500 ₽", "pay_by": "До 23 ноября, 10:07 — срок этой суммы: перевод на нее позже доступ не откроет.", "until_ms": 1795428450325}, {"from": "2026-11-23T09:07:30.325317+00:00", "to": "2026-11-24T09:07:30.325317+00:00", "amount": "2000.00", "kop": 200000, "price_text": "2 000", "text": "2 000 ₽", "pay_by": "До 24 ноября, 10:07 — срок этой суммы: перевод на нее позже доступ не откроет.", "until_ms": 1795514850325}, {"from": "2026-11-24T09:07:30.325317+00:00", "to": null, "amount": "2500.00", "kop": 250000, "price_text": "2 500", "text": "2 500 ₽"}], "promo": {"server": true, "bad": "Код не найден", "form": {"charset": "A-Za-z0-9-", "trim": "\\t\\n\\v\\f\\r    -     　﻿"}}, "bad_email": "Проверьте e-mail: на него придет ссылка доступа.", "no_window": "Сейчас нет действующего интервала цены — обновите страницу позже.", "no_price": "Цена не действует", "submit_label": "Перейти к оплате", "busy_text": "Открываем страницу оплаты…", "server_error": "Не удалось открыть страницу оплаты. Попробуйте еще раз.", "promo_bad": "Промокод не найден — проверьте написание или очистите поле.", "status": {"route": "/pay/tbank-status/{h}", "params": ["h"], "url": "https://getbusy.olgarozet.ru/pay/tbank-status/{h}", "prefix": "pay-status|tbank|", "late_ms": 30000, "grace_ms": 3600000, "every_ms": {"checking": 3000, "waiting": 15000}, "key": {"ref": "SPPF", "sep": "-", "alphabet": "ABCDEFGHJKMNPQRSTVWXYZ23456789", "length": 10}, "phrases": {"waiting": "Проверяем оплату — ссылка доступа откроется на этой странице и придет на указанный e-mail.", "checking": "Подтверждаем оплату — доступ откроется на этой странице и придет на указанный e-mail.", "late": "Подтверждение от банка еще идет. Как только оно придет, доступ откроется на этой странице, а ссылка придет на указанный e-mail.", "owed": "Оплата получена, доступ еще не открыт", "ready": "Оплата получена — доступ открыт.", "ready_no_letter": "Оплата получена — доступ открыт. Сохраните эту ссылку или номер заказа: по нему доступ откроется здесь снова.", "expired": "Окно оплаты закрылось. Если деньги списались, проверьте статус заказа по его номеру ниже.", "failed": "Оплата не завершена. Попробуйте снова или проверьте данные карты.", "unreachable": "Не удается проверить статус: нет связи с сервером. Оплата не теряется — ссылка придет на указанный e-mail, а по номеру заказа доступ откроется здесь позже.", "recover_bad": "Это не похоже на номер заказа — проверьте его и попробуйте снова.", "recover_not_found": "По этому номеру заказа оплата пока не подтверждена. Когда придет подтверждение банка, доступ откроется на этой странице и придет на указанный e-mail. Напишите на o.g.rozet@gmail.com и укажите номер заказа."}, "elapsed_tpl": "Прошло: {time}", "order_tpl": "Номер заказа: {order}", "receipt": {"issued": "Чек сформирован.", "pending": "Чек формируется — ссылка появится здесь и придет в письме."}, "verdicts": {"refused": {"terminal": true, "say": {"price_not_admitted": "Оплата получена, но сумма не совпала с ценой на момент заказа. Автор решит вручную: доступ или возврат. Напишите на o.g.rozet@gmail.com и укажите номер заказа.", "grant_refused": "Оплата получена, но доступ не открылся автоматически. Автор решит вручную: доступ или возврат. Напишите на o.g.rozet@gmail.com и укажите номер заказа."}}, "review": {"terminal": false, "say": {"": "Оплата получена и проходит проверку. Автор подтвердит доступ вручную. Напишите на o.g.rozet@gmail.com и укажите номер заказа."}}}, "contact": "o.g.rozet@gmail.com"}}</script>
+</article>
+<script data-api="PayStatus" src="/pay_status.js"></script>
 <script>
 (function(){
   var cfg = JSON.parse(document.getElementById('checkout-cfg').textContent);
+  var statusCtl = cfg.status && window["PayStatus"] ? window["PayStatus"].start(cfg.status) : null;
+  var form = document.getElementById('checkout-server-form');
   var email = document.getElementById('checkout-email');
   var err = document.getElementById('checkout-error');
-  var qrBox = document.getElementById('checkout-qr');
-  var purposeNode = document.getElementById('checkout-purpose');
-  var stNode = document.getElementById('checkout-st');
+  var submitBtn = document.getElementById('checkout-submit');
   var priceNode = document.getElementById('checkout-price');
-  var orderKey = null;
+  var baseNode = document.getElementById('checkout-base');
+  var launchNodes = Array.prototype.slice.call(document.querySelectorAll('.checkout-launch[data-until]'));
+  var promoBox = document.getElementById('checkout-promo');
+  var promoIn = document.getElementById('checkout-promo-in');
+  var promoMsg = document.getElementById('checkout-promo-msg');
+  var promo = null, busy = false;
 
-  function clean(v){ return String(v == null ? '' : v).replace(/\|/g, ' ').trim(); }
-  function fail(msg){ err.hidden = false; err.textContent = msg; qrBox.hidden = true; qrBox.innerHTML = ''; }
+  function showErr(msg){ err.hidden = false; err.textContent = msg; }
   function clearErr(){ err.hidden = true; err.textContent = ''; }
 
-  function st00012(fields, kop, purpose){
-    var keys = cfg.st_keys;   // ОДИН дом перечня полей — серверный ST00012_KEYS
-    var parts = ['ST00012'];
-    for (var i = 0; i < keys.length; i++) {
-      var v = fields[keys[i]];
-      if (v) parts.push(keys[i] + '=' + clean(v));
+  function pickSpan(){
+    var now = Date.now(), spans = promo ? promo.spans : cfg.spans;
+    for (var i = 0; i < spans.length; i++) {
+      var s = spans[i];
+      var a = s.from ? Date.parse(s.from) : NaN;
+      var b = s.to ? Date.parse(s.to) : NaN;
+      if ((isNaN(a) || now >= a) && (isNaN(b) || now < b)) return s;
     }
-    parts.push('Sum=' + kop);
-    parts.push('Purpose=' + clean(purpose));
-    return parts.join('|');
+    return null;
   }
 
-  // СМЕНА ИНТЕРВАЛА НА ОТКРЫТОЙ СТРАНИЦЕ: цена пересобирается по границе интервала, и это
-  // видно покупателю (цена, назначение и QR — заново, из той же таблицы spans тем же предикатом).
   function nextBoundary(){
     var now = Date.now(), best = null;
     for (var i = 0; i < cfg.spans.length; i++) {
@@ -165,6 +413,24 @@
     return best;
   }
 
+  function render(){
+    var span = pickSpan();
+    var now = Date.now();
+    for (var i = 0; i < launchNodes.length; i++) {
+      var u = Date.parse(launchNodes[i].getAttribute('data-until'));
+      launchNodes[i].hidden = !isNaN(u) && now >= u;
+    }
+    if (!span) {
+      priceNode.textContent = cfg.no_price;
+      if (baseNode) baseNode.hidden = true;
+      submitBtn.disabled = true;
+      return;
+    }
+    priceNode.textContent = span.text;
+    if (baseNode) baseNode.hidden = span.text === cfg.base_text;
+    if (!busy) submitBtn.disabled = false;
+  }
+
   function scheduleReprice(){
     var t = nextBoundary();
     if (t === null) return;
@@ -172,123 +438,156 @@
     setTimeout(function(){ render(); scheduleReprice(); }, Math.min(delay, 2147000000));
   }
 
-  function pickSpan(){
-    var now = Date.now();
-    for (var i = 0; i < cfg.spans.length; i++) {
-      var s = cfg.spans[i];
-      var a = s.from ? Date.parse(s.from) : NaN;
-      var b = s.to ? Date.parse(s.to) : NaN;
-      if ((isNaN(a) || now >= a) && (isNaN(b) || now < b)) return s;
+  if (cfg.promo && promoBox && promoIn && promoMsg) {
+    promoBox.hidden = false;
+    var pform = cfg.promo.form || {};
+    var trimRe = new RegExp('^[' + pform.trim + ']+|[' + pform.trim + ']+$', 'g');
+    var validRe = new RegExp('^[' + pform.charset + ']+$');
+    function normCode(s){
+      var t = String(s == null ? '' : s).normalize('NFKC').replace(trimRe, '');
+      return t && validRe.test(t) ? t.toLowerCase() : '';
     }
-    return null;
-  }
-
-  function makeKey(){
-    if (!cfg.keyed) return '';   // ручной мост: ключ заказа некому сверять — его нет
-    var n = cfg.alphabet.length;
-    var limit = 256 - (256 % n);
-    var need = cfg.length;
-    var out = '';
-    var buf = new Uint8Array(Math.max(32, need * 2));
-    while (out.length < need) {
-      crypto.getRandomValues(buf);
-      for (var i = 0; i < buf.length && out.length < need; i++) {
-        if (buf[i] < limit) out += cfg.alphabet[buf[i] % n];
+    function setPromoMsg(t){ promoMsg.textContent = t; promoMsg.hidden = !t; }
+    var bundles = cfg.promo.bundles ? Object.keys(cfg.promo.bundles).map(function(k){ return cfg.promo.bundles[k]; }) : [];
+    if (bundles.length && window.crypto && crypto.subtle) {
+      function b64(s){ var r = atob(s), a = new Uint8Array(r.length); for (var i = 0; i < r.length; i++) a[i] = r.charCodeAt(i); return a; }
+      var seq = 0, ptimer = null;
+      function decryptOne(b, code){
+        return crypto.subtle.importKey('raw', new TextEncoder().encode(code), 'PBKDF2', false, ['deriveKey'])
+          .then(function(k){ return crypto.subtle.deriveKey({name: 'PBKDF2', hash: 'SHA-256', salt: b64(b.salt), iterations: b.iterations}, k, {name: 'AES-GCM', length: 256}, false, ['decrypt']); })
+          .then(function(dk){ return crypto.subtle.decrypt({name: 'AES-GCM', iv: b64(b.nonce)}, dk, b64(b.ct)); })
+          .then(function(pt){ return JSON.parse(new TextDecoder().decode(pt)); });
       }
+      function tryCode(){
+        var my = ++seq, raw = promoIn.value, code = normCode(raw);
+        if (!String(raw || '').trim()) { promo = null; setPromoMsg(''); render(); return; }
+        if (!code) { promo = null; setPromoMsg(cfg.promo.bad); render(); return; }
+        var step = function(i){
+          if (my !== seq) return;
+          if (i >= bundles.length) { promo = null; setPromoMsg(cfg.promo.bad); render(); return; }
+          decryptOne(bundles[i], code).then(function(d){
+            if (my !== seq) return;
+            promo = d; setPromoMsg(d.ok || ''); render();
+          }, function(){ step(i + 1); });
+        };
+        step(0);
+      }
+      promoIn.addEventListener('input', function(){ clearTimeout(ptimer); ptimer = setTimeout(tryCode, 250); });
+    } else {
+      // Серверная проверка промокода: клиент проверяет лишь нормальную форму, без клиентского перебора PBKDF2.
+      promoIn.addEventListener('input', function(){
+        var raw = String(promoIn.value || '').trim();
+        setPromoMsg(raw && !normCode(raw) ? cfg.promo.bad : '');
+      });
     }
-    return cfg.ref + cfg.sep + out;
   }
 
-  // ОДНА ПОДСТАНОВКА ЗА ПРОХОД: цепь replace переписывала подставленный заголовок, если в нём
-  // встречался вид следующей подстановки (`{key}` внутри title). Разбор шаблона — не цепь.
-  // НАЗНАЧЕНИЕ — СКЛЕЙКА РАЗОБРАННЫХ ЧАСТЕЙ ([литерал, поле|null]), разобранных сервером
-  // (`payment_statement.purpose_parts`); правило склейки — `render_purpose`, второго
-  // форматтера нет. Разделитель ST00012 внутри назначения заменяется пробелом там же.
-  function purposeFor(key, contact){
-    var values = {title: cfg.title, key: key, contact: contact};
-    if (Object.keys(values).sort().join('|') !== cfg.purpose_sources.slice().sort().join('|'))
-      throw new Error('источники назначения JS ≠ объявленным: ' + cfg.purpose_sources.join(','));
-    return cfg.purpose_parts.map(function(p){
-      if (p[1] !== null && !(p[1] in values)) throw new Error('поле назначения вне источников: ' + p[1]);
-      return p[0] + (p[1] === null ? '' : String(values[p[1]]));
-    }).join('').split(cfg.st_sep).join(' ');
+  function mintIdemKey(){
+    if (window.crypto && crypto.getRandomValues) {
+      var bytes = new Uint8Array(16);
+      crypto.getRandomValues(bytes);
+      return Array.prototype.map.call(bytes, function(b){ return (b < 16 ? '0' : '') + b.toString(16); }).join('');
+    }
+    return String(Date.now()) + '-' + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+  }
+  function idemFor(sig){
+    var storeKey = location.pathname + '#idem:' + sig;
+    try {
+      var prev = sessionStorage.getItem(storeKey);
+      if (prev && prev.length >= 16) return prev;
+      var fresh = mintIdemKey();
+      sessionStorage.setItem(storeKey, fresh);
+      return fresh;
+    } catch (e) {
+      return mintIdemKey();
+    }
   }
 
-  function render(){
-    var span = pickSpan();
-    if (!span) { fail(cfg.no_window); priceNode.textContent = cfg.no_price; return; }
-    priceNode.textContent = span.price_text + ' ' + cfg.glyph;
-    var contact = (email.value || '').trim();
-    if (!contact) {
-      clearErr();
-      qrBox.hidden = true;
-      purposeNode.textContent = cfg.enter_email;
-      stNode.textContent = cfg.enter_email;
-      return;
-    }
-    if (!email.checkValidity()) {
-      fail(cfg.bad_email);
-      purposeNode.textContent = cfg.enter_email;
-      stNode.textContent = cfg.enter_email;
-      return;
-    }
+  [email, promoIn].forEach(function(el){
+    if (!el) return;
+    var key = location.pathname + '#' + el.id;
+    try { var kept = sessionStorage.getItem(key); if (kept && !el.value) { el.value = kept; el.dispatchEvent(new Event('input')); } } catch (e) {}
+    el.addEventListener('input', function(){ try { if (el.value) sessionStorage.setItem(key, el.value); else sessionStorage.removeItem(key); } catch (e) {} });
+  });
+
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    if (busy) return;
     clearErr();
-    try {
-      if (orderKey === null) orderKey = makeKey();
-    } catch (e) {
-      fail(cfg.key_error);
-      return;
-    }
-    var sent = purposeFor(orderKey, contact);
-    var line = st00012(cfg.fields, span.kop, sent);
-    purposeNode.textContent = sent;
-    stNode.textContent = line;
-    try {
-      qrcode.stringToBytes = qrcode.stringToBytesFuncs['UTF-8'];
-      var qr = qrcode(0, 'M');
-      qr.addData(line);
-      qr.make();
-      qrBox.innerHTML = qr.createSvgTag({cellSize: 6, margin: 2, scalable: true});
-      qrBox.hidden = false;
-    } catch (e) {
-      fail(cfg.qr_error);
-    }
-  }
+    var addr = (email.value || '').trim();
+    if (!addr || !email.validity.valid) { showErr(cfg.bad_email); email.focus(); return; }
+    var span = pickSpan();
+    if (!span) { showErr(cfg.no_window); return; }
+    var rawPromo = promoIn ? String(promoIn.value || '').trim() : '';
+    var body = {
+      email: addr,
+      idempotency_key: idemFor(addr.toLowerCase() + '|' + rawPromo.toLowerCase() + '|' + String(span.kop || ''))
+    };
+    if (rawPromo) body.promo = rawPromo;
+    busy = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = cfg.busy_text;
+    var ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+    var waitMs = Number(cfg.client_wait_ms || 10000);
+    var abortTimer = ctrl ? setTimeout(function(){ ctrl.abort(); }, waitMs) : null;
+    var reqOpts = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body)
+    };
+    if (ctrl) reqOpts.signal = ctrl.signal;
+    fetch(cfg.init_url, reqOpts).then(function(r){
+      return r.json().then(function(d){ return {status: r.status, data: d}; }, function(){ return {status: r.status, data: null}; });
+    }).then(function(res){
+      if (abortTimer) clearTimeout(abortTimer);
+      var d = res.data;
+      if (res.status === 200 && d && d.ok && d.payment_url) {
+        if (statusCtl && d.order_key) statusCtl.shown(d.order_key, span.until_ms != null ? span.until_ms : null);
+        location.assign(d.payment_url);
+        return;
+      }
+      var ecode = d && typeof d.error === 'string' ? d.error : '';
+      showErr(ecode === 'invalid promo' ? cfg.promo_bad : cfg.server_error);
+      busy = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = cfg.submit_label;
+    }).catch(function(){
+      if (abortTimer) clearTimeout(abortTimer);
+      showErr(cfg.server_error);
+      busy = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = cfg.submit_label;
+    });
+  });
 
-  try {
-    var v = cfg.vector;
-    var said = purposeFor(v.key, v.contact);
-    if (said !== v.purpose) {
-      fail(cfg.mismatch + ' Python: ' + v.purpose + ' · JS: ' + said);
-      return;
-    }
-    var check = st00012(cfg.fields, v.kop, said);
-    if (check !== v.st00012) {
-      fail(cfg.mismatch + ' Python: ' + v.st00012 + ' · JS: ' + check);
-      return;
-    }
-  } catch (e) {
-    fail(cfg.mismatch + ' ' + e);
-    return;
-  }
-  email.addEventListener('input', render);
   setInterval(render, 30000);
   render();
   scheduleReprice();
+
+  var head = document.querySelector('#doc > header');
+  var foldWidth = null;
+  function fold(){
+    if (!head || window.innerWidth === foldWidth) return;
+    foldWidth = window.innerWidth;
+    head.classList.remove('checkout-head--fold');
+    var below = email.getBoundingClientRect().bottom + window.scrollY > document.documentElement.clientHeight;
+    head.classList.toggle('checkout-head--fold', below);
+  }
+  fold();
+  window.addEventListener('resize', fold);
 })();
 </script>
-
 </main>
 <footer>
-  <div class="footer-content" style="--natural-w:1024px">
-    <a href="https://instagram.com/olga_rozet" class="social-icon" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-    <img src="/olga_footer.png" alt="Ольга Розет" class="footer-portrait day" width="1024" height="1024" loading="lazy" decoding="async">
-    <img src="/olga_footer_night.png" alt="Ольга Розет" class="footer-portrait night" width="1024" height="1024" loading="lazy" decoding="async">
-    <a href="https://t.me/olga_rozet" class="social-icon" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
-  </div>
-  <a href="#" class="scroll-top" aria-label="Наверх" title="Наверх" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V4M5 11l7-7 7 7"/></svg>
-  </a>
+<div class="footer-content" style="--natural-w:1024px;--natural-r:1">
+<a aria-label="Instagram" class="social-icon" href="https://instagram.com/olga_rozet"><svg fill="currentColor" viewbox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg></a>
+<img alt="Ольга Розет" class="footer-portrait day" decoding="async" height="1024" loading="lazy" src="/olga_footer.png" width="1024"/>
+<img alt="Ольга Розет" class="footer-portrait night" decoding="async" height="1024" loading="lazy" src="/olga_footer_night.png" width="1024"/>
+<a aria-label="Telegram" class="social-icon" href="https://t.me/olga_rozet"><svg fill="currentColor" viewbox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"></path></svg></a>
+</div>
+<a aria-label="Наверх" class="scroll-top" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" title="Наверх">
+<svg fill="none" height="40" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" viewbox="0 0 24 24" width="40"><path d="M12 20V4M5 11l7-7 7 7"></path></svg>
+</a>
 </footer>
 <script>
 const footer = document.querySelector('.footer-content');
@@ -297,19 +596,8 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 observer.observe(footer);
 </script>
-
-<link rel="stylesheet" href="/media.css"><script src="/media.js" defer></script>
+<link href="/media.css" rel="stylesheet"/><script defer="" src="/media.js"></script>
 <script>
-/* Display-window indicator 1[from ≤ now < until) per viewer clock
-   (Inv-STF-window-derived, surface-temporal-fixpoint.md). The reveal
-   (`data-visible-from`) is the exact dual of the original auto-hide
-   (`data-visible-until`, admin 2026-05-13: «пусть блок исчезнет после 20:30
-   по Москве») — one indicator covers both: a block appears at its window
-   start and disappears at its window end, so a page deployed before a
-   boundary still transitions at the precise moment without a redeploy.
-   Runs at page-load and every 30s thereafter — covers tabs left open across
-   a boundary. An unparseable/absent bound fails open on that side (a parse
-   error must never hide content). */
 (function(){
   function _applyWindows(){
     var nodes = document.querySelectorAll('[data-visible-until],[data-visible-from]');
@@ -319,19 +607,15 @@ observer.observe(footer);
       var until = Date.parse(nodes[i].getAttribute('data-visible-until') || '');
       var vis = (isNaN(from) || now >= from) && (isNaN(until) || now < until);
       nodes[i].style.display = vis ? '' : 'none';
-      nodes[i].hidden = !vis;  // окно, закрытое при сборке (атрибут `hidden`), открывается тем же индикатором
+      nodes[i].hidden = !vis;
     }
   }
   _applyWindows();
   setInterval(_applyWindows, 30000);
 })();
 
-/* Pageview pingback — entity-statistics G-Set event (admin 2026-05-13 «считает
-   статистику»). One event per page-load → CF Worker /pv → DELA_STATS KV.
-   No cookies, no client-id; idempotency via cf-ray (CF generates per request).
-   No-op gracefully if Worker unreachable (sendBeacon + fallback fetch). */
 (function(){
-  var slug = (document.querySelector('meta[name="dela:slug"]') || {}).content;
+  var slug = (document.querySelector("meta[name=\"page-slug\"]") || {}).content;
   if (!slug) return;
   var payload = JSON.stringify({
     p: slug,
@@ -339,7 +623,7 @@ observer.observe(footer);
        (Date.now() + '-' + Math.random().toString(36).slice(2)),
     ref: document.referrer || ''
   });
-  var url = "https://dela-edge.azaryarozet.workers.dev/pv";
+  var url = null;
   if (!url) return;
   try {
     var blob = new Blob([payload], { type: 'application/json' });
