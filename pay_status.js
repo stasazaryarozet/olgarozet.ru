@@ -217,11 +217,14 @@
     var rc = view.receipt || (s.recover && s.recover.receipt) || null;
     var rcCfg = cfg.receipt && typeof cfg.receipt === 'object' ? cfg.receipt : null;
     var rcSay = rc && rcCfg ? (rc.state === 'issued' ? rcCfg.issued : rcCfg.pending) : null;
+    var confirming = !!(s.rec && s.rec.return_result === 'success' &&
+      (view.state === 'checking' || view.state === 'owed' || view.state === 'waiting' || view.state === 'late'));
     return {
       box_hidden: view.state === 'composing' && !url,
       say: sayOf(cfg, view.say || view.state, view.reason),
       order_key: (s.rec && s.rec.key) || null,
       open_url: url,
+      confirming: confirming,
       paid_hidden: view.state !== 'waiting',
       receipt_hidden: !(rc && rcSay),
       receipt_say: rcSay,
@@ -319,6 +322,7 @@
     doc = doc || root.document;
     function $(id) { return doc.getElementById(id); }
     var box = $('pay-status'), say = $('pay-status-say'), orderEl = $('pay-status-order'), open = $('pay-status-open');
+    var sform = $('checkout-server-form');
     var paid = $('pay-status-paid'), elapsed = $('pay-status-elapsed');
     var rcBox = $('pay-status-receipt'), rcSay = $('pay-status-receipt-say'), rcLink = $('pay-status-receipt-link');
     var form = $('pay-status-recover'), ref = $('pay-status-ref'), rsay = $('pay-status-recover-say');
@@ -366,6 +370,7 @@
           }
         }
         if (open && row.open_url) { open.href = row.open_url; open.hidden = false; }
+        if (sform) sform.hidden = !!row.open_url || !!row.confirming;
         if (paid) paid.hidden = row.paid_hidden;
         if (rcBox) rcBox.hidden = row.receipt_hidden;
         if (rcSay && row.receipt_say != null) rcSay.textContent = row.receipt_say;

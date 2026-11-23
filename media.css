@@ -1,18 +1,28 @@
 
+
+@layer owner {
+
+:root { --bottom-bar-stack: 0px; }
+:root[data-now-playing] { --bottom-bar-stack: calc(var(--touch-min) + var(--sp-3)); }
+
 .now-playing {
   position: fixed;
-  left: var(--sp-2); right: var(--sp-2); bottom: var(--sp-2);
+  
+  left: calc(var(--sp-2) + env(safe-area-inset-left, 0px));
+  right: calc(var(--sp-2) + env(safe-area-inset-right, 0px));
+  bottom: calc(var(--sp-2) + env(safe-area-inset-bottom, 0px));
   margin-inline: auto;
   max-width: var(--measure);
   display: flex;
   align-items: center;
   gap: var(--sp-1);
   padding: var(--sp-1) var(--sp-2);
-  background: var(--overlay-solid);
+  background: var(--overlay-solid, transparent);   
   border: 1px solid var(--rule);
   border-radius: var(--radius-card);
   z-index: 103;
 }
+
 .now-playing[hidden] { display: none; }
 .now-playing-toggle {
   min-width: var(--touch-min); min-height: var(--touch-min);
@@ -24,11 +34,41 @@
 .now-playing-name {
   flex: 1 1 auto; min-width: 0;
   text-align: left;
-  font: 400 var(--fs-body-min)/1.3 var(--sans);
-  color: var(--ink-soft);
+  
+  font: inherit;
+  font-weight: 400; font-size: var(--fs-body-min); line-height: 1.3; font-family: var(--sans);
+  color: var(--ink-soft, var(--muted));
   background: transparent; border: 0; cursor: pointer;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.now-playing-toggle:focus-visible, .now-playing-name:focus-visible {
+
+audio:focus-visible, video:focus-visible, .media-rate:focus-visible,
+.now-playing-toggle:focus-visible, .now-playing-name:focus-visible,
+.player-resume-link:focus-visible,
+blockquote[data-t][tabindex]:focus-visible {
   outline: var(--focus-outline-min) solid var(--accent); outline-offset: 2px;
 }
+
+blockquote[data-t][tabindex] { cursor: pointer; }
+@media (pointer: coarse) {
+  blockquote[data-t][tabindex] {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--touch-min);
+  }
+}
+
+.media-rate {
+  min-width: var(--touch-min); min-height: var(--touch-min);
+  font: inherit;   
+  font-weight: 400; font-size: var(--fs-body-min); line-height: var(--lh-solid); font-family: var(--sans);
+  background: transparent; color: var(--ink);
+  border: 1px solid var(--rule); border-radius: var(--radius-control); cursor: pointer;
+}
+
+video::cue { font-size: max(100%, var(--fs-body-min)); }
+
+@media print {
+  .now-playing, .media-rate { display: none; }
+}
+} 

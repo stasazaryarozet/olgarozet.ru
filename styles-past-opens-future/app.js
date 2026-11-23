@@ -30,11 +30,13 @@
   function bindZoom() {
     var dlg = document.createElement('dialog');
     dlg.setAttribute('data-role', 'zoom');
+    dlg.setAttribute('aria-label', 'Просмотр изображения');
     var bar = document.createElement('div');
     bar.className = 'zoom-bar';
     var fitBtn = document.createElement('button');
     fitBtn.type = 'button';
     fitBtn.className = 'zoom-toggle';
+    fitBtn.setAttribute('aria-pressed', 'false');
     fitBtn.textContent = '1:1';
     var closeBtn = document.createElement('button');
     closeBtn.type = 'button';
@@ -51,8 +53,10 @@
     dlg.appendChild(stage);
     document.body.appendChild(dlg);
     if (!dlg.showModal) return;                 // старый браузер — остаётся ссылка
+    var triggerEl = null;
     var setFull = function (on) {
       dlg.toggleAttribute('data-zoom-full', !!on);
+      fitBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
       fitBtn.textContent = on ? 'По экрану' : '1:1';
     };
     fitBtn.addEventListener('click', function (e) {
@@ -70,11 +74,28 @@
     dlg.addEventListener('click', function (e) {
       if (e.target === dlg || e.target === stage) dlg.close();
     });
+    dlg.addEventListener('keydown', function (e) {
+      if (e.key !== 'Tab') return;
+      var controls = [fitBtn, closeBtn];
+      var idx = controls.indexOf(document.activeElement);
+      e.preventDefault();
+      var next = e.shiftKey
+        ? controls[(idx <= 0 ? controls.length : idx) - 1]
+        : controls[(idx + 1) % controls.length];
+      next.focus();
+    });
+    dlg.addEventListener('close', function () {
+      if (triggerEl && typeof triggerEl.focus === 'function') {
+        try { triggerEl.focus(); } catch (err) {}
+      }
+      triggerEl = null;
+    });
     document.addEventListener('click', function (e) {
       var a = e.target && e.target.closest && e.target.closest('a[data-role="zoom"]');
       if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
       var inner = a.querySelector('img');
       e.preventDefault();
+      triggerEl = a;
       setFull(false);
       big.src = a.getAttribute('href');
       big.alt = (inner && inner.alt) || '';
