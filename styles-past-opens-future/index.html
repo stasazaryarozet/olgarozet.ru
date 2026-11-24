@@ -4,7 +4,6 @@
 <html data-surface="editorial" lang="ru">
 <head>
 <meta charset="utf-8"/>
-<meta content="u5gNvIFSmtyOxQqC" name="mailru-domain"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <title>Стили и тренды: прошлое открывает будущее — Ольга Розет</title>
 <meta content="Стили и тренды: прошлое открывает будущее. Как читать любой интерьер по семи осям анализа: 3 главы открыты бесплатно, в полном доступе — 9 глав, 81 минута видеозаписи, упражнение и 13 проверок." name="description"/>
@@ -63,7 +62,7 @@
   setInterval(window.__applyTheme, 300000);
 })();
 </script>
-<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=8224bc63bb"); @import url("/styles.css?v=96ef6153a7"); @import url("/narrative-showcase.css") layer(owner); @import url("styles.css") layer(owner); @import url("proportions.css") layer(owner);</style>
+<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=8224bc63bb"); @import url("/styles.css?v=08b2c21906"); @import url("/narrative-showcase.css") layer(owner); @import url("styles.css") layer(owner); @import url("proportions.css") layer(owner);</style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Product", "name": "Стили и тренды: прошлое открывает будущее", "description": "Стили и тренды: прошлое открывает будущее. Как читать любой интерьер по семи осям анализа: 3 главы открыты бесплатно, в полном доступе — 9 глав, 81 минута видеозаписи, упражнение и 13 проверок.", "image": "https://olgarozet.ru/styles-past-opens-future/card.jpg", "brand": {"@type": "Person", "name": "Ольга Розет"}, "offers": {"@type": "Offer", "price": "2500.00", "priceCurrency": "RUB", "url": "https://olgarozet.ru/styles-past-opens-future/"}}</script>
 <meta content="styles-past-opens-future" name="page-slug"/>
 <script defer="" src="app.js"></script>
@@ -188,6 +187,22 @@
     if (r.width <= 0 || r.height <= 0) return false;
     return lineBoxCount(p) > 1 && (r.height / Math.max(r.width, 1)) > P.max_line_aspect;
   }
+  let _measureCanvas = null;
+  function controlTextNeedPx(ctl) {
+    const cs = getComputedStyle(ctl);
+    const padX = (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0)
+      + (parseFloat(cs.borderLeftWidth) || 0) + (parseFloat(cs.borderRightWidth) || 0);
+    const txt = ctl.tagName === 'SELECT'
+      ? ((ctl.options && ctl.selectedIndex >= 0 && ctl.options[ctl.selectedIndex]) ? ctl.options[ctl.selectedIndex].text : '')
+      : (ctl.value || ctl.placeholder || '');
+    if (!txt) return 0;
+    _measureCanvas = _measureCanvas || document.createElement('canvas');
+    const g = _measureCanvas.getContext && _measureCanvas.getContext('2d');
+    const fs = parseFloat(cs.fontSize) || 16;
+    const textW = g ? ((g.font = cs.font || (fs + 'px sans-serif')), g.measureText(txt).width) : txt.length * chPxOf(ctl);
+    const chromeW = ctl.tagName === 'SELECT' ? Math.ceil(fs * 1.8) : 4;
+    return textW + padX + chromeW;
+  }
   function controlSqueezed(el) {
     const labels = Array.from(el.querySelectorAll('label'));
     return labels.some(lb => {
@@ -200,7 +215,10 @@
         return true;
       }
       const textSized = ctl.tagName === 'SELECT' || !/^(checkbox|radio)$/i.test(ctl.type || '');
-      return textSized && ctlRect.width > 0 && ctlRect.width < P.min_readable_word_ch * chPxOf(ctl);
+      if (!textSized || ctlRect.width <= 0) return false;
+      if (ctlRect.width < P.min_readable_word_ch * chPxOf(ctl)) return true;
+      const needPx = controlTextNeedPx(ctl);
+      return needPx > 0 && ctlRect.width + P.tolerance_px < needPx;
     });
   }
   function flowNeedsIco(el) {
@@ -269,12 +287,21 @@
     const x = a.toLowerCase(), y = b.toLowerCase();
     if (x === y) return true;
     const minLen = Math.min(x.length, y.length);
-    const stemLen = Math.min(4, minLen);
-    return stemLen >= 3 && x.slice(0, stemLen) === y.slice(0, stemLen);
+    const maxLen = Math.max(x.length, y.length);
+    if (maxLen - minLen > 3 || minLen < 4) return false;
+    const stemLen = Math.max(4, minLen - 2);
+    return x.slice(0, stemLen) === y.slice(0, stemLen);
+  }
+  function isVisibleNode(el) {
+    if (!el || !el.isConnected) return false;
+    if (el.offsetParent === null) return false;
+    if (el.closest('[hidden], [aria-hidden="true"]')) return false;
+    return true;
   }
   function collectKeyPairs(scope) {
     return Array.from(scope.querySelectorAll('.' + S.cls_root))
       .filter(bf => {
+        if (!isVisibleNode(bf)) return false;
         const modeHost = bf.closest('[' + S.mode_attr + ']');
         return Boolean(modeHost && modeHost.getAttribute(S.mode_attr) === S.ico);
       })
@@ -291,10 +318,14 @@
   function keyAnchorOf(scope) {
     return /^(THEAD|TBODY|TFOOT|TR|TD|TH)$/i.test(scope.tagName) ? (scope.closest('table') || scope) : scope;
   }
+  function keyEdgeOf(scope) {
+    return (/^THEAD$/i.test(scope.tagName) || Boolean(scope.closest('thead'))) ? 'beforebegin' : 'afterend';
+  }
   function syncKey(scope) {
     const anchor = keyAnchorOf(scope);
-    const next = anchor.nextElementSibling;
-    const existing = (next && next.hasAttribute(S.legend_attr)) ? next : null;
+    const edge = keyEdgeOf(scope);
+    const sib = edge === 'beforebegin' ? anchor.previousElementSibling : anchor.nextElementSibling;
+    const existing = (sib && sib.hasAttribute(S.legend_attr)) ? sib : null;
     const pairs = collectKeyPairs(scope);
     if (!pairs.length) {
       if (existing) existing.remove();
@@ -304,7 +335,7 @@
     if (!existing) {
       el.className = S.cls_legend;
       el.setAttribute(S.legend_attr, '');
-      anchor.insertAdjacentElement('afterend', el);
+      anchor.insertAdjacentElement(edge, el);
     }
     el.textContent = '';
     pairs.forEach(pair => {
@@ -315,7 +346,9 @@
   }
   function evaluateBiform(root) {
     const doc = root || document;
-    const scopes = Array.from(doc.querySelectorAll('[' + S.scope_attr + ']')).filter(s => s.isConnected && s.offsetParent !== null);
+    const allScopes = Array.from(doc.querySelectorAll('[' + S.scope_attr + ']'));
+    allScopes.filter(s => s.isConnected && !isVisibleNode(s)).forEach(syncKey);
+    const scopes = allScopes.filter(isVisibleNode);
     if (!scopes.length) return;
     scopes.forEach(s => {
       s.setAttribute(S.mode_attr, S.txt);
@@ -340,7 +373,12 @@
   window.addEventListener('resize', () => {
     if (!raf) raf = requestAnimationFrame(() => { raf = 0; evaluateBiform(document); });
   }, {passive: true});
-  document.addEventListener('toggle', e => { if (e.target && e.target.open) evaluateBiform(e.target); }, true);
+  document.addEventListener('toggle', e => {
+    if (e.target && e.target.open) {
+      const host = e.target.closest('[' + S.scope_attr + ']');
+      evaluateBiform(host ? host.parentElement || document : e.target);
+    }
+  }, true);
 })();
 </script>
 </head>
@@ -377,8 +415,8 @@
 <footer>
 <div class="footer-content" style="--natural-w:1024px;--natural-r:1">
 <a aria-label="Instagram" class="social-icon" href="https://instagram.com/olga_rozet"><svg fill="currentColor" viewbox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg></a>
-<img alt="Ольга Розет" class="footer-portrait day" decoding="async" height="1024" loading="lazy" src="/olga_footer.png" width="1024"/>
-<img alt="Ольга Розет" class="footer-portrait night" decoding="async" height="1024" loading="lazy" src="/olga_footer_night.png" width="1024"/>
+<img alt="Ольга Розет" class="footer-portrait day" decoding="async" height="1024" loading="lazy" src="/olga_footer.webp" width="1024"/>
+<img alt="Ольга Розет" class="footer-portrait night" decoding="async" height="1024" loading="lazy" src="/olga_footer_night.webp" width="1024"/>
 <a aria-label="Telegram" class="social-icon" href="https://t.me/olga_rozet"><svg fill="currentColor" viewbox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"></path></svg></a>
 </div>
 <a aria-label="Наверх" class="scroll-top" href="#" onclick="window.scrollTo(0,0);return false;" title="Наверх">

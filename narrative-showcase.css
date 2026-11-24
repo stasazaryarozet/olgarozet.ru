@@ -1386,6 +1386,12 @@ button.moment-seek:focus-visible { outline: var(--focus-outline-min) solid var(-
 dialog[data-role="zoom"] img { filter: none; }
 
 
+#doc video::cue {
+  background-color: color-mix(in srgb, var(--surface) 88%, transparent);
+  color: var(--ink);
+}
+
+
 @media print {
   .story-buy-bar, .buyer-bar, .player-controls, .player-resume,
   .player-resume-fallback, .player-status, .worksheet-copy, .worksheet-status,
