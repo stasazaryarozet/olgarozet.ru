@@ -1039,8 +1039,102 @@
     }, { rootMargin: '200px' });
     els.forEach(function (el) { obs.observe(el); });
   }
+  /*fn:pickActiveSection*/function pickActiveSection(entries, currentId) {
+    var best = null;
+    (entries || []).forEach(function (e) {
+      if (!e || !e.id || !e.isIntersecting) return;
+      if (!best || e.ratio > best.ratio || (e.ratio === best.ratio && e.top < best.top)) {
+        best = e;
+      }
+    });
+    return best ? best.id : (currentId || '');
+  }/*/fn:pickActiveSection*/
+  function armSectionTracking() {
+    // imperative: DOM+IO - track active section for WCAG aria-current="location" and micro-session resume
+    var links = Array.prototype.slice.call(document.querySelectorAll('nav a[href^="#"]'));
+    if (!links.length) return;
+    var byId = {};
+    var order = [];
+    links.forEach(function (a) {
+      var id = (a.getAttribute('href') || '').slice(1);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      if (!byId[id]) {
+        byId[id] = { el: target, links: [] };
+        order.push(id);
+      }
+      byId[id].links.push(a);
+    });
+    if (!order.length) return;
+    var readKey = 'dela-read-section:' + location.pathname;
+    var activeId = '';
+    function applyActive(id, persist) {
+      if (!id || id === activeId || !byId[id]) return;
+      activeId = id;
+      order.forEach(function (k) {
+        byId[k].links.forEach(function (a) {
+          if (k === id) a.setAttribute('aria-current', 'location');
+          else a.removeAttribute('aria-current');
+        });
+      });
+      if (persist && (window.scrollY || 0) > 120) store('set', readKey, id);
+    }
+    var savedId = store('get', readKey);
+    if (!location.hash && savedId && byId[savedId] && savedId !== order[0]) {
+      var docEl = document.getElementById('doc');
+      var tpl = docEl && docEl.getAttribute('data-read-resume-label');
+      var dismissLbl = (docEl && docEl.getAttribute('data-read-resume-dismiss')) || '×';
+      var navHost = links[0].closest('nav');
+      if (tpl && navHost && navHost.parentNode && !document.querySelector('.read-resume')) {
+        var firstLink = byId[savedId].links[0];
+        var secTitle = (firstLink && firstLink.textContent || savedId).replace(/\s+/g, ' ').trim();
+        var bar = document.createElement('aside');
+        bar.className = 'read-resume';
+        bar.setAttribute('role', 'status');
+        var jump = document.createElement('a');
+        jump.className = 'read-resume-link';
+        jump.href = '#' + savedId;
+        jump.textContent = tpl.replace('{title}', secTitle);
+        jump.addEventListener('click', function () { bar.remove(); });
+        var closeBtn = document.createElement('button');
+        closeBtn.type = 'button';
+        closeBtn.className = 'read-resume-dismiss';
+        closeBtn.setAttribute('aria-label', dismissLbl);
+        closeBtn.textContent = '×';
+        closeBtn.addEventListener('click', function () {
+          store('set', readKey, '');
+          bar.remove();
+        });
+        bar.appendChild(jump);
+        bar.appendChild(closeBtn);
+        navHost.parentNode.insertBefore(bar, navHost);
+      }
+    }
+    if (!('IntersectionObserver' in window)) {
+      applyActive(order[0], false);
+      return;
+    }
+    var state = {};
+    var io = new IntersectionObserver(function (ioEntries) {
+      ioEntries.forEach(function (entry) {
+        var id = entry.target.id;
+        if (!id) return;
+        state[id] = {
+          id: id,
+          isIntersecting: entry.isIntersecting,
+          ratio: entry.intersectionRatio || 0,
+          top: entry.boundingClientRect ? entry.boundingClientRect.top : 0
+        };
+      });
+      var snap = order.map(function (id) { return state[id]; }).filter(Boolean);
+      var nextId = pickActiveSection(snap, activeId);
+      if (nextId) applyActive(nextId, true);
+    }, { rootMargin: '-15% 0px -65% 0px', threshold: [0, 0.25, 0.5] });
+    order.forEach(function (id) { io.observe(byId[id].el); });
+  }
   function ready() {
-    restore(); armWorksheets(); rateButtons(); armQuotes(); revealMetered(); armResumeLinks();
+    restore(); armWorksheets(); rateButtons(); armQuotes(); revealMetered(); armResumeLinks(); armSectionTracking();
     document.querySelectorAll('video[data-recover-backoff]').forEach(recoverable);
     if (document.readyState === 'complete') armLazyAudioMeta();
     else window.addEventListener('load', armLazyAudioMeta, { once: true });

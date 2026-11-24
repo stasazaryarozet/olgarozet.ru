@@ -1451,6 +1451,43 @@ video::cue {
   border-radius: var(--radius-control);
   cursor: pointer;
 }
+.story-share-row {
+  margin: var(--sp-2) 0 0;
+}
+.story-share-btn--inline {
+  color: var(--ink-soft);
+}
+nav a[aria-current="location"] {
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.read-resume {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin: var(--sp-2) 0;
+  padding: var(--sp-1) var(--sp-2);
+  background: var(--surface-deep);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-card);
+  font-size: var(--fs-xs);
+}
+.read-resume-link {
+  color: var(--ink);
+  text-decoration: underline;
+}
+.read-resume-dismiss {
+  min-width: var(--touch-min);
+  min-height: var(--touch-min);
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+}
 .story-noscript {
   margin: var(--sp-2) 0;
   padding: var(--sp-2) var(--sp-3);
@@ -1484,7 +1521,7 @@ video::cue {
   #doc > header [data-role="record"], [data-kind="video"], button.moment-seek,
   .story-buy-bar, .buyer-bar, .player-controls, .player-resume,
   .player-resume-fallback, .player-status, .worksheet-copy, .worksheet-status,
-  .buyer-closing-actions, .story-share-btn, .ics-return-btn,
+  .buyer-closing-actions, .story-share-btn, .ics-return-btn, .story-share-row, .read-resume,
   .worksheet-input, #doc audio { display: none !important; }
   .worksheet-print-mirror {
     display: block !important;
