@@ -1044,6 +1044,24 @@ a[data-reach="out"] { color: var(--muted); }
   text-transform: uppercase;
   color: var(--muted);
 }
+.story-colophon {
+  max-width: var(--measure);
+  margin: var(--sp-5) auto var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-s);
+  color: var(--muted);
+}
+.story-colophon .story-motto {
+  margin: 0 0 var(--sp-1);
+  color: var(--ink-soft);
+  font-style: italic;
+}
+.story-colophon .doc-revision {
+  margin: 0;
+  font-size: var(--fs-xs);
+  color: var(--muted);
+}
 #doc div[data-kind="segment"]:has(> .system-mark) {
   border-left: 2px solid var(--rule);
 }

@@ -477,6 +477,7 @@
         if (!box) return;
         box.hidden = !f.state;
         box.querySelectorAll('[data-state]').forEach(function (n) { n.hidden = n.getAttribute('data-state') !== f.state; });
+        if (f.state === 'failed') reportClientErr(v, 'player_recover', v.getAttribute('data-active-rung') || defRung);
       },
       schedule: function (f) { setTimeout(function () { send('wait-over'); }, f.ms); },
       restore: function (f) { applySnap(f.snap); },
@@ -592,9 +593,52 @@
     });
   }
 
-  /* ПАМЯТЬ ОТМЕТОК (B9). Флажок `input[type=checkbox][data-keep]` помнит своё состояние
-     у этого читателя: ключ — путь страницы и `data-keep`. Хранилище может отказать
-     (приватное окно, запрет) — страница от этого не ломается, флажок просто не помнит. */
+  /* ОБЕЗЛИЧЕННЫЙ МАЯК ОШИБОК ПРОИГРЫВАТЕЛЯ (Axis 24, 0 ПДн / 0 IP / 0 токенов).
+     Адрес едет из разметки (`data-err-beacon`, выведен из routes.yaml), отправляется только при
+     терминальном исчерпании попыток восстановления проигрывателя. */
+  /*fn:clientErrPayload*/function clientErrPayload(surface, slug, kind, code) {
+    var clip = function (val, max) { return String(val || '').trim().slice(0, max); };
+    var s = clip(surface, 32), sl = clip(slug, 64), k = clip(kind, 32), c = clip(code, 64);
+    if (!s || !sl || !k || !c) return null;
+    return { surface: s, slug: sl, kind: k, code: c };
+  }/*/fn:clientErrPayload*/
+  var errSent = {};
+  function reportClientErr(v, kind, code) {
+    // imperative: IO - one-shot zero-PII sendBeacon on terminal player recovery failure
+    var url = v && v.getAttribute('data-err-beacon');
+    if (!url || !navigator.sendBeacon) return;
+    var payload = clientErrPayload('buyer', v.getAttribute('data-slug') || '', kind, code);
+    if (!payload) return;
+    var dedup = payload.slug + '|' + payload.kind + '|' + payload.code;
+    if (errSent[dedup]) return;
+    errSent[dedup] = true;
+    try {
+      navigator.sendBeacon(url, new Blob([JSON.stringify(payload)], { type: 'application/json' }));
+    } catch (err) { /* маяк никогда не ломает проигрыватель */ }
+  }
+
+  /* ПАМЯТЬ ОТМЕТОК (B9) И ВЕРСИОНИРОВАНИЕ СХЕМЫ ХРАНИЛИЩА (Axis 31).
+     Флажок `input[type=checkbox][data-keep]` помнит своё состояние у этого читателя: ключ — путь
+     страницы и `data-keep`. Хранилище может отказать (приватное окно, запрет) — страница от этого
+     не ломается, флажок просто не помнит. Схема версионирована (`dela-schema:<pathname>`), чтобы
+     будущие переименования ключей мигрировали заметки читателя без потерь. */
+  var STORAGE_SCHEMA_VERSION = 1;
+  var STORAGE_MIGRATIONS = {};
+  /*fn:migrateStorage*/function migrateStorage(storeFn, pathname, targetVersion, migrations) {
+    var verKey = 'dela-schema:' + String(pathname || '');
+    var raw = storeFn('get', verKey);
+    var cur = raw ? parseInt(raw, 10) : 0;
+    if (!isFinite(cur) || cur < 0) cur = 0;
+    var target = Number(targetVersion) || 1;
+    var migs = migrations || {};
+    var v = cur;
+    while (v < target) {
+      if (typeof migs[v] === 'function') migs[v](storeFn, pathname);
+      v += 1;
+    }
+    if (cur !== target) storeFn('set', verKey, String(target));
+    return target;
+  }/*/fn:migrateStorage*/
   function store(op, k, v) {
     try { return op === 'get' ? window.localStorage.getItem(k) : window.localStorage.setItem(k, v); }
     catch (err) { return null; }
@@ -602,6 +646,7 @@
   function keyOf(box) { return 'dela-keep:' + location.pathname + ':' + box.getAttribute('data-keep'); }
   function textKeyOf(ta) { return 'dela-keep-text:' + location.pathname + ':' + ta.getAttribute('data-keep-text'); }
   function restore() {
+    migrateStorage(store, location.pathname, STORAGE_SCHEMA_VERSION, STORAGE_MIGRATIONS);
     document.querySelectorAll('input[type="checkbox"][data-keep]').forEach(function (box) {
       if (store('get', keyOf(box)) === '1') box.checked = true;
     });
