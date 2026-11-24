@@ -1,5 +1,5 @@
 {
- "at": "2026-11-24T00:48:42+00:00",
+ "at": "2026-11-24T07:59:25+00:00",
  "domain": [
   ".state/engage/olgarozet/slots.json",
   "config/code_dirs.txt",
@@ -13,6 +13,7 @@
   "knowledge/system/ai-slop-tells.yaml",
   "knowledge/system/anglicism-substitutions.yaml",
   "knowledge/system/canonical-normalizers.yaml",
+  "knowledge/system/cost_posture.yaml",
   "knowledge/system/domains.json",
   "knowledge/system/fx-registry.yaml",
   "knowledge/system/historical-events.yaml",
@@ -570,6 +571,7 @@
   "scripts/owner_config.py",
   "scripts/owner_data.py",
   "scripts/pages_host.py",
+  "scripts/payment_statement.py",
   "scripts/plan_status.py",
   "scripts/principal.py",
   "scripts/projection_fidelity.py",
@@ -601,6 +603,6 @@
   "scripts/typography.py",
   "scripts/utils/git_publish.py"
  ],
- "rev": "ab8c29ed76362500888b5024a94f4769f03bdf5a",
- "src_oid": "c9203871a7d56d58"
+ "rev": "5e24df6d7d3a71871165d14242b6fc450e97f68e",
+ "src_oid": "6495b9111d8b6c7f"
 }

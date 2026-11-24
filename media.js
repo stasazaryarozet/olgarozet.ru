@@ -27,6 +27,9 @@
   'use strict';
 
   var SEL = 'audio, video';
+  var _scriptEl = document.currentScript || document.querySelector('script[src="/media.js"]');
+  var _pauseLabel = (_scriptEl && _scriptEl.getAttribute('data-label-pause')) || '';
+  var _tzLocalTpl = (_scriptEl && _scriptEl.getAttribute('data-tz-local-note')) || '';
   var current = null;                 // единственный играющий носитель
   var bar = null, barName = null, barBtn = null, io = null;
 
@@ -66,7 +69,9 @@
     barName.textContent = label(el);
     // Знак действия, а не слово: полоса появляется ТОЛЬКО при играющем носителе.
     barBtn.textContent = '⏸';
-    barBtn.setAttribute('aria-label', barName.textContent || '⏸');
+    var nm = barName.textContent || '';
+    var pLbl = el.getAttribute('data-label-pause') || _pauseLabel;
+    barBtn.setAttribute('aria-label', pLbl ? (nm ? (pLbl + ': ' + nm) : pLbl) : (nm || '⏸'));
     bar.hidden = false;
     document.documentElement.setAttribute('data-now-playing', '');
   }
@@ -442,8 +447,12 @@
         sizeEl.textContent = tpl.replace('{mb}', String(Math.round(Number(hit.bytes) / 1e6)));
       }
     };
-    var applySrc = function (targetRung) {
+    var applySrc = function (targetRung, bust) {
       var u = rungs.length ? rungUrl(baseSrc, targetRung, defRung, qParam) : baseSrc;
+      if (bust && u) {
+        var sep = u.indexOf('?') === -1 ? '?' : '&';
+        u = u + sep + '_r=' + String(Date.now());
+      }
       Array.prototype.slice.call(v.querySelectorAll('source')).forEach(function (s) { s.parentNode && s.parentNode.removeChild(s); });
       v.src = u;
       v.setAttribute('data-active-rung', targetRung || defRung);
@@ -472,7 +481,7 @@
       schedule: function (f) { setTimeout(function () { send('wait-over'); }, f.ms); },
       restore: function (f) { applySnap(f.snap); },
       reload: function (f) {
-        applySrc(f.rung);
+        applySrc(f.rung, true);
         v.load();
       }
     };
@@ -510,9 +519,14 @@
       resumeTimeEl.textContent = Math.floor(pt / 60) + ':' + String(pt % 60).padStart(2, '0');
       resumeBox.hidden = false;
     }
-    [['play', 'play'], ['pause', 'pause'], ['error', 'error'], ['waiting', 'waiting'],
+    [['play', 'play'], ['pause', 'pause'], ['waiting', 'waiting'],
      ['loadedmetadata', 'meta'], ['playing', 'alive'], ['seeked', 'alive'], ['canplaythrough', 'alive']].forEach(function (p) {
       v.addEventListener(p[0], function () { send(p[1]); });
+    });
+    // Capture-phase error listener catches `<source>` resource load errors (which do not bubble per HTML spec).
+    v.addEventListener('error', function () { send('error'); }, true);
+    window.addEventListener('online', function () {
+      if (state.busy || (box && !box.hidden)) send('retry');
     });
     if (sel && rungs.length) {
       sel.addEventListener('change', function () {
@@ -657,15 +671,77 @@
       onDone();
     }
   }
+  function syncPrintMirrors(root) {
+    (root || document).querySelectorAll('textarea[data-keep-text]').forEach(function (ta) {
+      var row = ta.closest('.worksheet-row');
+      var mirror = row && row.querySelector('.worksheet-print-mirror');
+      if (mirror) mirror.textContent = ta.value || '';
+    });
+  }
+  function syncProgressCounter() {
+    var box = document.querySelector('[data-story-progress]');
+    if (!box) return;
+    var sheets = document.querySelectorAll('.exercise-worksheet');
+    var filled = 0;
+    sheets.forEach(function (fs) {
+      if (formatWorksheet(worksheetPairs(fs))) filled += 1;
+    });
+    var wsEl = box.querySelector('[data-progress-worksheets]');
+    if (wsEl) wsEl.textContent = String(filled) + '/' + String(sheets.length);
+  }
+  function escapeIcsText(s) {
+    return String(s || '')
+      .replace(/\\/g, '\\\\')
+      .replace(/;/g, '\\;')
+      .replace(/,/g, '\\,')
+      .replace(/\r?\n/g, '\\n');
+  }
+  function buildReturnIcs(title, url, schedule, host) {
+    var now = new Date();
+    var pad2 = function (n) { return String(n).padStart(2, '0'); };
+    var fmtDay = function (d) {
+      return String(d.getUTCFullYear()) + pad2(d.getUTCMonth() + 1) + pad2(d.getUTCDate());
+    };
+    var stamp = fmtDay(now) + 'T' + pad2(now.getUTCHours()) + pad2(now.getUTCMinutes()) + pad2(now.getUTCSeconds()) + 'Z';
+    var dom = String(host || (typeof location !== 'undefined' && location.hostname) || 'calendar.local')
+      .replace(/[^A-Za-z0-9.-]/g, '') || 'calendar.local';
+    var rows = Array.isArray(schedule) ? schedule.filter(function (o) {
+      return o && Number(o.days) > 0 && o.label;
+    }) : [];
+    var events = rows.reduce(function (acc, o, i) {
+      var start = new Date(now.getTime() + Number(o.days) * 86400000);
+      var end = new Date(start.getTime() + 86400000);
+      var ds = fmtDay(start);
+      var de = fmtDay(end);
+      var desc = escapeIcsText(o.label) + (url ? '\\n' + escapeIcsText(url) : '');
+      return acc.concat([
+        'BEGIN:VEVENT',
+        'UID:return-' + String(o.days) + '-' + ds + '-' + String(i) + '@' + dom,
+        'DTSTAMP:' + stamp,
+        'DTSTART;VALUE=DATE:' + ds,
+        'DTEND;VALUE=DATE:' + de,
+        'SUMMARY:' + escapeIcsText(String(title || '') + ' — ' + String(o.label)),
+        'DESCRIPTION:' + desc,
+        'END:VEVENT'
+      ]);
+    }, []);
+    var lang = String((typeof document !== 'undefined' && document.documentElement && document.documentElement.lang) || 'ru')
+      .replace(/[^A-Za-z]/g, '').slice(0, 2).toUpperCase() || 'RU';
+    return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//' + dom + '//Calendar//' + lang]
+      .concat(events, ['END:VCALENDAR'])
+      .join('\r\n') + '\r\n';
+  }
   function syncGlobalWorkbook() {
     var allText = formatAllWorksheets(allWorksheetGroups());
     document.querySelectorAll('[data-worksheet-export-all]').forEach(function (btn) {
       btn.hidden = false;
       btn.disabled = !allText;
     });
+    syncProgressCounter();
   }
   function syncWorksheet(fs, markSaved) {
     if (!fs) return;
+    syncPrintMirrors(fs);
     var text = formatWorksheet(worksheetPairs(fs));
     var st = fs.querySelector('[data-worksheet-status]');
     if (st && markSaved) {
@@ -678,6 +754,74 @@
       btn.disabled = !text;
     }
     syncGlobalWorkbook();
+  }
+  function armShareAndReturn() {
+    document.querySelectorAll('[data-share-anchor]').forEach(function (btn) {
+      if (btn.dataset.armed) return;
+      btn.dataset.armed = '1';
+      var timer = null;
+      btn.addEventListener('click', function () {
+        var hash = btn.getAttribute('data-share-anchor') || '';
+        var url = location.origin + location.pathname + (hash ? ('#' + hash.replace(/^#/, '')) : '');
+        var title = btn.getAttribute('data-share-title') || document.title;
+        var done = function () {
+          var copied = btn.getAttribute('data-label-copied') || '';
+          if (!copied) return;
+          var orig = btn.getAttribute('data-label-default') || btn.textContent;
+          btn.textContent = copied;
+          if (timer) clearTimeout(timer);
+          timer = setTimeout(function () { btn.textContent = orig; }, 2000);
+        };
+        if (navigator.share) {
+          navigator.share({ title: title, url: url }).catch(function () {});
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(done, function () {});
+        }
+      });
+    });
+    document.querySelectorAll('[data-ics-return]').forEach(function (btn) {
+      if (btn.dataset.armed) return;
+      btn.dataset.armed = '1';
+      btn.addEventListener('click', function () {
+        var title = btn.getAttribute('data-ics-title') || document.title;
+        var host = btn.getAttribute('data-ics-host') || '';
+        var schedule = [];
+        try { schedule = JSON.parse(btn.getAttribute('data-ics-schedule') || '[]') || []; } catch (e) { schedule = []; }
+        var ics = buildReturnIcs(title, location.href.split('#')[0], schedule, host);
+        if (typeof Blob !== 'undefined' && typeof URL !== 'undefined' && URL.createObjectURL) {
+          var blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+          var u = URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = u;
+          a.download = 'return-schedule.ics';
+          a.style.display = 'none';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(function () { try { URL.revokeObjectURL(u); } catch (err) {} }, 1000);
+        }
+      });
+    });
+    // Annotate local time (including local date if crossing midnight) on any `[data-until]` deadline element.
+    document.querySelectorAll('[data-until]').forEach(function (el) {
+      if (el.getAttribute('data-tz-done')) return;
+      var iso = el.getAttribute('data-until') || '';
+      var m = /([+-])(\d{2}):(\d{2})$|Z$/.exec(iso);
+      var ms = Date.parse(iso);
+      if (!m || isNaN(ms)) return;
+      var srcOffMin = iso.slice(-1) === 'Z' ? 0 : (m[1] === '+' ? 1 : -1) * (parseInt(m[2], 10) * 60 + parseInt(m[3], 10));
+      var localOffMin = -new Date(ms).getTimezoneOffset();
+      el.setAttribute('data-tz-done', '1');
+      if (srcOffMin === localOffMin) return;
+      var d = new Date(ms);
+      var srcD = new Date(ms + srcOffMin * 60000);
+      var sameDay = d.getFullYear() === srcD.getUTCFullYear() && d.getMonth() === srcD.getUTCMonth() && d.getDate() === srcD.getUTCDate();
+      var hh = String(d.getHours()).padStart(2, '0');
+      var mm = String(d.getMinutes()).padStart(2, '0');
+      var stamp = sameDay ? (hh + ':' + mm) : (String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0') + ' ' + hh + ':' + mm);
+      var tzTpl = el.getAttribute('data-tz-local-note') || _tzLocalTpl;
+      if (tzTpl) el.textContent = el.textContent + ' ' + tzTpl.replace('{time}', stamp);
+    });
   }
   function armWorksheets() {
     // imperative: DOM+clipboard - sync saved note indicator and 1-click brief export per worksheet + whole workbook
@@ -717,6 +861,7 @@
       btn.addEventListener('click', function () { window.print(); });
     });
     syncGlobalWorkbook();
+    armShareAndReturn();
   }
   document.addEventListener('input', function (e) {
     var ta = e.target;
