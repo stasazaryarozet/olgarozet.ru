@@ -1454,17 +1454,33 @@ video::cue {
 
 
 @media print {
-  html, body { transition: none !important; background: #fff !important; color: #000 !important; }
+  @page { margin: 14mm; background: #fff; }
+  html, body { transition: none !important; background: var(--surface) !important; color: var(--ink) !important; }
+  #doc img, figure img {
+    filter: none !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  #doc a[data-role="zoom"]::after { content: none !important; display: none !important; }
+  .player-wrapper, .sale, .buyer-closing, .offer, .story-progress,
+  #doc > header [data-role="record"], [data-kind="video"], button.moment-seek,
   .story-buy-bar, .buyer-bar, .player-controls, .player-resume,
   .player-resume-fallback, .player-status, .worksheet-copy, .worksheet-status,
   .buyer-closing-actions, .story-share-btn, .ics-return-btn,
-  .worksheet-input { display: none !important; }
+  .worksheet-input, #doc audio { display: none !important; }
   .worksheet-print-mirror {
     display: block !important;
+    min-height: 3.5rem;
     padding: var(--sp-1) 0;
     border-bottom: 1px solid var(--rule);
   }
   .worksheet-rubric { display: block !important; }
-  #doc audio, .player-wrapper video { display: none; }
-  .exercise-worksheet { break-inside: avoid; }
+  #doc h1, #doc h2, #doc h3, #doc section > header {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  #doc figure, .exercise-worksheet, .value {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
 }

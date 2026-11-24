@@ -523,8 +523,13 @@
      ['loadedmetadata', 'meta'], ['playing', 'alive'], ['seeked', 'alive'], ['canplaythrough', 'alive']].forEach(function (p) {
       v.addEventListener(p[0], function () { send(p[1]); });
     });
-    // Capture-phase error listener catches `<source>` resource load errors (which do not bubble per HTML spec).
-    v.addEventListener('error', function () { send('error'); }, true);
+    // Capture-phase error listener catches `<source>` resource load errors (which do not bubble per HTML spec),
+    // while explicitly ignoring `<track>` caption errors so missing/flaky subtitles never trigger video reload (D-09).
+    v.addEventListener('error', function (ev) {
+      var tgt = ev && ev.target;
+      if (tgt && tgt !== v && String(tgt.tagName || '').toUpperCase() !== 'SOURCE') return;
+      send('error');
+    }, true);
     window.addEventListener('online', function () {
       if (state.busy || (box && !box.hidden)) send('retry');
     });
@@ -855,10 +860,45 @@
         exportTextWithFallback(out, function () { flashDone(btn, st); });
       });
     });
+    function eagerizeImagesForPrint() {
+      var waits = [];
+      document.querySelectorAll('img').forEach(function (img) {
+        if (img.getAttribute('loading') === 'lazy' || img.loading === 'lazy') {
+          img.removeAttribute('loading');
+          img.loading = 'eager';
+        }
+        if (!img.complete) {
+          waits.push(new Promise(function (resolve) {
+            img.addEventListener('load', function () {
+              if (typeof img.decode === 'function') img.decode().catch(function () {}).finally(resolve);
+              else resolve();
+            }, { once: true });
+            img.addEventListener('error', resolve, { once: true });
+          }));
+        } else if (typeof img.decode === 'function' && img.naturalWidth > 0) {
+          waits.push(img.decode().catch(function () {}));
+        }
+      });
+      return waits;
+    }
+    function printWithImages() {
+      syncPrintMirrors(document);
+      var waits = eagerizeImagesForPrint();
+      if (!waits.length) { window.print(); return; }
+      Promise.race([Promise.all(waits), new Promise(function (r) { setTimeout(r, 3500); })])
+        .then(function () { window.print(); });
+    }
+    if (!window.__delaPrintArmed) {
+      window.__delaPrintArmed = true;
+      window.addEventListener('beforeprint', function () {
+        syncPrintMirrors(document);
+        eagerizeImagesForPrint();
+      });
+    }
     document.querySelectorAll('[data-worksheet-print]').forEach(function (btn) {
       if (btn.dataset.armed) return;
       btn.dataset.armed = '1';
-      btn.addEventListener('click', function () { window.print(); });
+      btn.addEventListener('click', printWithImages);
     });
     syncGlobalWorkbook();
     armShareAndReturn();

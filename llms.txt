@@ -11,7 +11,6 @@
 ## Разделы сайта
 - [Главная](https://olgarozet.ru/)
 - [Консультация](https://olgarozet.ru/init/)
-- [Эфиры](https://olgarozet.ru/audiobroadcast/)
 - [Подкаст](https://olgarozet.ru/podcast/)
 - [Искусство](https://olgarozet.ru/art/)
 - [Договор-оферта](https://olgarozet.ru/legal/)

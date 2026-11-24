@@ -1,7 +1,7 @@
 
 @import url("fonts/fonts.css?v=840df1668e");
 
-@import url("_tokens.generated.css?v=8224bc63bb");
+@import url("_tokens.generated.css?v=fa6ddfac71");
 
 @layer owner {
   :root {
@@ -1674,7 +1674,7 @@ nav.sections a { vertical-align: top; }
 
 
 @media print {
-  body { background: #fff; color: #000; }
+  html, body { background: var(--surface) !important; color: var(--ink) !important; }
   .nav-fade, .theme-toggle, .progress-bar, .scroll-top, .signup-wrap, .signup-form,
   footer { display: none !important; }
   

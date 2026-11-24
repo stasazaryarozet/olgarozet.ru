@@ -150,6 +150,20 @@
   --signup-backing-shadow: rgba(0, 0, 0, 0.5);  
   --signup-field-edge: rgba(234, 88, 12, 0.4);  
 }
+@media print {
+  :root[data-theme="night"] {
+    --accent: #c92020;  
+    --emphasis: #c92020;  
+    --ink: #1a1a1a;  
+    --ink-soft: #333;  
+    --muted: #555;  
+    --rule: #ccc;  
+    --rule-soft: #ddd;  
+    --surface: #fff;  
+    --surface-deep: #f8f8f7;  
+    --title-accent: #1C3FE8;  
+  }
+}
 @layer floor {
   :root {
     -webkit-hyphens: auto;  
@@ -198,7 +212,7 @@
   }
   :root :is(h1,h2,h3,h4,h5,h6) {
     -webkit-hyphens: auto;  
-    hyphenate-limit-chars: 10 4 4;  
+    hyphenate-limit-chars: 15 5 5;  
     hyphens: auto;  
   }
   :root :is(p, li) > .l {
