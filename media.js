@@ -1088,7 +1088,8 @@
       var navHost = links[0].closest('nav');
       if (tpl && navHost && navHost.parentNode && !document.querySelector('.read-resume')) {
         var firstLink = byId[savedId].links[0];
-        var secTitle = (firstLink && firstLink.textContent || savedId).replace(/\s+/g, ' ').trim();
+        var titleEl = (firstLink && firstLink.querySelector && firstLink.querySelector('[data-role="title"]')) || firstLink;
+        var secTitle = (titleEl && titleEl.textContent || savedId).replace(/\s+/g, ' ').trim();
         var bar = document.createElement('aside');
         bar.className = 'read-resume';
         bar.setAttribute('role', 'status');
