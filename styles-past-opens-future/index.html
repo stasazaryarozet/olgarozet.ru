@@ -9,7 +9,6 @@
 <meta content="Стили и тренды: прошлое открывает будущее. Как читать любой интерьер по семи осям анализа: 3 главы открыты бесплатно, в полном доступе — 9 глав, 81 минута видеозаписи, упражнение и 13 проверок." name="description"/>
 <link href="https://olgarozet.ru/styles-past-opens-future/" rel="canonical"/>
 <link href="https://olgarozet.ru/journal/feed.xml" rel="alternate" title="Journal" type="application/rss+xml"/>
-<link href="https://olgarozet.ru/audiobroadcast/feed.xml" rel="alternate" title="Ольга Розет" type="application/rss+xml"/>
 <meta content="website" property="og:type"/>
 <meta content="Стили и тренды: прошлое открывает будущее — Ольга Розет" property="og:title"/>
 <meta content="Стили и тренды: прошлое открывает будущее. Как читать любой интерьер по семи осям анализа: 3 главы открыты бесплатно, в полном доступе — 9 глав, 81 минута видеозаписи, упражнение и 13 проверок." property="og:description"/>
@@ -70,8 +69,6 @@
   [data-bf-mode="text"] [data-bf-probe], [data-bf-mode="text"][data-bf-probe], .bf, .bf * { overflow-wrap: normal !important; word-break: normal !important; hyphens: none !important; }
   .bf { position: relative; display: inline; }
   .bf > .bf-i { display: none; font-style: normal; font-weight: 500; text-decoration: none; line-height: 1; }
-  .bf-k { grid-column: 1 / -1; margin: var(--sp-1, 0.4rem) 0 var(--sp-3, 0.85rem); font-size: var(--fs-xs, 0.8rem); color: var(--muted, inherit); display: flex; flex-wrap: wrap; gap: var(--sp-1, 0.4rem) var(--sp-3, 1rem); }
-  .bf-k[hidden] { display: none; }
   [data-bf-mode="ico"] .bf > .bf-t {
     position: absolute !important; left: 0 !important; top: 0 !important;
     width: 1px !important; height: 1px !important; padding: 0 !important; margin: 0 !important;
@@ -91,12 +88,23 @@
 </style>
 <script>
 (function(){
-  const S = {"cls_root": "bf", "cls_text": "bf-t", "cls_icon": "bf-i", "cls_legend": "bf-k", "scope_attr": "data-bf-scope", "mode_attr": "data-bf-mode", "probe_attr": "data-bf-probe", "legend_attr": "data-bf-key", "rank_attr": "data-bf-rank", "txt": "text", "ico": "ico", "row": "row", "flow": "flow"};
+  const S = {"cls_root": "bf", "cls_text": "bf-t", "cls_icon": "bf-i", "scope_attr": "data-bf-scope", "mode_attr": "data-bf-mode", "probe_attr": "data-bf-probe", "rank_attr": "data-bf-rank", "txt": "text", "ico": "ico", "row": "row", "flow": "flow"};
   const P = {"max_line_aspect": 1.35, "min_readable_word_ch": 9.0, "tolerance_px": 1};
   const chCache = new Map();
   const autoTitled = new WeakSet();
   let measureCtx = null;
   let sharedRange = null;
+  function isVis(el) {
+    if (!el || !el.isConnected || el.offsetParent === null) return false;
+    if (el.closest('[hidden], [aria-hidden="true"]')) return false;
+    for (let cur = el.parentElement; cur; cur = cur.parentElement) {
+      if (cur.tagName === 'DETAILS' && !cur.open) {
+        const sum = cur.firstElementChild;
+        if (!sum || sum.tagName !== 'SUMMARY' || !sum.contains(el)) return false;
+      }
+    }
+    return true;
+  }
   function chPxOf(el) {
     const cs = getComputedStyle(el);
     const fontKey = cs.font || (cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily);
@@ -129,7 +137,7 @@
     while (n) {
       if (n.nodeValue && n.nodeValue.trim()) {
         const p = n.parentElement;
-        if (p && p.offsetParent !== null) {
+        if (isVis(p)) {
           sharedRange.selectNodeContents(n);
           for (const r of sharedRange.getClientRects()) {
             if (r.width > 0 && r.height > 0) out.push(r);
@@ -162,7 +170,7 @@
     if (p) {
       const pcs = getComputedStyle(p);
       if ((pcs.display === 'flex' || pcs.display === 'inline-flex') && pcs.flexDirection.startsWith('row') && pcs.flexWrap !== 'nowrap') {
-        const firstVis = Array.from(p.children).find(k => k.offsetParent !== null);
+        const firstVis = Array.from(p.children).find(k => isVis(k));
         if (firstVis && firstVis !== el) {
           const r1 = firstVis.getBoundingClientRect();
           const r2 = el.getBoundingClientRect();
@@ -170,7 +178,7 @@
         }
       }
     }
-    const kids = Array.from(el.children).filter(k => k.offsetParent !== null);
+    const kids = Array.from(el.children).filter(k => isVis(k));
     if (kids.length < 2) return false;
     const rects = kids.map(k => k.getBoundingClientRect()).filter(r => r.width > 0 && r.height > 0);
     if (rects.length < 2) return false;
@@ -178,7 +186,7 @@
     return rects.some(r => r.top >= minBottom - P.tolerance_px);
   }
   function probeVerticalOrTorn(p) {
-    if (p.offsetParent === null) return false;
+    if (!isVis(p)) return false;
     const minW = P.min_readable_word_ch * chPxOf(p);
     const cw = p.clientWidth;
     if (cw > 0 && p.scrollWidth > cw + P.tolerance_px) return true;
@@ -208,7 +216,7 @@
     return labels.some(lb => {
       const bf = lb.querySelector('.' + S.cls_root);
       const ctl = lb.querySelector('select,input');
-      if (!bf || !ctl || lb.offsetParent === null) return false;
+      if (!bf || !ctl || !isVis(lb)) return false;
       const bfRect = bf.getBoundingClientRect();
       const ctlRect = ctl.getBoundingClientRect();
       if (bfRect.height > 0 && ctlRect.height > 0 && (ctlRect.top >= bfRect.bottom - P.tolerance_px || bfRect.top >= ctlRect.bottom - P.tolerance_px)) {
@@ -228,7 +236,7 @@
     const texts = Array.from(el.querySelectorAll('.' + S.cls_root + ' > .' + S.cls_text));
     return texts.some(t => {
       const host = boxHostOf(t, el);
-      if (!host || host.offsetParent === null) return false;
+      if (!isVis(host)) return false;
       if (host.clientWidth > 0 && host.scrollWidth > host.clientWidth + P.tolerance_px) return true;
       const r = t.getBoundingClientRect();
       if (host.clientWidth > 0 && r.width > host.clientWidth + P.tolerance_px) return true;
@@ -243,7 +251,7 @@
   }
   function squeezedControlWidthSum(el) {
     return Array.from(el.querySelectorAll('label select, label input'))
-      .filter(c => c.offsetParent !== null)
+      .filter(c => isVis(c))
       .reduce((acc, c) => acc + c.getBoundingClientRect().width, 0);
   }
   function ensureTips(scope) {
@@ -290,72 +298,9 @@
     done.forEach(g => g.removeAttribute(S.mode_attr));
     return false;
   }
-  function sameLexeme(a, b) {
-    const x = a.toLowerCase(), y = b.toLowerCase();
-    if (x === y) return true;
-    const minLen = Math.min(x.length, y.length);
-    const maxLen = Math.max(x.length, y.length);
-    if (maxLen - minLen > 3 || minLen < 4) return false;
-    const stemLen = Math.max(4, minLen - 2);
-    return x.slice(0, stemLen) === y.slice(0, stemLen);
-  }
-  function isVisibleNode(el) {
-    if (!el || !el.isConnected) return false;
-    if (el.offsetParent === null) return false;
-    if (el.closest('[hidden], [aria-hidden="true"]')) return false;
-    return true;
-  }
-  function collectKeyPairs(scope) {
-    return Array.from(scope.querySelectorAll('.' + S.cls_root))
-      .filter(bf => {
-        if (!isVisibleNode(bf)) return false;
-        const modeHost = bf.closest('[' + S.mode_attr + ']');
-        return Boolean(modeHost && modeHost.getAttribute(S.mode_attr) === S.ico);
-      })
-      .map(bf => {
-        const ic = bf.querySelector('.' + S.cls_icon);
-        const tx = bf.querySelector('.' + S.cls_text);
-        return [((ic && ic.textContent) || '').trim(), ((tx && tx.textContent) || '').replace(/\s+/g, ' ').trim()];
-      })
-      .filter(([sym, word]) => Boolean(sym && word))
-      .reduce((acc, [sym, word]) => (
-        acc.some(([s, w]) => s === sym && sameLexeme(w, word)) ? acc : [...acc, [sym, word]]
-      ), []);
-  }
-  function keyAnchorOf(scope) {
-    return /^(THEAD|TBODY|TFOOT|TR|TD|TH)$/i.test(scope.tagName) ? (scope.closest('table') || scope) : scope;
-  }
-  function keyEdgeOf(scope) {
-    return (/^THEAD$/i.test(scope.tagName) || Boolean(scope.closest('thead'))) ? 'beforebegin' : 'afterend';
-  }
-  function syncKey(scope) {
-    const anchor = keyAnchorOf(scope);
-    const edge = keyEdgeOf(scope);
-    const sib = edge === 'beforebegin' ? anchor.previousElementSibling : anchor.nextElementSibling;
-    const existing = (sib && sib.hasAttribute(S.legend_attr)) ? sib : null;
-    const pairs = collectKeyPairs(scope);
-    if (!pairs.length) {
-      if (existing) existing.remove();
-      return;
-    }
-    const el = existing || document.createElement('p');
-    if (!existing) {
-      el.className = S.cls_legend;
-      el.setAttribute(S.legend_attr, '');
-      anchor.insertAdjacentElement(edge, el);
-    }
-    el.textContent = '';
-    pairs.forEach(pair => {
-      const sp = document.createElement('span');
-      sp.textContent = pair[0] + '\u00a0— ' + pair[1];
-      el.appendChild(sp);
-    });
-  }
   function evaluateBiform(root) {
     const doc = root || document;
-    const allScopes = Array.from(doc.querySelectorAll('[' + S.scope_attr + ']'));
-    allScopes.filter(s => s.isConnected && !isVisibleNode(s)).forEach(syncKey);
-    const scopes = allScopes.filter(isVisibleNode);
+    const scopes = Array.from(doc.querySelectorAll('[' + S.scope_attr + ']')).filter(isVis);
     if (!scopes.length) return;
     scopes.forEach(s => {
       s.setAttribute(S.mode_attr, S.txt);
@@ -380,7 +325,6 @@
         s.removeAttribute(S.mode_attr);
         clearAutoTips(s);
       }
-      syncKey(s);
     });
   }
   window["fitBiform"] = evaluateBiform;
@@ -428,7 +372,6 @@
 <p class="offer-cta"><a href="/styles-past-opens-future/buy/">Купить доступ</a></p>
 <p class="offer-consent">Нажимая «Купить доступ», принимаете <a href="/legal/">оферту</a> и <a href="/privacy/">политику обработки персональных данных</a></p>
 <p class="offer-terms"><a href="/legal/">Когда открывается доступ, на какой срок и как вернуть деньги</a></p>
-<p class="offer-voice">Голос Ольги: <span class="offer-voice-links"><a href="/podcast/">подкаст</a></span></p>
 </aside>
 <nav aria-label="Перейти к главе" id="doc-nav"><ul><li><a href="#doc-chapters-prologue"><span data-field="title" data-role="title">Камертон</span></a></li><li><a href="#doc-chapters-apparatus"><span data-field="title" data-role="title">Понятия</span></a></li><li><a href="#doc-chapters-antiquity"><span data-field="title" data-role="title">Античность</span></a></li><li data-reach="out"><a href="#offer"><span aria-hidden="true" class="lock">🔒</span> <span data-field="title" data-role="title">Романский стиль</span><span class="visually-hidden"> — Открывается с доступом</span></a></li><li data-reach="out"><a href="#offer"><span aria-hidden="true" class="lock">🔒</span> <span data-field="title" data-role="title">Готика</span><span class="visually-hidden"> — Открывается с доступом</span></a></li><li data-reach="out"><a href="#offer"><span aria-hidden="true" class="lock">🔒</span> <span data-field="title" data-role="title">Ренессанс</span><span class="visually-hidden"> — Открывается с доступом</span></a></li><li data-reach="out"><a href="#offer"><span aria-hidden="true" class="lock">🔒</span> <span data-field="title" data-role="title">Барокко</span><span class="visually-hidden"> — Открывается с доступом</span></a></li><li data-reach="out"><a href="#offer"><span aria-hidden="true" class="lock">🔒</span> <span data-field="title" data-role="title">Классицизм и Ампир</span><span class="visually-hidden"> — Открывается с доступом</span></a></li><li data-reach="out"><a href="#offer"><span aria-hidden="true" class="lock">🔒</span> <span data-field="title" data-role="title">Контекстуальный модернизм</span><span class="visually-hidden"> — Открывается с доступом</span></a></li><li data-reach="out"><a href="#offer"><span aria-hidden="true" class="lock">🔒</span> <span data-field="title" data-role="title">Упражнение</span><span class="visually-hidden"> — Открывается с доступом</span></a></li><li data-reach="out"><a href="#offer"><span aria-hidden="true" class="lock">🔒</span> <span data-field="title" data-role="title">Самопроверка</span><span class="visually-hidden"> — Открывается с доступом</span></a></li><li><a href="#doc-terms"><span data-field="title" data-role="title">Словарь</span></a></li><li><a href="#doc-axes"><span data-field="title" data-role="title">Оси анализа</span></a></li></ul></nav><section class="buyer-closing" id="story-feedback"><div class="buyer-closing-actions"><button class="story-share-btn" data-label-copied="Ссылка скопирована" data-label-default="Поделиться страницей" data-share-anchor="" type="button">Поделиться страницей</button></div><p>Заметили неточность, хотите поспорить с разбором или задать вопрос по материалу — напишите автору, контакты внизу страницы.</p></section><section id="qual">
 <h2 data-case="upper">Квалификация утверждений</h2>
