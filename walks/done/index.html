@@ -9,7 +9,6 @@
 <meta content="Прогулки · Уже — Ольга Розет" name="description"/>
 <link href="https://olgarozet.ru/walks/done/" rel="canonical"/>
 <link href="https://olgarozet.ru/journal/feed.xml" rel="alternate" title="Journal" type="application/rss+xml"/>
-<link href="https://olgarozet.ru/audiobroadcast/feed.xml" rel="alternate" title="Ольга Розет" type="application/rss+xml"/>
 <meta content="website" property="og:type"/>
 <meta content="Ольга Розет — Прогулки · Уже" property="og:title"/>
 <meta content="Прогулки · Уже — Ольга Розет" property="og:description"/>
@@ -59,13 +58,11 @@
   setInterval(window.__applyTheme, 300000);
 })();
 </script>
-<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=8224bc63bb"); @import url("/styles.css?v=08b2c21906");</style>
+<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=fa6ddfac71"); @import url("/styles.css?v=a40f4b9488");</style>
 <style>
   [data-bf-mode="text"] [data-bf-probe], [data-bf-mode="text"][data-bf-probe], .bf, .bf * { overflow-wrap: normal !important; word-break: normal !important; hyphens: none !important; }
   .bf { position: relative; display: inline; }
   .bf > .bf-i { display: none; font-style: normal; font-weight: 500; text-decoration: none; line-height: 1; }
-  .bf-k { grid-column: 1 / -1; margin: var(--sp-1, 0.4rem) 0 var(--sp-3, 0.85rem); font-size: var(--fs-xs, 0.8rem); color: var(--muted, inherit); display: flex; flex-wrap: wrap; gap: var(--sp-1, 0.4rem) var(--sp-3, 1rem); }
-  .bf-k[hidden] { display: none; }
   [data-bf-mode="ico"] .bf > .bf-t {
     position: absolute !important; left: 0 !important; top: 0 !important;
     width: 1px !important; height: 1px !important; padding: 0 !important; margin: 0 !important;
@@ -85,12 +82,23 @@
 </style>
 <script>
 (function(){
-  const S = {"cls_root": "bf", "cls_text": "bf-t", "cls_icon": "bf-i", "cls_legend": "bf-k", "scope_attr": "data-bf-scope", "mode_attr": "data-bf-mode", "probe_attr": "data-bf-probe", "legend_attr": "data-bf-key", "rank_attr": "data-bf-rank", "txt": "text", "ico": "ico", "row": "row", "flow": "flow"};
+  const S = {"cls_root": "bf", "cls_text": "bf-t", "cls_icon": "bf-i", "scope_attr": "data-bf-scope", "mode_attr": "data-bf-mode", "probe_attr": "data-bf-probe", "rank_attr": "data-bf-rank", "txt": "text", "ico": "ico", "row": "row", "flow": "flow"};
   const P = {"max_line_aspect": 1.35, "min_readable_word_ch": 9.0, "tolerance_px": 1};
   const chCache = new Map();
   const autoTitled = new WeakSet();
   let measureCtx = null;
   let sharedRange = null;
+  function isVis(el) {
+    if (!el || !el.isConnected || el.offsetParent === null) return false;
+    if (el.closest('[hidden], [aria-hidden="true"]')) return false;
+    for (let cur = el.parentElement; cur; cur = cur.parentElement) {
+      if (cur.tagName === 'DETAILS' && !cur.open) {
+        const sum = cur.firstElementChild;
+        if (!sum || sum.tagName !== 'SUMMARY' || !sum.contains(el)) return false;
+      }
+    }
+    return true;
+  }
   function chPxOf(el) {
     const cs = getComputedStyle(el);
     const fontKey = cs.font || (cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily);
@@ -123,7 +131,7 @@
     while (n) {
       if (n.nodeValue && n.nodeValue.trim()) {
         const p = n.parentElement;
-        if (p && p.offsetParent !== null) {
+        if (isVis(p)) {
           sharedRange.selectNodeContents(n);
           for (const r of sharedRange.getClientRects()) {
             if (r.width > 0 && r.height > 0) out.push(r);
@@ -156,7 +164,7 @@
     if (p) {
       const pcs = getComputedStyle(p);
       if ((pcs.display === 'flex' || pcs.display === 'inline-flex') && pcs.flexDirection.startsWith('row') && pcs.flexWrap !== 'nowrap') {
-        const firstVis = Array.from(p.children).find(k => k.offsetParent !== null);
+        const firstVis = Array.from(p.children).find(k => isVis(k));
         if (firstVis && firstVis !== el) {
           const r1 = firstVis.getBoundingClientRect();
           const r2 = el.getBoundingClientRect();
@@ -164,7 +172,7 @@
         }
       }
     }
-    const kids = Array.from(el.children).filter(k => k.offsetParent !== null);
+    const kids = Array.from(el.children).filter(k => isVis(k));
     if (kids.length < 2) return false;
     const rects = kids.map(k => k.getBoundingClientRect()).filter(r => r.width > 0 && r.height > 0);
     if (rects.length < 2) return false;
@@ -172,7 +180,7 @@
     return rects.some(r => r.top >= minBottom - P.tolerance_px);
   }
   function probeVerticalOrTorn(p) {
-    if (p.offsetParent === null) return false;
+    if (!isVis(p)) return false;
     const minW = P.min_readable_word_ch * chPxOf(p);
     const cw = p.clientWidth;
     if (cw > 0 && p.scrollWidth > cw + P.tolerance_px) return true;
@@ -202,7 +210,7 @@
     return labels.some(lb => {
       const bf = lb.querySelector('.' + S.cls_root);
       const ctl = lb.querySelector('select,input');
-      if (!bf || !ctl || lb.offsetParent === null) return false;
+      if (!bf || !ctl || !isVis(lb)) return false;
       const bfRect = bf.getBoundingClientRect();
       const ctlRect = ctl.getBoundingClientRect();
       if (bfRect.height > 0 && ctlRect.height > 0 && (ctlRect.top >= bfRect.bottom - P.tolerance_px || bfRect.top >= ctlRect.bottom - P.tolerance_px)) {
@@ -222,7 +230,7 @@
     const texts = Array.from(el.querySelectorAll('.' + S.cls_root + ' > .' + S.cls_text));
     return texts.some(t => {
       const host = boxHostOf(t, el);
-      if (!host || host.offsetParent === null) return false;
+      if (!isVis(host)) return false;
       if (host.clientWidth > 0 && host.scrollWidth > host.clientWidth + P.tolerance_px) return true;
       const r = t.getBoundingClientRect();
       if (host.clientWidth > 0 && r.width > host.clientWidth + P.tolerance_px) return true;
@@ -237,7 +245,7 @@
   }
   function squeezedControlWidthSum(el) {
     return Array.from(el.querySelectorAll('label select, label input'))
-      .filter(c => c.offsetParent !== null)
+      .filter(c => isVis(c))
       .reduce((acc, c) => acc + c.getBoundingClientRect().width, 0);
   }
   function ensureTips(scope) {
@@ -284,72 +292,9 @@
     done.forEach(g => g.removeAttribute(S.mode_attr));
     return false;
   }
-  function sameLexeme(a, b) {
-    const x = a.toLowerCase(), y = b.toLowerCase();
-    if (x === y) return true;
-    const minLen = Math.min(x.length, y.length);
-    const maxLen = Math.max(x.length, y.length);
-    if (maxLen - minLen > 3 || minLen < 4) return false;
-    const stemLen = Math.max(4, minLen - 2);
-    return x.slice(0, stemLen) === y.slice(0, stemLen);
-  }
-  function isVisibleNode(el) {
-    if (!el || !el.isConnected) return false;
-    if (el.offsetParent === null) return false;
-    if (el.closest('[hidden], [aria-hidden="true"]')) return false;
-    return true;
-  }
-  function collectKeyPairs(scope) {
-    return Array.from(scope.querySelectorAll('.' + S.cls_root))
-      .filter(bf => {
-        if (!isVisibleNode(bf)) return false;
-        const modeHost = bf.closest('[' + S.mode_attr + ']');
-        return Boolean(modeHost && modeHost.getAttribute(S.mode_attr) === S.ico);
-      })
-      .map(bf => {
-        const ic = bf.querySelector('.' + S.cls_icon);
-        const tx = bf.querySelector('.' + S.cls_text);
-        return [((ic && ic.textContent) || '').trim(), ((tx && tx.textContent) || '').replace(/\s+/g, ' ').trim()];
-      })
-      .filter(([sym, word]) => Boolean(sym && word))
-      .reduce((acc, [sym, word]) => (
-        acc.some(([s, w]) => s === sym && sameLexeme(w, word)) ? acc : [...acc, [sym, word]]
-      ), []);
-  }
-  function keyAnchorOf(scope) {
-    return /^(THEAD|TBODY|TFOOT|TR|TD|TH)$/i.test(scope.tagName) ? (scope.closest('table') || scope) : scope;
-  }
-  function keyEdgeOf(scope) {
-    return (/^THEAD$/i.test(scope.tagName) || Boolean(scope.closest('thead'))) ? 'beforebegin' : 'afterend';
-  }
-  function syncKey(scope) {
-    const anchor = keyAnchorOf(scope);
-    const edge = keyEdgeOf(scope);
-    const sib = edge === 'beforebegin' ? anchor.previousElementSibling : anchor.nextElementSibling;
-    const existing = (sib && sib.hasAttribute(S.legend_attr)) ? sib : null;
-    const pairs = collectKeyPairs(scope);
-    if (!pairs.length) {
-      if (existing) existing.remove();
-      return;
-    }
-    const el = existing || document.createElement('p');
-    if (!existing) {
-      el.className = S.cls_legend;
-      el.setAttribute(S.legend_attr, '');
-      anchor.insertAdjacentElement(edge, el);
-    }
-    el.textContent = '';
-    pairs.forEach(pair => {
-      const sp = document.createElement('span');
-      sp.textContent = pair[0] + '\u00a0— ' + pair[1];
-      el.appendChild(sp);
-    });
-  }
   function evaluateBiform(root) {
     const doc = root || document;
-    const allScopes = Array.from(doc.querySelectorAll('[' + S.scope_attr + ']'));
-    allScopes.filter(s => s.isConnected && !isVisibleNode(s)).forEach(syncKey);
-    const scopes = allScopes.filter(isVisibleNode);
+    const scopes = Array.from(doc.querySelectorAll('[' + S.scope_attr + ']')).filter(isVis);
     if (!scopes.length) return;
     scopes.forEach(s => {
       s.setAttribute(S.mode_attr, S.txt);
@@ -374,7 +319,6 @@
         s.removeAttribute(S.mode_attr);
         clearAutoTips(s);
       }
-      syncKey(s);
     });
   }
   window["fitBiform"] = evaluateBiform;
@@ -427,7 +371,7 @@
 <img alt="Ольга Розет" class="footer-portrait night" decoding="async" height="1024" loading="lazy" src="/olga_footer_night.webp" width="1024"/>
 <a aria-label="Telegram" class="social-icon" href="https://t.me/olga_rozet"><svg fill="currentColor" viewbox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"></path></svg></a>
 </div>
-<a aria-label="Наверх" class="scroll-top" href="#" onclick="window.scrollTo(0,0);return false;" title="Наверх">
+<a aria-label="Наверх" class="scroll-top" data-action="scroll-top" href="#" title="Наверх">
 <svg fill="none" height="40" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" viewbox="0 0 24 24" width="40"><path d="M12 20V4M5 11l7-7 7 7"></path></svg>
 </a>
 </footer>
@@ -436,9 +380,22 @@ const footer = document.querySelector('.footer-content');
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
 }, { threshold: 0.1 });
+document.addEventListener('click', (ev) => {
+  const act = ev.target && ev.target.closest && ev.target.closest('[data-action]');
+  if (!act) return;
+  const kind = act.getAttribute('data-action');
+  if (kind === 'scroll-top') { ev.preventDefault(); window.scrollTo(0, 0); }
+  else if (kind === 'print') {
+    const waits = Array.from(document.querySelectorAll('img[loading="lazy"]')).map((img) => {
+      img.loading = 'eager';
+      return img.complete ? Promise.resolve() : new Promise((r) => { img.addEventListener('load', r, { once: true }); img.addEventListener('error', r, { once: true }); });
+    });
+    Promise.race([Promise.all(waits), new Promise((r) => setTimeout(r, 3500))]).then(() => window.print());
+  }
+});
 observer.observe(footer);
 </script>
-<link href="/media.css" rel="stylesheet"/><script defer="" src="/media.js"></script>
+<link href="/media.css" rel="stylesheet"/><script data-label-pause="Пауза" data-tz-local-note="({time} по вашему времени)" defer="" src="/media.js"></script>
 <script>
 (function(){
   function _applyWindows(){
