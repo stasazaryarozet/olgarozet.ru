@@ -4,7 +4,6 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8"/>
-<meta content="u5gNvIFSmtyOxQqC" name="mailru-domain"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <title>Ольга Розет — Прогулки · Сейчас</title>
 <meta content="Прогулки · Сейчас — Ольга Розет" name="description"/>
@@ -16,12 +15,13 @@
 <meta content="Прогулки · Сейчас — Ольга Розет" property="og:description"/>
 <meta content="Ольга Розет" property="og:site_name"/>
 <meta content="https://olgarozet.ru/walks/now/" property="og:url"/>
-<meta content="https://olgarozet.ru/olga_footer.png" property="og:image"/>
+<meta content="https://olgarozet.ru/olga_footer.webp" property="og:image"/>
 <meta content="ru_RU" property="og:locale"/>
 <meta content="summary_large_image" name="twitter:card"/>
 <meta content="Ольга Розет — Прогулки · Сейчас" name="twitter:title"/>
 <meta content="Прогулки · Сейчас — Ольга Розет" name="twitter:description"/>
-<meta content="https://olgarozet.ru/olga_footer.png" name="twitter:image"/>
+<meta content="https://olgarozet.ru/olga_footer.webp" name="twitter:image"/>
+<link href="/favicon.ico" rel="icon" sizes="32x32"/>
 <link href="/favicon.png" rel="icon" type="image/png"/>
 <link href="/apple-touch-icon.png" rel="apple-touch-icon"/>
 <link href="/manifest.json" rel="manifest"/>
@@ -30,15 +30,8 @@
 <meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
 <meta content="#111111" media="(prefers-color-scheme: dark)" name="theme-color"/>
 <script>
-// Day/night theme — user-override-first, then solar-automatic. FOUC-critical:
-// runs synchronously in <head> before paint. Resolution: read dela.theme.v1
-// from localStorage; if ∈ ['day', 'night'] use it (user override) else solar
-// altitude (lat 55.0° / alt-threshold -0.1 rad). Config: solar calc from
-// spec.enforcement_data.Inv-SITE-solar-theme (+ data.yaml.bio.solar_calibration
-// override); attr/key/values from spec.enforcement_data.Inv-IFACE-day-night-mode.
-// No hardcoded constants in code — both Specs are SoT, code falls back gracefully.
 (function(){
-  var MODE_ATTR="data-theme", MODE_VALUES=["day", "night"], STORAGE_KEY="dela.theme.v1";
+  var MODE_ATTR="data-theme", MODE_VALUES=["day", "night"], STORAGE_KEY="theme.v1";
   function solarTheme(){
     var r=Math.PI/180, now=new Date();
     var J=now.valueOf()/86400000 + 2440587.5 - 2451545.0;
@@ -66,11 +59,13 @@
   setInterval(window.__applyTheme, 300000);
 })();
 </script>
-<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=2891c435a1"); @import url("/styles.css?v=e2cfc79967");</style>
-<style data-origin="biform_text.biform_css">
-  [data-bf-mode="text"] [data-bf-probe], [data-bf-mode="text"][data-bf-probe], [data-bf-mode="text"] .bf, [data-bf-mode="text"] .bf * { overflow-wrap: normal !important; word-break: normal !important; hyphens: none !important; }
+<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=8224bc63bb"); @import url("/styles.css?v=08b2c21906");</style>
+<style>
+  [data-bf-mode="text"] [data-bf-probe], [data-bf-mode="text"][data-bf-probe], .bf, .bf * { overflow-wrap: normal !important; word-break: normal !important; hyphens: none !important; }
   .bf { position: relative; display: inline; }
   .bf > .bf-i { display: none; font-style: normal; font-weight: 500; text-decoration: none; line-height: 1; }
+  .bf-k { grid-column: 1 / -1; margin: var(--sp-1, 0.4rem) 0 var(--sp-3, 0.85rem); font-size: var(--fs-xs, 0.8rem); color: var(--muted, inherit); display: flex; flex-wrap: wrap; gap: var(--sp-1, 0.4rem) var(--sp-3, 1rem); }
+  .bf-k[hidden] { display: none; }
   [data-bf-mode="ico"] .bf > .bf-t {
     position: absolute !important; left: 0 !important; top: 0 !important;
     width: 1px !important; height: 1px !important; padding: 0 !important; margin: 0 !important;
@@ -88,9 +83,9 @@
     [data-bf-scope] .bf > .bf-i { display: inline; }
   }
 </style>
-<script data-origin="biform_text.biform_fit_js">
+<script>
 (function(){
-  const S = {"cls_root": "bf", "cls_text": "bf-t", "scope_attr": "data-bf-scope", "mode_attr": "data-bf-mode", "probe_attr": "data-bf-probe", "rank_attr": "data-bf-rank", "txt": "text", "ico": "ico", "row": "row", "flow": "flow"};
+  const S = {"cls_root": "bf", "cls_text": "bf-t", "cls_icon": "bf-i", "cls_legend": "bf-k", "scope_attr": "data-bf-scope", "mode_attr": "data-bf-mode", "probe_attr": "data-bf-probe", "legend_attr": "data-bf-key", "rank_attr": "data-bf-rank", "txt": "text", "ico": "ico", "row": "row", "flow": "flow"};
   const P = {"max_line_aspect": 1.35, "min_readable_word_ch": 9.0, "tolerance_px": 1};
   const chCache = new Map();
   const autoTitled = new WeakSet();
@@ -186,6 +181,22 @@
     if (r.width <= 0 || r.height <= 0) return false;
     return lineBoxCount(p) > 1 && (r.height / Math.max(r.width, 1)) > P.max_line_aspect;
   }
+  let _measureCanvas = null;
+  function controlTextNeedPx(ctl) {
+    const cs = getComputedStyle(ctl);
+    const padX = (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0)
+      + (parseFloat(cs.borderLeftWidth) || 0) + (parseFloat(cs.borderRightWidth) || 0);
+    const txt = ctl.tagName === 'SELECT'
+      ? ((ctl.options && ctl.selectedIndex >= 0 && ctl.options[ctl.selectedIndex]) ? ctl.options[ctl.selectedIndex].text : '')
+      : (ctl.value || ctl.placeholder || '');
+    if (!txt) return 0;
+    _measureCanvas = _measureCanvas || document.createElement('canvas');
+    const g = _measureCanvas.getContext && _measureCanvas.getContext('2d');
+    const fs = parseFloat(cs.fontSize) || 16;
+    const textW = g ? ((g.font = cs.font || (fs + 'px sans-serif')), g.measureText(txt).width) : txt.length * chPxOf(ctl);
+    const chromeW = ctl.tagName === 'SELECT' ? Math.ceil(fs * 1.8) : 4;
+    return textW + padX + chromeW;
+  }
   function controlSqueezed(el) {
     const labels = Array.from(el.querySelectorAll('label'));
     return labels.some(lb => {
@@ -198,14 +209,16 @@
         return true;
       }
       const textSized = ctl.tagName === 'SELECT' || !/^(checkbox|radio)$/i.test(ctl.type || '');
-      return textSized && ctlRect.width > 0 && ctlRect.width < P.min_readable_word_ch * chPxOf(ctl);
+      if (!textSized || ctlRect.width <= 0) return false;
+      if (ctlRect.width < P.min_readable_word_ch * chPxOf(ctl)) return true;
+      const needPx = controlTextNeedPx(ctl);
+      return needPx > 0 && ctlRect.width + P.tolerance_px < needPx;
     });
   }
-  function flowNeedsIco(el) {
+  function flowNeedsIcoCore(el) {
     if (el.scrollWidth > el.clientWidth + P.tolerance_px) return true;
     const probes = Array.from(el.querySelectorAll('[' + S.probe_attr + ']'));
     if (probes.some(probeVerticalOrTorn)) return true;
-    if (controlSqueezed(el)) return true;
     const texts = Array.from(el.querySelectorAll('.' + S.cls_root + ' > .' + S.cls_text));
     return texts.some(t => {
       const host = boxHostOf(t, el);
@@ -218,6 +231,14 @@
       if (host.clientWidth > 0 && host.clientWidth < minW) return true;
       return r.width > 0 && r.height > 0 && (r.height / Math.max(r.width, 1)) > P.max_line_aspect;
     });
+  }
+  function flowNeedsIco(el) {
+    return flowNeedsIcoCore(el) || controlSqueezed(el);
+  }
+  function squeezedControlWidthSum(el) {
+    return Array.from(el.querySelectorAll('label select, label input'))
+      .filter(c => c.offsetParent !== null)
+      .reduce((acc, c) => acc + c.getBoundingClientRect().width, 0);
   }
   function ensureTips(scope) {
     scope.querySelectorAll('.' + S.cls_root).forEach(bf => {
@@ -263,48 +284,131 @@
     done.forEach(g => g.removeAttribute(S.mode_attr));
     return false;
   }
+  function sameLexeme(a, b) {
+    const x = a.toLowerCase(), y = b.toLowerCase();
+    if (x === y) return true;
+    const minLen = Math.min(x.length, y.length);
+    const maxLen = Math.max(x.length, y.length);
+    if (maxLen - minLen > 3 || minLen < 4) return false;
+    const stemLen = Math.max(4, minLen - 2);
+    return x.slice(0, stemLen) === y.slice(0, stemLen);
+  }
+  function isVisibleNode(el) {
+    if (!el || !el.isConnected) return false;
+    if (el.offsetParent === null) return false;
+    if (el.closest('[hidden], [aria-hidden="true"]')) return false;
+    return true;
+  }
+  function collectKeyPairs(scope) {
+    return Array.from(scope.querySelectorAll('.' + S.cls_root))
+      .filter(bf => {
+        if (!isVisibleNode(bf)) return false;
+        const modeHost = bf.closest('[' + S.mode_attr + ']');
+        return Boolean(modeHost && modeHost.getAttribute(S.mode_attr) === S.ico);
+      })
+      .map(bf => {
+        const ic = bf.querySelector('.' + S.cls_icon);
+        const tx = bf.querySelector('.' + S.cls_text);
+        return [((ic && ic.textContent) || '').trim(), ((tx && tx.textContent) || '').replace(/\s+/g, ' ').trim()];
+      })
+      .filter(([sym, word]) => Boolean(sym && word))
+      .reduce((acc, [sym, word]) => (
+        acc.some(([s, w]) => s === sym && sameLexeme(w, word)) ? acc : [...acc, [sym, word]]
+      ), []);
+  }
+  function keyAnchorOf(scope) {
+    return /^(THEAD|TBODY|TFOOT|TR|TD|TH)$/i.test(scope.tagName) ? (scope.closest('table') || scope) : scope;
+  }
+  function keyEdgeOf(scope) {
+    return (/^THEAD$/i.test(scope.tagName) || Boolean(scope.closest('thead'))) ? 'beforebegin' : 'afterend';
+  }
+  function syncKey(scope) {
+    const anchor = keyAnchorOf(scope);
+    const edge = keyEdgeOf(scope);
+    const sib = edge === 'beforebegin' ? anchor.previousElementSibling : anchor.nextElementSibling;
+    const existing = (sib && sib.hasAttribute(S.legend_attr)) ? sib : null;
+    const pairs = collectKeyPairs(scope);
+    if (!pairs.length) {
+      if (existing) existing.remove();
+      return;
+    }
+    const el = existing || document.createElement('p');
+    if (!existing) {
+      el.className = S.cls_legend;
+      el.setAttribute(S.legend_attr, '');
+      anchor.insertAdjacentElement(edge, el);
+    }
+    el.textContent = '';
+    pairs.forEach(pair => {
+      const sp = document.createElement('span');
+      sp.textContent = pair[0] + '\u00a0— ' + pair[1];
+      el.appendChild(sp);
+    });
+  }
   function evaluateBiform(root) {
     const doc = root || document;
-    const scopes = Array.from(doc.querySelectorAll('[' + S.scope_attr + ']')).filter(s => s.isConnected && s.offsetParent !== null);
+    const allScopes = Array.from(doc.querySelectorAll('[' + S.scope_attr + ']'));
+    allScopes.filter(s => s.isConnected && !isVisibleNode(s)).forEach(syncKey);
+    const scopes = allScopes.filter(isVisibleNode);
     if (!scopes.length) return;
     scopes.forEach(s => {
       s.setAttribute(S.mode_attr, S.txt);
       groupsOf(s).forEach(g => { g.removeAttribute(S.mode_attr); clearAutoTips(g); });
     });
-    const decisions = scopes.map(s => ({s, ico: needsIco(s)}));
-    decisions.forEach(({s, ico}) => {
+    const decisions = scopes.map(s => {
+      const isFlow = s.getAttribute(S.scope_attr) !== S.row;
+      const core = isFlow ? flowNeedsIcoCore(s) : rowNeedsIco(s);
+      const sq = isFlow && !core ? controlSqueezed(s) : false;
+      return {s, ico: core || sq, onlySqueezed: sq, wBefore: sq ? squeezedControlWidthSum(s) : 0};
+    });
+    decisions.forEach(({s, ico, onlySqueezed, wBefore}) => {
       if (ico && !fitByGroups(s)) {
         s.setAttribute(S.mode_attr, S.ico);
-        ensureTips(s);
+        if (onlySqueezed && controlSqueezed(s) && squeezedControlWidthSum(s) <= wBefore + P.tolerance_px) {
+          s.removeAttribute(S.mode_attr);
+          clearAutoTips(s);
+        } else {
+          ensureTips(s);
+        }
       } else if (!ico) {
         s.removeAttribute(S.mode_attr);
         clearAutoTips(s);
       }
+      syncKey(s);
     });
   }
-  window.__delaFitBiform = evaluateBiform;
+  window["fitBiform"] = evaluateBiform;
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => evaluateBiform(document));
   else evaluateBiform(document);
   let raf = 0;
   window.addEventListener('resize', () => {
     if (!raf) raf = requestAnimationFrame(() => { raf = 0; evaluateBiform(document); });
   }, {passive: true});
-  document.addEventListener('toggle', e => { if (e.target && e.target.open) evaluateBiform(e.target); }, true);
+  document.addEventListener('toggle', e => {
+    if (e.target) {
+      const host = e.target.closest('[' + S.scope_attr + ']');
+      evaluateBiform(host ? host.parentElement || document : e.target);
+    }
+  }, true);
+  document.addEventListener('change', e => {
+    const host = e.target && e.target.closest && e.target.closest('[' + S.scope_attr + ']');
+    if (host) evaluateBiform(host.parentElement || document);
+  }, true);
 })();
 </script>
-<script data-origin="site_generator.order_toggle">
-(function(){var C={"root": "bf", "text": "bf-t", "icon": "bf-i"};function apply(b,s,order){var oldest=order==="oldest";s.setAttribute("data-order",oldest?"oldest":"newest");b.setAttribute("aria-pressed",oldest?"true":"false");var lbl=oldest?(b.dataset.labelOn||""):(b.dataset.labelOff||"");var sym=oldest?(b.dataset.symbolOn||""):(b.dataset.symbolOff||"");var bf=C.root?b.querySelector("."+C.root):null;var bt=C.text?b.querySelector("."+C.text):null;var bi=C.icon?b.querySelector("."+C.icon):null;if(bt){bt.textContent=lbl;if(bi&&sym)bi.textContent=sym;if(bf&&bf.hasAttribute("title"))bf.setAttribute("title",lbl);}else{b.textContent=lbl;}}function init(){var btns=document.querySelectorAll("[data-order-toggle]");for(var i=0;i<btns.length;i++){(function(b){var target=b.dataset.target||"";var s=target?document.getElementById(target):null;if(!s)return;var saved="";try{saved=localStorage.getItem("dela:order:"+target)||"";}catch(e){}if(saved==="oldest"||saved==="newest"){apply(b,s,saved);}b.addEventListener("click",function(){var next=s.getAttribute("data-order")==="oldest"?"newest":"oldest";apply(b,s,next);try{localStorage.setItem("dela:order:"+target,next);}catch(e){}if(typeof window.__delaFitBiform==="function")window.__delaFitBiform(document);});})(btns[i]);}if(typeof window.__delaFitBiform==="function")window.__delaFitBiform(document);}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();})();
+<script>
+(function(){var C={"root": "bf", "text": "bf-t", "icon": "bf-i"},K="order:";function apply(b,s,order){var oldest=order==="oldest";s.setAttribute("data-order",oldest?"oldest":"newest");b.setAttribute("aria-pressed",oldest?"true":"false");var lbl=oldest?(b.dataset.labelOn||""):(b.dataset.labelOff||"");var sym=oldest?(b.dataset.symbolOn||""):(b.dataset.symbolOff||"");var bf=C.root?b.querySelector("."+C.root):null;var bt=C.text?b.querySelector("."+C.text):null;var bi=C.icon?b.querySelector("."+C.icon):null;if(bt){bt.textContent=lbl;if(bi&&sym)bi.textContent=sym;if(bf&&bf.hasAttribute("title"))bf.setAttribute("title",lbl);}else{b.textContent=lbl;}}function init(){var btns=document.querySelectorAll("[data-order-toggle]");for(var i=0;i<btns.length;i++){(function(b){var target=b.dataset.target||"";var s=target?document.getElementById(target):null;if(!s)return;var saved="";try{saved=localStorage.getItem(K+target)||"";}catch(e){}if(saved==="oldest"||saved==="newest"){apply(b,s,saved);}b.addEventListener("click",function(){var next=s.getAttribute("data-order")==="oldest"?"newest":"oldest";apply(b,s,next);try{localStorage.setItem(K+target,next);}catch(e){}if(typeof window["fitBiform"]==="function")window["fitBiform"](document);});})(btns[i]);}if(typeof window["fitBiform"]==="function")window["fitBiform"](document);}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();})();
 </script>
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
-<nav class="nav-fade"><span class="nav-left"><a aria-label="На главную" href="/">← olgarozet.ru</a></span><span class="nav-right"></span></nav>
-<button aria-label="Тема: авто (по солнцу) — переключить" class="theme-toggle" data-theme-toggle="" type="button">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="dela.theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить",CYCLE=["day", "night"],MODE_ATTR="data-theme";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());function rendered(){var a=null;try{a=document.documentElement.getAttribute(MODE_ATTR);}catch(e){}return (CYCLE.indexOf(a)!==-1)?a:null;}btn.addEventListener("click",function(){var seen=rendered();var i=CYCLE.indexOf(seen);var next=CYCLE[(i+1)%CYCLE.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
+<nav class="nav-fade"><span class="nav-left"><a aria-label="На главную" href="/">← olgarozet.ru</a></span><span class="nav-right"><a href="https://olgarozet.ru/getbusy/">Доступ для учеников</a></span></nav>
+<button aria-label="Тема: авто (по солнцу) — переключить" class="theme-toggle" data-theme-toggle="" type="button">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить",CYCLE=["day", "night"],MODE_ATTR="data-theme";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());function rendered(){var a=null;try{a=document.documentElement.getAttribute(MODE_ATTR);}catch(e){}return (CYCLE.indexOf(a)!==-1)?a:null;}btn.addEventListener("click",function(){var seen=rendered();var i=CYCLE.indexOf(seen);var next=CYCLE[(i+1)%CYCLE.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
 <main id="main" role="main">
 <article class="article-wrapper">
 <section aria-labelledby="collection-heading" class="board collection" id="collection">
 <header class="head">
-<nav class="crumbs"><a href="../">Прогулки</a> <b>Сейчас</b></nav>
+<nav class="crumbs" data-bf-scope="row"><a href="../">Прогулки</a> <b>Сейчас</b></nav>
 <h1 data-case="upper" id="collection-heading">Прогулки</h1>
 <nav class="tabs" data-bf-scope="row"><a class="tab" href="../done/"><span class="bf" data-bf-w="3"><span class="bf-t">Уже</span><span aria-hidden="true" class="bf-i">✅</span></span></a> <a aria-current="page" class="tab" href="../now/"><span class="bf" data-bf-w="6"><span class="bf-t">Сейчас</span><span aria-hidden="true" class="bf-i">▶️</span></span></a> <a class="tab" href="../soon/"><span class="bf" data-bf-w="5"><span class="bf-t">Скоро</span><span aria-hidden="true" class="bf-i">⏳</span></span></a> <button aria-pressed="false" class="order-toggle" data-label-off="Сначала старое" data-label-on="Сначала новое" data-order-toggle="1" data-symbol-off="⬆️" data-symbol-on="⬇️" data-target="collection" type="button"><span class="bf" data-bf-w="7"><span class="bf-t">Сначала старое</span><span aria-hidden="true" class="bf-i">⬆️</span></span></button></nav>
 </header>
@@ -315,11 +419,11 @@
 <footer>
 <div class="footer-content" style="--natural-w:1024px;--natural-r:1">
 <a aria-label="Instagram" class="social-icon" href="https://instagram.com/olga_rozet"><svg fill="currentColor" viewbox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg></a>
-<img alt="Ольга Розет" class="footer-portrait day" decoding="async" height="1024" loading="lazy" src="/olga_footer.png" width="1024"/>
-<img alt="Ольга Розет" class="footer-portrait night" decoding="async" height="1024" loading="lazy" src="/olga_footer_night.png" width="1024"/>
+<img alt="Ольга Розет" class="footer-portrait day" decoding="async" height="1024" loading="lazy" src="/olga_footer.webp" width="1024"/>
+<img alt="Ольга Розет" class="footer-portrait night" decoding="async" height="1024" loading="lazy" src="/olga_footer_night.webp" width="1024"/>
 <a aria-label="Telegram" class="social-icon" href="https://t.me/olga_rozet"><svg fill="currentColor" viewbox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"></path></svg></a>
 </div>
-<a aria-label="Наверх" class="scroll-top" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" title="Наверх">
+<a aria-label="Наверх" class="scroll-top" href="#" onclick="window.scrollTo(0,0);return false;" title="Наверх">
 <svg fill="none" height="40" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" viewbox="0 0 24 24" width="40"><path d="M12 20V4M5 11l7-7 7 7"></path></svg>
 </a>
 </footer>
@@ -332,16 +436,6 @@ observer.observe(footer);
 </script>
 <link href="/media.css" rel="stylesheet"/><script defer="" src="/media.js"></script>
 <script>
-/* Display-window indicator 1[from ≤ now < until) per viewer clock
-   (Inv-STF-window-derived, surface-temporal-fixpoint.md). The reveal
-   (`data-visible-from`) is the exact dual of the original auto-hide
-   (`data-visible-until`, admin 2026-05-13: «пусть блок исчезнет после 20:30
-   по Москве») — one indicator covers both: a block appears at its window
-   start and disappears at its window end, so a page deployed before a
-   boundary still transitions at the precise moment without a redeploy.
-   Runs at page-load and every 30s thereafter — covers tabs left open across
-   a boundary. An unparseable/absent bound fails open on that side (a parse
-   error must never hide content). */
 (function(){
   function _applyWindows(){
     var nodes = document.querySelectorAll('[data-visible-until],[data-visible-from]');
@@ -351,19 +445,15 @@ observer.observe(footer);
       var until = Date.parse(nodes[i].getAttribute('data-visible-until') || '');
       var vis = (isNaN(from) || now >= from) && (isNaN(until) || now < until);
       nodes[i].style.display = vis ? '' : 'none';
-      nodes[i].hidden = !vis;  // окно, закрытое при сборке (атрибут `hidden`), открывается тем же индикатором
+      nodes[i].hidden = !vis;
     }
   }
   _applyWindows();
   setInterval(_applyWindows, 30000);
 })();
 
-/* Pageview pingback — entity-statistics G-Set event (admin 2026-05-13 «считает
-   статистику»). One event per page-load → CF Worker /pv → DELA_STATS KV.
-   No cookies, no client-id; idempotency via cf-ray (CF generates per request).
-   No-op gracefully if Worker unreachable (sendBeacon + fallback fetch). */
 (function(){
-  var slug = (document.querySelector('meta[name="dela:slug"]') || {}).content;
+  var slug = (document.querySelector("meta[name=\"page-slug\"]") || {}).content;
   if (!slug) return;
   var payload = JSON.stringify({
     p: slug,
@@ -371,7 +461,7 @@ observer.observe(footer);
        (Date.now() + '-' + Math.random().toString(36).slice(2)),
     ref: document.referrer || ''
   });
-  var url = "https://dela-edge.azaryarozet.workers.dev/pv";
+  var url = null;
   if (!url) return;
   try {
     var blob = new Blob([payload], { type: 'application/json' });

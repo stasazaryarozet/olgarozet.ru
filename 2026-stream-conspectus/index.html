@@ -4,7 +4,6 @@
 <html data-surface="editorial" lang="ru">
 <head>
 <meta charset="utf-8"/>
-<meta content="u5gNvIFSmtyOxQqC" name="mailru-domain"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <title>Конспект некоторых фрагментов прямого эфира — Ольга Розет</title>
 <meta content="Конспект второго эфира «100 лет обещаний дизайна» — Ольга Розет × Наталья Логинова, 8 июля 2026. Модулёр, Le Corbusier и Aalto, зачем ехать и почему Париж." name="description"/>
@@ -16,12 +15,13 @@
 <meta content="Конспект второго эфира «100 лет обещаний дизайна» — Ольга Розет × Наталья Логинова, 8 июля 2026. Модулёр, Le Corbusier и Aalto, зачем ехать и почему Париж." property="og:description"/>
 <meta content="Ольга Розет" property="og:site_name"/>
 <meta content="https://parisinseptember.ru/2026-stream-conspectus/" property="og:url"/>
-<meta content="https://olgarozet.ru/olga_footer.png" property="og:image"/>
+<meta content="https://olgarozet.ru/olga_footer.webp" property="og:image"/>
 <meta content="ru_RU" property="og:locale"/>
 <meta content="summary_large_image" name="twitter:card"/>
 <meta content="Конспект некоторых фрагментов прямого эфира — Ольга Розет" name="twitter:title"/>
 <meta content="Конспект второго эфира «100 лет обещаний дизайна» — Ольга Розет × Наталья Логинова, 8 июля 2026. Модулёр, Le Corbusier и Aalto, зачем ехать и почему Париж." name="twitter:description"/>
-<meta content="https://olgarozet.ru/olga_footer.png" name="twitter:image"/>
+<meta content="https://olgarozet.ru/olga_footer.webp" name="twitter:image"/>
+<link href="/favicon.ico" rel="icon" sizes="32x32"/>
 <link href="/favicon.png" rel="icon" type="image/png"/>
 <link href="/apple-touch-icon.png" rel="apple-touch-icon"/>
 <link href="/manifest.json" rel="manifest"/>
@@ -30,15 +30,8 @@
 <meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
 <meta content="#111111" media="(prefers-color-scheme: dark)" name="theme-color"/>
 <script>
-// Day/night theme — user-override-first, then solar-automatic. FOUC-critical:
-// runs synchronously in <head> before paint. Resolution: read dela.theme.v1
-// from localStorage; if ∈ ['day', 'night'] use it (user override) else solar
-// altitude (lat 55.0° / alt-threshold -0.1 rad). Config: solar calc from
-// spec.enforcement_data.Inv-SITE-solar-theme (+ data.yaml.bio.solar_calibration
-// override); attr/key/values from spec.enforcement_data.Inv-IFACE-day-night-mode.
-// No hardcoded constants in code — both Specs are SoT, code falls back gracefully.
 (function(){
-  var MODE_ATTR="data-theme", MODE_VALUES=["day", "night"], STORAGE_KEY="dela.theme.v1";
+  var MODE_ATTR="data-theme", MODE_VALUES=["day", "night"], STORAGE_KEY="theme.v1";
   function solarTheme(){
     var r=Math.PI/180, now=new Date();
     var J=now.valueOf()/86400000 + 2440587.5 - 2451545.0;
@@ -66,14 +59,14 @@
   setInterval(window.__applyTheme, 300000);
 })();
 </script>
-<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=2891c435a1"); @import url("/styles.css?v=0cc8cc1348");</style>
-<meta content="2026-stream-conspectus" name="dela:slug"/>
+<style>@layer floor, owner, form; @import url("/_tokens.generated.css?v=8224bc63bb"); @import url("/styles.css?v=08b2c21906");</style>
+<meta content="2026-stream-conspectus" name="page-slug"/>
 <meta content="Ольга Розет × Наталья Логинова" name="author"/>
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
-<nav class="nav-fade"><span class="nav-left"><a aria-label="На главную" href="https://olgarozet.ru/">← olgarozet.ru</a></span><span class="nav-right"></span></nav>
-<button aria-label="Тема: авто (по солнцу) — переключить" class="theme-toggle" data-theme-toggle="" type="button">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="dela.theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить",CYCLE=["day", "night"],MODE_ATTR="data-theme";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());function rendered(){var a=null;try{a=document.documentElement.getAttribute(MODE_ATTR);}catch(e){}return (CYCLE.indexOf(a)!==-1)?a:null;}btn.addEventListener("click",function(){var seen=rendered();var i=CYCLE.indexOf(seen);var next=CYCLE[(i+1)%CYCLE.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
+<nav class="nav-fade"><span class="nav-left"><a aria-label="На главную" href="https://olgarozet.ru/">← olgarozet.ru</a></span><span class="nav-right"><a href="https://olgarozet.ru/getbusy/">Доступ для учеников</a></span></nav>
+<button aria-label="Тема: авто (по солнцу) — переключить" class="theme-toggle" data-theme-toggle="" type="button">◐</button><script>(function(){var STATES=["auto", "day", "night"],GLYPHS={"auto": "◐", "day": "☀", "night": "☾"},LABELS={"auto": "Тема: авто (по солнцу)", "day": "Тема: дневная", "night": "Тема: ночная"},STORAGE_KEY="theme.v1",MODE_VALUES=["day", "night"],SUFFIX=" — переключить",CYCLE=["day", "night"],MODE_ATTR="data-theme";var btn=document.querySelector("[data-theme-toggle]");if(!btn)return;function current(){var s=null;try{s=localStorage.getItem(STORAGE_KEY);}catch(e){}return (MODE_VALUES.indexOf(s)!==-1)?s:STATES[0];}function paint(st){btn.textContent=GLYPHS[st]||GLYPHS[STATES[0]];btn.setAttribute("aria-label",(LABELS[st]||LABELS[STATES[0]])+SUFFIX);}paint(current());function rendered(){var a=null;try{a=document.documentElement.getAttribute(MODE_ATTR);}catch(e){}return (CYCLE.indexOf(a)!==-1)?a:null;}btn.addEventListener("click",function(){var seen=rendered();var i=CYCLE.indexOf(seen);var next=CYCLE[(i+1)%CYCLE.length];try{localStorage.setItem(STORAGE_KEY,next);}catch(e){}if(window.__applyTheme)window.__applyTheme();paint(next);});})();</script>
 <main id="main" role="main">
 <article class="article-wrapper"><h1 data-case="upper" id="konspekt-nekotoryh-fragmentov-pryamogo-efira">Конспект некоторых фрагментов прямого эфира</h1>
 <p class="article-meta"><span class="l">8 июля 2026 · 42 мин</span></p>
@@ -84,14 +77,14 @@
 <span class="l">полезный.</span><br/>
 <span class="l">Комфортная и красивая среда принадлежит всем vs дворец и людская.</span></p>
 <p><span class="l"><em>Модулёр</em> Le Corbusier (сороковые) — явный след этого обещания.</span><br/>
-<span class="l">Прежде его травили; сегодня его работа среди оснований <abbr>ГОСТ</abbr>ов.</span></p>
+<span class="l">Прежде его травили; сегодня его работа среди оснований ГОСТов.</span></p>
 <p><span class="l">Так проектируют не «спальню» и не «кухню»,</span><br/>
 <span class="l">а соответствие действия человеку:</span><br/>
 <span class="l">сколько места — телу,</span><br/>
 <span class="l">какой высоты — мебель,</span><br/>
 <span class="l">где — гигиена.</span><br/>
 <span class="l">Среду приспосабливают к поведению организма.</span></p>
-<figure><svg aria-label="Модулёр — доли своего роста, а не сантиметры" preserveaspectratio="xMidYMid meet" role="img" viewbox="0 0 720 674" xmlns="http://www.w3.org/2000/svg">
+<figure><svg aria-label="Модулёр — доли своего роста, а не сантиметры" preserveaspectratio="xMidYMid meet" role="img" viewbox="0 0 720 698" xmlns="http://www.w3.org/2000/svg">
 <style>
     text { font-family: Georgia, "Times New Roman", serif; fill: currentColor; }
     .sf-title { font-size: 19px; font-style: italic; }
@@ -134,7 +127,11 @@
 <text class="sf-mm" x="96" y="65.7">1,24</text><text class="sf-cm" x="96" y="65.7"> </text>
 <text class="sf-body" x="146" y="51.7">поднятая рука</text>
 <text class="sf-use" x="146" y="65.7">верхняя полка, притолока, светильник</text>
-<text class="sf-note" x="40" y="646.0">Ряд порождён φ ≈ 1,618: каждая ступень = предыдущая ÷ φ. Мера — тело, не метр. Рост 183 см Корбюзье выбрал ПРОИЗВОЛЬНО («Le Modulor», 1948; en.wikipedia.org/wiki/Modulor). Умножьте доли на СВОЙ рост.</text>
+<text class="sf-note" x="40" y="646.0">
+<tspan dy="0" x="40">Ряд порождён φ ≈ 1,618: каждая ступень = предыдущая ÷ φ. Мера — тело, не метр.</tspan>
+<tspan dy="18" x="40">Рост 183 см Корбюзье выбрал ПРОИЗВОЛЬНО («Le Modulor», 1948; en.wikipedia.org/wiki/Modulor).</tspan>
+<tspan dy="18" x="40">Умножьте доли на СВОЙ рост.</tspan>
+</text>
 </svg>
 </figure>
 <p><span class="l">Возьмите рулетку и проверьте свою кухню.</span></p>
@@ -225,16 +222,6 @@
 </main>
 <link href="/media.css" rel="stylesheet"/><script defer="" src="/media.js"></script>
 <script>
-/* Display-window indicator 1[from ≤ now < until) per viewer clock
-   (Inv-STF-window-derived, surface-temporal-fixpoint.md). The reveal
-   (`data-visible-from`) is the exact dual of the original auto-hide
-   (`data-visible-until`, admin 2026-05-13: «пусть блок исчезнет после 20:30
-   по Москве») — one indicator covers both: a block appears at its window
-   start and disappears at its window end, so a page deployed before a
-   boundary still transitions at the precise moment without a redeploy.
-   Runs at page-load and every 30s thereafter — covers tabs left open across
-   a boundary. An unparseable/absent bound fails open on that side (a parse
-   error must never hide content). */
 (function(){
   function _applyWindows(){
     var nodes = document.querySelectorAll('[data-visible-until],[data-visible-from]');
@@ -244,19 +231,15 @@
       var until = Date.parse(nodes[i].getAttribute('data-visible-until') || '');
       var vis = (isNaN(from) || now >= from) && (isNaN(until) || now < until);
       nodes[i].style.display = vis ? '' : 'none';
-      nodes[i].hidden = !vis;  // окно, закрытое при сборке (атрибут `hidden`), открывается тем же индикатором
+      nodes[i].hidden = !vis;
     }
   }
   _applyWindows();
   setInterval(_applyWindows, 30000);
 })();
 
-/* Pageview pingback — entity-statistics G-Set event (admin 2026-05-13 «считает
-   статистику»). One event per page-load → CF Worker /pv → DELA_STATS KV.
-   No cookies, no client-id; idempotency via cf-ray (CF generates per request).
-   No-op gracefully if Worker unreachable (sendBeacon + fallback fetch). */
 (function(){
-  var slug = (document.querySelector('meta[name="dela:slug"]') || {}).content;
+  var slug = (document.querySelector("meta[name=\"page-slug\"]") || {}).content;
   if (!slug) return;
   var payload = JSON.stringify({
     p: slug,
@@ -264,7 +247,7 @@
        (Date.now() + '-' + Math.random().toString(36).slice(2)),
     ref: document.referrer || ''
   });
-  var url = "https://dela-edge.azaryarozet.workers.dev/pv";
+  var url = null;
   if (!url) return;
   try {
     var blob = new Blob([payload], { type: 'application/json' });

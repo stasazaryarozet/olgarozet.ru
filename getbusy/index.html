@@ -6,20 +6,20 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <title>Ольга Розет — Доступ для учеников</title>
-<meta content="Доступ для учеников — Ольга Розет" name="description"/>
+<meta content="Введите e-mail, указанный при покупке — мы повторно отправим вашу ссылку доступа в кабинет." name="description"/>
 <link href="https://olgarozet.ru/getbusy/" rel="canonical"/>
 <link href="https://olgarozet.ru/journal/feed.xml" rel="alternate" title="Journal" type="application/rss+xml"/>
 <link href="https://olgarozet.ru/audiobroadcast/feed.xml" rel="alternate" title="Ольга Розет" type="application/rss+xml"/>
 <meta content="website" property="og:type"/>
 <meta content="Ольга Розет — Доступ для учеников" property="og:title"/>
-<meta content="Доступ для учеников — Ольга Розет" property="og:description"/>
+<meta content="Введите e-mail, указанный при покупке — мы повторно отправим вашу ссылку доступа в кабинет." property="og:description"/>
 <meta content="Ольга Розет" property="og:site_name"/>
 <meta content="https://olgarozet.ru/getbusy/" property="og:url"/>
 <meta content="https://olgarozet.ru/olga_footer.webp" property="og:image"/>
 <meta content="ru_RU" property="og:locale"/>
 <meta content="summary_large_image" name="twitter:card"/>
 <meta content="Ольга Розет — Доступ для учеников" name="twitter:title"/>
-<meta content="Доступ для учеников — Ольга Розет" name="twitter:description"/>
+<meta content="Введите e-mail, указанный при покупке — мы повторно отправим вашу ссылку доступа в кабинет." name="twitter:description"/>
 <meta content="https://olgarozet.ru/olga_footer.webp" name="twitter:image"/>
 <link href="/favicon.ico" rel="icon" sizes="32x32"/>
 <link href="/favicon.png" rel="icon" type="image/png"/>
@@ -70,13 +70,15 @@
 <section aria-labelledby="getbusy-heading" class="board getbusy" id="getbusy">
 <h1 data-case="upper" id="getbusy-heading">Доступ для учеников</h1>
 <p class="getbusy-note">Введите e-mail, указанный при покупке — мы повторно отправим вашу ссылку доступа в кабинет.</p>
+<noscript><p class="getbusy-status">Для автоматической отправки ссылки нужен JavaScript. Напишите на o.g.rozet@gmail.com с адреса покупки — пришлем ссылку.</p></noscript>
 <form class="signup-form" id="getbusy-resend" novalidate="">
 <label class="signup-label" for="getbusy-email">Отправить ссылку доступа повторно</label>
-<input autocapitalize="off" autocomplete="email" autocorrect="off" class="signup-input" enterkeyhint="send" id="getbusy-email" inputmode="email" name="email" placeholder="you@example.com" required="" spellcheck="false" type="email"/>
+<input aria-describedby="getbusy-status" autocapitalize="off" autocomplete="email" autocorrect="off" class="signup-input" enterkeyhint="send" id="getbusy-email" inputmode="email" name="email" placeholder="you@example.com" required="" spellcheck="false" type="email"/>
+<p class="getbusy-status" hidden="" id="getbusy-typo"></p>
 <button class="cta" id="getbusy-submit" type="submit">Отправить ссылку</button>
 <p aria-live="polite" class="getbusy-status" hidden="" id="getbusy-status" role="status"></p>
 </form>
-<script id="getbusy-cfg" type="application/json">{"url": "https://getbusy.olgarozet.ru/enter/resend", "ok": "Если покупка на этот e-mail найдена, ссылка доступа придёт на почту.", "bad": "Проверьте e-mail и попробуйте снова.", "err": "Не удалось отправить запрос. Попробуйте чуть позже."}</script>
+<script id="getbusy-cfg" type="application/json">{"url": "https://getbusy.olgarozet.ru/enter/resend", "ok": "Если покупка на этот e-mail найдена, ссылка доступа придёт на почту.", "bad": "Проверьте e-mail и попробуйте снова.", "err": "Не удалось отправить запрос. Попробуйте чуть позже.", "timeout_ms": 12000, "typo_hint": "Возможно, вы имели в виду {suggested}?", "typo_apply": "Исправить", "typo_domains": {"gamil.com": "gmail.com", "gmial.com": "gmail.com", "gnail.com": "gmail.com", "gmail.ru": "gmail.com", "gmal.com": "gmail.com", "gmai.com": "gmail.com", "yandx.ru": "yandex.ru", "yadnex.ru": "yandex.ru", "yanex.ru": "yandex.ru", "yande.ru": "yandex.ru", "mial.ru": "mail.ru", "mal.ru": "mail.ru", "maik.ru": "mail.ru", "mail.con": "mail.ru", "icloud.con": "icloud.com", "icoud.com": "icloud.com", "outlok.com": "outlook.com", "bk.con": "bk.ru", "inbox.con": "inbox.ru", "list.con": "list.ru"}}</script>
 <script>
       (function(){
         var cfg = JSON.parse(document.getElementById('getbusy-cfg').textContent);
@@ -84,23 +86,46 @@
         var inp = document.getElementById('getbusy-email');
         var btn = document.getElementById('getbusy-submit');
         var out = document.getElementById('getbusy-status');
+        var typo = document.getElementById('getbusy-typo');
         function say(t){ out.textContent = t; out.hidden = !t; }
+        function checkTypo(){
+          if (!typo || !cfg.typo_domains) return;
+          var v = (inp.value || '').trim();
+          var at = v.lastIndexOf('@');
+          var fix = at > 0 ? cfg.typo_domains[v.slice(at + 1).toLowerCase()] : '';
+          if (fix) {
+            var sug = v.slice(0, at + 1) + fix;
+            typo.hidden = false;
+            typo.innerHTML = '';
+            typo.appendChild(document.createTextNode((cfg.typo_hint || '{suggested}').replace('{suggested}', sug) + ' '));
+            var b = document.createElement('button');
+            b.type = 'button'; b.textContent = cfg.typo_apply || sug;
+            b.addEventListener('click', function(){ inp.value = sug; typo.hidden = true; inp.focus(); });
+            typo.appendChild(b);
+          } else { typo.hidden = true; }
+        }
+        inp.addEventListener('input', function(){ inp.removeAttribute('aria-invalid'); checkTypo(); });
+        inp.addEventListener('blur', checkTypo);
         form.addEventListener('submit', function(ev){
           ev.preventDefault();
           var v = (inp.value || '').trim();
-          if (!v || !inp.validity.valid) { say(cfg.bad); inp.focus(); return; }
+          if (!v || !inp.validity.valid) { inp.setAttribute('aria-invalid', 'true'); say(cfg.bad); inp.focus(); return; }
+          inp.removeAttribute('aria-invalid');
           btn.disabled = true;
           say('');
           var body = new URLSearchParams();
           body.set('email', v);
+          var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+          var tid = ctrl ? setTimeout(function(){ ctrl.abort(); }, cfg.timeout_ms || 12000) : null;
           fetch(cfg.url, {
             method: 'POST',
-            body: body
+            body: body,
+            signal: ctrl ? ctrl.signal : undefined
           }).then(function(r){
             say(r.ok ? cfg.ok : cfg.err);
           }, function(){
             say(cfg.err);
-          }).finally(function(){ btn.disabled = false; });
+          }).finally(function(){ if (tid) clearTimeout(tid); btn.disabled = false; });
         });
       })();
       </script>
