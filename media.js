@@ -890,10 +890,38 @@
     });
     syncProgressCounter();
   }
+  function autoSizeTextarea(ta) {
+    // imperative: DOM layout - auto-grow workbook textarea height smoothly to match entered lines
+    if (!ta) return;
+    ta.style.height = 'auto';
+    if (ta.scrollHeight > 0) ta.style.height = String(ta.scrollHeight) + 'px';
+  }
   function syncWorksheet(fs, markSaved) {
     if (!fs) return;
     syncPrintMirrors(fs);
-    var text = formatWorksheet(worksheetPairs(fs));
+    var pairs = worksheetPairs(fs);
+    var filledCount = 0;
+    fs.querySelectorAll('textarea[data-keep-text]').forEach(function (ta) {
+      var hasVal = !!String(ta.value || '').trim();
+      if (hasVal) filledCount += 1;
+      var row = ta.closest('.worksheet-row');
+      if (row) {
+        if (hasVal) row.setAttribute('data-filled', '1');
+        else row.removeAttribute('data-filled');
+      }
+      autoSizeTextarea(ta);
+    });
+    var totalCount = pairs.length;
+    var progEl = fs.querySelector('[data-worksheet-progress]');
+    if (progEl) {
+      var tpl = progEl.getAttribute('data-tpl') || '{filled} / {total}';
+      progEl.textContent = tpl.replace('{filled}', String(filledCount)).replace('{total}', String(totalCount));
+      if (filledCount > 0) progEl.setAttribute('data-has-progress', '1');
+      else progEl.removeAttribute('data-has-progress');
+    }
+    var fold = fs.querySelector('.worksheet-fold');
+    if (fold && filledCount > 0 && !fold.open) fold.open = true;
+    var text = formatWorksheet(pairs);
     var st = fs.querySelector('[data-worksheet-status]');
     if (st && markSaved) {
       var msg = st.getAttribute('data-label-saved') || '';
@@ -901,7 +929,7 @@
     }
     var btn = fs.querySelector('[data-worksheet-copy]');
     if (btn) {
-      btn.hidden = false;
+      btn.hidden = !text;
       btn.disabled = !text;
     }
     syncGlobalWorkbook();
@@ -1027,7 +1055,11 @@
       });
       return waits;
     }
+    function openWorksheetsForPrint() {
+      document.querySelectorAll('.worksheet-fold').forEach(function (d) { d.open = true; });
+    }
     function printWithImages() {
+      openWorksheetsForPrint();
       syncPrintMirrors(document);
       var waits = eagerizeImagesForPrint();
       if (!waits.length) { window.print(); return; }
@@ -1037,6 +1069,7 @@
     if (!window.__delaPrintArmed) {
       window.__delaPrintArmed = true;
       window.addEventListener('beforeprint', function () {
+        openWorksheetsForPrint();
         syncPrintMirrors(document);
         eagerizeImagesForPrint();
       });
