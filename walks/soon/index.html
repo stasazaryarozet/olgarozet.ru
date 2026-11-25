@@ -263,7 +263,7 @@
   }
   function clearAutoTips(scope) {
     scope.querySelectorAll('.' + S.cls_root).forEach(bf => {
-      if (autoTitled.has(bf)) {
+      if (autoTitled.has(bf) && !bf.closest('[' + S.mode_attr + '="' + S.ico + '"]')) {
         bf.removeAttribute('title');
         autoTitled.delete(bf);
       }

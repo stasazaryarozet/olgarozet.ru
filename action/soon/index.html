@@ -263,7 +263,7 @@
   }
   function clearAutoTips(scope) {
     scope.querySelectorAll('.' + S.cls_root).forEach(bf => {
-      if (autoTitled.has(bf)) {
+      if (autoTitled.has(bf) && !bf.closest('[' + S.mode_attr + '="' + S.ico + '"]')) {
         bf.removeAttribute('title');
         autoTitled.delete(bf);
       }
@@ -365,7 +365,7 @@
 <p aria-hidden="true" class="rank rank-row">▰</p>
 <article class="event ev-period">
 <p class="when proper-case">в Ноябре</p>
-<p class="type as-is">Рассказ-Показ</p>
+<p class="type as-is">Учебное Пособие</p>
 <p class="concept caps">Быт шейкеров:</p>
 <p class="concept caps seam-line">Протофункционализм и настоящее</p>
 </article>
@@ -379,7 +379,7 @@
 <p aria-hidden="true" class="rank rank-row">▰</p>
 <article class="event ev-period">
 <p class="when proper-case">в Ноябре</p>
-<p class="type as-is">Рассказ-Показ</p>
+<p class="type as-is">Учебное Пособие</p>
 <p class="concept caps seam-line">Цена и Ценность</p>
 </article>
 </section>
