@@ -8,6 +8,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   
   overflow-anchor: none;
+  scroll-padding-bottom: calc(var(--touch-min) + var(--sp-4));
 }
 
 body {
