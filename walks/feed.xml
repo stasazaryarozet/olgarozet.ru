@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Ольга Розет — Прогулки</title>
+    <link>https://olgarozet.ru/walks/</link>
+    <description>Ольга Розет — художник, искусствовед, дизайнер интерьеров. Консультации, путешествия, искусство.</description>
+    <language>ru</language>
+    <item>
+      <title>Конструктивизм: Подход и решения</title>
+      <link>https://olgarozet.ru/walks/</link>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
+      <guid isPermaLink="false">https://olgarozet.ru/walks/#excursion_melnikov_nov_2026</guid>
+    </item>
+    <item>
+      <title>Круглый дом Мельникова</title>
+      <link>https://olgarozet.ru/walks/</link>
+      <pubDate>Wed, 03 Jun 2026 00:00:00 GMT</pubDate>
+      <guid isPermaLink="false">https://olgarozet.ru/walks/#excursion_melnikov_2026_06</guid>
+    </item>
+  </channel>
+</rss>

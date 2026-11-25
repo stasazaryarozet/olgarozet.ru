@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Ольга Розет — Дизайн-Путешествия</title>
+    <link>https://olgarozet.ru/travels/</link>
+    <description>Авторские выездные образовательные программы Ольги Розет по архитектуре, дизайну и искусству — с 2008 года. География практики: Франция, Италия, Великобритания, Австрия, США, Узбекистан.</description>
+    <language>ru</language>
+    <item>
+      <title>Париж · 8–11 сентября</title>
+      <link>https://parisinseptember.ru/</link>
+      <description>8–11 сентября</description>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
+      <guid isPermaLink="true">https://parisinseptember.ru/</guid>
+    </item>
+  </channel>
+</rss>
