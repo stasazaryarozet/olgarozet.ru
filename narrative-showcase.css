@@ -536,15 +536,19 @@ html[data-theme="day"] #doc audio { color-scheme: light; }
   outline-offset: 2px;
 }
 
+
 #doc .figure-asides {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-2);
-  margin-top: var(--sp-2);
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--rule);
 }
 #doc .composed-quote {
   flex: 1 1 100%;
   width: 100%;
+  max-width: var(--measure);
   background: var(--surface);
   border: 1px solid var(--rule);
   border-left: 3px solid var(--rule);
@@ -569,7 +573,7 @@ html[data-theme="day"] #doc audio { color-scheme: light; }
 }
 #doc .composed-quote-by {
   margin: var(--sp-1) var(--card-inset) 0;
-  font-size: var(--fs-2xs);
+  font-size: var(--fs-xs);
   color: var(--muted);
 }
 dialog[data-role="zoom"] .zoom-composed-card {
@@ -663,7 +667,7 @@ dialog[data-role="zoom"][data-zoom-full] img {
 }
 
 #doc figcaption {
-  padding: var(--sp-3) var(--card-inset) var(--sp-3);
+  padding: var(--sp-2) var(--card-inset) var(--sp-3);
   font-size: var(--fs-s);
   line-height: var(--lh-body);
   color: var(--ink);
@@ -1415,6 +1419,57 @@ a[data-reach="out"] { color: var(--muted); }
   border-radius: var(--radius-control);
   overflow: hidden;
 }
+.player-stage[data-media-mode="audio"] {
+  background: var(--surface-deep);
+  border: 1px solid var(--rule);
+  padding: var(--sp-2);
+}
+.player-stage[data-media-mode="audio"] video {
+  height: 3.5rem;
+  min-height: var(--touch-min);
+}
+.player-stage[data-media-mode="audio"] .player-quality-overlay {
+  display: none;
+}
+.player-mode-toggle {
+  display: inline-flex;
+  border: 1px solid var(--muted);
+  border-radius: var(--radius-control);
+  overflow: hidden;
+}
+.player-mode-btn,
+.player-speed-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch-min);
+  padding: 0 var(--sp-2);
+  font: inherit;
+  font-size: var(--fs-xs);
+  color: var(--ink);
+  background: var(--surface);
+  border: 0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.player-mode-btn + .player-mode-btn {
+  border-left: 1px solid var(--rule);
+}
+.player-mode-btn[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--surface);
+  font-weight: 600;
+}
+.player-speed-btn {
+  font-family: var(--mono);
+  border: 1px solid var(--muted);
+  border-radius: var(--radius-control);
+}
+.player-mode-btn:focus-visible,
+.player-speed-btn:focus-visible {
+  outline: var(--focus-outline-min) solid var(--accent);
+  outline-offset: 2px;
+}
 .player-stage video {
   display: block;
   width: 100%;
@@ -1814,8 +1869,10 @@ dialog.toc-drawer::backdrop {
   white-space: nowrap;
 }
 @container (max-width: 28rem) {
-  .buyer-bar-chapter { flex: 1 1 100%; }
-  .buyer-bar a { flex: 1 1 0; justify-content: center; }
+  .buyer-bar { flex-wrap: nowrap; gap: var(--sp-1); }
+  .buyer-bar-chapter { flex: 1 1 auto; min-width: 0; }
+  .buyer-bar a,
+  .buyer-bar .toc-drawer-trigger { flex: 0 0 auto; padding: 0 var(--sp-2); }
 }
 .buyer-bar a:focus-visible {
   outline: var(--focus-outline-min) solid var(--accent);
@@ -1969,7 +2026,7 @@ button.moment-video:focus-visible,
 }
 .worksheet-progress {
   font-family: var(--mono);
-  font-size: var(--fs-2xs);
+  font-size: var(--fs-xs);
   color: var(--muted);
   padding: 0.15rem 0.5rem;
   border: 1px solid var(--rule);
@@ -2012,7 +2069,7 @@ button.moment-video:focus-visible,
 .worksheet-body {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-3);
+  gap: var(--sp-4);
 }
 .worksheet-fold > .worksheet-body {
   margin-top: var(--sp-3);

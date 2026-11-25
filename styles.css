@@ -120,18 +120,14 @@ body {
 .content-wrapper:has(> section[data-band]) > section[data-band="odd"] {
     background: var(--surface-band);
 }
-
-.content-wrapper:has(> section[data-band]) > section.board:has(+ section.board) {
-    padding-bottom: 0;
-}
-.content-wrapper:has(> section[data-band]) > section.board + section.board {
-    margin-top: 0;
-    padding-top: var(--sp-5);
-}
 .content-wrapper:has(> section[data-band]) > .legal {
     margin-top: 0;
     padding-block: var(--space-band) 0;
     background: var(--surface);
+}
+.content-wrapper:has(> section[data-band]) > .legal[data-band="odd"] {
+    padding-block: var(--space-band);
+    background: var(--surface-band);
 }
 .content-wrapper:has(> section[data-band]) > .legal::before {
     content: none;
@@ -197,7 +193,7 @@ body {
     color: var(--emphasis);
     text-transform: uppercase;   
     letter-spacing: var(--tracking-caps-emphasis);   
-    font-weight: 600;
+    font-weight: 400;
 }
 
 .artist-highlight a {
@@ -222,17 +218,6 @@ section {
 
 section:not(:first-of-type)::before {
     content: none;
-}
-
-
-section.board + section.board::before {
-    content: "";
-    display: block;
-    width: calc(var(--section-rule-w) * 0.45);
-    height: 0;
-    background: transparent;
-    border-top: 1px dashed color-mix(in srgb, var(--rule) 85%, transparent);
-    margin: 0 auto var(--sp-5);
 }
 
 section:first-of-type {
@@ -452,7 +437,8 @@ a:focus-visible {
 }
 .event h3.type {
     font-size: clamp(1.05rem, 1rem + 0.25vw, 1.25rem);
-    font-weight: 600;
+    font-weight: 400;
+    color: var(--ink-peak);
     margin: 0 0 0.4em 0;
 }
 .event .multi-component {
@@ -527,7 +513,8 @@ a:focus-visible {
 }
 .board h4.run {
     font-size: var(--font-size-base);
-    font-weight: 600;
+    font-weight: 400;
+    color: var(--ink-peak);
     margin: 0 0 var(--sp-2) 0;
 }
 
@@ -550,9 +537,9 @@ a:focus-visible {
 }
 .board .event .concept {
     font-size: var(--fs-caps-entry);
-    font-weight: 600;
+    font-weight: 400;
     line-height: var(--lh-tight);
-    color: inherit;
+    color: var(--ink-peak);
 }
 .board .event .detail {
     font-size: var(--font-size-p);
@@ -2469,13 +2456,14 @@ nav [data-reach="out"] > a {
     margin-inline: auto;
     text-align: center;
     font-size: var(--fs-caps-entry);
-    font-weight: 600;
+    font-weight: 400;
+    color: var(--ink-peak);
     line-height: var(--lh-tight);
     text-transform: uppercase;
     letter-spacing: var(--tracking-caps);
 }
 .offer-entry-prefix {
-    color: var(--ink);
+    color: var(--ink-peak);
 }
 .offer-entry h3 a {
     color: var(--link);

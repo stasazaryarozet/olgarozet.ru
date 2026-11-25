@@ -83,6 +83,8 @@
 
   function watch(el) {
     if (io) io.disconnect();
+    // Покупательская страница держит единую полосу `#buyer-bar` — вторая плавающая полоса не дублируется (Wave V P0-2).
+    if (el && el.hasAttribute && el.hasAttribute('data-has-buyer-bar')) { hideBar(); return; }
     if (!('IntersectionObserver' in window)) { showBar(el); return; }
     io = new IntersectionObserver(function (entries) {
       var seen = entries[0] && entries[0].isIntersecting;
@@ -274,6 +276,16 @@
     return { seek: null, prompt: null };
   }/*/fn:resolveInitialTime*/
 
+  /*fn:formatClock*/function formatClock(sec) {
+    var t = Math.max(0, Math.floor(Number(sec) || 0));
+    var h = Math.floor(t / 3600);
+    var m = Math.floor((t % 3600) / 60);
+    var s = t % 60;
+    return h > 0
+      ? (h + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0'))
+      : (m + ':' + String(s).padStart(2, '0'));
+  }/*/fn:formatClock*/
+
   /*fn:buildResumeLink*/function buildResumeLink(href, seconds, prefix) {
     var base = String(href || '').split('#')[0];
     var p = String(prefix || '#t=');
@@ -450,6 +462,20 @@
         sizeEl.textContent = tpl.replace('{mb}', String(Math.round(Number(hit.bytes) / 1e6)));
       }
     };
+    var stageEl = v.closest('.player-stage');
+    var modeWrap = document.querySelector('[data-media-mode-toggle]');
+    var audioRungId = modeWrap ? (modeWrap.getAttribute('data-audio-rung') || '') : '';
+    var syncModeUi = function (targetRung) {
+      var hit = rungs.filter(function (r) { return r.id === (targetRung || defRung); })[0];
+      var isAudio = !!(hit && Number(hit.height) === 0);
+      if (stageEl) stageEl.setAttribute('data-media-mode', isAudio ? 'audio' : 'video');
+      if (modeWrap) {
+        modeWrap.querySelectorAll('[data-mode]').forEach(function (b) {
+          var active = (b.getAttribute('data-mode') === (isAudio ? 'audio' : 'video'));
+          b.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+      }
+    };
     var applySrc = function (targetRung, bust) {
       var u = rungs.length ? rungUrl(baseSrc, targetRung, defRung, qParam) : baseSrc;
       if (bust && u) {
@@ -460,6 +486,7 @@
       v.src = u;
       v.setAttribute('data-active-rung', targetRung || defRung);
       syncSize(targetRung);
+      syncModeUi(targetRung);
     };
     var applySnap = function (snap) {
       if (!snap) return;
@@ -475,7 +502,7 @@
       persist: function () { try { v.dispatchEvent(new Event('timeupdate')); } catch (err) { /* прежнее место */ } },
       mark: function () { v.setAttribute('data-recovering', ''); },
       unmark: function () { v.removeAttribute('data-recovering'); },
-      syncRung: function (f) { v.setAttribute('data-active-rung', f.rung || defRung); syncSize(f.rung); },
+      syncRung: function (f) { v.setAttribute('data-active-rung', f.rung || defRung); syncSize(f.rung); syncModeUi(f.rung); },
       show: function (f) {
         if (!box) return;
         box.hidden = !f.state;
@@ -501,6 +528,22 @@
     } else if (rungs.length) {
       v.setAttribute('data-active-rung', initRung || defRung);
       syncSize(initRung);
+      syncModeUi(initRung);
+    }
+    if (modeWrap && audioRungId && rungs.length) {
+      modeWrap.addEventListener('click', function (ev) {
+        var btn = ev.target && ev.target.closest && ev.target.closest('[data-mode]');
+        if (!btn) return;
+        var wantAudio = btn.getAttribute('data-mode') === 'audio';
+        var nextVal = wantAudio ? audioRungId : autoId;
+        if (sel) {
+          sel.value = nextVal;
+          sel.dispatchEvent(new Event('change'));
+        } else {
+          var target = selectRung(rungs, navigator.connection || {}, nextVal, policy);
+          if (target && target !== state.rung) send('switch', { rungId: target, autoMode: !wantAudio });
+        }
+      });
     }
     var hPref = policy.hash_prefix || v.getAttribute('data-hash-prefix') || '#t=';
     var hTime = parseHashTime(location.hash, hPref);
@@ -519,8 +562,7 @@
       if (v.readyState >= 1) seekInit();
       else v.addEventListener('loadedmetadata', seekInit);
     } else if (initT.prompt !== null && resumeBox && resumeTimeEl) {
-      var pt = Math.floor(initT.prompt);
-      resumeTimeEl.textContent = Math.floor(pt / 60) + ':' + String(pt % 60).padStart(2, '0');
+      resumeTimeEl.textContent = formatClock(initT.prompt);
       resumeBox.hidden = false;
     }
     [['play', 'play'], ['pause', 'pause'], ['waiting', 'waiting'],
@@ -661,25 +703,37 @@
   /*fn:mergeWorkbookState*/function mergeWorkbookState(local, remote) {
     var lNotes = (local && local.notes) || {};
     var rNotes = (remote && remote.notes) || {};
+    var lTs = (local && local.notes_ts) || {};
+    var rTs = (remote && remote.notes_ts) || {};
     var lChecks = (local && local.checks) || {};
     var rChecks = (remote && remote.checks) || {};
     var notes = {};
+    var notesTs = {};
     var checks = {};
     var changedLocal = false;
     var dirtyRemote = false;
     Object.keys(rNotes).forEach(function (k) {
       notes[k] = String(rNotes[k] == null ? '' : rNotes[k]);
+      notesTs[k] = Number(rTs[k]) || 0;
       if (!lNotes[k] && notes[k]) changedLocal = true;
     });
     Object.keys(lNotes).forEach(function (k) {
       var lv = String(lNotes[k] == null ? '' : lNotes[k]);
+      var lt = Number(lTs[k]) || 0;
+      var rt = Number(rTs[k]) || 0;
       if (lv && !notes[k]) {
         notes[k] = lv;
+        notesTs[k] = lt;
         dirtyRemote = true;
       } else if (lv && notes[k] && lv !== notes[k]) {
-        // Remote wins when local is empty; otherwise keep local non-empty edit and sync up
-        notes[k] = lv;
-        dirtyRemote = true;
+        // Per-field LWW: newer timestamp wins; equal/untracked falls back to local non-empty edit
+        if (rt > lt) {
+          changedLocal = true;
+        } else {
+          notes[k] = lv;
+          notesTs[k] = lt;
+          dirtyRemote = true;
+        }
       }
     });
     Object.keys(rChecks).forEach(function (k) {
@@ -692,20 +746,25 @@
         dirtyRemote = true;
       }
     });
-    return { notes: notes, checks: checks, changedLocal: changedLocal, dirtyRemote: dirtyRemote };
+    return { notes: notes, notes_ts: notesTs, checks: checks, changedLocal: changedLocal, dirtyRemote: dirtyRemote };
   }/*/fn:mergeWorkbookState*/
+  function textTsKeyOf(ta) { return 'dela-keep-ts:' + location.pathname + ':' + ta.getAttribute('data-keep-text'); }
   function collectWorkbookState() {
     var notes = {};
+    var notesTs = {};
     var checks = {};
     document.querySelectorAll('textarea[data-keep-text]').forEach(function (ta) {
       var id = ta.getAttribute('data-keep-text');
-      if (id) notes[id] = ta.value || '';
+      if (id) {
+        notes[id] = ta.value || '';
+        notesTs[id] = Number(store('get', textTsKeyOf(ta))) || 0;
+      }
     });
     document.querySelectorAll('input[type="checkbox"][data-keep]').forEach(function (box) {
       var id = box.getAttribute('data-keep');
       if (id) checks[id] = !!box.checked;
     });
-    return { notes: notes, checks: checks };
+    return { notes: notes, notes_ts: notesTs, checks: checks };
   }
   var _notesSyncTimer = null;
   function hasRemoteNotesDoor() {
@@ -920,7 +979,13 @@
       else progEl.removeAttribute('data-has-progress');
     }
     var fold = fs.querySelector('.worksheet-fold');
-    if (fold && filledCount > 0 && !fold.open) fold.open = true;
+    if (fold && !fold.open) {
+      var innerFilled = Array.prototype.some.call(
+        fold.querySelectorAll('textarea[data-keep-text]'),
+        function (ta) { return !!String(ta.value || '').trim(); }
+      );
+      if (innerFilled) fold.open = true;
+    }
     var text = formatWorksheet(pairs);
     var st = fs.querySelector('[data-worksheet-status]');
     if (st && markSaved) {
@@ -929,7 +994,7 @@
     }
     var btn = fs.querySelector('[data-worksheet-copy]');
     if (btn) {
-      btn.hidden = !text;
+      btn.hidden = false;
       btn.disabled = !text;
     }
     syncGlobalWorkbook();
@@ -1087,6 +1152,7 @@
     var ta = e.target;
     if (ta && ta.matches && ta.matches('textarea[data-keep-text]')) {
       store('set', textKeyOf(ta), ta.value);
+      store('set', textTsKeyOf(ta), String(Date.now()));
       syncWorksheet(ta.closest('.exercise-worksheet'), true);
       scheduleWorkbookRemotePush();
     }
