@@ -933,7 +933,7 @@ html[data-theme="night"] #doc img[data-figure-kind="sheet"] {
 }
 #doc details.where-used .where-used-count {
   font-family: var(--mono);
-  font-size: var(--fs-2xs);
+  font-size: var(--fs-s);
   color: var(--accent);
 }
 #doc details.where-used > [data-role="links"] {
@@ -1298,7 +1298,7 @@ dialog.toc-drawer::backdrop {
   border-bottom: 1px solid var(--rule);
 }
 .toc-drawer-title {
-  font-size: var(--fs-xs);
+  font-size: var(--fs-s);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: var(--tracking-caps);
@@ -1343,7 +1343,7 @@ dialog.toc-drawer::backdrop {
 }
 .toc-drawer-list a [data-role="stamp"] {
   font-family: var(--mono);
-  font-size: var(--fs-2xs);
+  font-size: var(--fs-s);
   color: var(--muted);
   flex-basis: 100%;
 }
@@ -1606,7 +1606,7 @@ button.moment-seek:focus-visible { outline: var(--focus-outline-min) solid var(-
   color: var(--ink);
 }
 .worksheet-hint {
-  font-size: var(--fs-xs);
+  font-size: var(--fs-s);
   line-height: var(--lh-tight);
   color: var(--muted);
 }
