@@ -2,6 +2,7 @@
 :root {
   --accent: #c92020;  
   --atom-min: 15rem;  
+  --badge-pad-x: 0.82em;  
   --baseline: 1.6925rem;  
   --breakpoint: 880px;  
   --btn-pad-x: var(--sp-3);  
@@ -9,15 +10,15 @@
   --cta-text: #ffffff;  
   --emphasis: #c92020;  
   --focus-outline-min: 2px;  
-  --font-size-base: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);  
+  --font-size-base: clamp(1rem, 0.7rem + 1.0vw, 2.0rem);  
   --font-size-doc: calc(var(--font-size-base) * 1.07);  
   --font-size-h1: clamp(2.5rem, 1.5rem + 5vw, 7rem);  
-  --font-size-p: clamp(1rem, 0.95rem + 0.25vw, 1.35rem);  
+  --font-size-p: 1.05rem;  
   --fs-2xl: 2.441rem;  
   --fs-2xs: max(0.640rem, var(--fs-caps-min));  
   --fs-3xl: 3.052rem;  
   --fs-body-min: 0.875rem;  
-  --fs-caps-entry: 0.96rem;  
+  --fs-caps-entry: calc(var(--font-size-p) * 0.89);  
   --fs-caps-min: 0.719rem;  
   --fs-l: 1.563rem;  
   --fs-m: 1.250rem;  
@@ -32,6 +33,7 @@
   --kern-pair-mild: -0.04em;  
   --kern-pair-tight: -0.065em;  
   --lh-body: 1.55;  
+  --lh-caps: 1.45;  
   --lh-display: 0.95;  
   --lh-flush: 1.0;  
   --lh-loose: 1.5;  
@@ -102,6 +104,8 @@
   --cta-bg: #1E407C;  
   --cta-text: #F4F1EB;  
   --emphasis: #2A2A2A;  
+  --font-size-base: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);  
+  --font-size-p: clamp(1rem, 0.95rem + 0.25vw, 1.35rem);  
   --ink: #2A2A2A;  
   --ink-peak: #111111;  
   --ink-soft: #4D4D4D;  

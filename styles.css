@@ -1,7 +1,7 @@
 
 @import url("fonts/fonts.css?v=840df1668e");
 
-@import url("_tokens.generated.css?v=48a5489b89");
+@import url("_tokens.generated.css?v=fced688ef8");
 
 @layer owner {
   :root {
@@ -329,6 +329,7 @@ a:focus-visible {
 
 
 .section-body .cta {
+    justify-content: flex-start;
     margin: 0 0 var(--sp-3) calc(-1 * var(--btn-pad-x));
     min-width: calc(var(--heading-w, 0px) + 2 * var(--btn-pad-x));
 }
@@ -496,7 +497,7 @@ a:focus-visible {
 .board h3.tier {
     display: inline-flex;
     align-items: center;
-    padding: 0.28em 0.82em;
+    padding: 0.28em var(--badge-pad-x);
     border: 1px solid var(--rule);
     border-radius: var(--radius-control);
     background: color-mix(in srgb, var(--ink) 4%, var(--surface));
@@ -506,7 +507,7 @@ a:focus-visible {
     text-transform: uppercase;
     color: var(--ink);
     line-height: var(--lh-flush);
-    margin: 0 0 var(--sp-2) 0;
+    margin: 0 0 var(--sp-2) calc(-1 * (var(--badge-pad-x) + 1px));
 }
 .board .event + h3.tier {
     margin-top: var(--sp-5);
@@ -533,7 +534,7 @@ a:focus-visible {
     font-weight: 400;
     line-height: var(--lh-body);
     color: var(--muted);
-    margin: 0 0 0.2em 0;
+    margin: 0 0 var(--sp-1) 0;
 }
 .board .event .concept {
     font-size: var(--fs-caps-entry);
@@ -541,8 +542,20 @@ a:focus-visible {
     line-height: var(--lh-tight);
     color: var(--ink-peak);
 }
+.board .event .concept:has(+ .concept.seam-line) {
+    margin-bottom: 0;
+}
+.board .event .concept + .concept.seam-line {
+    margin-top: 0;
+}
+.board .event .concept:has(+ .detail),
+.board .event .entry-title:has(+ .detail) {
+    margin-bottom: var(--sp-2);
+}
 .board .event .detail {
     font-size: var(--font-size-p);
+    font-weight: 400;
+    color: var(--ink);
     line-height: var(--lh-body);
 }
 .board .event .entry-title {
@@ -551,12 +564,15 @@ a:focus-visible {
 .board .event .entry-title a {
     color: var(--link);
 }
+.board .event .title-dash {
+    color: var(--muted);
+}
 .board .event .entry-title + .detail {
-    margin-top: var(--sp-1);
+    margin-top: 0;
 }
 
 
-.board .event .seam-line { margin-top: -0.25em; }
+.board .event .type + .concept.seam-line { margin-top: 0; }
 
 
 .board .skoro-closing {
@@ -1752,6 +1768,7 @@ figure svg { display: block; width: 100%; height: auto; }
   gap: var(--sp-2);
   max-width: 26em;
   margin-top: var(--sp-3);
+  margin-bottom: var(--sp-4);
 }
 .article-wrapper .signup-label {
   font-weight: 400;
@@ -2101,7 +2118,8 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
 .artwork-caption p { margin: 0 0 var(--sp-1); font-size: inherit; }
 .artwork-caption p:first-child { color: var(--ink); font-weight: 500; }
 
-.getbusy .getbusy-note { max-width: var(--measure); line-height: var(--lh-body); }
+.getbusy .getbusy-note { max-width: var(--measure); line-height: var(--lh-body); hyphens: none; }
+.getbusy .getbusy-support { color: var(--muted); font-size: var(--fs-xs); line-height: var(--lh-body); margin-top: var(--sp-2); }
 .getbusy .ways-heading { color: var(--muted); margin-bottom: var(--sp-2); }
 .getbusy .ways { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--sp-2); }
 .getbusy .ways li {
@@ -2453,8 +2471,8 @@ nav [data-reach="out"] > a {
 }
 .offer-entry h3 {
     margin-block: 0 var(--sp-3);
-    margin-inline: auto;
-    text-align: center;
+    margin-inline: 0;
+    text-align: left;
     font-size: var(--fs-caps-entry);
     font-weight: 400;
     color: var(--ink-peak);
