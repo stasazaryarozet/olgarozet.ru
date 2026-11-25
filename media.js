@@ -187,7 +187,7 @@
     return NaN;
   }
   function seekTo(hit, e) {
-    // imperative: DOM/media - перемотка и воспроизведение элемента: единственное действие над носителем
+    // imperative: DOM/media - перемотка и воспроизведение элемента; прокрутка к видео — только по явному data-seek-view="video"
     var p = document.querySelector('[data-player]');
     var t0 = momentOf(hit);
     if (!p || !isFinite(t0)) return;
@@ -195,7 +195,10 @@
     p.currentTime = t0;
     var go = p.play && p.play();
     if (go && go.catch) go.catch(function () {});
-    p.scrollIntoView({ block: 'center' });
+    if (hit.getAttribute('data-seek-view') === 'video') {
+      var target = document.getElementById('player-wrapper') || p;
+      target.scrollIntoView({ block: 'center' });
+    }
   }
   /* Цитата с временем становится ДЕЙСТВУЕМОЙ ТОЛЬКО при наличии проигрывателя: фокус с клавиатуры,
      Enter/Пробел, роль кнопки (имя — её собственный текст). Вида не меняет: курсор и кольцо фокуса

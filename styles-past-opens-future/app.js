@@ -23,10 +23,9 @@
      отметок — законы НОСИТЕЛЯ сайта, а не этой страницы: их держит общий `/media.js`
      (D4, story-form 2026-11-20). Здесь остаётся лишь увеличение. */
 
-  /* УВЕЛИЧЕНИЕ — НАДСТРОЙКА НАД ЯКОРЕМ ДОКУМЕНТА (D-12: панорамируемый 1:1 режим + явное закрытие).
-     Документ уже несёт <a data-role="zoom" href="…носитель…">: без скрипта ссылка
-     открывает изображение, со скриптом оно показывается в модальном <dialog> с
-     переключением «по экрану ↔ 1:1» (для чтения мелкого текста слайдов на телефоне). */
+  /* УВЕЛИЧЕНИЕ — НАДСТРОЙКА НАД ЯКОРЕМ ДОКУМЕНТА (D-12 + Wave T: растр 1:1 и живые пересобранные блоки).
+     Документ несёт <a data-role="zoom" href="…"> для растров и [data-role="zoom"][data-zoom-kind="composed-quote"]
+     для динамически пересобранных блоков «портрет + живой текст». Единый <dialog> увеличивает оба класса. */
   function bindZoom() {
     var dlg = document.createElement('dialog');
     dlg.setAttribute('data-role', 'zoom');
@@ -48,7 +47,11 @@
     var stage = document.createElement('div');
     stage.className = 'zoom-stage';
     var big = document.createElement('img');
+    var composedStage = document.createElement('div');
+    composedStage.className = 'zoom-composed-card';
+    composedStage.hidden = true;
     stage.appendChild(big);
+    stage.appendChild(composedStage);
     dlg.appendChild(bar);
     dlg.appendChild(stage);
     document.body.appendChild(dlg);
@@ -76,7 +79,7 @@
     });
     dlg.addEventListener('keydown', function (e) {
       if (e.key !== 'Tab') return;
-      var controls = [fitBtn, closeBtn];
+      var controls = fitBtn.hidden ? [closeBtn] : [fitBtn, closeBtn];
       var idx = controls.indexOf(document.activeElement);
       e.preventDefault();
       var next = e.shiftKey
@@ -90,16 +93,48 @@
       }
       triggerEl = null;
     });
-    document.addEventListener('click', function (e) {
-      var a = e.target && e.target.closest && e.target.closest('a[data-role="zoom"]');
-      if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
-      var inner = a.querySelector('img');
-      e.preventDefault();
-      triggerEl = a;
+    var openZoom = function (hit) {
+      triggerEl = hit;
       setFull(false);
-      big.src = a.getAttribute('href');
-      big.alt = (inner && inner.alt) || '';
+      if (hit.getAttribute('data-zoom-kind') === 'composed-quote') {
+        dlg.setAttribute('data-zoom-kind', 'composed-quote');
+        fitBtn.hidden = true;
+        big.hidden = true;
+        composedStage.hidden = false;
+        composedStage.textContent = '';
+        Array.prototype.forEach.call(hit.children, function (ch) {
+          var clone = ch.cloneNode(true);
+          if (clone.tagName === 'IMG') {
+            clone.removeAttribute('loading');
+            clone.removeAttribute('width');
+            clone.removeAttribute('height');
+          }
+          composedStage.appendChild(clone);
+        });
+      } else {
+        dlg.removeAttribute('data-zoom-kind');
+        fitBtn.hidden = false;
+        composedStage.hidden = true;
+        big.hidden = false;
+        var inner = hit.querySelector('img');
+        big.src = hit.getAttribute('href');
+        big.alt = (inner && inner.alt) || '';
+      }
       dlg.showModal();
+    };
+    document.addEventListener('click', function (e) {
+      var hit = e.target && e.target.closest && e.target.closest('[data-role="zoom"]');
+      if (!hit || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+      if (hit.getAttribute('data-zoom-kind') === 'composed-quote' && String(window.getSelection && window.getSelection())) return;
+      e.preventDefault();
+      openZoom(hit);
+    });
+    document.addEventListener('keydown', function (e) {
+      if ((e.key !== 'Enter' && e.key !== ' ') || e.metaKey || e.ctrlKey || e.altKey) return;
+      var hit = e.target && e.target.matches && e.target.matches('[data-role="zoom"][data-zoom-kind="composed-quote"]') ? e.target : null;
+      if (!hit) return;
+      e.preventDefault();
+      openZoom(hit);
     });
   }
 
