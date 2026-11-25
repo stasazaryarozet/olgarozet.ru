@@ -655,10 +655,108 @@
       if (saved !== null) ta.value = saved;
     });
   }
+  /*fn:mergeWorkbookState*/function mergeWorkbookState(local, remote) {
+    var lNotes = (local && local.notes) || {};
+    var rNotes = (remote && remote.notes) || {};
+    var lChecks = (local && local.checks) || {};
+    var rChecks = (remote && remote.checks) || {};
+    var notes = {};
+    var checks = {};
+    var changedLocal = false;
+    var dirtyRemote = false;
+    Object.keys(rNotes).forEach(function (k) {
+      notes[k] = String(rNotes[k] == null ? '' : rNotes[k]);
+      if (!lNotes[k] && notes[k]) changedLocal = true;
+    });
+    Object.keys(lNotes).forEach(function (k) {
+      var lv = String(lNotes[k] == null ? '' : lNotes[k]);
+      if (lv && !notes[k]) {
+        notes[k] = lv;
+        dirtyRemote = true;
+      } else if (lv && notes[k] && lv !== notes[k]) {
+        // Remote wins when local is empty; otherwise keep local non-empty edit and sync up
+        notes[k] = lv;
+        dirtyRemote = true;
+      }
+    });
+    Object.keys(rChecks).forEach(function (k) {
+      checks[k] = !!rChecks[k];
+      if (!!rChecks[k] && !lChecks[k]) changedLocal = true;
+    });
+    Object.keys(lChecks).forEach(function (k) {
+      if (lChecks[k] && !checks[k]) {
+        checks[k] = true;
+        dirtyRemote = true;
+      }
+    });
+    return { notes: notes, checks: checks, changedLocal: changedLocal, dirtyRemote: dirtyRemote };
+  }/*/fn:mergeWorkbookState*/
+  function collectWorkbookState() {
+    var notes = {};
+    var checks = {};
+    document.querySelectorAll('textarea[data-keep-text]').forEach(function (ta) {
+      var id = ta.getAttribute('data-keep-text');
+      if (id) notes[id] = ta.value || '';
+    });
+    document.querySelectorAll('input[type="checkbox"][data-keep]').forEach(function (box) {
+      var id = box.getAttribute('data-keep');
+      if (id) checks[id] = !!box.checked;
+    });
+    return { notes: notes, checks: checks };
+  }
+  var _notesSyncTimer = null;
+  function hasRemoteNotesDoor() {
+    return typeof fetch === 'function' && !!document.getElementById('buyer-player');
+  }
+  function pushWorkbookRemote() {
+    if (!hasRemoteNotesDoor()) return;
+    var state = collectWorkbookState();
+    fetch('./notes', {
+      method: 'PUT',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(state)
+    }).catch(function () {});
+  }
+  function scheduleWorkbookRemotePush() {
+    if (!hasRemoteNotesDoor()) return;
+    if (_notesSyncTimer) clearTimeout(_notesSyncTimer);
+    _notesSyncTimer = setTimeout(pushWorkbookRemote, 800);
+  }
+  function hydrateWorkbookRemote() {
+    if (!hasRemoteNotesDoor()) return;
+    fetch('./notes', { method: 'GET', credentials: 'same-origin' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (remote) {
+        if (!remote || !remote.ok) return;
+        var merged = mergeWorkbookState(collectWorkbookState(), remote);
+        if (merged.changedLocal) {
+          document.querySelectorAll('textarea[data-keep-text]').forEach(function (ta) {
+            var id = ta.getAttribute('data-keep-text');
+            if (id && Object.prototype.hasOwnProperty.call(merged.notes, id) && ta.value !== merged.notes[id]) {
+              ta.value = merged.notes[id];
+              store('set', textKeyOf(ta), ta.value);
+              syncWorksheet(ta.closest('.exercise-worksheet'), !!ta.value);
+            }
+          });
+          document.querySelectorAll('input[type="checkbox"][data-keep]').forEach(function (box) {
+            var id = box.getAttribute('data-keep');
+            if (id && Object.prototype.hasOwnProperty.call(merged.checks, id) && box.checked !== !!merged.checks[id]) {
+              box.checked = !!merged.checks[id];
+              store('set', keyOf(box), box.checked ? '1' : '0');
+            }
+          });
+          syncGlobalWorkbook();
+        }
+        if (merged.dirtyRemote) pushWorkbookRemote();
+      })
+      .catch(function () {});
+  }
   document.addEventListener('change', function (e) {
     var box = e.target;
     if (box && box.matches && box.matches('input[type="checkbox"][data-keep]')) {
       store('set', keyOf(box), box.checked ? '1' : '0');
+      scheduleWorkbookRemotePush();
     }
   });
   /*fn:formatWorksheet*/function formatWorksheet(pairs) {
@@ -947,12 +1045,14 @@
     });
     syncGlobalWorkbook();
     armShareAndReturn();
+    hydrateWorkbookRemote();
   }
   document.addEventListener('input', function (e) {
     var ta = e.target;
     if (ta && ta.matches && ta.matches('textarea[data-keep-text]')) {
       store('set', textKeyOf(ta), ta.value);
       syncWorksheet(ta.closest('.exercise-worksheet'), true);
+      scheduleWorkbookRemotePush();
     }
   });
 

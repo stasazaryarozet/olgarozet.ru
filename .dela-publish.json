@@ -1,5 +1,5 @@
 {
- "at": "2026-11-25T11:00:28+00:00",
+ "at": "2026-11-25T11:12:22+00:00",
  "domain": [
   ".state/engage/olgarozet/slots.json",
   "config/code_dirs.txt",
@@ -330,6 +330,7 @@
   "knowledge/system/specifications/resource-spend.md",
   "knowledge/system/specifications/resource-theory-preorder.md",
   "knowledge/system/specifications/resource.md",
+  "knowledge/system/specifications/runbook-product-support-dr.md",
   "knowledge/system/specifications/scene-framing.md",
   "knowledge/system/specifications/selectel.md",
   "knowledge/system/specifications/site-world.md",
@@ -358,6 +359,7 @@
   "knowledge/system/specifications/subsystem-bootstrap-projection.md",
   "knowledge/system/specifications/subsystem-bottom-integrity.md",
   "knowledge/system/specifications/subsystem-bound-exec.md",
+  "knowledge/system/specifications/subsystem-brain-lease.md",
   "knowledge/system/specifications/subsystem-brain-presence.md",
   "knowledge/system/specifications/subsystem-browser-profile.md",
   "knowledge/system/specifications/subsystem-burst-substrate.md",
@@ -604,6 +606,6 @@
   "scripts/typography.py",
   "scripts/utils/git_publish.py"
  ],
- "rev": "a55a6fc71bf8061f8d10f92ca0922822a2cc6daf",
- "src_oid": "b6dde26bf50fa620"
+ "rev": "5aa5c0249e80e132899f6d2c843fabe618582cb4",
+ "src_oid": "161964b8f448ba0c"
 }
