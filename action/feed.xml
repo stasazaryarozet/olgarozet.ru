@@ -6,28 +6,34 @@
     <description>Ольга Розет — художник, искусствовед, дизайнер интерьеров. Консультации, путешествия, искусство.</description>
     <language>ru</language>
     <item>
+      <title>Цена и Ценность</title>
+      <link>https://olgarozet.ru/course_price_value/</link>
+      <pubDate>Fri, 01 Jan 2027 00:00:00 GMT</pubDate>
+      <guid isPermaLink="true">https://olgarozet.ru/course_price_value/</guid>
+    </item>
+    <item>
+      <title>Быт шейкеров: Протофункционализм и настоящее</title>
+      <link>https://olgarozet.ru/action/</link>
+      <pubDate>Tue, 01 Dec 2026 00:00:00 GMT</pubDate>
+      <guid isPermaLink="false">https://olgarozet.ru/action/#lecture_protofunctionalism_shakers</guid>
+    </item>
+    <item>
+      <title>Зимняя прогулка</title>
+      <link>https://olgarozet.ru/action/</link>
+      <pubDate>Tue, 01 Dec 2026 00:00:00 GMT</pubDate>
+      <guid isPermaLink="false">https://olgarozet.ru/action/#excursion_melnikov_nov_2026</guid>
+    </item>
+    <item>
       <title>Встреча с Ольгой</title>
       <link>https://olgarozet.ru/action/</link>
       <pubDate>Tue, 01 Dec 2026 00:00:00 GMT</pubDate>
       <guid isPermaLink="false">https://olgarozet.ru/action/#meeting_2026_12_offline</guid>
     </item>
     <item>
-      <title>Быт шейкеров: Протофункционализм и настоящее</title>
-      <link>https://olgarozet.ru/action/</link>
+      <title>Стили и тренды: прошлое открывает будущее</title>
+      <link>https://olgarozet.ru/lecture_styles_trends/</link>
       <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
-      <guid isPermaLink="false">https://olgarozet.ru/action/#lecture_protofunctionalism_shakers</guid>
-    </item>
-    <item>
-      <title>Конструктивизм: Подход и решения</title>
-      <link>https://olgarozet.ru/action/</link>
-      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
-      <guid isPermaLink="false">https://olgarozet.ru/action/#excursion_melnikov_nov_2026</guid>
-    </item>
-    <item>
-      <title>Цена и Ценность</title>
-      <link>https://olgarozet.ru/course_price_value/</link>
-      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
-      <guid isPermaLink="true">https://olgarozet.ru/course_price_value/</guid>
+      <guid isPermaLink="true">https://olgarozet.ru/lecture_styles_trends/</guid>
     </item>
     <item>
       <title>Париж · 8–11 сентября</title>

@@ -1,5 +1,5 @@
 {
- "at": "2026-11-25T13:56:24+00:00",
+ "at": "2026-11-25T14:29:41+00:00",
  "domain": [
   ".state/engage/olgarozet/slots.json",
   "config/code_dirs.txt",
@@ -340,6 +340,7 @@
   "knowledge/system/specifications/state.md",
   "knowledge/system/specifications/stats.md",
   "knowledge/system/specifications/storage-taxonomy.md",
+  "knowledge/system/specifications/study-guide.md",
   "knowledge/system/specifications/substance-witness.md",
   "knowledge/system/specifications/substrate-adaptive-fleet.md",
   "knowledge/system/specifications/substrate-decomposition.md",
@@ -556,6 +557,7 @@
   "scripts/entity_registry.py",
   "scripts/event_schema.py",
   "scripts/git_ops.py",
+  "scripts/happening.py",
   "scripts/http_budgets.py",
   "scripts/identity_primacy.py",
   "scripts/ig_digest_plate.py",
@@ -599,6 +601,7 @@
   "scripts/skoro.py",
   "scripts/spec_data.py",
   "scripts/surface_freshness.py",
+  "scripts/telegram_channel_reconcile.py",
   "scripts/text_invariants.py",
   "scripts/text_publish_preflight.py",
   "scripts/tunnel/tunnels_portal.py",
@@ -606,6 +609,6 @@
   "scripts/typography.py",
   "scripts/utils/git_publish.py"
  ],
- "rev": "960472d538756505615aefe862c55e5ba3133cc6",
- "src_oid": "1dedfbe203b6c09a"
+ "rev": "ee0c5b2f571a3ea6a2e53daad2c643458fb29060",
+ "src_oid": "336e3ea36424634b"
 }
