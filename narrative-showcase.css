@@ -134,6 +134,11 @@ body {
   letter-spacing: var(--tracking-fine);
 }
 
+#doc > header [data-field="staccato"] li {
+  width: 100%;
+  max-width: var(--measure);
+}
+
 #doc > header blockquote {
   margin: 0 var(--hero-inset) var(--sp-2);
   max-width: var(--measure);
