@@ -1,5 +1,5 @@
 {
- "at": "2026-11-25T11:38:48+00:00",
+ "at": "2026-11-25T13:56:24+00:00",
  "domain": [
   ".state/engage/olgarozet/slots.json",
   "config/code_dirs.txt",
@@ -606,6 +606,6 @@
   "scripts/typography.py",
   "scripts/utils/git_publish.py"
  ],
- "rev": "f54e5d030a405fecba924fa4e8d5e31903a400bc",
- "src_oid": "29df39700907a469"
+ "rev": "960472d538756505615aefe862c55e5ba3133cc6",
+ "src_oid": "1dedfbe203b6c09a"
 }

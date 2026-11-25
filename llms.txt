@@ -2,7 +2,7 @@
 
 > Ольга Розет — художник, искусствовед, дизайнер интерьеров. Консультации, путешествия, искусство. «Вдохновляю — за деньги и без».
 
-## {'one': Sourced('Учебное пособие', Object(coord=Coord('site_chrome.offers_heading.one'))), 'many': Sourced('Учебные пособия', Object(coord=Coord('site_chrome.offers_heading.many')))}
+## {'one': Sourced('Учебное Пособие', Object(coord=Coord('site_chrome.offers_heading.one'))), 'many': Sourced('Учебные Пособия', Object(coord=Coord('site_chrome.offers_heading.many')))}
 - [Стили и тренды: прошлое открывает будущее](https://olgarozet.ru/styles-past-opens-future/): Зачем понимать стили, если современность не требует канонов?
   - Бесплатно открыто: 3 главы, 5 понятий, 1 стиль по осям, 1 шаг упражнения, 3 проверки, 5 минут записи.
   - Полный доступ (9 глав, 19 понятий, 7 стилей по осям, 4 шага упражнения, 13 проверок, 80 минут записи): [оформление доступа](https://olgarozet.ru/styles-past-opens-future/buy/).
