@@ -1,5 +1,5 @@
 {
- "at": "2026-11-25T18:35:29+00:00",
+ "at": "2026-11-25T21:30:17+00:00",
  "domain": [
   ".state/engage/olgarozet/slots.json",
   "config/code_dirs.txt",
@@ -483,6 +483,8 @@
   "knowledge/system/specifications/text/campaign-main-ig-post-image.md",
   "knowledge/system/specifications/text/campaign-paris-2026-09-images.md",
   "knowledge/system/specifications/text/campaign-paris-2026-09.md",
+  "knowledge/system/specifications/text/campaign-study-guide.md",
+  "knowledge/system/specifications/text/campaign-styles-past-opens-future.md",
   "knowledge/system/specifications/text/design-travels.md",
   "knowledge/system/specifications/text/event-paris-2026-09.md",
   "knowledge/system/specifications/text/event-paris-main-ig-post-template.md",
@@ -609,6 +611,6 @@
   "scripts/typography.py",
   "scripts/utils/git_publish.py"
  ],
- "rev": "36ec5dc8b8e42b2ba386e2bb3ae665f331d62ed8",
- "src_oid": "18db46ee53ee0669"
+ "rev": "1281376eaa630500602a866a917eca0e7d5af0fc",
+ "src_oid": "a28eb0112918e4d9"
 }
