@@ -1078,6 +1078,14 @@
           else a.removeAttribute('aria-current');
         });
       });
+      var barCh = document.getElementById('buyer-bar-chapter');
+      var player = document.querySelector('[data-player]');
+      if (barCh && (!player || player.paused)) {
+        var lnk = byId[id].links[0];
+        var tEl = (lnk && lnk.querySelector && lnk.querySelector('[data-role="title"]')) || lnk;
+        var txt = (tEl && tEl.textContent || '').replace(/\s+/g, ' ').trim();
+        if (txt) barCh.textContent = txt;
+      }
       if (persist && (window.scrollY || 0) > 120) store('set', readKey, id);
     }
     var savedId = store('get', readKey);
@@ -1134,8 +1142,145 @@
     }, { rootMargin: '-15% 0px -65% 0px', threshold: [0, 0.25, 0.5] });
     order.forEach(function (id) { io.observe(byId[id].el); });
   }
+  /* ПОЛНЫЙ ЭКРАН ПРОИГРЫВАТЕЛЯ НА ТЕЛЕФОНЕ И ДЕСКТОПЕ: стандартный Fullscreen API +
+     iOS Safari `webkitEnterFullscreen` + автоотключение на чисто-звуковой ступени (height=0). */
+  function armFullscreen() {
+    // imperative: DOM+Fullscreen API — единая кнопка полного экрана для всех мобильных и десктопных браузеров
+    var btn = document.querySelector('[data-player-fullscreen]');
+    var video = document.querySelector('[data-player]');
+    if (!btn || !video || btn.dataset.armed) return;
+    btn.dataset.armed = '1';
+    var enterLbl = btn.getAttribute('data-label-enter') || btn.textContent;
+    var exitLbl = btn.getAttribute('data-label-exit') || enterLbl;
+    var rungs = [];
+    try { rungs = JSON.parse(video.getAttribute('data-rungs') || '[]') || []; } catch (e) { rungs = []; }
+    var isAudioOnly = function () {
+      var active = video.getAttribute('data-active-rung') || '';
+      var hit = rungs.filter(function (r) { return r && r.id === active; })[0];
+      return !!(hit && Number(hit.height) === 0);
+    };
+    var inFs = function () {
+      return !!(document.fullscreenElement || document.webkitFullscreenElement || video.webkitDisplayingFullscreen);
+    };
+    var syncBtn = function () {
+      var audioOnly = isAudioOnly();
+      btn.hidden = audioOnly;
+      btn.disabled = audioOnly;
+      var activeFs = inFs();
+      btn.textContent = activeFs ? exitLbl : enterLbl;
+      btn.setAttribute('aria-pressed', activeFs ? 'true' : 'false');
+    };
+    btn.addEventListener('click', function () {
+      if (isAudioOnly()) return;
+      if (inFs()) {
+        if (document.exitFullscreen) document.exitFullscreen().catch(function () {});
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        else if (video.webkitExitFullscreen) video.webkitExitFullscreen();
+        return;
+      }
+      var tryLandscape = function () {
+        try {
+          if (screen.orientation && screen.orientation.lock && window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
+            screen.orientation.lock('landscape').catch(function () {});
+          }
+        } catch (err) {}
+      };
+      if (typeof video.requestFullscreen === 'function') {
+        Promise.resolve(video.requestFullscreen()).then(tryLandscape, function () {
+          if (typeof video.webkitEnterFullscreen === 'function') {
+            try { video.webkitEnterFullscreen(); } catch (err) {}
+          }
+        });
+      } else if (typeof video.webkitRequestFullscreen === 'function') {
+        try { video.webkitRequestFullscreen(); tryLandscape(); } catch (err) {
+          if (typeof video.webkitEnterFullscreen === 'function') {
+            try { video.webkitEnterFullscreen(); } catch (e2) {}
+          }
+        }
+      } else if (typeof video.webkitEnterFullscreen === 'function') {
+        try { video.webkitEnterFullscreen(); } catch (err) {}
+      }
+    });
+    document.addEventListener('fullscreenchange', syncBtn);
+    document.addEventListener('webkitfullscreenchange', syncBtn);
+    video.addEventListener('webkitbeginfullscreen', syncBtn);
+    video.addEventListener('webkitendfullscreen', syncBtn);
+    video.addEventListener('loadedmetadata', syncBtn);
+    var qualSel = document.querySelector('[data-rung-select]');
+    if (qualSel) qualSel.addEventListener('change', function () { setTimeout(syncBtn, 50); });
+    syncBtn();
+  }
+
+  /* ВЫДВИЖНОЕ ОГЛАВЛЕНИЕ НА ГЛУБОКОЙ ПРОКРУТКЕ: один нативный `<dialog id="toc-drawer">` для
+     открытой витрины и закрытого кабинета, проецирующий живое `#doc-contents` без дублирования HTML. */
+  function armTocDrawer() {
+    // imperative: DOM+dialog — открывает оглавление на месте, не сбивая позицию чтения
+    var dlg = document.getElementById('toc-drawer');
+    var triggers = document.querySelectorAll('[data-toc-open]');
+    if (!dlg || !triggers.length || dlg.dataset.armed) return;
+    dlg.dataset.armed = '1';
+    var closeLbl = dlg.getAttribute('data-close-label') || '×';
+    var titleLbl = dlg.getAttribute('aria-label') || '';
+    var recLbl = dlg.getAttribute('data-record-label') || '';
+    function renderDrawer() {
+      dlg.textContent = '';
+      var head = document.createElement('div');
+      head.className = 'toc-drawer-head';
+      var h = document.createElement('span');
+      h.className = 'toc-drawer-title';
+      h.textContent = titleLbl;
+      var closeBtn = document.createElement('button');
+      closeBtn.type = 'button';
+      closeBtn.className = 'toc-drawer-close';
+      closeBtn.setAttribute('aria-label', closeLbl);
+      closeBtn.textContent = '×';
+      closeBtn.addEventListener('click', function () { if (dlg.open) dlg.close(); });
+      head.appendChild(h);
+      head.appendChild(closeBtn);
+      dlg.appendChild(head);
+      var list = document.createElement('ul');
+      list.className = 'toc-drawer-list';
+      if (recLbl && document.getElementById('player-wrapper')) {
+        var rli = document.createElement('li');
+        var ra = document.createElement('a');
+        ra.href = '#player-wrapper';
+        ra.className = 'toc-drawer-jump';
+        ra.textContent = recLbl;
+        ra.addEventListener('click', function () { if (dlg.open) dlg.close(); });
+        rli.appendChild(ra);
+        list.appendChild(rli);
+      }
+      var src = document.querySelector('#doc-contents ul');
+      if (src) {
+        Array.prototype.forEach.call(src.querySelectorAll('a[href^="#"]'), function (a) {
+          var li = document.createElement('li');
+          var copyA = a.cloneNode(true);
+          copyA.addEventListener('click', function () { if (dlg.open) dlg.close(); });
+          li.appendChild(copyA);
+          list.appendChild(li);
+        });
+      }
+      dlg.appendChild(list);
+    }
+    dlg.addEventListener('click', function (e) {
+      if (e.target === dlg && dlg.open) dlg.close();
+    });
+    triggers.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        renderDrawer();
+        if (typeof dlg.showModal === 'function') {
+          if (!dlg.open) dlg.showModal();
+        } else {
+          var toc = document.getElementById('doc-contents');
+          if (toc) toc.scrollIntoView({ block: 'start' });
+        }
+      });
+    });
+  }
+
   function ready() {
     restore(); armWorksheets(); rateButtons(); armQuotes(); revealMetered(); armResumeLinks(); armSectionTracking();
+    armFullscreen(); armTocDrawer();
     document.querySelectorAll('video[data-recover-backoff]').forEach(recoverable);
     if (document.readyState === 'complete') armLazyAudioMeta();
     else window.addEventListener('load', armLazyAudioMeta, { once: true });
