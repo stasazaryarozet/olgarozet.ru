@@ -12,8 +12,12 @@
   --baseline: 1.6925rem;  
   --breakpoint: 880px;  
   --btn-pad-x: var(--sp-3);  
+  --card-inset: clamp(var(--sp-2), 0.9vw, 0.85rem);  
+  --chrome-pad: 16px;  
   --cta-bg: #a15e00;  
   --cta-text: #ffffff;  
+  --doc-gutter: min(var(--space-padding), 3vw);  
+  --drawer-backdrop: rgba(0, 0, 0, 0.65);  
   --emphasis: #c92020;  
   --focus-outline-min: 2px;  
   --font-signature: "Tenor Sans", "Inter", "Inter Fallback", "Noto Sans Symbols", "Noto Sans Symbols 2", "Noto Sans Math", "Noto Sans Bamum", sans-serif;  
@@ -29,6 +33,7 @@
   --fs-caps-min: 0.78125rem;  
   --fs-l: 1.563rem;  
   --fs-m: 1.250rem;  
+  --fs-mark-ratio: calc(1 / (var(--fs-ratio) * var(--fs-ratio)));  
   --fs-ratio: 1.250;  
   --fs-s: 1.0625rem;  
   --fs-xl: 1.953rem;  
@@ -39,6 +44,9 @@
   --ink-soft: #666666;  
   --kern-pair-mild: -0.04em;  
   --kern-pair-tight: -0.065em;  
+  --landing-banner-h: clamp(160px, 22vw, 220px);  
+  --landing-frieze-h: 22px;  
+  --lead-measure: 32em;  
   --lh-body: 1.55;  
   --lh-caps: 1.45;  
   --lh-display: 0.95;  
@@ -48,6 +56,7 @@
   --lh-solid: 1;  
   --lh-tight: 1.2;  
   --link: #a15e00;  
+  --list-hang: 1.6em;  
   --mark-bar-w: 3px;  
   --mark-pad-x: 8px;  
   --max-width: min(50em, 90vw);  
@@ -63,9 +72,14 @@
   --overlay: rgba(255, 255, 255, 0.95);  
   --overlay-solid: rgba(255, 255, 255, 0.98);  
   --page: min(72em, 94vw);  
+  --player-overlay-bg: rgba(0, 0, 0, 0.72);  
+  --player-overlay-border: rgba(255, 255, 255, 0.28);  
+  --player-overlay-ink: #ffffff;  
+  --player-stage-bg: #000000;  
   --radius-card: 12px;  
   --radius-control: 8px;  
   --rail: 7.5em;  
+  --read-progress-h: var(--mark-bar-w);  
   --rubric: #007069;  
   --rule: #ddd;  
   --rule-soft: #ddd;  
@@ -75,6 +89,7 @@
   --scroll-anchor-offset: calc(var(--sp-4) + var(--sp-2));  
   --section-rule-w: 5.5rem;  
   --sheet-filter: none;  
+  --signup-measure: 26em;  
   --sp-1: 0.50rem;  
   --sp-2: 0.75rem;  
   --sp-3: 1.13rem;  
@@ -87,12 +102,14 @@
   --space-padding: clamp(1.2rem, 1rem + 2vw, 3rem);  
   --space-section: clamp(3rem, 2rem + 4vw, 6rem);  
   --space-top: clamp(6rem, 4rem + 12vh, 20vh);  
+  --strophe-gap: var(--sp-3);  
   --surface: #fff;  
   --surface-band: #fcf9f7;  
   --surface-deep: #fff;  
   --target-coarse: 44px;  
   --target-fine: 24px;  
   --title-accent: #1C3FE8;  
+  --toc-gap: 0.4em;  
   --touch-min: 44px;  
   --tracking-caps: calc(1.6px + 0.02em);  
   --tracking-caps-ceiling: calc(2.8px + 0.06em);  
@@ -111,6 +128,7 @@
   --tracking-zero: 0;  
   --verse-cluster-tolerance: 0.30;  
   --verse-hang: 1.2em;  
+  --zoom-backdrop: rgba(0, 0, 0, 0.86);  
 }
 :root[data-surface="*"] {
   --math-rel-shift: 0.09em;  
@@ -135,6 +153,7 @@
   --paris-day-4-accent: #E6DDC9;  
   --paris-modulor-ratio: 1.618;  
   --paris-rule-weight: 3px;  
+  --rail: 7.5em;  
   --rule: #BFBCB5;  
   --rule-soft: #D9D6CF;  
   --surface: #F4F1EB;  
@@ -142,21 +161,6 @@
 }
 :root[data-surface="editorial"] .article-wrapper {
   --accent: #1E407C;  
-}
-:root[data-surface="editorial"][data-event="uzbekistan_2026_fall"] .article-wrapper {
-  --accent: #9a3412;  
-  --display-weight: 300;  
-  --emphasis: #9a3412;  
-  --locus-weight: 400;  
-  --price-weight: 300;  
-  --section-heading-weight: 400;  
-  --signup-backing: #ece4d8;  
-  --signup-backing-edge: rgba(154, 52, 18, 0.22);  
-  --signup-backing-edge-width: 1px;  
-  --signup-backing-inset: clamp(1.8rem, 4vw, 2.8rem);  
-  --signup-backing-radius: 4px;  
-  --signup-backing-shadow: rgba(154, 52, 18, 0.08);  
-  --strong-weight: 500;  
 }
 :root[data-theme="night"] {
   --accent: #e45353;  
@@ -184,16 +188,14 @@
   --ink: #c9c9c9;  
   --ink-peak: #ffffff;  
 }
+:root[data-theme="night"][data-surface="editorial"] {
+  --ink: #c4c4c4;  
+  --rule: #444444;  
+  --surface: #000000;  
+  --surface-deep: #121212;  
+}
 :root[data-theme="night"][data-surface="editorial"] .article-wrapper {
   --accent: #99b5e6;  
-}
-:root[data-theme="night"][data-surface="editorial"][data-event="uzbekistan_2026_fall"] .article-wrapper {
-  --accent: #ea580c;  
-  --emphasis: #ea580c;  
-  --signup-backing: #191412;  
-  --signup-backing-edge: rgba(234, 88, 12, 0.26);  
-  --signup-backing-shadow: rgba(0, 0, 0, 0.5);  
-  --signup-field-edge: rgba(234, 88, 12, 0.4);  
 }
 [data-band="odd"] {
   --ink: #333333;  
@@ -285,11 +287,14 @@
   }
 }
 @layer owner {
+  :root[data-theme="day"] {
+    color-scheme: light;  
+  }
+  :root[data-theme="night"] {
+    color-scheme: dark;  
+  }
   [data-case="glyphs"] {
     letter-spacing: var(--tracking-caps-emphasis);  
-  }
-  [data-case="plain"] {
-    letter-spacing: var(--tracking-zero);  
   }
   [data-case="upper"] {
     letter-spacing: var(--tracking-caps);  
@@ -300,6 +305,7 @@
     hanging-punctuation: first allow-end last;  
   }
   [data-case="plain"] {
+    letter-spacing: var(--tracking-zero);  
     text-transform: none;  
   }
   [data-case="upper"] {

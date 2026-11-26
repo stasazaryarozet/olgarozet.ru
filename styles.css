@@ -1,12 +1,11 @@
 
 @import url("fonts/fonts.css?v=c1dbe9d5f1");
 
-@import url("_tokens.generated.css?v=79d105bedc");
+@import url("_tokens.generated.css?v=0ec19fed21");
 
 @layer owner {
   :root {
     
-    --chrome-pad: 16px;
     
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-right: env(safe-area-inset-right, 0px);
@@ -19,8 +18,6 @@
   }
 
   
-  :root[data-theme="day"] { color-scheme: light; }
-  :root[data-theme="night"] { color-scheme: dark; }
 
   
   [hidden]:not([hidden="until-found"]) { display: none !important; }
@@ -282,6 +279,9 @@ h2 {
     font-size: var(--fs-xs);
     font-weight: 500;
     line-height: var(--lh-caps);
+}
+.content-wrapper > section > h2,
+.board h3.tier[data-case="upper"] {
     letter-spacing: var(--tracking-caps);
     text-transform: uppercase;
 }
@@ -1078,9 +1078,6 @@ section[id], h2[id], h3[id], figure[id] { scroll-margin-top: var(--scroll-anchor
 
   
   
-  --mono:         "IBM Plex Mono", "JetBrains Mono", ui-monospace,
-                  SFMono-Regular, Menlo, Consolas, monospace;
-
   
 }
 
@@ -2535,6 +2532,8 @@ nav [data-reach="out"] > a {
     font-weight: 400;
     color: var(--ink-peak);
     line-height: var(--lh-caps);
+}
+.offer-entry h3[data-case="upper"] {
     text-transform: uppercase;
     letter-spacing: var(--tracking-caps);
 }

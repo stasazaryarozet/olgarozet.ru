@@ -25,10 +25,7 @@ body {
 
 
 
-.buyer-bar {
-  
-  --read-progress-h: var(--mark-bar-w, 3px);
-}
+
 
 #doc :is(section, figure, nav, [id]),
 #player-wrapper {
@@ -202,7 +199,7 @@ body {
   text-align: center;
 }
 #doc-contents li { max-width: var(--measure); }
-#doc-contents { --toc-gap: 0.4em; }   
+
 
 #doc-contents a > .lock {
   flex-basis: 100%;
@@ -1009,10 +1006,7 @@ dialog[data-role="zoom"][data-zoom-full] img {
 
 
 
-:root { --doc-gutter: min(var(--space-padding), 3vw);
-  --list-hang: 1.6em;   
-  
-  --card-inset: clamp(var(--sp-2), 0.9vw, 0.85rem); }
+
 #doc { padding-inline: var(--doc-gutter); }
 #doc figcaption { padding-inline: var(--card-inset); }
 #doc [data-form="atomic"] [data-role="figure"] { padding-inline: var(--card-inset); }
@@ -1032,7 +1026,7 @@ dialog[data-role="zoom"][data-zoom-full] img {
 #doc a.claim-qual-mark, a.claim-qual-mark { color: var(--muted); text-decoration: none; border: none; background: none; }
 
 
-:root { --fs-mark-ratio: calc(1 / (var(--fs-ratio) * var(--fs-ratio))); }
+
 a.claim-qual-mark > sup { line-height: 0; font-size: calc(1em * var(--fs-mark-ratio)); margin-inline-start: 0.05em; }  
 a.claim-qual-mark:focus { outline: var(--focus-outline-min) solid var(--accent); }
 #qual { margin-top: var(--sp-6, 2rem); color: var(--ink); }
