@@ -1,5 +1,5 @@
 {
- "at": "2026-11-26T03:40:52+00:00",
+ "at": "2026-11-26T10:25:16+00:00",
  "domain": [
   ".state/engage/olgarozet/slots.json",
   "config/code_dirs.txt",
@@ -112,6 +112,9 @@
   "knowledge/system/site-assets/fonts/noto-sans-math-rel-400-normal.woff2",
   "knowledge/system/site-assets/fonts/noto-sans-symbols-chrome-var-normal.woff2",
   "knowledge/system/site-assets/fonts/noto-sans-symbols2-chrome-400-normal.woff2",
+  "knowledge/system/site-assets/fonts/tenor-sans-cyrillic-400-normal.woff2",
+  "knowledge/system/site-assets/fonts/tenor-sans-latin-400-normal.woff2",
+  "knowledge/system/site-assets/fonts/tenor-sans-latin-ext-400-normal.woff2",
   "knowledge/system/site/documents",
   "knowledge/system/site/documents/oferta.md",
   "knowledge/system/site/documents/privacy.md",
@@ -611,6 +614,6 @@
   "scripts/typography.py",
   "scripts/utils/git_publish.py"
  ],
- "rev": "ca64796fd8f3aca9383bee7906c2dde5c25381d2",
- "src_oid": "93d9e4ed3039ecc5"
+ "rev": "3f2386f043b64f7790a649ce48fb45d4e7bcec23",
+ "src_oid": "4807e20e208af813"
 }
