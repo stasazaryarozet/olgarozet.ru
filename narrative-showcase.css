@@ -812,6 +812,7 @@ dialog[data-role="zoom"][data-zoom-full] img {
   margin-bottom: 0.5rem;
 }
 #doc div[data-kind="segment"] [data-role="prose"] { color: var(--ink); margin-bottom: 0.75rem; }
+#doc ul[data-field="specs"][data-role="strophe"],
 #doc div[data-kind="segment"] [data-role="strophe"] {
   display: flex;
   flex-direction: column;

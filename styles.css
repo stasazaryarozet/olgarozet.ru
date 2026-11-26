@@ -1,7 +1,7 @@
 
-@import url("fonts/fonts.css?v=840df1668e");
+@import url("fonts/fonts.css?v=c1dbe9d5f1");
 
-@import url("_tokens.generated.css?v=386035813b");
+@import url("_tokens.generated.css?v=d660f6d8c2");
 
 @layer owner {
   :root {
@@ -164,7 +164,7 @@ body {
 .content-wrapper > header h1 {
     font-family: var(--font-signature);
     font-size: var(--fs-3xl);
-    font-weight: 600;
+    font-weight: 400;
     margin-bottom: var(--sp-1);
     color: var(--emphasis);
     line-height: var(--lh-tight);
@@ -178,20 +178,25 @@ body {
 .content-wrapper > header h1:not([data-case="upper"]) {
     letter-spacing: var(--tracking-display);
 }
+.content-wrapper > header.subpage-header h1 {
+    font-size: var(--fs-2xl);
+    color: var(--ink-peak);
+    margin-bottom: var(--sp-5);
+}
 
 
-.content-wrapper > header h1::before,
-.content-wrapper > header h1::after {
+.content-wrapper > header:not(.subpage-header) h1::before,
+.content-wrapper > header:not(.subpage-header) h1::after {
     content: " —";
     font-weight: 400;
     font-size: var(--fs-2xl);
 }
-.content-wrapper > header h1::before {
+.content-wrapper > header:not(.subpage-header) h1::before {
     visibility: hidden;
     pointer-events: none;
     user-select: none;
 }
-.content-wrapper > header h1::after {
+.content-wrapper > header:not(.subpage-header) h1::after {
     color: var(--emphasis);
 }
 
@@ -203,8 +208,11 @@ body {
     .content-wrapper > header h1 {
         font-size: var(--fs-2xl);
     }
-    .content-wrapper > header h1::before,
-    .content-wrapper > header h1::after {
+    .content-wrapper > header.subpage-header h1 {
+        font-size: var(--fs-xl);
+    }
+    .content-wrapper > header:not(.subpage-header) h1::before,
+    .content-wrapper > header:not(.subpage-header) h1::after {
         font-size: var(--fs-xl);
     }
 }
@@ -330,6 +338,12 @@ a {
     text-underline-offset: 0.22em;
     text-decoration-color: color-mix(in srgb, currentColor 52%, transparent);
     transition: color 0.2s, text-decoration-color 0.2s;
+}
+
+
+a[href^="mailto:"] {
+    color: var(--link) !important;
+    text-decoration-color: color-mix(in srgb, var(--link) 52%, transparent);
 }
 
 a:hover,
@@ -821,13 +835,13 @@ figure svg { display: block; width: 100%; height: auto; }
 
 :root:has(.nav-fade, .theme-toggle) body::before { content: ""; position: fixed; inset: 0 0 auto 0; height: var(--chrome-h); background: var(--surface); z-index: 99; pointer-events: none; }
 
-.nav-fade a { font-family: var(--font-signature); font-size: var(--fs-s); font-weight: 600; letter-spacing: var(--tracking-spread-mild); color: var(--link); text-decoration: underline; text-decoration-thickness: 0.75px; text-underline-offset: 0.22em; text-decoration-color: color-mix(in srgb, currentColor 48%, transparent); transition: color 0.2s, text-decoration-color 0.2s; display: inline-flex; align-items: center; min-height: var(--touch-min); padding: 0 0.5em;
+.nav-fade a { font-family: var(--sans); font-size: var(--fs-body-min); font-weight: 400; letter-spacing: normal; color: var(--link); text-decoration: underline; text-decoration-thickness: 0.75px; text-underline-offset: 0.22em; text-decoration-color: color-mix(in srgb, currentColor 48%, transparent); transition: color 0.2s, text-decoration-color 0.2s; display: inline-flex; align-items: center; min-height: var(--touch-min); padding: 0 0.5em;
   
   border-bottom: 0; }
 .nav-fade a:hover, .nav-fade a:focus-visible { color: var(--ink); text-decoration-color: currentColor; }
 
 
-:root[data-align="left"] .content-wrapper > header h1,
+:root[data-align="left"] .content-wrapper > header:not(.subpage-header) h1,
 :root[data-align="left"] .content-wrapper > section > h2,
 :root[data-align="left"] .artist-highlight,
 :root[data-align="left"] .offer-entry h3,
@@ -868,13 +882,10 @@ figure svg { display: block; width: 100%; height: auto; }
   :root[data-align="left"] {
     --narrow-extra-start: max(0px, calc(clamp(max(var(--space-padding), calc(var(--btn-pad-x) + var(--sp-1))), var(--narrow-left-inset, 12vw), var(--narrow-inset-cap)) - var(--space-padding)));
   }
-  :root[data-align="left"] .content-wrapper:not(:has(> section[data-band])) {
-    padding-inline-start: calc(var(--space-padding) + var(--narrow-extra-start));
-  }
-  :root[data-align="left"] .content-wrapper:has(> section[data-band]) > header h1,
-  :root[data-align="left"] .content-wrapper:has(> section[data-band]) > section > h2,
-  :root[data-align="left"] .content-wrapper:has(> section[data-band]) .artist-highlight,
-  :root[data-align="left"] .content-wrapper:has(> section[data-band]) [data-verse-block] {
+  :root[data-align="left"] .content-wrapper > header:not(.subpage-header) h1,
+  :root[data-align="left"] .content-wrapper > section > h2,
+  :root[data-align="left"] .content-wrapper .artist-highlight,
+  :root[data-align="left"] .content-wrapper [data-verse-block] {
     margin-inline-start: var(--narrow-extra-start) !important;
   }
   :root[data-align="left"] .content-wrapper:has(> section[data-band]) > .legal {
@@ -1216,6 +1227,10 @@ figure svg { display: block; width: 100%; height: auto; }
 .legal a {
   color: var(--muted-subtle);
   text-decoration-color: color-mix(in srgb, var(--muted-subtle) 55%, transparent);
+}
+.legal a[href^="mailto:"] {
+  color: var(--link);
+  text-decoration-color: color-mix(in srgb, var(--link) 52%, transparent);
 }
 .legal a:hover, .legal a:focus-visible {
   color: var(--link);
@@ -1801,23 +1816,23 @@ figure svg { display: block; width: 100%; height: auto; }
   color: var(--muted);
   margin: 0 0 var(--sp-3);
 }
-.article-wrapper .signup-form {
+:is(.article-wrapper, .content-wrapper) .signup-form {
   display: grid;
   gap: var(--sp-2);
   max-width: 26em;
   margin-top: var(--sp-3);
   margin-bottom: var(--sp-4);
 }
-.article-wrapper .signup-label {
+:is(.article-wrapper, .content-wrapper) .signup-label {
   font-weight: 400;
   font-size: var(--fs-xs);
   line-height: var(--lh-tight);
   font-family: var(--sans);
   color: var(--muted);
 }
-.article-wrapper .signup-hint { color: var(--ink-soft); }
+:is(.article-wrapper, .content-wrapper) .signup-hint { color: var(--ink-soft); }
 
-.article-wrapper .signup-input {
+:is(.article-wrapper, .content-wrapper) .signup-input {
   width: 100%;
   padding: 0.55em 0;
   font-size: max(1rem, var(--font-size-doc, 1rem));
@@ -1833,9 +1848,9 @@ figure svg { display: block; width: 100%; height: auto; }
   min-height: var(--touch-min);   
   transition: border-color 180ms ease;
 }
-.article-wrapper .signup-input::placeholder { color: var(--muted); opacity: 1; }
-.article-wrapper .signup-input:focus { outline: none; }
-.article-wrapper .signup-input:focus-visible {
+:is(.article-wrapper, .content-wrapper) .signup-input::placeholder { color: var(--muted); opacity: 1; }
+:is(.article-wrapper, .content-wrapper) .signup-input:focus { outline: none; }
+:is(.article-wrapper, .content-wrapper) .signup-input:focus-visible {
   border-bottom-color: var(--accent);
   border-bottom-width: 2px;
   outline: var(--focus-outline-min) solid var(--accent);
@@ -2157,7 +2172,9 @@ article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; disp
 .artwork-caption p:first-child { color: var(--ink); font-weight: 500; }
 
 .getbusy .getbusy-note { max-width: var(--measure); line-height: var(--lh-body); }
+.getbusy .getbusy-status { margin: var(--sp-2) 0 0; font-size: var(--fs-s); line-height: var(--lh-body); color: var(--ink); }
 .getbusy .getbusy-support { color: var(--muted); font-size: var(--fs-xs); line-height: var(--lh-body); margin-top: var(--sp-2); }
+.getbusy .signup-form .cta { justify-self: start; }
 .getbusy .ways-heading { color: var(--muted); margin-bottom: var(--sp-2); }
 .getbusy .ways { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--sp-2); }
 .getbusy .ways li {

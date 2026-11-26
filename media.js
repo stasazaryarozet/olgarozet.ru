@@ -449,6 +449,15 @@
     };
     var stallTimer = null;
     var modes = function () { return Array.prototype.map.call(v.textTracks || [], function (t) { return t.mode; }); };
+    var disableDefaultCaptions = function () {
+      if (v.getAttribute('data-captions-default') !== '0' || v.dataset.captionsInitDone) return;
+      v.dataset.captionsInitDone = '1';
+      Array.prototype.forEach.call(v.textTracks || [], function (t) {
+        if (t.kind === 'captions' || t.kind === 'subtitles') t.mode = 'disabled';
+      });
+    };
+    disableDefaultCaptions();
+    v.addEventListener('loadedmetadata', disableDefaultCaptions, { once: true });
     var obs = function () {
       return { t: v.currentTime, rate: v.playbackRate, modes: modes(), rs: v.readyState,
                recovering: v.hasAttribute('data-recovering'), err: !!v.error, ended: v.ended };

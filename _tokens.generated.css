@@ -16,7 +16,7 @@
   --cta-text: #ffffff;  
   --emphasis: #c92020;  
   --focus-outline-min: 2px;  
-  --font-signature: "Cormorant Garamond", "Inter", "Inter Fallback", "Noto Sans Symbols", "Noto Sans Symbols 2", "Noto Sans Math", "Noto Sans Bamum", Georgia, serif;  
+  --font-signature: "Tenor Sans", "Inter", "Inter Fallback", "Noto Sans Symbols", "Noto Sans Symbols 2", "Noto Sans Math", "Noto Sans Bamum", sans-serif;  
   --font-size-base: clamp(1rem, 0.7rem + 1.0vw, 2.0rem);  
   --font-size-doc: calc(var(--font-size-base) * 1.07);  
   --font-size-h1: clamp(2.5rem, 1.5rem + 5vw, 7rem);  
@@ -56,7 +56,7 @@
   --muted-subtle: #747474;  
   --narrow-inset-cap: 14vw;  
   --narrow-margin-ratio: 0.382;  
-  --offer-face-w: 17rem;  
+  --offer-face-w: 13.5rem;  
   --overlay: rgba(255, 255, 255, 0.95);  
   --overlay-solid: rgba(255, 255, 255, 0.98);  
   --page: min(72em, 94vw);  
