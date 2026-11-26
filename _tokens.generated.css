@@ -26,7 +26,7 @@
   --fs-3xl: 3.052rem;  
   --fs-body-min: 0.875rem;  
   --fs-caps-entry: calc(var(--font-size-p) * 0.89);  
-  --fs-caps-min: 0.719rem;  
+  --fs-caps-min: 0.78125rem;  
   --fs-l: 1.563rem;  
   --fs-m: 1.250rem;  
   --fs-ratio: 1.250;  
@@ -43,10 +43,13 @@
   --lh-caps: 1.45;  
   --lh-display: 0.95;  
   --lh-flush: 1.0;  
+  --lh-heading: 1.25;  
   --lh-loose: 1.5;  
   --lh-solid: 1;  
   --lh-tight: 1.2;  
   --link: #a15e00;  
+  --mark-bar-w: 3px;  
+  --mark-pad-x: 8px;  
   --max-width: min(50em, 90vw);  
   --measure: 60ch;  
   --measure-max: 75ch;  
@@ -69,6 +72,7 @@
   --sans: "Inter", "Inter Fallback", "Noto Sans Symbols", "Noto Sans Symbols 2", "Noto Sans Math", "Noto Sans Bamum", -apple-system, BlinkMacSystemFont, "Helvetica Neue", system-ui, sans-serif;  
   --sans-display: "Inter Tight", "Inter", "Inter Fallback", "Noto Sans Symbols", "Noto Sans Symbols 2", "Noto Sans Math", "Noto Sans Bamum", -apple-system, BlinkMacSystemFont, "Helvetica Neue", system-ui, sans-serif;  
   --script: "Bad Script", "Marck Script", cursive;  
+  --scroll-anchor-offset: calc(var(--sp-4) + var(--sp-2));  
   --section-rule-w: 5.5rem;  
   --sheet-filter: none;  
   --sp-1: 0.50rem;  
@@ -86,6 +90,8 @@
   --surface: #fff;  
   --surface-band: #fcf9f7;  
   --surface-deep: #fff;  
+  --target-coarse: 44px;  
+  --target-fine: 24px;  
   --title-accent: #1C3FE8;  
   --touch-min: 44px;  
   --tracking-caps: calc(1.6px + 0.02em);  
@@ -118,6 +124,7 @@
   --ink: #333333;  
   --ink-peak: #000000;  
   --ink-soft: #4e4e4e;  
+  --link: #8b5000;  
   --muted: #686868;  
   --muted-subtle: #686868;  
   --overlay: rgba(244, 241, 235, 0.95);  

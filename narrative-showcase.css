@@ -25,15 +25,9 @@ body {
 
 
 
-#doc,
-.player-wrapper,
 .buyer-bar {
   
-  --lh-heading: 1.25;
-  --target-fine: 24px;
-  --target-coarse: 44px;
-  --scroll-anchor-offset: calc(var(--sp-4) + var(--sp-2));
-  --read-progress-h: 3px;
+  --read-progress-h: var(--mark-bar-w, 3px);
 }
 
 #doc :is(section, figure, nav, [id]),

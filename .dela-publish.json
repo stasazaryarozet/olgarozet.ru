@@ -1,5 +1,5 @@
 {
- "at": "2026-11-26T12:56:47+00:00",
+ "at": "2026-11-26T14:08:48+00:00",
  "domain": [
   ".state/engage/olgarozet/slots.json",
   "config/code_dirs.txt",
@@ -592,6 +592,7 @@
   "scripts/publish_withheld.py",
   "scripts/read_trace.py",
   "scripts/rf_edge.py",
+  "scripts/rf_edge_reconcile.py",
   "scripts/sales_launch.py",
   "scripts/site_assets",
   "scripts/site_assets/media.js",
@@ -614,6 +615,6 @@
   "scripts/typography.py",
   "scripts/utils/git_publish.py"
  ],
- "rev": "923aa5b14b56166ec786ef6c34f14c90d51bc750",
- "src_oid": "033e5c262208166e"
+ "rev": "bd590f441ede49c527898482f51e557b8275bc1e",
+ "src_oid": "71acf7f12424d426"
 }

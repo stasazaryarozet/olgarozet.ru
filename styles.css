@@ -1,7 +1,7 @@
 
 @import url("fonts/fonts.css?v=c1dbe9d5f1");
 
-@import url("_tokens.generated.css?v=dec18dbf92");
+@import url("_tokens.generated.css?v=79d105bedc");
 
 @layer owner {
   :root {
@@ -369,7 +369,7 @@ a:focus-visible {
     color: var(--cta-text);
     text-decoration: none;
     border: none;
-    border-radius: 4px;
+    border-radius: var(--radius-control);
     font-size: var(--fs-s);
     font-weight: 500;
     transition: opacity 0.2s;
@@ -739,7 +739,7 @@ footer {
 }
 
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
     .social-icon {
         width: clamp(70px, 18vw, 95px);
         height: clamp(70px, 18vw, 95px);
@@ -827,9 +827,12 @@ body, a, p, h1, h2, h3, footer, .scroll-top { transition: color 600ms ease, back
 
 
 figure svg { display: block; width: 100%; height: auto; }
-.artwork + .artwork { border-top: 1px solid rgba(0,0,0,0.03); }
+.artwork + .artwork { border-top: 1px solid var(--rule-soft, var(--rule)); }
 
-.progress-bar { position: fixed; top: 0; left: 0; height: 2px; width: 100%; background: rgba(0,0,0,0.1); transform-origin: left; transform: scaleX(0); z-index: 101; }
+.progress-bar { position: fixed; top: 0; left: 0; height: 2px; width: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); z-index: 101; }
+
+
+section[id], h2[id], h3[id], figure[id] { scroll-margin-top: var(--scroll-anchor-offset, calc(var(--sp-4) + var(--sp-2))); }
 
 .nav-fade { position: var(--frame-position, fixed); top: 0; left: 0; right: 0; padding: calc(var(--chrome-pad) + var(--safe-top)) calc(20px + var(--safe-right)) var(--chrome-pad) calc(20px + var(--safe-left)); display: flex; justify-content: space-between; align-items: center; opacity: 1; transition: opacity 0.3s ease; background: none; pointer-events: auto; z-index: 100; }
 
@@ -2044,14 +2047,14 @@ figure svg { display: block; width: 100%; height: auto; }
 
 
 
-article figure { margin: var(--space-l, 2rem) 0; }
+article figure { margin: var(--sp-5) 0; }
 
 
 article:not(#doc) figure:not(.landing-art) img { width: 100%; height: auto; display: block; }
 
 
 .article-wrapper figcaption { margin-top: .6rem; font-size: var(--fs-body-min, .875rem);
-                     color: var(--muted); }
+                     color: var(--muted); max-width: var(--measure); }
 
 
 .collection .crumbs { margin: 0 0 var(--sp-2); font-size: var(--fs-xs); line-height: var(--lh-tight); color: var(--muted); }
