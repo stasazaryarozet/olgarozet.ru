@@ -225,7 +225,7 @@ body {
 #doc-contents [data-role="title"] { flex-basis: 100%; }
 
 #doc-contents [data-role="stamp"] {
-  font-family: var(--mono);
+  font-family: inherit;
   font-size: var(--fs-xs);
   letter-spacing: var(--tracking-emphasis);
   color: var(--muted);
@@ -310,7 +310,7 @@ body {
 
 #doc section > h2 [data-role="stamp"] {
   display: block;
-  font-family: var(--mono);
+  font-family: inherit;
   font-size: var(--fs-xs);
   color: var(--accent);
   margin-bottom: 0.35rem;
@@ -379,7 +379,7 @@ html[data-theme="day"] #doc audio { color-scheme: light; }
   
   content: counter(axis, decimal);
   display: block;
-  font-family: var(--mono);
+  font-family: inherit;
   font-size: var(--fs-xs);
   color: var(--accent);
   margin-bottom: 0.25rem;
@@ -448,10 +448,23 @@ html[data-theme="day"] #doc audio { color-scheme: light; }
   min-height: var(--touch-min, 44px);
   padding: var(--sp-1) var(--sp-2);
   font-size: var(--fs-xs);
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, currentColor 38%, transparent);
   border: 1px solid var(--rule);
   border-radius: var(--radius-control);
   background-color: var(--surface-deep);
+}
+#doc a[data-link-form="graph_tag"]:focus-visible,
+#doc [data-field="axis"] a:focus-visible {
+  text-decoration-color: currentColor;
+}
+@media (hover: hover) {
+  #doc a[data-link-form="graph_tag"]:hover,
+  #doc [data-field="axis"] a:hover {
+    text-decoration-color: currentColor;
+  }
 }
 
 
@@ -586,7 +599,9 @@ html[data-theme="day"] #doc audio { color-scheme: light; }
   color: var(--muted);
 }
 dialog[data-role="zoom"] .zoom-composed-card {
-  width: min(92vw, var(--measure));
+  width: min(100%, var(--measure));
+  max-width: 100%;
+  box-sizing: border-box;
   background: var(--surface);
   color: var(--ink);
   border: 1px solid var(--rule);
@@ -665,6 +680,10 @@ dialog[data-role="zoom"] .zoom-stage {
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
 }
+
+dialog[data-role="zoom"]:not([data-zoom-full]) .zoom-stage {
+  overflow-x: hidden;
+}
 dialog[data-role="zoom"] img {
   display: block; max-width: calc(96vw - 2 * var(--space-padding));
   max-height: calc(92vh - var(--touch-min) - var(--sp-2));
@@ -706,7 +725,7 @@ dialog[data-role="zoom"][data-zoom-full] img {
 }
 
 #doc :is([data-role="stamp"], .closed-rows .closed-num) {
-  font-family: var(--mono);
+  font-family: inherit;
   font-size: var(--fs-xs);
   color: var(--muted);
 }
@@ -740,7 +759,7 @@ dialog[data-role="zoom"][data-zoom-full] img {
 #doc details > summary::-webkit-details-marker { display: none; }
 #doc details > summary::before {
   content: "+";
-  font-family: var(--mono);
+  font-family: inherit;
   font-size: var(--fs-s);
   line-height: var(--lh-flush);
   color: var(--accent);
@@ -1063,7 +1082,7 @@ html[data-theme="night"] #doc img[data-figure-kind="sheet"] {
   border-color: var(--accent);
 }
 #doc details.where-used .where-used-count {
-  font-family: var(--mono);
+  font-family: inherit;
   font-size: var(--fs-s);
   color: var(--accent);
 }
@@ -1140,7 +1159,11 @@ html[data-theme="night"] #doc img[data-figure-kind="sheet"] {
   background: transparent;
   border: 0;
   border-radius: 0;
-  text-decoration: none;
+  
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, currentColor 38%, transparent);
   white-space: normal;
   overflow: visible;
   text-overflow: clip;
@@ -1148,13 +1171,15 @@ html[data-theme="night"] #doc img[data-figure-kind="sheet"] {
 #doc [data-kind="segment"] [data-role="links"] a:focus-visible {
   color: var(--ink);
   text-decoration: underline;
-  text-underline-offset: 0.18em;
+  text-decoration-color: currentColor;
+  text-underline-offset: 0.2em;
 }
 @media (hover: hover) {
   #doc [data-kind="segment"] [data-role="links"] a:hover {
     color: var(--ink);
     text-decoration: underline;
-    text-underline-offset: 0.18em;
+    text-decoration-color: currentColor;
+    text-underline-offset: 0.2em;
   }
 }
 @media (pointer: coarse) {
@@ -1469,7 +1494,7 @@ a[data-reach="out"] { color: var(--muted); }
   font-weight: 600;
 }
 .player-speed-btn {
-  font-family: var(--mono);
+  font-family: inherit;
   border: 1px solid var(--muted);
   border-radius: var(--radius-control);
 }
@@ -1664,7 +1689,7 @@ dialog.toc-drawer::backdrop {
   line-height: var(--lh-solid);
 }
 .toc-drawer-list a [data-role="stamp"] {
-  font-family: var(--mono);
+  font-family: inherit;
   font-size: var(--fs-s);
   color: var(--muted);
   flex-basis: 100%;
@@ -1925,7 +1950,7 @@ button.moment-video .icon-monitor,
 }
 #doc section > h2 [data-role="stamp"] button.moment-seek {
   padding-inline: 0;
-  font-family: var(--mono);
+  font-family: inherit;
   font-size: inherit;
   letter-spacing: inherit;
 }
@@ -2033,18 +2058,14 @@ button.moment-video:focus-visible,
   color: var(--accent);
 }
 .worksheet-progress {
-  font-family: var(--mono);
+  font-family: inherit;
   font-size: var(--fs-xs);
   color: var(--muted);
-  padding: 0.15rem 0.5rem;
-  border: 1px solid var(--rule);
-  border-radius: var(--radius-control);
-  background: var(--surface);
   white-space: nowrap;
 }
 .worksheet-progress[data-has-progress="1"] {
   color: var(--ink);
-  border-color: var(--accent);
+  font-weight: 600;
 }
 #doc .worksheet-fold > summary.worksheet-fold-summary {
   display: flex;
@@ -2401,6 +2422,19 @@ nav a[aria-current="location"] {
   #doc .worksheet-rubric > summary::before,
   .worksheet-row {
     transition: none;
+  }
+}
+
+
+@media (prefers-contrast: more) {
+  #doc {
+    --muted: var(--ink);
+    --ink-soft: var(--ink);
+  }
+  #doc [data-kind="segment"] [data-role="links"] a,
+  #doc a[data-link-form="graph_tag"],
+  #doc [data-field="axis"] a {
+    text-decoration-color: currentColor;
   }
 }
 

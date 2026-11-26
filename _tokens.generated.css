@@ -16,6 +16,7 @@
   --cta-text: #ffffff;  
   --emphasis: #c92020;  
   --focus-outline-min: 2px;  
+  --font-signature: "Cormorant Garamond", "Inter", "Inter Fallback", "Noto Sans Symbols", "Noto Sans Symbols 2", "Noto Sans Math", "Noto Sans Bamum", Georgia, serif;  
   --font-size-base: clamp(1rem, 0.7rem + 1.0vw, 2.0rem);  
   --font-size-doc: calc(var(--font-size-base) * 1.07);  
   --font-size-h1: clamp(2.5rem, 1.5rem + 5vw, 7rem);  
@@ -63,10 +64,6 @@
   --radius-control: 8px;  
   --rail: 7.5em;  
   --rubric: #007069;  
-  --rubric-cobalt: #00639b;  
-  --rubric-gray: #666666;  
-  --rubric-plum: #813e5e;  
-  --rubric-teal: #007069;  
   --rule: #ddd;  
   --rule-soft: #ddd;  
   --sans: "Inter", "Inter Fallback", "Noto Sans Symbols", "Noto Sans Symbols 2", "Noto Sans Math", "Noto Sans Bamum", -apple-system, BlinkMacSystemFont, "Helvetica Neue", system-ui, sans-serif;  
@@ -108,15 +105,6 @@
   --tracking-zero: 0;  
   --verse-cluster-tolerance: 0.30;  
   --verse-hang: 1.2em;  
-}
-:root[data-rubric="cobalt"] {
-  --rubric: #00639b;  
-}
-:root[data-rubric="gray"] {
-  --rubric: #666666;  
-}
-:root[data-rubric="plum"] {
-  --rubric: #813e5e;  
 }
 :root[data-surface="*"] {
   --math-rel-shift: 0.09em;  
@@ -177,10 +165,6 @@
   --overlay: rgba(0, 0, 0, 0.95);  
   --overlay-solid: rgba(0, 0, 0, 0.98);  
   --rubric: #5ac6bd;  
-  --rubric-cobalt: #66b6f4;  
-  --rubric-gray: #b3b3b3;  
-  --rubric-plum: #dc90b1;  
-  --rubric-teal: #5ac6bd;  
   --rule: #444;  
   --rule-soft: #444;  
   --sheet-filter: brightness(0.72) contrast(1.06);  
@@ -192,15 +176,6 @@
 :root[data-theme="night"] [data-band="odd"] {
   --ink: #c9c9c9;  
   --ink-peak: #ffffff;  
-}
-:root[data-theme="night"][data-rubric="cobalt"] {
-  --rubric: #66b6f4;  
-}
-:root[data-theme="night"][data-rubric="gray"] {
-  --rubric: #b3b3b3;  
-}
-:root[data-theme="night"][data-rubric="plum"] {
-  --rubric: #dc90b1;  
 }
 :root[data-theme="night"][data-surface="editorial"] .article-wrapper {
   --accent: #99b5e6;  
@@ -228,10 +203,6 @@
     --muted: #555;  
     --muted-subtle: #555555;  
     --rubric: #007069;  
-    --rubric-cobalt: #00639b;  
-    --rubric-gray: #555555;  
-    --rubric-plum: #813e5e;  
-    --rubric-teal: #007069;  
     --rule: #ccc;  
     --rule-soft: #ddd;  
     --surface: #fff;  
