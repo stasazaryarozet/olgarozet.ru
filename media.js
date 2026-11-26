@@ -198,6 +198,7 @@
     var go = p.play && p.play();
     if (go && go.catch) go.catch(function () {});
     if (hit.getAttribute('data-seek-view') === 'video') {
+      rememberReadingSpot();
       var target = document.getElementById('player-wrapper') || p;
       target.scrollIntoView({ block: 'center' });
     }
@@ -1422,6 +1423,89 @@
     syncBtn();
   }
 
+  /*fn:readingProgressPct*/function readingProgressPct(scrollY, docHeight, viewHeight) {
+    var span = Number(docHeight) - Number(viewHeight);
+    if (!isFinite(span) || span <= 0) return 0;
+    var y = Math.max(0, Number(scrollY) || 0);
+    return Math.max(0, Math.min(100, Math.round((y / span) * 1000) / 10));
+  }/*/fn:readingProgressPct*/
+
+  /*fn:formatReturnReading*/function formatReturnReading(baseLabel, sectionTitle) {
+    var b = String(baseLabel || '').trim();
+    var s = String(sectionTitle || '').replace(/\s+/g, ' ').trim();
+    if (!b) return s ? ('← ' + s) : '';
+    if (!s) return '← ' + b;
+    var clipped = s.length > 34 ? (s.slice(0, 33).trim() + '…') : s;
+    return '← ' + b + ' · ' + clipped;
+  }/*/fn:formatReturnReading*/
+
+  var _readingSpot = null;
+  function rememberReadingSpot() {
+    // imperative: DOM+scroll - captures scroll position and chapter title before jumping up to #player-wrapper
+    var btn = document.getElementById('player-return-reading');
+    var wrap = document.getElementById('player-wrapper');
+    if (!btn || !wrap) return;
+    var y = window.scrollY || window.pageYOffset || 0;
+    var wrapBottom = wrap.offsetTop + wrap.offsetHeight;
+    if (y <= wrapBottom + 40) return;
+    var chEl = document.getElementById('buyer-bar-chapter');
+    var chTitle = (chEl && chEl.textContent || '').replace(/\s+/g, ' ').trim();
+    _readingSpot = { y: y, title: chTitle };
+    var base = btn.getAttribute('data-label-base') || '';
+    btn.textContent = formatReturnReading(base, chTitle);
+    btn.hidden = false;
+  }
+
+  function armReturnToReading() {
+    // imperative: DOM+scroll - binds return-to-reading button and buyer-bar "К записи" jump hook
+    var btn = document.getElementById('player-return-reading');
+    if (btn && !btn.dataset.armed) {
+      btn.dataset.armed = '1';
+      btn.addEventListener('click', function () {
+        if (!_readingSpot) { btn.hidden = true; return; }
+        var targetY = _readingSpot.y;
+        _readingSpot = null;
+        btn.hidden = true;
+        var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        try {
+          window.scrollTo({ top: targetY, behavior: reduced ? 'auto' : 'smooth' });
+        } catch (err) {
+          window.scrollTo(0, targetY);
+        }
+      });
+    }
+    var bar = document.getElementById('buyer-bar');
+    if (bar && !bar.dataset.returnArmed) {
+      bar.dataset.returnArmed = '1';
+      bar.querySelectorAll('a[href="#player-wrapper"]').forEach(function (a) {
+        a.addEventListener('click', rememberReadingSpot);
+      });
+    }
+  }
+
+  function armReadingProgress() {
+    // imperative: DOM+rAF - passively updates #buyer-bar reading progress hairline without layout thrashing
+    var bar = document.getElementById('buyer-bar');
+    if (!bar || bar.dataset.progressArmed) return;
+    bar.dataset.progressArmed = '1';
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var de = document.documentElement;
+      var pct = readingProgressPct(window.scrollY || window.pageYOffset || 0, de.scrollHeight, window.innerHeight || de.clientHeight);
+      bar.style.setProperty('--read-progress', pct + '%');
+    }
+    function schedule() {
+      if (ticking) return;
+      ticking = true;
+      if (typeof requestAnimationFrame === 'function') requestAnimationFrame(update);
+      else update();
+    }
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    update();
+  }
+
   /* ВЫДВИЖНОЕ ОГЛАВЛЕНИЕ НА ГЛУБОКОЙ ПРОКРУТКЕ: один нативный `<dialog id="toc-drawer">` для
      открытой витрины и закрытого кабинета, проецирующий живое `#doc-contents` без дублирования HTML. */
   function armTocDrawer() {
@@ -1433,6 +1517,8 @@
     var closeLbl = dlg.getAttribute('data-close-label') || '×';
     var titleLbl = dlg.getAttribute('aria-label') || '';
     var recLbl = dlg.getAttribute('data-record-label') || '';
+    var lastTrigger = null;
+    var navigated = false;
     function renderDrawer() {
       dlg.textContent = '';
       var head = document.createElement('div');
@@ -1457,7 +1543,7 @@
         ra.href = '#player-wrapper';
         ra.className = 'toc-drawer-jump';
         ra.textContent = recLbl;
-        ra.addEventListener('click', function () { if (dlg.open) dlg.close(); });
+        ra.addEventListener('click', function () { navigated = true; rememberReadingSpot(); if (dlg.open) dlg.close(); });
         rli.appendChild(ra);
         list.appendChild(rli);
       }
@@ -1466,7 +1552,7 @@
         Array.prototype.forEach.call(src.querySelectorAll('a[href^="#"]'), function (a) {
           var li = document.createElement('li');
           var copyA = a.cloneNode(true);
-          copyA.addEventListener('click', function () { if (dlg.open) dlg.close(); });
+          copyA.addEventListener('click', function () { navigated = true; if (dlg.open) dlg.close(); });
           li.appendChild(copyA);
           list.appendChild(li);
         });
@@ -1476,8 +1562,16 @@
     dlg.addEventListener('click', function (e) {
       if (e.target === dlg && dlg.open) dlg.close();
     });
+    dlg.addEventListener('close', function () {
+      if (!navigated && lastTrigger && typeof lastTrigger.focus === 'function') {
+        try { lastTrigger.focus(); } catch (err) {}
+      }
+      navigated = false;
+    });
     triggers.forEach(function (btn) {
       btn.addEventListener('click', function () {
+        lastTrigger = btn;
+        navigated = false;
         renderDrawer();
         if (typeof dlg.showModal === 'function') {
           if (!dlg.open) dlg.showModal();
@@ -1491,7 +1585,7 @@
 
   function ready() {
     restore(); armWorksheets(); rateButtons(); armQuotes(); revealMetered(); armResumeLinks(); armSectionTracking();
-    armFullscreen(); armTocDrawer();
+    armFullscreen(); armTocDrawer(); armReturnToReading(); armReadingProgress();
     document.querySelectorAll('video[data-recover-backoff]').forEach(recoverable);
     if (document.readyState === 'complete') armLazyAudioMeta();
     else window.addEventListener('load', armLazyAudioMeta, { once: true });

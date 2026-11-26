@@ -261,6 +261,9 @@
     -webkit-hyphens: manual;  
     hyphens: manual;  
   }
+  :root :is(button.moment-seek, .player-speed-btn, .player-stamp, #player-resume-time, .worksheet-progress, #doc .mc-num, #doc [data-role="stamp"], .closed-num, .closed-extent) {
+    font-variant-numeric: lining-nums tabular-nums;  
+  }
   :root :is(h1,h2,h3,h4,h5,h6) {
     -webkit-hyphens: auto;  
     hyphenate-limit-chars: 15 5 5;  
