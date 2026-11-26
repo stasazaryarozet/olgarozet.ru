@@ -812,7 +812,34 @@ dialog[data-role="zoom"][data-zoom-full] img {
   margin-bottom: 0.5rem;
 }
 #doc div[data-kind="segment"] [data-role="prose"] { color: var(--ink); margin-bottom: 0.75rem; }
-#doc div[data-kind="segment"] [data-role="strophe"] { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 0.85rem; color: var(--muted); font-size: var(--fs-xs); }
+#doc div[data-kind="segment"] [data-role="strophe"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  margin-bottom: 0.85rem;
+  color: var(--muted);
+  font-size: var(--fs-xs);
+}
+#doc .microchapter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+#doc .microchapter .mc-num {
+  display: block;
+  text-align: center;
+  font-size: var(--fs-s);
+  color: var(--accent);
+}
+#doc .microchapter .mc-title {
+  display: block;
+  font-weight: 600;
+  color: var(--ink);
+}
+#doc .microchapter .mc-body {
+  display: block;
+  color: var(--ink-soft);
+}
 #doc div[data-kind="segment"] [data-role="links"] a { font-size: var(--fs-xs); }
 
 
