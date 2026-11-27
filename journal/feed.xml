@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>Ольга Розет — Journal</title>
+    <title>Ольга Розет — Журнал</title>
     <link>https://olgarozet.ru/journal/</link>
     <description>Ольга Розет — художник, искусствовед, дизайнер интерьеров. Консультации, путешествия, искусство.</description>
     <language>ru</language>
     <item>
-      <title>Что стало трендом, а что осталось на стендах Maison&amp;Objet спустя восемь месяцев — Marie Claire Maison</title>
-      <link>http://mcmaison.ru/how-to-trends/chto-stalo-trendom-a-chto-ostalos-na-stendakh-maison-and-objet-spustya-vosem-mesyacev</link>
-      <pubDate>Fri, 25 Sep 2026 12:00:00 GMT</pubDate>
-      <guid isPermaLink="false">https://olgarozet.ru/journal/#marie-claire-maison-2026-09</guid>
+      <title>Пегас Вердонского ущелья</title>
+      <link>https://olgarozet.ru/journal/#pegasus-verdon-gorge</link>
+      <description>Также размещено в
+Instagram (instagram.com/p/Dcz3MwtF3OI/)</description>
+      <pubDate>Thu, 03 Sep 2026 03:37:27 GMT</pubDate>
+      <guid isPermaLink="true">https://olgarozet.ru/journal/#pegasus-verdon-gorge</guid>
     </item>
     <item>
-      <title>Рассказ-показ: «Тренды Maison&amp;Objet 2026»</title>
+      <title>Рассказ-Показ: «Тренды Maison&amp;Objet 2026»</title>
       <link>https://olgarozet.ru/maison-objet-2026-january/</link>
       <pubDate>Fri, 14 Aug 2026 15:00:00 GMT</pubDate>
       <guid isPermaLink="false">https://olgarozet.ru/journal/#maison-objet-2026-january</guid>
@@ -22,6 +24,22 @@
       <link>https://olgarozet.ru/2026-stream-conspectus/</link>
       <pubDate>Fri, 10 Jul 2026 02:30:00 GMT</pubDate>
       <guid isPermaLink="false">https://olgarozet.ru/journal/#2026-stream-conspectus</guid>
+    </item>
+    <item>
+      <title>Алвар Аалто: вилла Maison Louis Carré</title>
+      <link>https://olgarozet.ru/journal/#aalto-maison-louis-carre</link>
+      <description>Также размещено в
+Instagram (светильник столовой: instagram.com/p/DZwO9q8Cod2/), Instagram (гнутая древесина: instagram.com/p/DaFGJYWMauA/), Instagram (вилла и рельеф: instagram.com/p/DacOlwbDaOm/)</description>
+      <pubDate>Mon, 06 Jul 2026 06:18:14 GMT</pubDate>
+      <guid isPermaLink="true">https://olgarozet.ru/journal/#aalto-maison-louis-carre</guid>
+    </item>
+    <item>
+      <title>Эйлин Грей: прототипы на выставке «100 лет ар-деко» в MAD</title>
+      <link>https://olgarozet.ru/journal/#eileen-gray-mad-prototypes</link>
+      <description>Также размещено в
+Instagram (Coiffeuse E-1027: instagram.com/p/DRXLgjjjJXL/), Instagram (Petite Coiffeuse: instagram.com/p/DSPgR57Dciz/)</description>
+      <pubDate>Sun, 14 Dec 2025 11:30:28 GMT</pubDate>
+      <guid isPermaLink="true">https://olgarozet.ru/journal/#eileen-gray-mad-prototypes</guid>
     </item>
   </channel>
 </rss>
